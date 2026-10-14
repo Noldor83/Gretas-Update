@@ -503,7 +503,7 @@ body{background:var(--gu-bar);color:var(--gu-bar-fg)}
 :root[data-theme="dark"] #st{--s-bg:#15132a; --s-dot:#252146; --s-card:#1f1c3a; --s-ink:#eeeaff; --s-muted:#b2acd6;
   --s-sun:#e8c23a; --s-pink:#ff8fb6; --s-sky:#4aa8d6; --s-lat:#a184f0; --s-en:#5d9be6; --s-ma:#3fbf82; color-scheme:dark}
 #st{background-color:var(--s-bg);background-image:radial-gradient(var(--s-dot) 1.6px,transparent 1.8px);background-size:22px 22px;color:var(--s-ink);font-family:var(--s-f-body)}
-#st .s-wrap{max-width:620px;margin:0 auto;padding-block:18px 48px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:grid;gap:18px}
+#st .s-wrap{max-width:860px;margin:0 auto;padding-block:18px 48px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:grid;gap:18px}
 #st h2,#st h3{margin:0;text-wrap:balance}
 #st p{margin:0}
 #st .s-card{background:var(--s-card);border:2.5px solid var(--s-ink);border-radius:20px;box-shadow:5px 5px 0 var(--s-ink)}
@@ -517,7 +517,27 @@ body{background:var(--gu-bar);color:var(--gu-bar-fg)}
 #st .s-hello > :not(.s-blob){position:relative}
 #st .s-sec{font-family:var(--s-f-head);font-weight:700;font-size:22px;display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
 #st .s-sec small{font-weight:500;font-size:14px;color:var(--s-muted)}
-#st .s-scores{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+#st .s-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);gap:18px;align-items:start}
+#st .s-col{display:grid;gap:12px;min-width:0}
+#st .s-scores{display:grid;gap:12px}
+#st .s-praise{padding:14px;display:grid;gap:10px;background:var(--s-card)}
+#st .s-praise ul{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+#st .s-praise li{display:grid;grid-template-columns:auto minmax(0,1fr);gap:10px;align-items:center;padding:8px;border-radius:14px;background:var(--s-bg)}
+#st .s-praise li.new{outline:2.5px solid var(--s-sun)}
+#st .s-av{display:grid;place-items:center;width:40px;height:40px;border-radius:50%;border:2px solid var(--s-ink);font-family:var(--s-f-head);font-weight:700;font-size:18px;color:#1d2140;position:relative}
+#st .s-av::after{content:"👍";position:absolute;right:-8px;bottom:-6px;font-size:16px}
+#st .s-praise p{font-size:15px;line-height:1.35}
+#st .s-praise p b{font-family:var(--s-f-head);font-weight:700}
+#st .s-praise time{display:block;font-size:12.5px;color:var(--s-muted)}
+#st .s-praise .s-newtag{display:inline-block;margin-left:6px;background:var(--s-sun);color:#1d2140;border-radius:999px;padding:0 7px;font:700 11px var(--s-f-head);letter-spacing:.04em;vertical-align:2px}
+#st .s-empty{font-size:15px;color:var(--s-muted);line-height:1.4;padding:4px 2px}
+#st button.s-tile{font:inherit;color:inherit;text-align:left;cursor:pointer;width:100%}
+#st button.s-tile:active{transform:translate(2px,2px);box-shadow:3px 3px 0 var(--s-ink)}
+#st button.s-tile:focus-visible{outline:3px solid var(--s-pink);outline-offset:3px}
+#st .s-cta{font-family:var(--s-f-head);font-weight:700;font-size:14.5px}
+#st .s-tile[data-k="lat"] .s-cta{color:var(--s-lat)}
+#st .s-tile[data-k="en"] .s-cta{color:var(--s-en)}
+#st .s-tile[data-k="ma"] .s-cta{color:var(--s-ma)}
 #st .s-tile{padding:14px 12px 12px;display:grid;gap:6px;align-content:start;border-top-width:8px;min-width:0}
 #st .s-tile[data-k="lat"]{border-top-color:var(--s-lat)}
 #st .s-tile[data-k="en"]{border-top-color:var(--s-en)}
@@ -546,10 +566,10 @@ body{background:var(--gu-bar);color:var(--gu-bar-fg)}
 #st .s-btn span.s-sub{font-size:14px;opacity:.9}
 #st .s-btn .s-arrow{font-family:var(--s-f-head);font-weight:700;font-size:24px}
 #st .s-note{font-size:13.5px;color:var(--s-muted);text-align:center}
-@media (max-width:520px){#st .s-scores{grid-template-columns:1fr}
-  #st .s-tile{grid-template-columns:1fr auto;align-items:center;column-gap:10px}
-  #st .s-tile h3,#st .s-tile .s-what,#st .s-tile .s-rank{grid-column:1}
-  #st .s-tile .s-num{grid-column:2;grid-row:1 / span 3;font-size:42px}}
+#st .s-tile{grid-template-columns:1fr auto;align-items:center;column-gap:10px}
+#st .s-tile h3,#st .s-tile .s-what,#st .s-tile .s-rank,#st .s-tile .s-cta{grid-column:1}
+#st .s-tile .s-num{grid-column:2;grid-row:1 / span 4;font-size:44px}
+@media (max-width:700px){#st .s-grid{grid-template-columns:1fr}}
 </style>
 <div class="s-wrap">
   <div class="s-card s-hello">
@@ -561,18 +581,19 @@ body{background:var(--gu-bar);color:var(--gu-bar-fg)}
     <span class="s-school"><b aria-hidden="true">H</b>Heriburg-Gymnasium · Stufe 7</span>
   </div>
 
-  <h3 class="s-sec">Deine Rekorde <small id="s-ranknote">Platz in den Bestenlisten</small></h3>
-  <div class="s-scores">
-    <div class="s-card s-tile" data-k="lat"><h3>Latein</h3><p class="s-what">Beste Serie in Folge</p><div class="s-num" id="s-lat">–</div><p class="s-rank" id="s-lat-r">Lädt …</p></div>
-    <div class="s-card s-tile" data-k="en"><h3>Englisch</h3><p class="s-what">Beste Serie in Folge</p><div class="s-num" id="s-en">–</div><p class="s-rank" id="s-en-r">Lädt …</p></div>
-    <div class="s-card s-tile" data-k="ma"><h3>Mathe</h3><p class="s-what">Punkte in 60 Sekunden</p><div class="s-num" id="s-ma">–</div><p class="s-rank" id="s-ma-r">Lädt …</p></div>
-  </div>
-
-  <h3 class="s-sec">Was machst du jetzt?</h3>
-  <div class="s-go">
-    <button type="button" class="s-btn" data-go="lat"><span class="s-ic" aria-hidden="true">Aa</span><span><b>Latein üben</b><span class="s-sub">Vokabeln, bis sie sitzen</span></span><span class="s-arrow" aria-hidden="true">→</span></button>
-    <button type="button" class="s-btn" data-go="en"><span class="s-ic" aria-hidden="true">Hi</span><span><b>Englisch üben</b><span class="s-sub">in beide Richtungen</span></span><span class="s-arrow" aria-hidden="true">→</span></button>
-    <button type="button" class="s-btn" data-go="ma"><span class="s-ic" aria-hidden="true">×</span><span><b>1×1-Rakete starten</b><span class="s-sub">60 Sekunden, ein Fehler und du fällst auf 0</span></span><span class="s-arrow" aria-hidden="true">→</span></button>
+  <div class="s-grid">
+    <div class="s-col">
+      <h3 class="s-sec">Lob für dich <small id="s-pcount"></small></h3>
+      <div class="s-card s-praise"><ul id="s-praise"><li class="s-empty">Lädt …</li></ul></div>
+    </div>
+    <div class="s-col">
+      <h3 class="s-sec">Deine Rekorde <small>Tippen zum Üben</small></h3>
+      <div class="s-scores">
+        <button type="button" class="s-card s-tile" data-k="lat" data-go="lat"><h3>Latein</h3><p class="s-what">Beste Serie in Folge</p><div class="s-num" id="s-lat">–</div><p class="s-rank" id="s-lat-r">Lädt …</p><span class="s-cta">Vokabeln üben →</span></button>
+        <button type="button" class="s-card s-tile" data-k="en" data-go="en"><h3>Englisch</h3><p class="s-what">Beste Serie in Folge</p><div class="s-num" id="s-en">–</div><p class="s-rank" id="s-en-r">Lädt …</p><span class="s-cta">Vokabeln üben →</span></button>
+        <button type="button" class="s-card s-tile" data-k="ma" data-go="ma"><h3>Mathe</h3><p class="s-what">Punkte in 60 Sekunden</p><div class="s-num" id="s-ma">–</div><p class="s-rank" id="s-ma-r">Lädt …</p><span class="s-cta">1×1-Rakete starten →</span></button>
+      </div>
+    </div>
   </div>
 </div>
 </section>
@@ -588,7 +609,24 @@ body{background:var(--gu-bar);color:var(--gu-bar-fg)}
   var LINES=["Bereit für eine Runde?","Heute knackst du einen Rekord.","Fünf Minuten üben schlagen eine Stunde Pauken.","Die Rakete wartet schon auf dich.","Kleine Schritte, große Wirkung."];
   if(now.getDay()===0||now.getDay()===6)LINES.push("Wochenende – ein kurzes Training geht immer.");
   $("s-line").textContent=LINES[(now.getDate()+h)%LINES.length];
-  document.querySelectorAll("#st .s-btn").forEach(function(b){b.onclick=function(){var t=document.getElementById("gu-tab-"+b.dataset.go);if(t)t.click()}});
+  document.querySelectorAll("#st [data-go]").forEach(function(b){b.onclick=function(){var t=document.getElementById("gu-tab-"+b.dataset.go);if(t)t.click()}});
+  var CAT={ma:"in Mathe",lat:"in Latein",en:"in Englisch"},UNIT={ma:"Punkte",lat:"er-Serie",en:"er-Serie"};
+  var COLS=["#ffd24d","#ff9fc0","#9fdcf7","#a8e6c3","#c9b8ff","#ffc59a"];
+  var seen=0;try{seen=Number(localStorage.getItem("gu-kudos-seen"))||0}catch(e){}
+  function ago(t){var d=(Date.now()-t)/60000;if(d<1)return "gerade eben";if(d<60)return "vor "+Math.round(d)+" Min.";if(d<1440)return "vor "+Math.round(d/60)+" Std.";
+    var days=Math.round(d/1440);return days===1?"gestern":"vor "+days+" Tagen"}
+  function praise(kd){var items=[];
+    Object.keys(kd).forEach(function(from){if(from===me.uid)return;var x=kd[from]||{},L=x.likes||{};
+      Object.keys(L).forEach(function(k){var parts=k.split(":");if(parts[1]!==me.uid)return;var t=Date.parse(L[k].t)||0;
+        items.push({name:String(x.name||"?").slice(0,24),cat:parts[0],v:L[k].v,t:t})})});
+    items.sort(function(a,b){return b.t-a.t});
+    var ul=$("s-praise"),fresh=items.filter(function(i){return i.t>seen}).length;
+    $("s-pcount").textContent=fresh?fresh+" neu":"";
+    if(!items.length){ul.innerHTML='<li class="s-empty">Noch kein Daumen hoch. Spiel eine Runde 1×1 – vielleicht lobt dich bald jemand!</li>';return}
+    ul.innerHTML=items.slice(0,6).map(function(i){var c=COLS[(i.name.charCodeAt(0)||0)%COLS.length],u=i.cat==="ma"?i.v+" Punkte":"deine "+i.v+"er-Serie";
+      return '<li class="'+(i.t>seen?"new":"")+'"><span class="s-av" style="background:'+c+'" aria-hidden="true">'+esc(i.name.charAt(0).toUpperCase())+'</span><p><b>'+esc(i.name)+'</b> findet '+esc(u)+' '+(CAT[i.cat]||"")+' stark!'+(i.t>seen?'<span class="s-newtag">NEU</span>':'')+'<time>'+ago(i.t)+'</time></p></li>'}).join("");
+    if(!document.getElementById("st").hidden){try{localStorage.setItem("gu-kudos-seen",String(Date.now()))}catch(e){}}}
+  function esc(s){return String(s).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]})}
   function rank(list,k){
     var mine=list.filter(function(r){return r.id===me.uid})[0];
     $("s-"+k).textContent=mine?mine.best:"0";
@@ -599,11 +637,12 @@ body{background:var(--gu-bar);color:var(--gu-bar-fg)}
     el.innerHTML='<span class="s-medal'+(pos<=3?" r"+pos:"")+'">'+pos+'</span>Platz '+pos+' von '+sorted.length}
   (async function(){
     try{var db=await claude.use("db");
+      db.collection("kudos").onSnapshot(function(snap){var kd={};snap.docs.forEach(function(d){kd[d.id]=d.data()||{}});praise(kd)},function(){$("s-praise").innerHTML='<li class="s-empty">Lob konnte nicht geladen werden.</li>'});
       [["lat","scores"],["en","en_scores"],["ma","ma_scores"]].forEach(function(p){
         db.collection(p[1]).onSnapshot(function(snap){
           rank(snap.docs.map(function(d){var x=d.data()||{};return {id:d.id,best:Number(x.best)||0}}),p[0])},
           function(){$("s-"+p[0]+"-r").textContent="Nicht geladen"})})}
-    catch(e){["lat","en","ma"].forEach(function(k){$("s-"+k+"-r").textContent="Nicht verbunden"})}
+    catch(e){$("s-praise").innerHTML='<li class="s-empty">Nicht verbunden.</li>';["lat","en","ma"].forEach(function(k){$("s-"+k+"-r").textContent="Nicht verbunden"})}
   })();
 })();
 </script>
@@ -1642,10 +1681,17 @@ if(player)loadPlayer();migrate();rebuild();drawRandom();renderStats();renderStag
 #ma .m-rec{justify-self:center;background:var(--m-sun);color:#14231b;font:700 16px var(--m-f-head);border:2px solid var(--m-ink);border-radius:999px;padding:3px 14px;transform:rotate(-2deg)}
 #ma .m-board h3{font-family:var(--m-f-head);font-weight:700;font-size:20px;margin-bottom:8px}
 #ma .m-board ol{margin:0;padding:0;list-style:none;display:grid;gap:4px}
-#ma .m-board li{display:grid;grid-template-columns:28px 1fr auto;gap:8px;align-items:center;padding:6px 8px;border-radius:10px;font-size:16px}
+#ma .m-board li{display:grid;grid-template-columns:28px 1fr auto auto;gap:8px;align-items:center;padding:6px 8px;border-radius:10px;font-size:16px}
 #ma .m-board li.me{background:var(--m-ok-bg);font-weight:700}
 #ma .m-board .rk{font-family:var(--m-f-head);font-weight:700;color:var(--m-muted);text-align:center}
-#ma .m-board .nm{overflow-wrap:anywhere;min-width:0}
+#ma .m-board .nm{overflow-wrap:anywhere;min-width:0;display:grid}
+#ma .m-board .nm small{font-weight:600;font-size:13px;color:var(--m-green)}
+#ma .m-thumb{font:600 15px var(--m-f-head);border:2px solid var(--m-ink);border-radius:999px;padding:2px 9px;background:var(--m-card);color:var(--m-ink);cursor:pointer;white-space:nowrap;min-width:52px}
+#ma .m-thumb[aria-pressed="true"]{background:var(--m-sun);color:#14231b}
+#ma .m-thumb:focus-visible{outline:3px solid var(--m-sun);outline-offset:2px}
+#ma .m-thumb.pop{animation:mthumb .35s}
+@keyframes mthumb{50%{transform:scale(1.25) rotate(-10deg)}}
+#ma .m-thumbs{font:600 15px var(--m-f-head);white-space:nowrap;min-width:52px;text-align:center}
 #ma .m-board .pt{font-family:var(--m-f-head);font-weight:700;font-variant-numeric:tabular-nums}
 #ma .m-note{font-size:14px;color:var(--m-muted)}
 #ma .m-start{position:relative;overflow:hidden}
@@ -1786,10 +1832,24 @@ if(player)loadPlayer();migrate();rebuild();drawRandom();renderStats();renderStag
     if(rec){best=ok;$("m-best").textContent=best;
       try{if(col)await col.doc(me.uid).set({name:me.name,best:best,updatedAt:new Date().toISOString()})}catch(e){$("m-detail").textContent+=" Rekord konnte nicht gespeichert werden."}}}
   $("m-go").onclick=start;$("m-again").onclick=start;
+  var kd={},kcol=null,kbusy=false;
+  function likesFor(id,v){var out=[];Object.keys(kd).forEach(function(from){if(from===id)return;var L=(kd[from].likes||{})["ma:"+id];if(L&&L.v===v)out.push({from:from,name:kd[from].name||"?"})});return out}
   function board(){var list=scores.slice().sort(function(x,y){return y.best-x.best}).slice(0,10);
-    if(!list.length){$("m-board").innerHTML='<li><span></span><span class="m-note">Noch kein Ergebnis. Sei die erste Person auf der Liste!</span><span></span></li>';return}
-    $("m-board").innerHTML=list.map(function(r,i){return '<li class="'+(r.id===me.uid?"me":"")+'"><span class="rk">'+(i+1)+'</span><span class="nm">'+esc(r.name)+'</span><span class="pt">'+r.best+'</span></li>'}).join("")}
+    if(!list.length){$("m-board").innerHTML='<li><span></span><span class="m-note">Noch kein Ergebnis. Sei die erste Person auf der Liste!</span><span></span><span></span></li>';return}
+    $("m-board").innerHTML=list.map(function(r,i){var L=r.best?likesFor(r.id,r.best):[],mine=L.some(function(x){return x.from===me.uid});
+      var who=r.id===me.uid&&L.length?'<small>👍 '+esc(L.map(function(x){return x.name}).join(", "))+'</small>':"";
+      var th=r.id===me.uid?'<span class="m-thumbs" aria-label="'+L.length+' Daumen hoch">'+(L.length?"👍 "+L.length:"")+'</span>'
+        :(r.best?'<button type="button" class="m-thumb" data-th="'+esc(r.id)+'" data-v="'+r.best+'" aria-pressed="'+mine+'" aria-label="Daumen hoch für '+esc(r.name)+'">👍'+(L.length?" "+L.length:"")+'</button>':'<span></span>');
+      return '<li class="'+(r.id===me.uid?"me":"")+'"><span class="rk">'+(i+1)+'</span><span class="nm">'+esc(r.name)+who+'</span><span class="pt">'+r.best+'</span>'+th+'</li>'}).join("")}
+  $("m-board").addEventListener("click",async function(e){var b=e.target.closest(".m-thumb");if(!b||!kcol||kbusy)return;
+    var id=b.dataset.th,v=Number(b.dataset.v),key="ma:"+id,likes=Object.assign({},(kd[me.uid]&&kd[me.uid].likes)||{});
+    if(likes[key]&&likes[key].v===v)delete likes[key];else likes[key]={v:v,t:new Date().toISOString()};
+    kbusy=true;b.classList.add("pop");
+    try{await kcol.doc(me.uid).set({name:me.name,best:0,likes:likes})}catch(err){b.textContent="Fehler"}
+    kbusy=false});
   (async function(){try{var db=await claude.use("db");col=db.collection("ma_scores");
+    kcol=db.collection("kudos");
+    kcol.onSnapshot(function(snap){kd={};snap.docs.forEach(function(d){kd[d.id]=d.data()||{}});board()},function(){});
     col.onSnapshot(function(snap){scores=snap.docs.map(function(d){var x=d.data()||{};return {id:d.id,name:String(x.name||"?").slice(0,24),best:Number(x.best)||0}});
       var mine=scores.filter(function(r){return r.id===me.uid})[0];if(mine&&mine.best>best){best=mine.best;$("m-best").textContent=best}board()},
       function(){$("m-board").innerHTML='<li><span></span><span class="m-note">Bestenliste konnte nicht geladen werden.</span><span></span></li>'})}
@@ -2030,7 +2090,7 @@ if(player)loadPlayer();migrate();rebuild();drawRandom();renderStats();renderStag
     document.addEventListener("visibilitychange",function(){if(document.visibilityState==="hidden"&&t)flush()});
     // Brücke für die Seiten-Skripte
     var none={onSnapshot:function(cb){cb({docs:[]});return function(){}},doc:function(){return {get:async function(){return {exists:false}},set:async function(){throw {code:"not_supported"}},delete:async function(){}}}};
-    var db={collection:function(n){if(n==="scores")return fs.collection("scores/lat/players");if(n==="en_scores")return fs.collection("scores/en/players");if(n==="ma_scores")return fs.collection("scores/mathe/players");return none}};
+    var db={collection:function(n){if(n==="scores")return fs.collection("scores/lat/players");if(n==="en_scores")return fs.collection("scores/en/players");if(n==="ma_scores")return fs.collection("scores/mathe/players");if(n==="kudos")return fs.collection("scores/kudos/players");return none}};
     window.__GU={uid:uid,name:name};
     window.claude={use:async function(n){if(n==="db")return db;if(n==="user")return {canEdit:async function(){return isAdmin},can:async function(){return true},isOwner:function(){return isAdmin}};return null}};
     // Seiten starten
@@ -2088,7 +2148,7 @@ if(player)loadPlayer();migrate();rebuild();drawRandom();renderStats();renderStag
     if(armed!==id){armed=id;this.querySelectorAll("button[data-rm]").forEach(function(x){x.classList.remove("sure");x.textContent="Entfernen"});
       b.classList.add("sure");b.textContent="Wirklich entfernen?";return}
     b.disabled=true;b.textContent="Entfernt …";
-    try{await Promise.all([fs.doc("scores/lat/players/"+id).delete(),fs.doc("scores/en/players/"+id).delete(),fs.doc("scores/mathe/players/"+id).delete(),fs.doc("progress/"+id).delete()]);
+    try{await Promise.all([fs.doc("scores/lat/players/"+id).delete(),fs.doc("scores/en/players/"+id).delete(),fs.doc("scores/mathe/players/"+id).delete(),fs.doc("scores/kudos/players/"+id).delete(),fs.doc("progress/"+id).delete()]);
       await fs.doc("profiles/"+id).delete();
       $("ad-msg").textContent=name+" wurde entfernt. Tipp: jetzt den Klassen-Code ändern.";loadMembers()}
     catch(err){b.disabled=false;b.classList.remove("sure");b.textContent="Entfernen";armed=null;$("ad-msg").textContent="Entfernen hat nicht geklappt: "+(err.code||err.message)}};
