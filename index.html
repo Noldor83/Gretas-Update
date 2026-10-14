@@ -879,7 +879,7 @@ body{background:var(--gu-bar);color:var(--gu-bar-fg)}
     main.appendChild(z);
     var qz=el('section','card quiz');qz.id='quiz';main.appendChild(qz);quizView(qz,a,i===0);
 
-    if(a.quellen&&a.quellen.length){foot.appendChild(el('h4',null,'Quellen dieser Ausgabe'));var ol=el('ol');
+    if(false&&a.quellen&&a.quellen.length){foot.appendChild(el('h4',null,'Quellen dieser Ausgabe'));var ol=el('ol');
       a.quellen.forEach(function(q){var li=el('li'),aa=el('a',null,q.titel);aa.href=q.url;aa.target='_blank';aa.rel='noopener';li.appendChild(aa);ol.appendChild(li)});
       foot.appendChild(ol)}
   }
