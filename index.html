@@ -578,6 +578,13 @@ body{background:var(--gu-bar);color:var(--gu-bar-fg)}
 #st .s-btn b{display:block;font-family:var(--s-f-head);font-weight:700;font-size:20px;line-height:1.15}
 #st .s-btn span.s-sub{font-size:14px;opacity:.9}
 #st .s-btn .s-arrow{font-family:var(--s-f-head);font-weight:700;font-size:24px}
+#st .s-install{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:12px;padding:12px 14px;text-align:left;cursor:pointer;font:inherit;color:var(--s-ink);width:100%}
+#st .s-install[hidden]{display:none}
+#st .s-install:focus-visible{outline:3px solid var(--s-pink);outline-offset:3px}
+#st .s-appic{display:grid;place-items:center;width:46px;height:46px;border-radius:12px;background:#1d2140;color:#ffd24d;font-family:var(--s-f-big);font-size:18px;border:2px solid var(--s-ink)}
+#st .s-install b{display:block;font-family:var(--s-f-head);font-weight:700;font-size:17px}
+#st .s-install .s-sub{font-size:14px;color:var(--s-muted)}
+#st .s-instgo{font-family:var(--s-f-head);font-weight:700;font-size:15px;background:var(--s-sun);color:#1d2140;border:2px solid var(--s-ink);border-radius:999px;padding:5px 12px;white-space:nowrap}
 #st .s-note{font-size:13.5px;color:var(--s-muted);text-align:center}
 #st .s-tile{grid-template-columns:1fr auto;align-items:center;column-gap:10px}
 #st .s-tile h3,#st .s-tile .s-what,#st .s-tile .s-rank,#st .s-tile .s-cta{grid-column:1}
@@ -594,6 +601,11 @@ body{background:var(--gu-bar);color:var(--gu-bar-fg)}
     <span class="s-school"><b aria-hidden="true">H</b>Heriburg-Gymnasium · Stufe 7</span>
   </div>
 
+  <button type="button" class="s-card s-install" data-inst hidden>
+    <span class="s-appic" aria-hidden="true">GU</span>
+    <span><b>Gretas Update als App</b><span class="s-sub">Auf den Startbildschirm legen – dann bist du mit einem Tipp drin.</span></span>
+    <span class="s-instgo">So geht’s</span>
+  </button>
   <div class="s-grid">
     <div class="s-col">
       <h3 class="s-sec">Lob für dich <small id="s-pcount"></small></h3>
