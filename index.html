@@ -1476,13 +1476,13 @@ if(player)loadPlayer();migrate();rebuild();drawRandom();renderStats();renderStag
 <section class="gu-view" id="ma" data-v="ma" role="tabpanel" aria-labelledby="gu-tab-ma" hidden>
 <style>
 #ma{--m-bg:#e9f7ef; --m-dot:#cdebd9; --m-card:#ffffff; --m-ink:#14231b; --m-muted:#4f6358; --m-green:#1d8655; --m-green-ink:#ffffff;
-  --m-sun:#ffd24d; --m-ok:#1d8655; --m-ok-bg:#d6f3e2; --m-bad:#c23b2b; --m-bad-bg:#fde3de; --m-key:#f2f7f4;
+  --m-sun:#ffd24d; --m-sky:#8fd3f4; --m-pink:#ff7aa8; --m-ok:#1d8655; --m-ok-bg:#d6f3e2; --m-bad:#c23b2b; --m-bad-bg:#fde3de; --m-key:#f2f7f4;
   --m-f-big:"Bagel Fat One","Fredoka","Arial Rounded MT Bold",sans-serif; --m-f-head:"Fredoka","Arial Rounded MT Bold","Trebuchet MS",sans-serif;
   --m-f-body:"Atkinson Hyperlegible",Verdana,"Segoe UI",sans-serif}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]) #ma{--m-bg:#0f1d16; --m-dot:#1b3427; --m-card:#17271f; --m-ink:#e8f6ee; --m-muted:#a6c2b2;
-  --m-green:#3fbf82; --m-green-ink:#0b1711; --m-sun:#e8c23a; --m-ok:#4fd197; --m-ok-bg:#163b2a; --m-bad:#ff8a70; --m-bad-bg:#3d221c; --m-key:#1f3429; color-scheme:dark}}
+  --m-green:#3fbf82; --m-green-ink:#0b1711; --m-sun:#e8c23a; --m-sky:#4aa8d6; --m-pink:#ff8fb6; --m-ok:#4fd197; --m-ok-bg:#163b2a; --m-bad:#ff8a70; --m-bad-bg:#3d221c; --m-key:#1f3429; color-scheme:dark}}
 :root[data-theme="dark"] #ma{--m-bg:#0f1d16; --m-dot:#1b3427; --m-card:#17271f; --m-ink:#e8f6ee; --m-muted:#a6c2b2;
-  --m-green:#3fbf82; --m-green-ink:#0b1711; --m-sun:#e8c23a; --m-ok:#4fd197; --m-ok-bg:#163b2a; --m-bad:#ff8a70; --m-bad-bg:#3d221c; --m-key:#1f3429; color-scheme:dark}
+  --m-green:#3fbf82; --m-green-ink:#0b1711; --m-sun:#e8c23a; --m-sky:#4aa8d6; --m-pink:#ff8fb6; --m-ok:#4fd197; --m-ok-bg:#163b2a; --m-bad:#ff8a70; --m-bad-bg:#3d221c; --m-key:#1f3429; color-scheme:dark}
 #ma{background-color:var(--m-bg);background-image:radial-gradient(var(--m-dot) 1.6px,transparent 1.8px);background-size:20px 20px;color:var(--m-ink);font-family:var(--m-f-body)}
 #ma .m-wrap{max-width:520px;margin:0 auto;padding-block:16px 48px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:grid;gap:16px}
 #ma h2,#ma h3{margin:0;text-wrap:balance}
@@ -1527,24 +1527,73 @@ if(player)loadPlayer();migrate();rebuild();drawRandom();renderStats();renderStag
 #ma .m-board .nm{overflow-wrap:anywhere;min-width:0}
 #ma .m-board .pt{font-family:var(--m-f-head);font-weight:700;font-variant-numeric:tabular-nums}
 #ma .m-note{font-size:14px;color:var(--m-muted)}
+#ma .m-start{position:relative;overflow:hidden}
+#ma .m-deco{position:absolute;inset:0;pointer-events:none}
+#ma .m-deco span{position:absolute;font-family:var(--m-f-big);line-height:1;opacity:.22}
+#ma .m-start > :not(.m-deco){position:relative}
+#ma .m-rule{font-family:var(--m-f-head);font-weight:600;font-size:16px;background:var(--m-bad-bg);border:2px dashed var(--m-bad);border-radius:12px;padding:6px 10px;justify-self:center}
+#ma .m-arena{display:grid;grid-template-columns:minmax(0,1fr) 54px;gap:12px;align-items:stretch;position:relative}
+#ma .m-main{display:grid;gap:10px;align-content:center;min-width:0}
+#ma .m-track{position:relative;border:2.5px solid var(--m-ink);border-radius:27px;min-height:170px;
+  background:linear-gradient(to top,var(--m-ok-bg),var(--m-key) 60%,var(--m-sky));overflow:hidden}
+#ma .m-track::before{content:"";position:absolute;left:50%;top:26px;bottom:8px;border-left:2px dashed var(--m-muted);opacity:.5}
+#ma .m-star{position:absolute;top:4px;left:50%;width:22px;height:22px;transform:translateX(-50%)}
+#ma .m-rocket{position:absolute;left:50%;width:34px;height:48px;transform:translateX(-50%);
+  bottom:calc(4px + var(--h,0) * (100% - 80px));transition:bottom .35s cubic-bezier(.3,1.4,.5,1)}
+#ma .m-rocket svg{width:100%;height:100%;display:block}
+#ma .m-rocket .fl{transform-origin:20px 41px;animation:mfl .18s infinite alternate}
+@keyframes mfl{to{transform:scaleY(1.35)}}
+#ma .m-rocket.crash{transition:bottom .55s cubic-bezier(.6,0,.9,.4);animation:mcrash .6s}
+@keyframes mcrash{0%{transform:translateX(-50%) rotate(0)}30%{transform:translateX(-50%) rotate(-40deg)}60%{transform:translateX(-50%) rotate(30deg)}100%{transform:translateX(-50%) rotate(0)}}
+#ma .m-plus{position:absolute;right:62px;top:20px;font-family:var(--m-f-big);font-size:30px;color:var(--m-green);pointer-events:none;opacity:0}
+#ma .m-plus.go{animation:mplus .6s ease-out}
+#ma .m-plus.zero{color:var(--m-bad)}
+@keyframes mplus{0%{opacity:1;transform:translateY(10px) scale(.8)}100%{opacity:0;transform:translateY(-30px) scale(1.2)}}
+#ma .m-cheer{font-family:var(--m-f-head);font-weight:700;font-size:16px;text-align:center;min-height:22px;color:var(--m-green)}
+#ma .m-cheer.bad{color:var(--m-bad)}
+#ma .m-count{position:relative}
+#ma .m-countbox{background:var(--m-sun)}
+#ma .m-countbox .m-count{color:var(--m-ink)}
+#ma .m-end{position:relative;overflow:hidden}
+#ma .m-confetti{position:absolute;inset:0;pointer-events:none}
+#ma .m-confetti i{position:absolute;top:-12px;width:9px;height:14px;border-radius:2px;animation:mconf 1.8s ease-in forwards}
+@keyframes mconf{to{transform:translateY(340px) rotate(540deg);opacity:0}}
+@media (prefers-reduced-motion:reduce){#ma .m-rocket,#ma .m-rocket.crash{transition:none;animation:none}#ma .m-rocket .fl,#ma .m-plus.go,#ma .m-confetti i{animation:none}}
 @media (prefers-reduced-motion:reduce){#ma .m-count.pop,#ma .m-ans.bad{animation:none}}
 </style>
 <div class="m-wrap">
   <div class="m-head"><h2>Kleines 1×1</h2><span class="m-best">Dein Rekord: <b id="m-best">0</b></span></div>
 
   <div class="m-card m-start" id="m-start">
-    <p>60 Sekunden, zufällige Aufgaben aus dem kleinen 1×1. Wie viele schaffst du richtig?</p>
+    <div class="m-deco" aria-hidden="true">
+      <span style="left:6%;top:8%;font-size:46px;color:var(--m-green);transform:rotate(-14deg)">×</span>
+      <span style="right:8%;top:6%;font-size:40px;color:var(--m-pink);transform:rotate(12deg)">7</span>
+      <span style="left:10%;bottom:10%;font-size:38px;color:var(--m-sky);transform:rotate(10deg)">9</span>
+      <span style="right:6%;bottom:14%;font-size:50px;color:var(--m-sun);transform:rotate(-8deg)">=</span>
+      <span style="left:46%;top:2%;font-size:28px;color:var(--m-pink);transform:rotate(20deg)">3</span>
+    </div>
+    <p>60 Sekunden, zufällige Aufgaben aus dem kleinen 1×1. Bring deine Rakete so hoch wie möglich!</p>
+    <p class="m-rule">Achtung: Eine falsche Antwort – und du fällst zurück auf 0!</p>
     <button type="button" class="m-go" id="m-go">Los geht’s</button>
-    <p class="m-note">Tipp: Falsche Antworten kosten keine Punkte, aber Zeit.</p>
   </div>
 
-  <div class="m-card" id="m-countbox" hidden><div class="m-count" id="m-count" aria-live="assertive">3</div></div>
+  <div class="m-card m-countbox" id="m-countbox" hidden><div class="m-count" id="m-count" aria-live="assertive">3</div></div>
 
   <div class="m-card m-play" id="m-play" hidden>
-    <div class="m-bar"><span>⏱ <span id="m-sec">60</span> s</span><span class="m-ok-n">✓ <span id="m-n">0</span></span></div>
+    <div class="m-bar"><span>⏱ <span id="m-sec">60</span> s</span><span class="m-ok-n">Punkte: <span id="m-n">0</span></span></div>
     <div class="m-time"><i id="m-tbar"></i></div>
-    <div class="m-task" id="m-task" aria-live="polite">7 × 8</div>
-    <div class="m-ans" id="m-ans" aria-label="Deine Antwort">&nbsp;</div>
+    <div class="m-arena">
+      <div class="m-main">
+        <div class="m-task" id="m-task" aria-live="polite">7 × 8</div>
+        <div class="m-ans" id="m-ans" aria-label="Deine Antwort">&nbsp;</div>
+        <div class="m-cheer" id="m-cheer" aria-live="polite"></div>
+      </div>
+      <div class="m-track" aria-hidden="true">
+        <svg class="m-star" viewBox="0 0 24 24"><path d="M12 2l3 6.5 7 .8-5.2 4.8 1.4 7L12 17.6 5.8 21l1.4-7L2 9.3l7-.8z" fill="var(--m-sun)" stroke="var(--m-ink)" stroke-width="1.8" stroke-linejoin="round"/></svg>
+        <div class="m-rocket" id="m-rocket"><svg viewBox="0 0 40 56" aria-hidden="true"><path class="fl" d="M14 41h12l-6 13z" fill="var(--m-sun)" stroke="var(--m-ink)" stroke-width="2"/><path d="M9 31 2 42v7l8-5z" fill="var(--m-pink)" stroke="var(--m-ink)" stroke-width="2.2" stroke-linejoin="round"/><path d="M31 31l7 11v7l-8-5z" fill="var(--m-pink)" stroke="var(--m-ink)" stroke-width="2.2" stroke-linejoin="round"/><path d="M20 2c8 7 11 17 11 28v12H9V30C9 19 12 9 20 2z" fill="var(--m-card)" stroke="var(--m-ink)" stroke-width="2.5" stroke-linejoin="round"/><circle cx="20" cy="21" r="5" fill="var(--m-sky)" stroke="var(--m-ink)" stroke-width="2.2"/></svg></div>
+      </div>
+      <span class="m-plus" id="m-plus" aria-hidden="true">+1</span>
+    </div>
     <div class="m-pad" id="m-pad">
       <button type="button" class="m-key" data-k="1">1</button><button type="button" class="m-key" data-k="2">2</button><button type="button" class="m-key" data-k="3">3</button>
       <button type="button" class="m-key" data-k="4">4</button><button type="button" class="m-key" data-k="5">5</button><button type="button" class="m-key" data-k="6">6</button>
@@ -1554,7 +1603,8 @@ if(player)loadPlayer();migrate();rebuild();drawRandom();renderStats();renderStag
   </div>
 
   <div class="m-card m-end" id="m-end" hidden>
-    <p class="m-sub">Richtig in 60 Sekunden</p>
+    <div class="m-confetti" id="m-confetti" aria-hidden="true"></div>
+    <p class="m-sub">Deine Punkte nach 60 Sekunden</p>
     <div class="m-score" id="m-score">0</div>
     <span class="m-rec" id="m-rec" hidden>Neuer Rekord!</span>
     <p id="m-detail" class="m-note"></p>
@@ -1572,9 +1622,20 @@ if(player)loadPlayer();migrate();rebuild();drawRandom();renderStats();renderStag
 (function(){
   var $=function(id){return document.getElementById(id)};
   var me=window.__GU||{uid:"ich",name:"Ich"};
-  var DUR=60,state="start",a=0,b=0,typed="",ok=0,bad=0,endAt=0,raf=0,last="",best=0,scores=[],col=null,lock=false;
+  var DUR=60,state="start",a=0,b=0,typed="",ok=0,bad=0,run=0,TOP=20,endAt=0,raf=0,last="",best=0,scores=[],col=null,lock=false;
   function esc(s){return String(s).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]})}
   function show(id){["m-start","m-countbox","m-play","m-end"].forEach(function(x){$(x).hidden=x!==id})}
+  var CHEER=["Super!","Weiter so!","Stark!","Läuft!","Rakete!","Genial!","Wow!"];
+  function rocket(crash){var r=$("m-rocket");r.classList.toggle("crash",!!crash);r.style.setProperty("--h",Math.min(ok,TOP)/TOP)}
+  function plus(t,zero){var p=$("m-plus");p.textContent=t;p.classList.toggle("zero",!!zero);p.classList.remove("go");void p.offsetWidth;p.classList.add("go")}
+  function cheer(t,isBad){var c=$("m-cheer");c.textContent=t;c.classList.toggle("bad",!!isBad)}
+  function hit(){ok++;if(ok>run)run=ok;$("m-n").textContent=ok;flash("ok");rocket(false);plus("+1");
+    if(ok%5===0)cheer(ok===TOP?"Ganz oben! Weiter so!":CHEER[Math.floor(Math.random()*CHEER.length)]);next()}
+  function miss(){bad++;var had=ok;ok=0;$("m-n").textContent="0";flash("bad");typed="";lock=true;rocket(had>0);
+    if(had>0){plus("0",true);cheer("Abgestürzt! Nochmal von vorn.",true)}else cheer("Knapp daneben.",true);
+    setTimeout(function(){lock=false;paint()},250)}
+  function confetti(){var box=$("m-confetti"),cols=["var(--m-green)","var(--m-sun)","var(--m-pink)","var(--m-sky)"],h="";
+    for(var i=0;i<28;i++){h+='<i style="left:'+(Math.random()*100)+'%;background:'+cols[i%4]+';animation-delay:'+(Math.random()*.5)+'s"></i>'}box.innerHTML=h}
   function next(){var k;do{a=1+Math.floor(Math.random()*10);b=1+Math.floor(Math.random()*10);k=a+"x"+b}while(k===last);last=k;
     typed="";$("m-task").textContent=a+" × "+b;paint()}
   function paint(){var el=$("m-ans");el.textContent=typed||" "}
@@ -1582,11 +1643,11 @@ if(player)loadPlayer();migrate();rebuild();drawRandom();renderStats();renderStag
   function press(k){if(state!=="play"||lock)return;
     if(k==="del"){typed=typed.slice(0,-1);paint();return}
     if(k==="ok"){if(!typed)return;
-      if(Number(typed)===a*b){ok++;$("m-n").textContent=ok;flash("ok");next()}
-      else{bad++;flash("bad");typed="";lock=true;setTimeout(function(){lock=false;paint()},250)}
+      if(Number(typed)===a*b){hit()}
+      else{miss()}
       return}
     if(typed.length>=3)return;typed+=k;paint();
-    if(Number(typed)===a*b&&String(a*b).length===typed.length){ok++;$("m-n").textContent=ok;flash("ok");next()}}
+    if(Number(typed)===a*b&&String(a*b).length===typed.length){hit()}}
   $("m-pad").addEventListener("click",function(e){var t=e.target.closest(".m-key");if(t)press(t.dataset.k)});
   document.addEventListener("keydown",function(e){if($("ma").hidden||state!=="play")return;
     if(/^[0-9]$/.test(e.key)){press(e.key);e.preventDefault()}else if(e.key==="Backspace"){press("del");e.preventDefault()}else if(e.key==="Enter"){press("ok");e.preventDefault()}});
@@ -1597,10 +1658,10 @@ if(player)loadPlayer();migrate();rebuild();drawRandom();renderStats();renderStag
     function step(){if(n===0){el.textContent="Los!";setTimeout(play,500);return}
       el.textContent=n;el.classList.remove("pop");void el.offsetWidth;el.classList.add("pop");n--;setTimeout(step,900)}
     step()}
-  function play(){state="play";ok=0;bad=0;last="";$("m-n").textContent="0";show("m-play");next();endAt=Date.now()+DUR*1000;cancelAnimationFrame(raf);tick()}
+  function play(){state="play";ok=0;bad=0;run=0;last="";$("m-n").textContent="0";cheer("");rocket(false);show("m-play");next();endAt=Date.now()+DUR*1000;cancelAnimationFrame(raf);tick()}
   async function finish(){state="end";cancelAnimationFrame(raf);
-    $("m-score").textContent=ok;$("m-detail").textContent=bad?(bad===1?"1 Antwort war falsch.":bad+" Antworten waren falsch."):"Keine einzige falsche Antwort!";
-    var rec=ok>best&&ok>0;$("m-rec").hidden=!rec;show("m-end");
+    $("m-score").textContent=ok;$("m-detail").textContent=(bad?(bad===1?"1-mal abgestürzt.":bad+"-mal abgestürzt."):"Kein einziger Absturz!")+(bad&&run>ok?" Längste Serie: "+run+".":"");
+    var rec=ok>best&&ok>0;$("m-rec").hidden=!rec;$("m-confetti").innerHTML="";show("m-end");if(rec)confetti();
     if(rec){best=ok;$("m-best").textContent=best;
       try{if(col)await col.doc(me.uid).set({name:me.name,best:best,updatedAt:new Date().toISOString()})}catch(e){$("m-detail").textContent+=" Rekord konnte nicht gespeichert werden."}}}
   $("m-go").onclick=start;$("m-again").onclick=start;
