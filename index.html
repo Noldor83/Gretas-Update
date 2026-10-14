@@ -487,6 +487,25 @@ body{background:var(--gu-bar);color:var(--gu-bar-fg)}
 #lat .board li .rk,#en .board li .rk{font-family:var(--f-comic);font-weight:700;letter-spacing:0}
 #lat .answer,#en .answer{font-weight:600;color:var(--ink)}
 #lat .stat b,#en .stat b{font-family:var(--f-comic);font-weight:700}
+/* Kopf ohne Kasten – aufgebaut wie im Mathe-Reiter */
+#lat{--head:#6a3fb5; --head-muted:#585d80}
+#en{--head:#1f5fa8; --head-muted:#4f5e78}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) #lat{--head:#b9a3ff; --head-muted:#b2acd6}:root:not([data-theme="light"]) #en{--head:#8fbcf2; --head-muted:#a9bad6}}
+:root[data-theme="dark"] #lat{--head:#b9a3ff; --head-muted:#b2acd6}
+:root[data-theme="dark"] #en{--head:#8fbcf2; --head-muted:#a9bad6}
+#lat .bar,#en .bar{background:none;border:0;box-shadow:none;padding:4px 0 0;align-items:baseline;gap:10px 12px}
+#lat .bar h1,#en .bar h1{color:var(--head);flex:1 1 auto;font-size:clamp(2rem,9vw,2.8rem)}
+#lat .record,#en .record{flex-basis:auto;font-family:var(--f-comic);font-weight:600;font-size:15px;color:var(--head-muted)}
+#lat .record b,#en .record b{color:var(--head);font-variant-numeric:tabular-nums}
+#lat .stats,#en .stats{flex-basis:100%;flex-wrap:wrap;gap:5px}
+#lat .stat,#en .stat{display:flex;align-items:baseline;gap:4px;padding:2px 8px;border-width:2px;border-radius:999px}
+#lat .stat b,#en .stat b{display:inline;font-size:1rem}
+#lat .stat span,#en .stat span{font-size:.6rem;letter-spacing:.03em}
+#lat .progress,#en .progress{height:10px}
+#lat .tabs,#en .tabs{flex-basis:auto;display:inline-flex;gap:4px;border:2px solid var(--ink);border-radius:999px;padding:3px;background:var(--panel)}
+#lat .tab,#en .tab{border:0;box-shadow:none;border-radius:999px;padding:5px 18px;font-size:1rem;background:transparent;color:var(--ink)}
+#lat .tab[aria-selected="true"],#en .tab[aria-selected="true"]{background:var(--purple);color:#fff;transform:none;box-shadow:none}
+#en .dirbtn{flex-basis:auto;box-shadow:none;border-width:2px;border-radius:999px;padding:5px 14px}
 #en .tag{background:#e3eefb}
 #en .dirbtn{flex-basis:100%;font:700 .92rem var(--f-ui);border:2.5px solid var(--ink);border-radius:10px;padding:6px 10px;background:var(--sun);color:var(--ink);cursor:pointer;box-shadow:3px 3px 0 var(--ink)}
 #en .dirbtn:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--ink)}
@@ -812,8 +831,9 @@ body{background:var(--gu-bar);color:var(--gu-bar-fg)}
 
 <section class="gu-view" id="lat" data-v="lat" role="tabpanel" aria-labelledby="gu-tab-lat" hidden>
 <div class="wrap">
-  <header class="bar panel">
-    <h1>Gretas Lateinvokabeln</h1>
+  <header class="bar">
+    <h1>Latein</h1>
+    <div class="record" id="record"></div>
     <div class="stats">
       <div class="stat"><b id="sWon">0</b><span>gewonnen</span></div>
       <div class="stat"><b id="sLeft">0</b><span>im Stapel</span></div>
@@ -821,7 +841,6 @@ body{background:var(--gu-bar);color:var(--gu-bar-fg)}
       <div class="stat genus-stat"><b id="sGenus">0</b><span>Genus</span></div>
     </div>
     <div class="progress"><i id="prog"></i></div>
-    <div class="record" id="record"></div>
     <div class="tabs" role="tablist">
       <button class="tab" role="tab" id="tabPlay" type="button" aria-selected="true">Spielen</button>
       <button class="tab" role="tab" id="tabList" type="button" aria-selected="false">Vokabeln</button>
@@ -1001,7 +1020,7 @@ if(window.__GUK)window.__GUK.on(()=>renderBoard());
 const ROMAN=["I","II","III","IV","V","VI","VII","VIII","IX","X"];
 function renderBoard(){
   const b=board(),top=b.find(x=>x.best>0);
-  $("record").innerHTML=player?`<span class="who">${esc(player.name)} spielt</span>${top?`<span class="top">Rekord: ${esc(top.name)} – ${top.best} in Folge</span>`:""}`:"";
+  $("record").innerHTML=player?`<span class="mybest">Dein Rekord: <b>${S.best}</b> in Folge</span>`:"";
   const sp=$("switchP");if(sp)sp.onclick=switchPlayer;
   $("board").hidden=!player;
   $("board").innerHTML=`<h2>Bestenliste</h2>${b.length?`<ol>${b.map((x,i)=>`<li class="${x.id===player?.id?"me":""}"><span class="rk">${ROMAN[i]||i+1}</span><span class="k-name">${esc(x.name)}${kWho(x)}</span><b>${x.best} in Folge</b>${kBtn(x)}</li>`).join("")}</ol>`:'<p class="empty">Noch keine Rekorde.</p>'}${dbStatus()}`;
@@ -1279,15 +1298,15 @@ if(player)loadPlayer();rebuild();drawRandom();renderStats();renderStage();
 
 <section class="gu-view" id="en" data-v="en" role="tabpanel" aria-labelledby="gu-tab-en" hidden>
 <div class="wrap">
-  <header class="bar panel">
-    <h1>Gretas Englischvokabeln</h1>
+  <header class="bar">
+    <h1>Englisch</h1>
+    <div class="record" id="en-record"></div>
     <div class="stats">
       <div class="stat"><b id="en-sWon">0</b><span>gewonnen</span></div>
       <div class="stat"><b id="en-sLeft">0</b><span>im Stapel</span></div>
       <div class="stat"><b id="en-sStreak">0</b><span>Serie</span></div>
     </div>
     <div class="progress"><i id="en-prog"></i></div>
-    <div class="record" id="en-record"></div>
     <div class="tabs" role="tablist">
       <button class="tab" role="tab" id="en-tabPlay" type="button" aria-selected="true">Spielen</button>
       <button class="tab" role="tab" id="en-tabList" type="button" aria-selected="false">Vokabeln</button>
@@ -1471,7 +1490,7 @@ if(window.__GUK)window.__GUK.on(()=>renderBoard());
 const ROMAN=["1.","2.","3.","4.","5.","6.","7.","8.","9.","10."];
 function renderBoard(){
   const b=board(),top=b.find(x=>x.best>0);
-  $("record").innerHTML=player?`<span class="who">${esc(player.name)} spielt</span>${top?`<span class="top">Rekord: ${esc(top.name)} – ${top.best} in Folge</span>`:""}`:"";
+  $("record").innerHTML=player?`<span class="mybest">Dein Rekord: <b>${S.best}</b> in Folge</span>`:"";
   const sp=$("switchP");if(sp)sp.onclick=switchPlayer;
   $("board").hidden=!player;
   $("board").innerHTML=`<h2>Bestenliste</h2>${b.length?`<ol>${b.map((x,i)=>`<li class="${x.id===player?.id?"me":""}"><span class="rk">${ROMAN[i]||i+1}</span><span class="k-name">${esc(x.name)}${kWho(x)}</span><b>${x.best} in Folge</b>${kBtn(x)}</li>`).join("")}</ol>`:'<p class="empty">Noch keine Rekorde.</p>'}${dbStatus()}`;
