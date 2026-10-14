@@ -271,7 +271,7 @@ body{background:var(--gu-bar);color:var(--gu-bar-fg)}
 #lat .board{margin-top:18px;padding:12px 14px}
 #lat .board h2{font:400 1.4rem var(--f-comic);letter-spacing:.05em;margin:0 0 8px;color:var(--purple)}
 #lat .board ol{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
-#lat .board li{display:grid;grid-template-columns:42px minmax(0,1fr) auto;align-items:center;gap:8px;padding:6px 10px;border:2px solid var(--ink);border-radius:10px;background:#fff;font-weight:700}
+#lat .board li{display:grid;grid-template-columns:42px minmax(0,1fr) auto auto;align-items:center;gap:8px;padding:6px 10px;border:2px solid var(--ink);border-radius:10px;background:#fff;font-weight:700}
 #lat .board li.me{background:#ede5fb}
 #lat .board li .rk{font:400 1.3rem var(--f-comic);letter-spacing:.04em;color:var(--purple)}
 #lat .board li:first-child .rk{color:var(--ink);background:var(--sun);border:2px solid var(--ink);border-radius:6px;text-align:center}
@@ -443,12 +443,18 @@ body{background:var(--gu-bar);color:var(--gu-bar-fg)}
 #en .board{margin-top:18px;padding:12px 14px}
 #en .board h2{font:400 1.4rem var(--f-comic);letter-spacing:.05em;margin:0 0 8px;color:var(--purple)}
 #en .board ol{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
-#en .board li{display:grid;grid-template-columns:42px minmax(0,1fr) auto;align-items:center;gap:8px;padding:6px 10px;border:2px solid var(--ink);border-radius:10px;background:#fff;font-weight:700}
+#en .board li{display:grid;grid-template-columns:42px minmax(0,1fr) auto auto;align-items:center;gap:8px;padding:6px 10px;border:2px solid var(--ink);border-radius:10px;background:#fff;font-weight:700}
 #en .board li.me{background:#ede5fb}
 #en .board li .rk{font:400 1.3rem var(--f-comic);letter-spacing:.04em;color:var(--purple)}
 #en .board li:first-child .rk{color:var(--ink);background:var(--sun);border:2px solid var(--ink);border-radius:6px;text-align:center}
 #en .board li b{font-variant-numeric:tabular-nums}
 #en .board .empty{color:var(--muted);font-weight:600;margin:0}
+.k-name{display:grid;min-width:0;overflow-wrap:anywhere}
+.k-name small{font-weight:700;font-size:.8rem;color:#23804a}
+.k-thumb{font:700 .95rem system-ui,sans-serif;border:2px solid #1c1530;border-radius:999px;padding:2px 9px;background:#fff;color:#1c1530;cursor:pointer;white-space:nowrap;min-width:50px}
+.k-thumb[aria-pressed="true"]{background:#ffcd3c}
+.k-thumb:focus-visible{outline:3px solid #ffcd3c;outline-offset:2px}
+.k-count{font-weight:700;font-size:.95rem;white-space:nowrap;min-width:50px;text-align:center}
 #en .names{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
 #en .names .btn{font-size:1.4rem;padding:9px 20px 7px}
 #en .newname{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:6px}
@@ -901,13 +907,21 @@ function board(){
   if(player)m.get(player.id).best=Math.max(m.get(player.id).best,S.best);
   return [...m.values()].sort((a,b)=>b.best-a.best||a.name.localeCompare(b.name));
 }
+const KCAT="lat";
+function kL(x){return window.__GUK&&x.best>0?window.__GUK.likes(KCAT,x.id,x.best):[]}
+function kWho(x){if(x.id!==player?.id)return "";const L=kL(x);return L.length?`<small>👍 ${esc(L.map(y=>y.name).join(", "))}</small>`:""}
+function kBtn(x){const L=kL(x);if(x.id===player?.id)return `<span class="k-count">${L.length?"👍 "+L.length:""}</span>`;
+  if(!x.best||!window.__GUK)return "<span></span>";const mine=L.some(y=>y.from===window.__GU?.uid);
+  return `<button type="button" class="k-thumb" data-kcat="${KCAT}" data-kid="${esc(x.id)}" data-kv="${x.best}" aria-pressed="${mine}" aria-label="Daumen hoch für ${esc(x.name)}">👍${L.length?" "+L.length:""}</button>`}
+document.addEventListener("click",e=>{const b=e.target.closest('.k-thumb[data-kcat="lat"]');if(!b||!window.__GUK)return;window.__GUK.toggle(KCAT,b.dataset.kid,Number(b.dataset.kv)).catch(()=>{b.textContent="Fehler"})});
+if(window.__GUK)window.__GUK.on(()=>renderBoard());
 const ROMAN=["I","II","III","IV","V","VI","VII","VIII","IX","X"];
 function renderBoard(){
   const b=board(),top=b.find(x=>x.best>0);
   $("record").innerHTML=player?`<span class="who">${esc(player.name)} spielt · <button type="button" id="switchP">wechseln</button></span>${top?`<span class="top">Rekord: ${esc(top.name)} – ${top.best} in Folge</span>`:""}`:"";
   const sp=$("switchP");if(sp)sp.onclick=switchPlayer;
   $("board").hidden=!player;
-  $("board").innerHTML=`<h2>Bestenliste</h2>${b.length?`<ol>${b.map((x,i)=>`<li class="${x.id===player?.id?"me":""}"><span class="rk">${ROMAN[i]||i+1}</span><span>${esc(x.name)}</span><b>${x.best} in Folge</b></li>`).join("")}</ol>`:'<p class="empty">Noch keine Rekorde.</p>'}${dbStatus()}`;
+  $("board").innerHTML=`<h2>Bestenliste</h2>${b.length?`<ol>${b.map((x,i)=>`<li class="${x.id===player?.id?"me":""}"><span class="rk">${ROMAN[i]||i+1}</span><span class="k-name">${esc(x.name)}${kWho(x)}</span><b>${x.best} in Folge</b>${kBtn(x)}</li>`).join("")}</ol>`:'<p class="empty">Noch keine Rekorde.</p>'}${dbStatus()}`;
 }
 function renderStats(){
   renderBoard();
@@ -1362,13 +1376,21 @@ function board(){
   if(player)m.get(player.id).best=Math.max(m.get(player.id).best,S.best);
   return [...m.values()].sort((a,b)=>b.best-a.best||a.name.localeCompare(b.name));
 }
+const KCAT="en";
+function kL(x){return window.__GUK&&x.best>0?window.__GUK.likes(KCAT,x.id,x.best):[]}
+function kWho(x){if(x.id!==player?.id)return "";const L=kL(x);return L.length?`<small>👍 ${esc(L.map(y=>y.name).join(", "))}</small>`:""}
+function kBtn(x){const L=kL(x);if(x.id===player?.id)return `<span class="k-count">${L.length?"👍 "+L.length:""}</span>`;
+  if(!x.best||!window.__GUK)return "<span></span>";const mine=L.some(y=>y.from===window.__GU?.uid);
+  return `<button type="button" class="k-thumb" data-kcat="${KCAT}" data-kid="${esc(x.id)}" data-kv="${x.best}" aria-pressed="${mine}" aria-label="Daumen hoch für ${esc(x.name)}">👍${L.length?" "+L.length:""}</button>`}
+document.addEventListener("click",e=>{const b=e.target.closest('.k-thumb[data-kcat="en"]');if(!b||!window.__GUK)return;window.__GUK.toggle(KCAT,b.dataset.kid,Number(b.dataset.kv)).catch(()=>{b.textContent="Fehler"})});
+if(window.__GUK)window.__GUK.on(()=>renderBoard());
 const ROMAN=["1.","2.","3.","4.","5.","6.","7.","8.","9.","10."];
 function renderBoard(){
   const b=board(),top=b.find(x=>x.best>0);
   $("record").innerHTML=player?`<span class="who">${esc(player.name)} spielt · <button type="button" id="en-switchP">wechseln</button></span>${top?`<span class="top">Rekord: ${esc(top.name)} – ${top.best} in Folge</span>`:""}`:"";
   const sp=$("switchP");if(sp)sp.onclick=switchPlayer;
   $("board").hidden=!player;
-  $("board").innerHTML=`<h2>Bestenliste</h2>${b.length?`<ol>${b.map((x,i)=>`<li class="${x.id===player?.id?"me":""}"><span class="rk">${ROMAN[i]||i+1}</span><span>${esc(x.name)}</span><b>${x.best} in Folge</b></li>`).join("")}</ol>`:'<p class="empty">Noch keine Rekorde.</p>'}${dbStatus()}`;
+  $("board").innerHTML=`<h2>Bestenliste</h2>${b.length?`<ol>${b.map((x,i)=>`<li class="${x.id===player?.id?"me":""}"><span class="rk">${ROMAN[i]||i+1}</span><span class="k-name">${esc(x.name)}${kWho(x)}</span><b>${x.best} in Folge</b>${kBtn(x)}</li>`).join("")}</ol>`:'<p class="empty">Noch keine Rekorde.</p>'}${dbStatus()}`;
 }
 function renderStats(){
   renderBoard();showDir();
@@ -2092,6 +2114,13 @@ if(player)loadPlayer();migrate();rebuild();drawRandom();renderStats();renderStag
     var none={onSnapshot:function(cb){cb({docs:[]});return function(){}},doc:function(){return {get:async function(){return {exists:false}},set:async function(){throw {code:"not_supported"}},delete:async function(){}}}};
     var db={collection:function(n){if(n==="scores")return fs.collection("scores/lat/players");if(n==="en_scores")return fs.collection("scores/en/players");if(n==="ma_scores")return fs.collection("scores/mathe/players");if(n==="kudos")return fs.collection("scores/kudos/players");return none}};
     window.__GU={uid:uid,name:name};
+    window.__GUK=(function(){var kd={},subs=[],busy=false,col=fs.collection("scores/kudos/players");
+      col.onSnapshot(function(sn){kd={};sn.docs.forEach(function(d){kd[d.id]=d.data()||{}});subs.forEach(function(f){try{f()}catch(e){}})},function(){});
+      return {on:function(f){subs.push(f)},
+        likes:function(cat,id,v){var out=[];Object.keys(kd).forEach(function(from){if(from===id)return;var L=(kd[from].likes||{})[cat+":"+id];if(L&&L.v===v)out.push({from:from,name:kd[from].name||"?"})});return out},
+        toggle:async function(cat,id,v){if(busy)return;busy=true;var key=cat+":"+id,likes=Object.assign({},(kd[uid]&&kd[uid].likes)||{});
+          if(likes[key]&&likes[key].v===v)delete likes[key];else likes[key]={v:v,t:new Date().toISOString()};
+          try{await col.doc(uid).set({name:name,best:0,likes:likes})}finally{busy=false}}}})();
     window.claude={use:async function(n){if(n==="db")return db;if(n==="user")return {canEdit:async function(){return isAdmin},can:async function(){return true},isOwner:function(){return isAdmin}};return null}};
     // Seiten starten
     document.querySelectorAll('script[type="text/x-deferred"]').forEach(function(s){var n=document.createElement("script");n.textContent=s.textContent;s.replaceWith(n)});
