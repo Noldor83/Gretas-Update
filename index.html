@@ -547,7 +547,14 @@ body{background:var(--gu-bar);color:var(--gu-bar-fg)}
 #st .s-tile{padding:14px 12px 12px;display:grid;gap:6px;align-content:start;border-top-width:8px;min-width:0}
 #st .s-tile[data-k="lat"]{border-top-color:var(--s-lat)}
 #st .s-tile[data-k="en"]{border-top-color:var(--s-en)}
-#st .s-tile[data-k="ma"],#st .s-tile[data-k="md"]{border-top-color:var(--s-ma)}
+#st .s-tile[data-k="ma"]{border-top-color:var(--s-ma)}
+#st .s-math .s-mrows{grid-column:1 / -1;display:grid;gap:8px;margin:2px 0}
+#st .s-mrow{display:grid;grid-template-columns:30px 70px 48px minmax(0,1fr);align-items:center;gap:8px}
+#st .s-op{display:grid;place-items:center;width:30px;height:30px;border-radius:9px;background:var(--s-ma);color:#fff;font-family:var(--s-f-big);font-size:18px;line-height:1}
+#st .s-mlabel{font-family:var(--s-f-head);font-weight:600;font-size:15px}
+#st .s-mnum{font-family:var(--s-f-big);font-weight:400;font-size:30px;line-height:1;color:var(--s-ma);text-align:right;font-variant-numeric:tabular-nums}
+#st .s-math .s-mrow .s-rank{font-size:13.5px;grid-column:auto;grid-row:auto}
+#st .s-math h3,#st .s-math .s-what,#st .s-math .s-cta{grid-column:1 / -1}
 #st .s-tile h3{font-family:var(--s-f-head);font-weight:700;font-size:17px}
 #st .s-tile .s-what{font-size:12.5px;color:var(--s-muted);line-height:1.3}
 #st .s-tile .s-num{font-family:var(--s-f-big);font-size:46px;line-height:1;font-variant-numeric:tabular-nums}
@@ -597,8 +604,10 @@ body{background:var(--gu-bar);color:var(--gu-bar-fg)}
       <div class="s-scores">
         <button type="button" class="s-card s-tile" data-k="lat" data-go="lat"><h3>Latein</h3><p class="s-what">Beste Serie in Folge</p><div class="s-num" id="s-lat">–</div><p class="s-rank" id="s-lat-r">Lädt …</p><span class="s-cta">Vokabeln üben →</span></button>
         <button type="button" class="s-card s-tile" data-k="en" data-go="en"><h3>Englisch</h3><p class="s-what">Beste Serie in Folge</p><div class="s-num" id="s-en">–</div><p class="s-rank" id="s-en-r">Lädt …</p><span class="s-cta">Vokabeln üben →</span></button>
-        <button type="button" class="s-card s-tile" data-k="ma" data-go="ma"><h3>Mathe · Mal</h3><p class="s-what">Punkte in 60 Sekunden</p><div class="s-num" id="s-ma">–</div><p class="s-rank" id="s-ma-r">Lädt …</p><span class="s-cta">1×1-Rakete starten →</span></button>
-        <button type="button" class="s-card s-tile" data-k="md" data-go="ma"><h3>Mathe · Geteilt</h3><p class="s-what">Punkte in 60 Sekunden</p><div class="s-num" id="s-md">–</div><p class="s-rank" id="s-md-r">Lädt …</p><span class="s-cta">Geteilt-Rakete starten →</span></button>
+        <button type="button" class="s-card s-tile s-math" data-k="ma" data-go="ma"><h3>Mathe</h3><p class="s-what">Punkte in 60 Sekunden</p>
+          <div class="s-mrows"><div class="s-mrow"><span class="s-op">×</span><span class="s-mlabel">Mal</span><b class="s-mnum" id="s-ma">–</b><span class="s-rank" id="s-ma-r">Lädt …</span></div>
+          <div class="s-mrow"><span class="s-op">:</span><span class="s-mlabel">Geteilt</span><b class="s-mnum" id="s-md">–</b><span class="s-rank" id="s-md-r">Lädt …</span></div></div>
+          <span class="s-cta">Rakete starten →</span></button>
       </div>
     </div>
   </div>
@@ -616,7 +625,7 @@ body{background:var(--gu-bar);color:var(--gu-bar-fg)}
   var LINES=["Bereit für eine Runde?","Heute knackst du einen Rekord.","Fünf Minuten üben schlagen eine Stunde Pauken.","Die Rakete wartet schon auf dich.","Kleine Schritte, große Wirkung."];
   if(now.getDay()===0||now.getDay()===6)LINES.push("Wochenende – ein kurzes Training geht immer.");
   $("s-line").textContent=LINES[(now.getDate()+h)%LINES.length];
-  document.querySelectorAll("#st [data-go]").forEach(function(b){b.onclick=function(){if(b.dataset.k==="md"||b.dataset.k==="ma"){var mb=document.querySelector('#ma .m-mode[data-mode="'+(b.dataset.k==="md"?"div":"mul")+'"]');if(mb)mb.click()}var t=document.getElementById("gu-tab-"+b.dataset.go);if(t)t.click()}});
+  document.querySelectorAll("#st [data-go]").forEach(function(b){b.onclick=function(){var t=document.getElementById("gu-tab-"+b.dataset.go);if(t)t.click()}});
   var CAT={ma:"in Mathe (Mal)",md:"in Mathe (Geteilt)",lat:"in Latein",en:"in Englisch"},UNIT={ma:"Punkte",lat:"er-Serie",en:"er-Serie"};
   var COLS=["#ffd24d","#ff9fc0","#9fdcf7","#a8e6c3","#c9b8ff","#ffc59a"];
   var seen=0;try{seen=Number(localStorage.getItem("gu-kudos-seen"))||0}catch(e){}
