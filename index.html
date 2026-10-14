@@ -1,0 +1,1679 @@
+<!doctype html>
+<html lang="de"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Gretas Update</title>
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#1d2140">
+<meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Gretas Update">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="apple-touch-icon" href="icon-180.png"><link rel="icon" href="icon-180.png">
+<style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bagel+Fat+One&family=Fredoka:wght@500;600;700&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bangers&family=Baloo+2:wght@500;700;800&family=Kalam:wght@700&display=swap">
+<style>
+/* Layout: Ordner mit Registerreitern – oben eine feste Leiste mit Name und zwei Reitern (Weltblick, Latein), darunter das gewählte Fach in voller Größe */
+:root{
+  --gu-bar:#1d2140; --gu-bar-fg:#ffffff; --gu-muted:#b6bad8; --gu-sun:#ffd24d; --gu-sun-ink:#1d2140;
+  --gu-wb:#d9472b; --gu-lat:#6a3fb5; --gu-en:#1f5fa8; --gu-tab:#2b3060;
+  --gu-f-head:"Fredoka","Arial Rounded MT Bold","Trebuchet MS",sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --gu-bar:#0c0e1d; --gu-bar-fg:#eef0ff; --gu-muted:#9a9ec0; --gu-sun:#e8c23a; --gu-sun-ink:#13162a;
+  --gu-wb:#c8432a; --gu-lat:#7b55d0; --gu-en:#2a6cb8; --gu-tab:#1d2140; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --gu-bar:#0c0e1d; --gu-bar-fg:#eef0ff; --gu-muted:#9a9ec0; --gu-sun:#e8c23a; --gu-sun-ink:#13162a;
+  --gu-wb:#c8432a; --gu-lat:#7b55d0; --gu-en:#2a6cb8; --gu-tab:#1d2140; color-scheme:dark}
+body{background:var(--gu-bar);color:var(--gu-bar-fg)}
+
+.gu-bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;background:var(--gu-bar);color:var(--gu-bar-fg);
+  padding-block:10px 0;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.gu-in{max-width:1000px;margin:0 auto;display:grid;gap:8px}
+.gu-name{font-family:var(--gu-f-head);font-weight:700;font-size:20px;line-height:1;display:flex;align-items:center;gap:8px}
+.gu-logo>span{background:var(--gu-sun);color:var(--gu-sun-ink);border-radius:8px;padding:2px 8px 3px;transform:rotate(-2deg);display:inline-block}
+.gu-tabs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+.gu-tab{font-family:var(--gu-f-head);font-weight:600;font-size:18px;line-height:1.1;text-align:left;cursor:pointer;
+  border:0;border-radius:14px 14px 0 0;padding:10px 14px 9px;background:var(--gu-tab);color:var(--gu-muted);
+  display:grid;gap:1px;transition:background .15s,color .15s}
+.gu-tab small{font-weight:500;font-size:12.5px;letter-spacing:.06em;text-transform:uppercase;opacity:.85}
+.gu-tab[aria-selected="true"]{color:#fff}
+.gu-tab[data-v="wb"][aria-selected="true"]{background:var(--gu-wb)}
+.gu-tab[data-v="lat"][aria-selected="true"]{background:var(--gu-lat)}
+.gu-tab[data-v="en"][aria-selected="true"]{background:var(--gu-en)}
+@media (max-width:420px){.gu-tab{font-size:16px;padding:9px 10px 8px}.gu-tab small{font-size:11px}}
+.gu-tab:focus-visible{outline:3px solid var(--gu-sun);outline-offset:-3px}
+.gu-view{min-height:calc(100vh - 90px)}
+.gu-view[data-v="wb"]{border-top:4px solid var(--gu-wb)}
+.gu-view[data-v="lat"]{border-top:4px solid var(--gu-lat)}
+.gu-view[data-v="en"]{border-top:4px solid var(--gu-en)}
+@media (prefers-reduced-motion:reduce){.gu-tab{transition:none}}
+
+/* ===== Der Weltblick ===== */
+#wb{--paper:#f7f9ff; --dot:#dfe4f5; --ink:#1e2240; --muted:#565b7a; --card:#ffffff;
+  --purple:#5b3cc4; --innen:#0c8a79; --innen-bg:#dcf4ef; --aussen:#d9472b; --aussen-bg:#ffe5de;
+  --yellow:#ffd84d; --yellow-ink:#1e2240; --shadow:#1e2240;
+  --f-mast:"Bagel Fat One","Arial Rounded MT Bold","Trebuchet MS",sans-serif;
+  --f-head:"Fredoka","Arial Rounded MT Bold","Trebuchet MS",sans-serif;
+  --f-body:"Atkinson Hyperlegible",Verdana,"Segoe UI",sans-serif;}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) #wb{--paper:#141729; --dot:#23284a; --ink:#eef0ff; --muted:#b0b4d4; --card:#1c2039;
+  --purple:#ab9cff; --innen:#4fd1bd; --innen-bg:#173a35; --aussen:#ff8a70; --aussen-bg:#3d221c;
+  --yellow:#e8c23a; --yellow-ink:#141729; --shadow:#000000; color-scheme:dark}}
+:root[data-theme="dark"] #wb{--paper:#141729; --dot:#23284a; --ink:#eef0ff; --muted:#b0b4d4; --card:#1c2039;
+  --purple:#ab9cff; --innen:#4fd1bd; --innen-bg:#173a35; --aussen:#ff8a70; --aussen-bg:#3d221c;
+  --yellow:#e8c23a; --yellow-ink:#141729; --shadow:#000000; color-scheme:dark}
+#wb{background-color:var(--paper);background-image:radial-gradient(var(--dot) 1.4px,transparent 1.5px);background-size:22px 22px;
+  color:var(--ink);font-family:var(--f-body);font-size:17px;line-height:1.55}
+#wb .page{max-width:1000px;margin:0 auto;padding-block:16px 48px;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:grid;gap:22px}
+#wb h1,#wb h2,#wb h3,#wb h4{text-wrap:balance;margin:0}
+#wb p{margin:0}
+#wb .topbar{display:flex;justify-content:flex-end}
+#wb .topbar label{display:flex;gap:8px;align-items:center;font-family:var(--f-head);font-weight:600;font-size:15px;color:var(--muted)}
+#wb select{font:inherit;font-family:var(--f-head);color:var(--ink);background:var(--card);border:2px solid var(--ink);border-radius:999px;padding:4px 12px}
+#wb select:focus-visible{outline:3px solid var(--purple);outline-offset:2px}
+#wb .mast{text-align:center;display:grid;gap:10px;justify-items:center}
+#wb .mast h1{font-family:var(--f-mast);font-weight:400;font-size:clamp(46px,11vw,96px);line-height:.95;color:var(--purple);letter-spacing:.01em}
+#wb .mast h1 span{color:var(--aussen)}
+#wb .ribbon{display:flex;flex-wrap:wrap;justify-content:center;gap:8px}
+#wb .chip{font-family:var(--f-head);font-weight:600;font-size:14.5px;background:var(--card);border:2px solid var(--ink);border-radius:999px;padding:3px 14px}
+#wb .chip.dark{background:var(--ink);color:var(--paper)}
+#wb .card{background:var(--card);border:2.5px solid var(--ink);border-radius:20px;box-shadow:5px 5px 0 var(--shadow);padding:20px}
+#wb .badge{display:inline-block;font-family:var(--f-head);font-weight:600;font-size:13px;letter-spacing:.04em;text-transform:uppercase;
+  border-radius:999px;padding:3px 12px;color:var(--card);background:var(--ink)}
+#wb .innen .badge,#wb .badge.innen{background:var(--innen);color:var(--card)}
+#wb .aussen .badge,#wb .badge.aussen{background:var(--aussen);color:var(--card)}
+#wb .lead{display:grid;gap:12px;position:relative}
+#wb .lead .badge{justify-self:start}
+#wb .lead.innen{background:var(--innen-bg)}
+#wb .lead.aussen{background:var(--aussen-bg)}
+#wb .lead .sticker{position:absolute;top:-16px;right:18px;background:var(--yellow);color:var(--yellow-ink);font-family:var(--f-head);font-weight:700;
+  font-size:15px;border:2.5px solid var(--ink);border-radius:999px;padding:4px 14px;transform:rotate(4deg)}
+#wb .lead h2{font-family:var(--f-head);font-weight:700;font-size:clamp(28px,5vw,44px);line-height:1.08}
+#wb .lead p{font-size:18.5px;max-width:62ch}
+#wb .wichtig{display:flex;gap:10px;align-items:flex-start;font-weight:700}
+#wb .wichtig::before{content:"!";flex:none;display:grid;place-items:center;width:26px;height:26px;border-radius:50%;
+  background:var(--yellow);color:var(--yellow-ink);border:2px solid var(--ink);font-family:var(--f-head);font-weight:700;font-size:15px;margin-top:1px}
+#wb .ressorts{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+#wb .ressort{display:grid;gap:14px;align-content:start;min-width:0}
+#wb .ressort > header{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+#wb .ressort h3{font-family:var(--f-head);font-weight:700;font-size:26px}
+#wb .ressort.innen h3{color:var(--innen)}
+#wb .ressort.aussen h3{color:var(--aussen)}
+#wb .ressort .sub{font-family:var(--f-head);font-weight:500;color:var(--muted);font-size:15px}
+#wb .story{display:grid;gap:8px;border-radius:16px}
+#wb .ressort.innen .story{border-top:6px solid var(--innen)}
+#wb .ressort.aussen .story{border-top:6px solid var(--aussen)}
+#wb .story h4{font-family:var(--f-head);font-weight:600;font-size:21px;line-height:1.2}
+#wb .story .wichtig{font-size:16px}
+#wb .leer{color:var(--muted);font-style:italic}
+#wb .zettel{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;align-items:start}
+#wb .note{display:grid;gap:8px}
+#wb .note h4{font-family:var(--f-head);font-weight:600;font-size:14px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+#wb .note.zahl .wert{font-family:var(--f-mast);font-weight:400;font-size:46px;line-height:1;color:var(--purple)}
+#wb .note.wort b{font-family:var(--f-head);font-weight:700;font-size:22px;display:block}
+#wb .note.frage{background:var(--yellow);color:var(--yellow-ink);transform:rotate(-1.5deg)}
+#wb .note.frage h4{color:var(--yellow-ink)}
+#wb .note.frage p{font-family:var(--f-head);font-weight:500;font-size:19px;line-height:1.35}
+#wb .note.zahl{transform:rotate(1deg)}
+#wb footer{font-size:13.5px;color:var(--muted);display:grid;gap:6px}
+#wb footer h4{font-family:var(--f-head);font-weight:600;font-size:14px;color:var(--ink)}
+#wb footer ol{margin:0;padding-left:20px;display:grid;gap:2px}
+#wb footer a{color:var(--purple);overflow-wrap:anywhere}
+#wb footer a:focus-visible{outline:2px solid var(--purple)}
+#wb .empty{text-align:center;color:var(--muted);padding:40px 0}
+@media (max-width:760px){#wb .ressorts{grid-template-columns:1fr}
+#wb .zettel{grid-template-columns:1fr}
+#wb .note.frage,#wb .note.zahl{transform:none}}
+@media (prefers-reduced-motion:no-preference){#wb .note{transition:transform .2s}
+#wb .note:hover{transform:rotate(0) translateY(-2px)}}
+
+/* ===== Gretas Lateinvokabeln ===== */
+#lat{--sky:#8fd3f4; --dot:rgba(255,255,255,.55); --panel:#ffffff; --ink:#1c1530; --text:#1c1530; --muted:#5d5670;
+  --purple:#6a3fb5; --sun:#ffcd3c; --line:#e3ddf0;
+  --ok:#23804a; --ok-bg:#dcf5e3; --bad:#c23b2b; --bad-bg:#fde3de; --warn:#9a6400; --warn-bg:#fff1c7;
+  --f-comic:"Bangers","Impact","Arial Black",sans-serif; --f-ui:"Baloo 2",system-ui,-apple-system,"Segoe UI",sans-serif; --f-hand:"Kalam","Comic Sans MS","Bradley Hand",cursive;}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) #lat{--sky:#1d2552; --dot:rgba(140,160,255,.16); --panel:#fbf9ff; --ink:#0d0a18; color-scheme:dark}}
+:root[data-theme="dark"] #lat{--sky:#1d2552; --dot:rgba(140,160,255,.16); --panel:#fbf9ff; --ink:#0d0a18; color-scheme:dark}
+#lat *{box-sizing:border-box}
+#lat{font-family:var(--f-ui);color:var(--text);min-height:100vh;background-color:var(--sky);
+  background-image:radial-gradient(var(--dot) 2.2px,transparent 2.6px);background-size:16px 16px}
+#lat .wrap{max-width:820px;margin:0 auto;padding-block:14px 56px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;flex-direction:column;gap:18px}
+#lat .panel{background:var(--panel);border:3px solid var(--ink);border-radius:14px;box-shadow:5px 5px 0 var(--ink)}
+#lat .bar{padding:12px 14px;display:flex;flex-wrap:wrap;align-items:center;gap:10px 16px}
+#lat .bar h1{font-family:var(--f-comic);font-weight:400;font-size:clamp(1.6rem,6.5vw,2.2rem);margin:0;letter-spacing:.04em;line-height:1;color:var(--purple);flex:1 1 auto;text-shadow:2px 2px 0 var(--sun)}
+#lat .stats{display:flex;gap:8px;font-variant-numeric:tabular-nums}
+#lat .stat{border:2px solid var(--ink);border-radius:10px;padding:2px 9px;text-align:center;background:#fff}
+#lat .stat:nth-child(1){background:var(--ok-bg)}
+#lat .stat:nth-child(3){background:var(--warn-bg)}
+#lat .stat b{display:block;font-size:1.15rem;line-height:1.15;font-weight:800}
+#lat .stat span{font-size:.62rem;text-transform:uppercase;letter-spacing:.06em;font-weight:700;color:var(--muted)}
+#lat .progress{flex-basis:100%;height:12px;border:2px solid var(--ink);border-radius:8px;background:#fff;overflow:hidden}
+#lat .progress i{display:block;height:100%;width:0;background:repeating-linear-gradient(-45deg,var(--sun) 0 8px,#ffdb6e 8px 16px);transition:width .4s}
+#lat .tabs{flex-basis:100%;display:grid;grid-template-columns:1fr 1fr;gap:8px}
+#lat .tab{font:400 1.25rem var(--f-comic);letter-spacing:.06em;border:2.5px solid var(--ink);border-radius:10px;padding:5px 8px 3px;cursor:pointer;background:#fff;color:var(--ink);box-shadow:3px 3px 0 var(--ink)}
+#lat .tab[aria-selected="true"]{background:var(--purple);color:#fff;transform:translate(2px,2px);box-shadow:1px 1px 0 var(--ink)}
+#lat .hero{display:flex;align-items:flex-end;gap:6px;max-width:500px;margin:0 auto;width:100%}
+#lat .julia{width:104px;flex:none;height:auto}
+#lat .julia .m{display:none}
+#lat .julia[data-mood="idle"] .m-idle,#lat .julia[data-mood="ok"] .m-ok,#lat .julia[data-mood="bad"] .m-bad,#lat .julia[data-mood="near"] .m-idle{display:inline}
+#lat .julia[data-mood="ok"]{animation:hop .5s ease}
+#lat .julia[data-mood="bad"]{animation:shake .4s ease}
+@keyframes hop{40%{transform:translateY(-12px)}}
+@keyframes shake{25%{transform:rotate(-5deg)}75%{transform:rotate(5deg)}}
+#lat .bubble{position:relative;flex:1;min-width:0;background:#fff;border:3px solid var(--ink);border-radius:18px;padding:8px 14px;margin-bottom:46px;box-shadow:3px 3px 0 var(--ink)}
+#lat .bubble::before{content:"";position:absolute;left:-16px;bottom:10px;border:9px solid transparent;border-right:16px solid var(--ink);border-left:0}
+#lat .bubble::after{content:"";position:absolute;left:-10px;bottom:13px;border:6px solid transparent;border-right:11px solid #fff;border-left:0}
+#lat .bubble b{font:400 1.6rem var(--f-comic);letter-spacing:.05em;color:var(--purple);display:block;line-height:1.05}
+#lat .bubble span{font-size:.88rem;color:var(--muted);font-weight:500}
+#lat .stage{display:flex;justify-content:center;margin-top:-6px}
+#lat .card{width:min(100%,500px);padding:14px 18px 18px;display:flex;flex-direction:column;gap:12px}
+#lat .card.pop{animation:pop .4s cubic-bezier(.3,1.4,.5,1)}
+@keyframes pop{0%{transform:scale(.85) rotate(-3deg);opacity:.3}100%{transform:none;opacity:1}}
+#lat .card .meta{display:flex;justify-content:space-between;gap:8px;font-size:.75rem;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.07em}
+#lat .card .meta .neu{background:var(--sun);color:var(--ink);border:2px solid var(--ink);border-radius:6px;padding:0 6px}
+#lat .latin{font-family:var(--f-comic);font-weight:400;letter-spacing:.05em;font-size:clamp(2.3rem,11vw,3.3rem);color:var(--ink);margin:2px 0 0;line-height:1;text-wrap:balance;overflow-wrap:anywhere}
+#lat .extra{font-size:1rem;color:var(--muted);font-weight:700}
+#lat .tags{display:flex;flex-wrap:wrap;gap:6px}
+#lat .tag{font-size:.75rem;font-weight:800;padding:2px 9px;border-radius:999px;background:#ede5fb;color:var(--purple);border:2px solid var(--purple)}
+#lat .row{display:flex;gap:8px}
+#lat .answer{flex:1;min-width:0;font:700 1.4rem var(--f-hand);color:#2b3f9e;background:#f5f8ff;border:2.5px solid var(--ink);border-radius:10px;padding:8px 12px;outline:none}
+#lat .answer:disabled{opacity:.75}
+#lat .answer::placeholder{color:#8f96b8;font-weight:400}
+#lat .btn{font:400 1.15rem var(--f-comic);letter-spacing:.06em;border:2.5px solid var(--ink);border-radius:10px;padding:7px 16px 5px;cursor:pointer;background:var(--purple);color:#fff;box-shadow:3px 3px 0 var(--ink)}
+#lat .btn:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--ink)}
+#lat .btn:disabled{opacity:.5;cursor:default}
+#lat .btn.ghost{background:#fff;color:var(--ink)}
+#lat .btn:focus-visible,#lat .chip:focus-visible,#lat .tab:focus-visible,#lat .answer:focus-visible,#lat input:focus-visible{outline:3px solid var(--sun);outline-offset:3px}
+#lat .actions{display:flex;flex-wrap:wrap;gap:10px;justify-content:space-between}
+#lat .fb{border:2.5px solid currentColor;border-radius:10px;padding:9px 12px;font-size:.98rem;line-height:1.35;font-weight:500}
+#lat .fb.ok{background:var(--ok-bg);color:var(--ok)}
+#lat .fb.bad{background:var(--bad-bg);color:var(--bad)}
+#lat .fb.warn{background:var(--warn-bg);color:var(--warn)}
+#lat .fb strong{font-weight:800}
+#lat .idle{text-align:center;padding:22px 14px}
+#lat .idle p{margin:6px 0 14px;color:var(--muted);font-weight:500}
+#lat .stackinfo{font-weight:700;font-size:.85rem;text-align:center;margin:14px auto 0;color:var(--ink);background:#fff;border:2px solid var(--ink);border-radius:999px;padding:4px 14px;width:max-content;max-width:100%}
+#lat .stackinfo:empty{display:none}
+#lat .stackinfo button{font:inherit;color:var(--purple);background:transparent;border:none;text-decoration:underline;cursor:pointer;padding:0 2px}
+#lat .list{padding:14px;display:flex;flex-direction:column;gap:16px}
+#lat .tools{display:flex;flex-direction:column;gap:10px}
+#lat .chips{display:flex;flex-wrap:wrap;gap:6px}
+#lat .chip{font:800 .85rem var(--f-ui);border:2px solid var(--ink);color:var(--ink);background:#fff;border-radius:999px;padding:3px 12px;cursor:pointer}
+#lat .chip[aria-pressed="true"]{background:var(--sun)}
+#lat .chip:disabled{opacity:.4;cursor:default}
+#lat .switch{display:flex;align-items:center;gap:8px;font-size:.92rem;font-weight:700;cursor:pointer}
+#lat .switch input{width:18px;height:18px;accent-color:var(--purple)}
+#lat .grp h2{font:400 1.35rem var(--f-comic);letter-spacing:.05em;margin:0 0 4px;display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px;padding:4px 10px;background:var(--purple);color:#fff;border:2.5px solid var(--ink);border-radius:10px}
+#lat .grp h2 label{display:flex;align-items:center;gap:8px;cursor:pointer;flex:1}
+#lat .grp h2 > span{font:700 .8rem var(--f-ui);letter-spacing:0}
+#lat .grp h2 input,#lat .vrow input{width:18px;height:18px;accent-color:var(--purple);flex:none}
+#lat .new{font:400 .9rem var(--f-comic);background:var(--sun);color:var(--ink);border:2px solid var(--ink);border-radius:6px;padding:1px 6px 0}
+#lat .vrow{display:grid;grid-template-columns:auto minmax(0,1fr) minmax(0,1.2fr) auto;gap:10px;align-items:center;padding:7px 4px;border-bottom:2px dotted var(--line);font-size:.95rem}
+#lat .vrow .la{font-weight:800;overflow-wrap:anywhere;color:var(--ink);cursor:pointer}
+#lat .vrow .la small{display:block;font-weight:500;color:var(--muted);font-size:.8rem}
+#lat .vrow .de{overflow-wrap:anywhere}
+#lat .hide .vrow .de{filter:blur(6px);cursor:pointer;user-select:none}
+#lat .hide .vrow .de.show{filter:none}
+#lat .pill{font-size:.7rem;font-weight:800;border-radius:999px;padding:1px 8px;white-space:nowrap;border:2px solid currentColor}
+#lat .pill.won{background:var(--ok-bg);color:var(--ok)}
+#lat .pill.retry{background:var(--bad-bg);color:var(--bad)}
+#lat .pill.open{background:#f2eff8;color:var(--muted)}
+#lat .vrow.off{opacity:.42}
+#lat .sticky{position:sticky;bottom:calc(12px + env(safe-area-inset-bottom,0px));display:flex;justify-content:center;margin-top:14px}
+@media (max-width:480px){#lat .vrow{grid-template-columns:auto minmax(0,1fr) auto}
+#lat .vrow .de{grid-column:2/4;grid-row:2;font-size:.9rem;margin-top:-4px}
+#lat .julia{width:88px}}
+@media (prefers-reduced-motion: reduce){#lat *{animation:none!important;transition:none!important}}
+#lat .addbox{padding:0;overflow:hidden}
+#lat .addbox>summary{list-style:none;cursor:pointer;padding:10px 14px;font:400 1.35rem var(--f-comic);letter-spacing:.05em;background:var(--sun);color:var(--ink);display:flex;justify-content:space-between;align-items:center}
+#lat .addbox>summary::-webkit-details-marker{display:none}
+#lat .addbox>summary::after{content:"+";font-size:1.6rem;line-height:1}
+#lat .addbox[open]>summary::after{content:"–"}
+#lat .addbox[open]>summary{border-bottom:3px solid var(--ink)}
+#lat .addin{padding:14px;display:flex;flex-direction:column;gap:12px}
+#lat .addrow{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+#lat .addrow label.num{display:flex;align-items:center;gap:6px;font-weight:800}
+#lat .addrow input[type=number]{width:64px;font:800 1rem var(--f-ui);border:2.5px solid var(--ink);border-radius:8px;padding:4px 8px;background:#fff;color:var(--ink)}
+#lat .filebtn{display:inline-flex;align-items:center;gap:6px}
+#lat .filebtn input{position:absolute;width:1px;height:1px;opacity:0;pointer-events:none}
+#lat .note{margin:0;font-size:.9rem;font-weight:600;color:var(--muted)}
+#lat .note.err{color:var(--bad)}
+#lat .note.ok{color:var(--ok)}
+#lat .busy{display:flex;align-items:center;gap:10px;font-weight:700}
+#lat .dots i{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--purple);margin-right:3px;animation:blink 1s infinite}
+#lat .dots i:nth-child(2){animation-delay:.2s}
+#lat .dots i:nth-child(3){animation-delay:.4s}
+@keyframes blink{50%{opacity:.2}}
+#lat .prow{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.8fr) minmax(0,1.4fr) minmax(0,.9fr) auto;gap:6px;align-items:center;padding:6px 0;border-bottom:2px dotted var(--line)}
+#lat .prow input,#lat .prow select{min-width:0;width:100%;font:600 .92rem var(--f-ui);border:2px solid var(--ink);border-radius:7px;padding:4px 7px;background:#fff;color:var(--ink)}
+#lat .prow input.la{font-weight:800}
+#lat .prow .x{font:800 1rem var(--f-ui);border:2px solid var(--ink);background:#fff;color:var(--bad);border-radius:7px;width:32px;height:32px;cursor:pointer}
+#lat .prow .dup{grid-column:1/-1;font-size:.75rem;font-weight:700;color:var(--warn)}
+#lat .phead{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.8fr) minmax(0,1.4fr) minmax(0,.9fr) 32px;gap:6px;font-size:.7rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+@media (max-width:560px){#lat .phead{display:none}
+#lat .prow{grid-template-columns:minmax(0,1fr) minmax(0,1fr) 32px}
+#lat .prow input.de{grid-column:1/3;grid-row:2}
+#lat .prow select{grid-column:1/3;grid-row:3}
+#lat .prow .x{grid-row:1;grid-column:3}}
+#lat .grp h2 .del{font:700 .75rem var(--f-ui);background:#fff;color:var(--bad);border:2px solid var(--ink);border-radius:7px;padding:1px 8px;cursor:pointer}
+#lat .grp h2 .del.sure{background:var(--bad);color:#fff}
+#lat .record{flex-basis:100%;display:flex;flex-wrap:wrap;justify-content:space-between;gap:6px 12px;font-weight:800;font-size:.92rem}
+#lat .record .who button{font:inherit;color:var(--purple);background:transparent;border:none;text-decoration:underline;cursor:pointer;padding:0 2px}
+#lat .record .top{background:var(--sun);border:2px solid var(--ink);border-radius:8px;padding:0 8px}
+#lat .board{margin-top:18px;padding:12px 14px}
+#lat .board h2{font:400 1.4rem var(--f-comic);letter-spacing:.05em;margin:0 0 8px;color:var(--purple)}
+#lat .board ol{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
+#lat .board li{display:grid;grid-template-columns:42px minmax(0,1fr) auto;align-items:center;gap:8px;padding:6px 10px;border:2px solid var(--ink);border-radius:10px;background:#fff;font-weight:700}
+#lat .board li.me{background:#ede5fb}
+#lat .board li .rk{font:400 1.3rem var(--f-comic);letter-spacing:.04em;color:var(--purple)}
+#lat .board li:first-child .rk{color:var(--ink);background:var(--sun);border:2px solid var(--ink);border-radius:6px;text-align:center}
+#lat .board li b{font-variant-numeric:tabular-nums}
+#lat .board .empty{color:var(--muted);font-weight:600;margin:0}
+#lat .names{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
+#lat .names .btn{font-size:1.4rem;padding:9px 20px 7px}
+#lat .newname{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:6px}
+#lat .newname input{font:700 1.1rem var(--f-ui);border:2.5px solid var(--ink);border-radius:10px;padding:6px 10px;min-width:0;width:180px;max-width:100%;color:var(--ink);background:#fff}
+#lat .restart{display:flex;justify-content:center;margin-top:14px}
+#lat .restart .btn.sure{background:var(--bad);color:#fff}
+#lat .vrow .mine{font-size:.66rem;font-weight:800;color:var(--purple);margin-left:4px}
+#lat{min-height:calc(100vh - 90px)}
+#lat .stats{flex-wrap:wrap}
+#lat .genus-stat{background:#e7defa}
+#lat .row.genus{align-items:center;flex-wrap:wrap}
+#lat .row.genus label{font-weight:800;font-size:.95rem;color:var(--ink);display:grid;line-height:1.1}
+#lat .row.genus label small{font-weight:600;color:var(--muted);font-size:.75rem}
+#lat .gen-badge{display:inline-block;margin-left:6px;font:800 .78rem var(--f-ui);line-height:1;padding:3px 7px 2px;border-radius:6px;border:2px solid currentColor;vertical-align:2px}
+#lat .g-m{color:#1f5fa8;background:#e3eefb}#lat .g-f{color:#b3261e;background:#fde3de}#lat .g-n{color:#23804a;background:#dcf5e3}
+#lat .tag-badge{display:inline-block;margin-left:6px;font:700 .72rem var(--f-ui);line-height:1;padding:3px 6px 2px;border-radius:6px;border:2px solid var(--muted);color:var(--muted);background:#f2eff8;vertical-align:2px;white-space:nowrap}
+#lat .vrow .lw{display:block;font-size:.78rem;font-style:italic;color:var(--muted);margin-top:1px}
+#lat .vrow .dewrap{min-width:0;overflow-wrap:anywhere}
+#lat .hide .vrow .gen-badge,#lat .hide .vrow .tag-badge{filter:blur(5px);user-select:none}
+#lat .hide .vrow.show .gen-badge,#lat .hide .vrow.show .tag-badge{filter:none}
+#lat .hide .vrow:not(.show) .gen-badge{color:var(--muted);background:#f2eff8}
+#lat .hide .vrow:not(.show) .lw{display:none}
+@media (max-width:480px){#lat .vrow .dewrap{grid-column:2/4;grid-row:2;font-size:.9rem;margin-top:-4px}#lat .vrow .dewrap .de{font-size:inherit;margin-top:0}}
+#lat .hide .vrow:not(.show) .exf{filter:blur(5px);user-select:none}
+#lat .chk{list-style:none;margin:6px 0 4px;padding:0;display:grid;gap:2px}
+#lat .chk li.y{color:var(--ok)}#lat .chk li.n{color:var(--bad)}
+#lat .fb .full{margin-top:6px;padding-top:6px;border-top:2px dotted currentColor;font-weight:800;color:var(--ink)}
+#lat .dbst,#en .dbst{margin:8px 0 0;font-size:.78rem;font-weight:700;color:var(--muted)}
+#lat .answer.gen{flex:0 1 9.5em;font-size:1.2rem;padding:6px 10px}
+
+/* ===== Gretas Englischvokabeln ===== */
+#en{--sky:#8fd3f4; --dot:rgba(255,255,255,.55); --panel:#ffffff; --ink:#1c1530; --text:#1c1530; --muted:#5d5670;
+  --purple:#6a3fb5; --sun:#ffcd3c; --line:#e3ddf0;
+  --ok:#23804a; --ok-bg:#dcf5e3; --bad:#c23b2b; --bad-bg:#fde3de; --warn:#9a6400; --warn-bg:#fff1c7;
+  --f-comic:"Bangers","Impact","Arial Black",sans-serif; --f-ui:"Baloo 2",system-ui,-apple-system,"Segoe UI",sans-serif; --f-hand:"Kalam","Comic Sans MS","Bradley Hand",cursive;}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) #en{--sky:#1d2552; --dot:rgba(140,160,255,.16); --panel:#fbf9ff; --ink:#0d0a18; color-scheme:dark}}
+:root[data-theme="dark"] #en{--sky:#1d2552; --dot:rgba(140,160,255,.16); --panel:#fbf9ff; --ink:#0d0a18; color-scheme:dark}
+#en *{box-sizing:border-box}
+#en{font-family:var(--f-ui);color:var(--text);min-height:100vh;background-color:var(--sky);
+  background-image:radial-gradient(var(--dot) 2.2px,transparent 2.6px);background-size:16px 16px}
+#en .wrap{max-width:820px;margin:0 auto;padding-block:14px 56px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;flex-direction:column;gap:18px}
+#en .panel{background:var(--panel);border:3px solid var(--ink);border-radius:14px;box-shadow:5px 5px 0 var(--ink)}
+#en .bar{padding:12px 14px;display:flex;flex-wrap:wrap;align-items:center;gap:10px 16px}
+#en .bar h1{font-family:var(--f-comic);font-weight:400;font-size:clamp(1.6rem,6.5vw,2.2rem);margin:0;letter-spacing:.04em;line-height:1;color:var(--purple);flex:1 1 auto;text-shadow:2px 2px 0 var(--sun)}
+#en .stats{display:flex;gap:8px;font-variant-numeric:tabular-nums}
+#en .stat{border:2px solid var(--ink);border-radius:10px;padding:2px 9px;text-align:center;background:#fff}
+#en .stat:nth-child(1){background:var(--ok-bg)}
+#en .stat:nth-child(3){background:var(--warn-bg)}
+#en .stat b{display:block;font-size:1.15rem;line-height:1.15;font-weight:800}
+#en .stat span{font-size:.62rem;text-transform:uppercase;letter-spacing:.06em;font-weight:700;color:var(--muted)}
+#en .progress{flex-basis:100%;height:12px;border:2px solid var(--ink);border-radius:8px;background:#fff;overflow:hidden}
+#en .progress i{display:block;height:100%;width:0;background:repeating-linear-gradient(-45deg,var(--sun) 0 8px,#ffdb6e 8px 16px);transition:width .4s}
+#en .tabs{flex-basis:100%;display:grid;grid-template-columns:1fr 1fr;gap:8px}
+#en .tab{font:400 1.25rem var(--f-comic);letter-spacing:.06em;border:2.5px solid var(--ink);border-radius:10px;padding:5px 8px 3px;cursor:pointer;background:#fff;color:var(--ink);box-shadow:3px 3px 0 var(--ink)}
+#en .tab[aria-selected="true"]{background:var(--purple);color:#fff;transform:translate(2px,2px);box-shadow:1px 1px 0 var(--ink)}
+#en .hero{display:flex;align-items:flex-end;gap:6px;max-width:500px;margin:0 auto;width:100%}
+#en .julia{width:104px;flex:none;height:auto}
+#en .julia .m{display:none}
+#en .julia[data-mood="idle"] .m-idle,#en .julia[data-mood="ok"] .m-ok,#en .julia[data-mood="bad"] .m-bad,#en .julia[data-mood="near"] .m-idle{display:inline}
+#en .julia[data-mood="ok"]{animation:hop .5s ease}
+#en .julia[data-mood="bad"]{animation:shake .4s ease}
+@keyframes hop{40%{transform:translateY(-12px)}}
+@keyframes shake{25%{transform:rotate(-5deg)}75%{transform:rotate(5deg)}}
+#en .bubble{position:relative;flex:1;min-width:0;background:#fff;border:3px solid var(--ink);border-radius:18px;padding:8px 14px;margin-bottom:46px;box-shadow:3px 3px 0 var(--ink)}
+#en .bubble::before{content:"";position:absolute;left:-16px;bottom:10px;border:9px solid transparent;border-right:16px solid var(--ink);border-left:0}
+#en .bubble::after{content:"";position:absolute;left:-10px;bottom:13px;border:6px solid transparent;border-right:11px solid #fff;border-left:0}
+#en .bubble b{font:400 1.6rem var(--f-comic);letter-spacing:.05em;color:var(--purple);display:block;line-height:1.05}
+#en .bubble span{font-size:.88rem;color:var(--muted);font-weight:500}
+#en .stage{display:flex;justify-content:center;margin-top:-6px}
+#en .card{width:min(100%,500px);padding:14px 18px 18px;display:flex;flex-direction:column;gap:12px}
+#en .card.pop{animation:pop .4s cubic-bezier(.3,1.4,.5,1)}
+@keyframes pop{0%{transform:scale(.85) rotate(-3deg);opacity:.3}100%{transform:none;opacity:1}}
+#en .card .meta{display:flex;justify-content:space-between;gap:8px;font-size:.75rem;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.07em}
+#en .card .meta .neu{background:var(--sun);color:var(--ink);border:2px solid var(--ink);border-radius:6px;padding:0 6px}
+#en .latin{font-family:var(--f-comic);font-weight:400;letter-spacing:.05em;font-size:clamp(2.3rem,11vw,3.3rem);color:var(--ink);margin:2px 0 0;line-height:1;text-wrap:balance;overflow-wrap:anywhere}
+#en .extra{font-size:1rem;color:var(--muted);font-weight:700}
+#en .tags{display:flex;flex-wrap:wrap;gap:6px}
+#en .tag{font-size:.75rem;font-weight:800;padding:2px 9px;border-radius:999px;background:#ede5fb;color:var(--purple);border:2px solid var(--purple)}
+#en .row{display:flex;gap:8px}
+#en .answer{flex:1;min-width:0;font:700 1.4rem var(--f-hand);color:#2b3f9e;background:#f5f8ff;border:2.5px solid var(--ink);border-radius:10px;padding:8px 12px;outline:none}
+#en .answer:disabled{opacity:.75}
+#en .answer::placeholder{color:#8f96b8;font-weight:400}
+#en .btn{font:400 1.15rem var(--f-comic);letter-spacing:.06em;border:2.5px solid var(--ink);border-radius:10px;padding:7px 16px 5px;cursor:pointer;background:var(--purple);color:#fff;box-shadow:3px 3px 0 var(--ink)}
+#en .btn:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--ink)}
+#en .btn:disabled{opacity:.5;cursor:default}
+#en .btn.ghost{background:#fff;color:var(--ink)}
+#en .btn:focus-visible,#en .chip:focus-visible,#en .tab:focus-visible,#en .answer:focus-visible,#en input:focus-visible{outline:3px solid var(--sun);outline-offset:3px}
+#en .actions{display:flex;flex-wrap:wrap;gap:10px;justify-content:space-between}
+#en .fb{border:2.5px solid currentColor;border-radius:10px;padding:9px 12px;font-size:.98rem;line-height:1.35;font-weight:500}
+#en .fb.ok{background:var(--ok-bg);color:var(--ok)}
+#en .fb.bad{background:var(--bad-bg);color:var(--bad)}
+#en .fb.warn{background:var(--warn-bg);color:var(--warn)}
+#en .fb strong{font-weight:800}
+#en .idle{text-align:center;padding:22px 14px}
+#en .idle p{margin:6px 0 14px;color:var(--muted);font-weight:500}
+#en .stackinfo{font-weight:700;font-size:.85rem;text-align:center;margin:14px auto 0;color:var(--ink);background:#fff;border:2px solid var(--ink);border-radius:999px;padding:4px 14px;width:max-content;max-width:100%}
+#en .stackinfo:empty{display:none}
+#en .stackinfo button{font:inherit;color:var(--purple);background:transparent;border:none;text-decoration:underline;cursor:pointer;padding:0 2px}
+#en .list{padding:14px;display:flex;flex-direction:column;gap:16px}
+#en .tools{display:flex;flex-direction:column;gap:10px}
+#en .chips{display:flex;flex-wrap:wrap;gap:6px}
+#en .chip{font:800 .85rem var(--f-ui);border:2px solid var(--ink);color:var(--ink);background:#fff;border-radius:999px;padding:3px 12px;cursor:pointer}
+#en .chip[aria-pressed="true"]{background:var(--sun)}
+#en .chip:disabled{opacity:.4;cursor:default}
+#en .switch{display:flex;align-items:center;gap:8px;font-size:.92rem;font-weight:700;cursor:pointer}
+#en .switch input{width:18px;height:18px;accent-color:var(--purple)}
+#en .grp h2{font:400 1.35rem var(--f-comic);letter-spacing:.05em;margin:0 0 4px;display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px;padding:4px 10px;background:var(--purple);color:#fff;border:2.5px solid var(--ink);border-radius:10px}
+#en .grp h2 label{display:flex;align-items:center;gap:8px;cursor:pointer;flex:1}
+#en .grp h2 > span{font:700 .8rem var(--f-ui);letter-spacing:0}
+#en .grp h2 input,#en .vrow input{width:18px;height:18px;accent-color:var(--purple);flex:none}
+#en .new{font:400 .9rem var(--f-comic);background:var(--sun);color:var(--ink);border:2px solid var(--ink);border-radius:6px;padding:1px 6px 0}
+#en .vrow{display:grid;grid-template-columns:auto minmax(0,1fr) minmax(0,1.2fr) auto;gap:10px;align-items:center;padding:7px 4px;border-bottom:2px dotted var(--line);font-size:.95rem}
+#en .vrow .la{font-weight:800;overflow-wrap:anywhere;color:var(--ink);cursor:pointer}
+#en .vrow .la small{display:block;font-weight:500;color:var(--muted);font-size:.8rem}
+#en .vrow .de{overflow-wrap:anywhere}
+#en .hide .vrow .de{filter:blur(6px);cursor:pointer;user-select:none}
+#en .hide .vrow .de.show{filter:none}
+#en .pill{font-size:.7rem;font-weight:800;border-radius:999px;padding:1px 8px;white-space:nowrap;border:2px solid currentColor}
+#en .pill.won{background:var(--ok-bg);color:var(--ok)}
+#en .pill.retry{background:var(--bad-bg);color:var(--bad)}
+#en .pill.open{background:#f2eff8;color:var(--muted)}
+#en .vrow.off{opacity:.42}
+#en .sticky{position:sticky;bottom:calc(12px + env(safe-area-inset-bottom,0px));display:flex;justify-content:center;margin-top:14px}
+@media (max-width:480px){#en .vrow{grid-template-columns:auto minmax(0,1fr) auto}
+#en .vrow .de{grid-column:2/4;grid-row:2;font-size:.9rem;margin-top:-4px}
+#en .julia{width:88px}}
+@media (prefers-reduced-motion: reduce){#en *{animation:none!important;transition:none!important}}
+#en .addbox{padding:0;overflow:hidden}
+#en .addbox>summary{list-style:none;cursor:pointer;padding:10px 14px;font:400 1.35rem var(--f-comic);letter-spacing:.05em;background:var(--sun);color:var(--ink);display:flex;justify-content:space-between;align-items:center}
+#en .addbox>summary::-webkit-details-marker{display:none}
+#en .addbox>summary::after{content:"+";font-size:1.6rem;line-height:1}
+#en .addbox[open]>summary::after{content:"–"}
+#en .addbox[open]>summary{border-bottom:3px solid var(--ink)}
+#en .addin{padding:14px;display:flex;flex-direction:column;gap:12px}
+#en .addrow{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+#en .addrow label.num{display:flex;align-items:center;gap:6px;font-weight:800}
+#en .addrow input[type=number]{width:64px;font:800 1rem var(--f-ui);border:2.5px solid var(--ink);border-radius:8px;padding:4px 8px;background:#fff;color:var(--ink)}
+#en .filebtn{display:inline-flex;align-items:center;gap:6px}
+#en .filebtn input{position:absolute;width:1px;height:1px;opacity:0;pointer-events:none}
+#en .note{margin:0;font-size:.9rem;font-weight:600;color:var(--muted)}
+#en .note.err{color:var(--bad)}
+#en .note.ok{color:var(--ok)}
+#en .busy{display:flex;align-items:center;gap:10px;font-weight:700}
+#en .dots i{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--purple);margin-right:3px;animation:blink 1s infinite}
+#en .dots i:nth-child(2){animation-delay:.2s}
+#en .dots i:nth-child(3){animation-delay:.4s}
+@keyframes blink{50%{opacity:.2}}
+#en .prow{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.8fr) minmax(0,1.4fr) minmax(0,.9fr) auto;gap:6px;align-items:center;padding:6px 0;border-bottom:2px dotted var(--line)}
+#en .prow input,#en .prow select{min-width:0;width:100%;font:600 .92rem var(--f-ui);border:2px solid var(--ink);border-radius:7px;padding:4px 7px;background:#fff;color:var(--ink)}
+#en .prow input.la{font-weight:800}
+#en .prow .x{font:800 1rem var(--f-ui);border:2px solid var(--ink);background:#fff;color:var(--bad);border-radius:7px;width:32px;height:32px;cursor:pointer}
+#en .prow .dup{grid-column:1/-1;font-size:.75rem;font-weight:700;color:var(--warn)}
+#en .phead{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.8fr) minmax(0,1.4fr) minmax(0,.9fr) 32px;gap:6px;font-size:.7rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+@media (max-width:560px){#en .phead{display:none}
+#en .prow{grid-template-columns:minmax(0,1fr) minmax(0,1fr) 32px}
+#en .prow input.de{grid-column:1/3;grid-row:2}
+#en .prow select{grid-column:1/3;grid-row:3}
+#en .prow .x{grid-row:1;grid-column:3}}
+#en .grp h2 .del{font:700 .75rem var(--f-ui);background:#fff;color:var(--bad);border:2px solid var(--ink);border-radius:7px;padding:1px 8px;cursor:pointer}
+#en .grp h2 .del.sure{background:var(--bad);color:#fff}
+#en .record{flex-basis:100%;display:flex;flex-wrap:wrap;justify-content:space-between;gap:6px 12px;font-weight:800;font-size:.92rem}
+#en .record .who button{font:inherit;color:var(--purple);background:transparent;border:none;text-decoration:underline;cursor:pointer;padding:0 2px}
+#en .record .top{background:var(--sun);border:2px solid var(--ink);border-radius:8px;padding:0 8px}
+#en .board{margin-top:18px;padding:12px 14px}
+#en .board h2{font:400 1.4rem var(--f-comic);letter-spacing:.05em;margin:0 0 8px;color:var(--purple)}
+#en .board ol{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
+#en .board li{display:grid;grid-template-columns:42px minmax(0,1fr) auto;align-items:center;gap:8px;padding:6px 10px;border:2px solid var(--ink);border-radius:10px;background:#fff;font-weight:700}
+#en .board li.me{background:#ede5fb}
+#en .board li .rk{font:400 1.3rem var(--f-comic);letter-spacing:.04em;color:var(--purple)}
+#en .board li:first-child .rk{color:var(--ink);background:var(--sun);border:2px solid var(--ink);border-radius:6px;text-align:center}
+#en .board li b{font-variant-numeric:tabular-nums}
+#en .board .empty{color:var(--muted);font-weight:600;margin:0}
+#en .names{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
+#en .names .btn{font-size:1.4rem;padding:9px 20px 7px}
+#en .newname{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:6px}
+#en .newname input{font:700 1.1rem var(--f-ui);border:2.5px solid var(--ink);border-radius:10px;padding:6px 10px;min-width:0;width:180px;max-width:100%;color:var(--ink);background:#fff}
+#en .restart{display:flex;justify-content:center;margin-top:14px}
+#en .restart .btn.sure{background:var(--bad);color:#fff}
+#en .vrow .mine{font-size:.66rem;font-weight:800;color:var(--purple);margin-left:4px}
+#en{--sky:#ffd9cf; --dot:rgba(255,255,255,.6); --purple:#1f5fa8; --line:#dfe6f2; min-height:calc(100vh - 90px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) #en{--sky:#3a1e2c; --dot:rgba(255,170,150,.14); --purple:#1f5fa8}}
+:root[data-theme="dark"] #en{--sky:#3a1e2c; --dot:rgba(255,170,150,.14); --purple:#1f5fa8}
+#en .tag{background:#e3eefb}
+#en .dirbtn{flex-basis:100%;font:700 .92rem var(--f-ui);border:2.5px solid var(--ink);border-radius:10px;padding:6px 10px;background:var(--sun);color:var(--ink);cursor:pointer;box-shadow:3px 3px 0 var(--ink)}
+#en .dirbtn:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--ink)}
+#en .pbtn,#lat .pbtn{cursor:pointer;font-family:var(--f-ui)}
+#en .pills{display:flex;flex-direction:column;align-items:flex-end;gap:3px}
+#en .pills .pill{font-size:.64rem;padding:0 6px}
+#en .pills .pbtn{font-size:.72rem;padding:1px 8px}
+#en .qlab{font-weight:800;font-size:.8rem;color:var(--muted);align-self:center;margin-right:2px}
+#en .prt{display:flex;justify-content:space-between;align-items:center;gap:8px;margin:10px 0 2px;padding:4px 8px;border-radius:8px;background:#e3eefb;color:var(--ink);font-weight:800;font-size:.9rem}
+#en .prt label{display:flex;align-items:center;gap:8px;cursor:pointer}#en .prt input{width:18px;height:18px;accent-color:var(--purple)}#en .prt span{font-weight:700;font-size:.78rem;color:var(--muted)}
+#en .vrow .dewrap{min-width:0;overflow-wrap:anywhere}#en .vrow .lw{display:block;font-size:.78rem;font-style:italic;color:var(--muted);margin-top:1px}
+#en .hide .vrow:not(.show) .lw{display:none}
+@media (max-width:480px){#en .vrow .dewrap{grid-column:2/4;grid-row:2;font-size:.9rem;margin-top:-4px}#en .vrow .dewrap .de{font-size:inherit;margin-top:0}}
+#en .board li.me{background:#e3eefb}
+
+</style>
+</head>
+<body>
+
+
+<header class="gu-bar">
+  <div class="gu-in">
+    <div class="gu-name"><span class="gu-logo">Gretas <span>Update</span></span><span class="gu-user" id="gu-user" hidden><span id="gu-uname"></span><button type="button" id="gu-admin" hidden>Verwaltung</button><button type="button" id="gu-logout">Abmelden</button></span></div>
+    <nav class="gu-tabs" role="tablist" aria-label="Fächer">
+      <button class="gu-tab" type="button" role="tab" id="gu-tab-wb" data-v="wb" aria-controls="wb" aria-selected="true">Weltblick<small>Politik</small></button>
+      <button class="gu-tab" type="button" role="tab" id="gu-tab-lat" data-v="lat" aria-controls="lat" aria-selected="false">Latein<small>Vokabeln</small></button>
+      <button class="gu-tab" type="button" role="tab" id="gu-tab-en" data-v="en" aria-controls="en" aria-selected="false">Englisch<small>Vokabeln</small></button>
+    </nav>
+  </div>
+</header>
+
+<section class="gu-view" id="wb" data-v="wb" role="tabpanel" aria-labelledby="gu-tab-wb">
+<div class="page">
+  <div class="topbar">
+    <label for="archiv">Ausgabe <select id="archiv"></select></label>
+  </div>
+  <header class="mast">
+    <h1>Der Welt<span>blick</span></h1>
+    <div class="ribbon">
+      <span class="chip dark" id="dl-nr">Ausgabe</span>
+      <span class="chip" id="dl-datum">Erscheint jeden Mittwoch</span>
+      <span class="chip">Politik einfach erklärt</span>
+    </div>
+  </header>
+  <main id="inhalt" style="display:grid;gap:26px"><p class="empty">Die erste Ausgabe wird gerade gedruckt.</p></main>
+  <footer id="quellen"></footer>
+</div>
+
+<!-- AUSGABEN: neueste Ausgabe zuerst. Jede Ausgabe: nr, datum (JJJJ-MM-TT, Donnerstag des Unterrichts), themen[] mit bereich "innen" (Innenpolitik/Deutschland) oder "aussen" (Außenpolitik/Welt), schlagzeile, text (2-3 kurze Sätze), wichtig (1 Satz); das erste Thema ist das Thema der Woche. Dazu zahl{wert,text}, wort{begriff,erklaerung}, frage, quellen[]. -->
+<script type="application/json" id="ausgaben">[]</script>
+
+<script type="text/x-deferred">
+(function(){
+  var ausgaben=[];
+  try{ausgaben=JSON.parse(document.getElementById('ausgaben').textContent)}catch(e){ausgaben=[]}
+  ausgaben.sort(function(a,b){return a.datum<b.datum?1:-1});
+  var sel=document.getElementById('archiv'), main=document.getElementById('inhalt'), foot=document.getElementById('quellen');
+  var fmt=new Intl.DateTimeFormat('de-DE',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+  var NAMEN={innen:'Deutschland',aussen:'Welt'}, SUB={innen:'Innenpolitik',aussen:'Außenpolitik'};
+
+  function el(tag,cls,text){var n=document.createElement(tag);if(cls)n.className=cls;if(text!=null)n.textContent=text;return n}
+
+  function render(i){
+    var a=ausgaben[i]; main.innerHTML=''; foot.innerHTML='';
+    if(!a){main.appendChild(el('p','empty','Die erste Ausgabe wird gerade gedruckt.'));return}
+    document.getElementById('dl-nr').textContent='Ausgabe Nr. '+a.nr;
+    document.getElementById('dl-datum').textContent=fmt.format(new Date(a.datum+'T12:00:00'));
+
+    var t0=a.themen[0], lead=el('article','card lead '+t0.bereich);
+    lead.appendChild(el('span','sticker','Thema der Woche'));
+    var b=el('span','badge',NAMEN[t0.bereich]+' · '+SUB[t0.bereich]);lead.appendChild(b);
+    lead.appendChild(el('h2',null,t0.schlagzeile));
+    lead.appendChild(el('p',null,t0.text));
+    if(t0.wichtig)lead.appendChild(el('p','wichtig',t0.wichtig));
+    main.appendChild(lead);
+
+    var rs=el('div','ressorts');
+    ['innen','aussen'].forEach(function(key){
+      var r=el('section','ressort '+key), h=el('header');
+      h.appendChild(el('h3',null,NAMEN[key]));h.appendChild(el('span','sub',SUB[key]));r.appendChild(h);
+      var items=a.themen.slice(1).filter(function(t){return t.bereich===key});
+      if(!items.length)r.appendChild(el('p','leer','Diese Woche steht das wichtigste Thema oben.'));
+      items.forEach(function(t){var s=el('article','card story');s.appendChild(el('h4',null,t.schlagzeile));s.appendChild(el('p',null,t.text));
+        if(t.wichtig)s.appendChild(el('p','wichtig',t.wichtig));r.appendChild(s)});
+      rs.appendChild(r);
+    });
+    main.appendChild(rs);
+
+    var z=el('div','zettel');
+    if(a.zahl){var n=el('section','card note zahl');n.appendChild(el('h4',null,'Zahl der Woche'));n.appendChild(el('div','wert',a.zahl.wert));n.appendChild(el('p',null,a.zahl.text));z.appendChild(n)}
+    if(a.wort){var w=el('section','card note wort');w.appendChild(el('h4',null,'Wort der Woche'));w.appendChild(el('b',null,a.wort.begriff));w.appendChild(el('p',null,a.wort.erklaerung));z.appendChild(w)}
+    if(a.frage){var f=el('section','card note frage');f.appendChild(el('h4',null,'Frage zum Nachdenken'));f.appendChild(el('p',null,a.frage));z.appendChild(f)}
+    main.appendChild(z);
+
+    if(a.quellen&&a.quellen.length){foot.appendChild(el('h4',null,'Quellen dieser Ausgabe'));var ol=el('ol');
+      a.quellen.forEach(function(q){var li=el('li'),aa=el('a',null,q.titel);aa.href=q.url;aa.target='_blank';aa.rel='noopener';li.appendChild(aa);ol.appendChild(li)});
+      foot.appendChild(ol)}
+  }
+
+  ausgaben.forEach(function(a,i){var o=el('option',null,'Nr. '+a.nr+' · '+new Date(a.datum+'T12:00:00').toLocaleDateString('de-DE',{day:'numeric',month:'short'}));o.value=i;sel.appendChild(o)});
+  sel.addEventListener('change',function(){render(+sel.value);window.scrollTo({top:0})});
+  render(0);
+})();
+</script>
+</section>
+
+<section class="gu-view" id="lat" data-v="lat" role="tabpanel" aria-labelledby="gu-tab-lat" hidden>
+<div class="wrap">
+  <header class="bar panel">
+    <h1>Gretas Lateinvokabeln</h1>
+    <div class="stats">
+      <div class="stat"><b id="sWon">0</b><span>gewonnen</span></div>
+      <div class="stat"><b id="sLeft">0</b><span>im Stapel</span></div>
+      <div class="stat"><b id="sStreak">0</b><span>Serie</span></div>
+      <div class="stat genus-stat"><b id="sGenus">0</b><span>Genus</span></div>
+    </div>
+    <div class="progress"><i id="prog"></i></div>
+    <div class="record" id="record"></div>
+    <div class="tabs" role="tablist">
+      <button class="tab" role="tab" id="tabPlay" type="button" aria-selected="true">Spielen</button>
+      <button class="tab" role="tab" id="tabList" type="button" aria-selected="false">Vokabeln</button>
+    </div>
+  </header>
+
+  <div id="viewPlay">
+    <div class="hero"><svg class="julia" id="julia" data-mood="idle" viewBox="0 0 120 170" role="img" aria-label="Julia, ein römisches Mädchen">
+  <g stroke="#1c1530" stroke-width="3" stroke-linejoin="round" stroke-linecap="round">
+    <path d="M30 168 L40 112 Q60 102 80 112 L90 168 Z" fill="#6a3fb5"/>
+    <path d="M40 112 Q60 128 80 112" fill="none"/>
+    <rect x="42" y="131" width="36" height="7" rx="2" fill="#ffcd3c"/>
+    <path d="M40 116 Q24 128 26 146" fill="none"/><circle cx="26" cy="148" r="6" fill="#f3c9a0"/>
+    <path d="M80 116 Q98 112 104 96" fill="none"/><circle cx="105" cy="92" r="6" fill="#f3c9a0"/>
+    <rect x="53" y="94" width="14" height="14" fill="#f3c9a0"/>
+    <circle cx="60" cy="18" r="13" fill="#4a2c1a"/>
+    <ellipse cx="60" cy="62" rx="34" ry="36" fill="#4a2c1a"/>
+    <ellipse cx="60" cy="66" rx="27" ry="30" fill="#f3c9a0"/>
+    <path d="M33 56 Q45 34 60 40 Q75 34 87 56 Q75 44 60 48 Q45 44 33 56 Z" fill="#4a2c1a"/>
+    <g fill="#3f9b4a">
+      <ellipse cx="32" cy="50" rx="7" ry="4" transform="rotate(-50 32 50)"/><ellipse cx="38" cy="38" rx="7" ry="4" transform="rotate(-30 38 38)"/>
+      <ellipse cx="49" cy="30" rx="7" ry="4" transform="rotate(-12 49 30)"/><ellipse cx="88" cy="50" rx="7" ry="4" transform="rotate(50 88 50)"/>
+      <ellipse cx="82" cy="38" rx="7" ry="4" transform="rotate(30 82 38)"/><ellipse cx="71" cy="30" rx="7" ry="4" transform="rotate(12 71 30)"/>
+    </g>
+  </g>
+  <g fill="#1c1530"><ellipse cx="49" cy="66" rx="3.6" ry="5"/><ellipse cx="71" cy="66" rx="3.6" ry="5"/></g>
+  <g fill="#fff"><circle cx="50" cy="64" r="1.3"/><circle cx="72" cy="64" r="1.3"/></g>
+  <g fill="#f29a8c" opacity=".7"><ellipse cx="41" cy="78" rx="5" ry="3"/><ellipse cx="79" cy="78" rx="5" ry="3"/></g>
+  <g fill="none" stroke="#1c1530" stroke-width="3" stroke-linecap="round">
+    <path class="m m-idle" d="M51 82 Q60 89 69 82"/>
+    <path class="m m-ok" d="M49 80 Q60 96 71 80 Z" fill="#fff"/>
+    <path class="m m-bad" d="M52 87 Q60 81 68 87"/>
+  </g>
+</svg><div class="bubble" id="bubble" aria-live="polite"><b>Salve!</b><span>Hallo! Wer spielt heute?</span></div></div>
+    <section class="stage" id="stage"></section>
+    <p class="stackinfo" id="stackinfo"></p>
+    <div class="restart"><button class="btn ghost" type="button" id="restart">Neu starten</button></div>
+    <section class="board panel" id="board" aria-live="polite"></section>
+  </div>
+
+  <div id="viewList" hidden>
+    <details class="addbox panel" id="addbox">
+      <summary>Neue Vokabeln hinzufügen</summary>
+      <div class="addin">
+        <p class="note">Fotografiere die Heftseite gerade und gut beleuchtet. Julia liest die Wörter aus, danach kannst du alles prüfen und korrigieren.</p>
+        <div class="addrow">
+          <label class="num" for="addL">Lektion <input type="number" id="addL" min="1" max="99" inputmode="numeric"></label>
+          <label class="btn filebtn" id="photoLbl" for="photo">Foto wählen<input type="file" id="photo" accept="image/jpeg,image/png,image/webp" multiple></label>
+          <button class="btn ghost" type="button" id="manual">Von Hand eintippen</button>
+        </div>
+        <div id="addStatus"></div>
+        <div id="preview" hidden>
+          <div class="phead"><span>Latein</span><span>Zusatz</span><span>Deutsch</span><span>Merkmal</span><span></span></div>
+          <div id="prows"></div>
+          <div class="actions" style="margin-top:10px">
+            <button class="btn ghost" type="button" id="addRow">+ Zeile</button>
+            <span style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn ghost" type="button" id="cancelAdd">Abbrechen</button><button class="btn" type="button" id="saveAdd">Lektion speichern</button></span>
+          </div>
+        </div>
+      </div>
+    </details>
+    <section class="list panel" id="list">
+      <div class="tools">
+        <div class="chips" id="quick" role="group" aria-label="Schnellauswahl"></div>
+        <label class="switch"><input type="checkbox" id="hideDe"> Deutsch und Geschlecht verdecken (einzeln aufdecken mit „zeigen“)</label>
+      </div>
+      <div id="groups"></div>
+    </section>
+    <div class="sticky"><button class="btn" id="playSel" type="button">Mit Auswahl spielen</button></div>
+  </div>
+</div>
+<script type="text/x-deferred">
+const V=(window.__VOCAB_LAT||[]);
+const LW={"esse": "Essenz", "non": "nonstop", "venire": "Advent (Ankunft)", "dominus": "dominieren", "et": "etc. (et cetera)", "domina": "Madonna (ital. „meine Herrin“)", "servus": "„Servus!“, servieren", "stare": "Station, Statue", "spectare": "Spektakel, Inspektor", "clamare": "Reklame, reklamieren", "forum": "Forum", "circus": "Zirkus", "amicus": "span. amigo", "per": "per Post", "via": "via (über), Viadukt", "reperire": "Repertoire", "audire": "Audio, Audienz", "exspectare": "engl. to expect", "narrare": "engl. narrator (Erzähler)", "vocare": "Vokabel, Vokal", "bene": "Benefizkonzert", "taberna": "Taverne", "senator": "Senat", "ante": "Antike", "bestia": "Bestie", "videre": "Video", "victor": "Viktor (Name)", "gaudere": "Gaudi", "populus": "populär", "victoria": "Viktoria, engl. victory", "mercator": "Markt", "amare": "Amateur", "debere": "engl. debt (Schulden)"};
+const ALT={"zum zweiten mal":["zum 2 mal","zum zweitenmal","ein zweites mal","noch einmal"],"gernhaben":["gern haben","gerne haben","mögen"],"da sein":["dasein","anwesend sein"],"von uberall her":["von uberall"],"hurra":["juhu"],"auf der stelle":["sofort"]};
+const TAGNAME={m:"maskulin",f:"feminin",n:"neutrum","Adv.":"Adverb","Akk.":"Akkusativ","Präp. m. Akk.":"Präposition mit Akkusativ","m. Akk.":"mit Akkusativ"};
+
+const norm=s=>s.toLowerCase().replace(/ä/g,"a").replace(/ö/g,"o").replace(/ü/g,"u").replace(/ß/g,"ss")
+  .replace(/\(.*?\)/g," ").replace(/2\./g,"2 ").replace(/[^a-z0-9 ]/g," ").replace(/\s+/g," ").trim()
+  .replace(/^(der|die|das|ein|eine|einen) /,"");
+const variants=s=>{const n=norm(s);const out=new Set([n]);if(n.startsWith("sich "))out.add(n.slice(5));(ALT[n]||[]).forEach(a=>out.add(norm(a)));return out};
+function lev(a,b){const d=Array.from({length:a.length+1},(_,i)=>[i]);for(let j=1;j<=b.length;j++)d[0][j]=j;
+  for(let i=1;i<=a.length;i++)for(let j=1;j<=b.length;j++)d[i][j]=Math.min(d[i-1][j]+1,d[i][j-1]+1,d[i-1][j-1]+(a[i-1]===b[j-1]?0:1));return d[a.length][b.length]}
+function check(input,de){
+  const targets=[];de.split(",").forEach(p=>{if(p.trim())variants(p).forEach(v=>targets.push([v,p.trim()]))});
+  const guesses=input.split(/[,;\/]| oder /).map(norm).filter(Boolean);
+  let near=null;
+  for(const g of guesses){const gs=new Set([g]);if(g.startsWith("sich "))gs.add(g.slice(5));
+    for(const x of gs)for(const [t,orig] of targets){
+      if(x===t)return{res:"ok"};
+      const tol=t.length>=9?2:t.length>=4?1:0;
+      if(tol&&lev(x,t)<=tol&&!near)near=orig;
+    }}
+  return near?{res:"near",word:near}:{res:"bad"};
+}
+
+
+
+const BASE=V.map(([la,ex,de,l,tg])=>({la,ex,de,l,tg,custom:false}));
+const keyOf=w=>w.l+"|"+w.la;
+BASE.forEach(w=>w.k=keyOf(w));
+const TAGS=["","m","f","n","Adv.","Präp. m. Akk.","Präp. m. Abl.","Akk.","m. Akk.","Konj.","Pron."];
+const TN={...TAGNAME,"Präp. m. Abl.":"Präposition mit Ablativ","Konj.":"Konjunktion","Pron.":"Pronomen"};
+const $=id=>document.getElementById(id);
+const esc=s=>String(s??"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/"/g,"&quot;");
+
+let S={won:[],retry:[],sel:[],known:[],streak:0,best:0,hide:false,genus:0};
+try{
+  const s=JSON.parse(localStorage.getItem("greta-latein-3")||"null");
+  if(s&&Array.isArray(s.sel))S={...S,...s};
+  else{const o=JSON.parse(localStorage.getItem("greta-latein-2")||"null");
+    if(o&&Array.isArray(o.sel)){const m=a=>(a||[]).map(i=>BASE[i]&&BASE[i].k).filter(Boolean);
+      S={...S,won:m(o.won),retry:m(o.retry),sel:m(o.sel),known:BASE.map(w=>w.k),streak:o.streak||0,best:o.best||0,hide:!!o.hide}}}
+}catch(e){}
+const legacyS=(S.sel.length||S.won.length)?S:null;
+const DEFAULT_S=()=>({won:[],retry:[],sel:[],known:[],streak:0,best:0,hide:false,genus:0});
+const isNoun=w=>["m","f","n"].includes(w.tg);
+const GN={m:"maskulin",f:"feminin",n:"neutrum"};
+function parseGenus(v){const s=String(v||"").toLowerCase().replace(/[^a-zäöü]/g,"");if(!s)return"";
+  if(/^(m|ma|mas|mask|maskulin|maskulinum|masc|männlich|maennlich)$/.test(s))return"m";
+  if(/^(f|fe|fem|feminin|femininum|w|weiblich)$/.test(s))return"f";
+  if(/^(n|ne|neu|neutr|neutrum|s|sächlich|saechlich)$/.test(s))return"n";return"?"}
+let curGenus="";
+const slug=n=>n.trim().toLowerCase().replace(/ä/g,"ae").replace(/ö/g,"oe").replace(/ü/g,"ue").replace(/ß/g,"ss").replace(/[^a-z0-9]+/g,"-").replace(/^-+|-+$/g,"").slice(0,40);
+let player=null,localNames=[];
+try{player=JSON.parse(localStorage.getItem("greta-latein-player")||"null")}catch(e){}
+try{localNames=JSON.parse(localStorage.getItem("greta-latein-names")||"[]")||[]}catch(e){}
+const PKEY=id=>"greta-latein-p:"+id;
+const save=()=>{try{localStorage.setItem(player?PKEY(player.id):"greta-latein-3",JSON.stringify(S))}catch(e){}};
+function readPlayerState(id){try{return JSON.parse(localStorage.getItem(PKEY(id))||"null")}catch(e){return null}}
+function loadPlayer(){
+  let st=readPlayerState(player.id);
+  if(!st){let used=false;try{used=localStorage.getItem("greta-latein-legacy-used")==="1"}catch(e){}
+    if(!used&&legacyS){st=legacyS;try{localStorage.setItem("greta-latein-legacy-used","1")}catch(e){}}}
+  S={...DEFAULT_S(),...(st||{})};S.streak=0;
+}
+
+let dbLessons=[],localLessons=[];
+try{localLessons=(JSON.parse(localStorage.getItem("greta-latein-extra")||"[]")||[]).map(L=>({...L,src:"local"}))}catch(e){}
+const saveLocal=()=>{try{localStorage.setItem("greta-latein-extra",JSON.stringify(localLessons.map(({l,words})=>({l,words}))))}catch(e){}};
+let ALL=[],BY={};
+function rebuild(){
+  const seen=new Set();ALL=BASE.slice();BASE.forEach(w=>seen.add(w.k));
+  [...dbLessons,...localLessons].sort((a,b)=>a.l-b.l).forEach(L=>(L.words||[]).forEach(x=>{
+    const w={la:String(x.la||"").trim(),ex:String(x.ex||"").trim(),de:String(x.de||"").trim(),l:L.l,tg:String(x.tag||"").trim(),custom:true,src:L.src};
+    if(!w.la||!w.de||!(w.l>0))return;w.k=keyOf(w);if(seen.has(w.k))return;seen.add(w.k);ALL.push(w)}));
+  BY={};ALL.forEach(w=>BY[w.k]=w);
+  let ch=false;ALL.forEach(w=>{if(!S.known.includes(w.k)){S.known.push(w.k);S.sel.push(w.k);ch=true}});
+  if(ch)save();
+}
+const LESSONS=()=>[...new Set(ALL.map(w=>w.l))].sort((a,b)=>a-b);
+const NEWEST=()=>Math.max(...LESSONS());
+const selK=()=>S.sel.filter(k=>BY[k]);
+const stack=()=>selK().filter(k=>!S.won.includes(k));
+let current=null,answered=false,lastDrawn=null;
+function drawRandom(){const t=stack();if(!t.length){current=null;return}
+  const pool=t.length>1?t.filter(k=>k!==lastDrawn):t;current=pool[Math.floor(Math.random()*pool.length)];lastDrawn=current}
+
+let scores=[];
+function board(){
+  const m=new Map();
+  scores.forEach(x=>m.set(x.id,{id:x.id,name:x.name,best:x.best}));
+  localNames.forEach(n=>{const st=readPlayerState(n.id);const b=Math.max(st?.best||0,n.id===player?.id?S.best:0);const e=m.get(n.id);if(e)e.best=Math.max(e.best,b);else m.set(n.id,{id:n.id,name:n.name,best:b})});
+  if(player&&!m.has(player.id))m.set(player.id,{id:player.id,name:player.name,best:S.best});
+  if(player)m.get(player.id).best=Math.max(m.get(player.id).best,S.best);
+  return [...m.values()].sort((a,b)=>b.best-a.best||a.name.localeCompare(b.name));
+}
+const ROMAN=["I","II","III","IV","V","VI","VII","VIII","IX","X"];
+function renderBoard(){
+  const b=board(),top=b.find(x=>x.best>0);
+  $("record").innerHTML=player?`<span class="who">${esc(player.name)} spielt · <button type="button" id="switchP">wechseln</button></span>${top?`<span class="top">Rekord: ${esc(top.name)} – ${top.best} in Folge</span>`:""}`:"";
+  const sp=$("switchP");if(sp)sp.onclick=switchPlayer;
+  $("board").hidden=!player;
+  $("board").innerHTML=`<h2>Bestenliste</h2>${b.length?`<ol>${b.map((x,i)=>`<li class="${x.id===player?.id?"me":""}"><span class="rk">${ROMAN[i]||i+1}</span><span>${esc(x.name)}</span><b>${x.best} in Folge</b></li>`).join("")}</ol>`:'<p class="empty">Noch keine Rekorde.</p>'}${dbStatus()}`;
+}
+function renderStats(){
+  renderBoard();
+  const sel=selK(),won=sel.filter(k=>S.won.includes(k)).length,all=sel.length;
+  $("sWon").textContent=`${won}/${all}`;$("sLeft").textContent=all-won;$("sStreak").textContent=S.streak;$("sGenus").textContent=S.genus||0;
+  $("prog").style.width=(all?won/all*100:0)+"%";
+  const ls=LESSONS().filter(l=>sel.some(k=>BY[k].l===l));
+  const custom=all!==ALL.filter(w=>ls.includes(w.l)).length;
+  $("stackinfo").innerHTML=all?`Im Stapel: ${custom?"eigene Auswahl aus ":""}Lektion ${ls.join(", ")} · <button type="button" id="toList">Auswahl ändern</button>`:"";
+  const tl=$("toList");if(tl)tl.onclick=()=>show("list");
+}
+function allNames(){const m=new Map();scores.forEach(x=>m.set(x.id,x.name));localNames.forEach(n=>m.set(n.id,n.name));return [...m].map(([id,name])=>({id,name})).sort((a,b)=>a.name.localeCompare(b.name))}
+function renderPicker(){
+  const ns=allNames();
+  $("stage").innerHTML=`<div class="card panel idle"><div class="latin">Quis es?</div><p>Wer spielt? Tippe auf deinen Namen.</p>
+    ${ns.length?`<div class="names">${ns.map(n=>`<button class="btn" type="button" data-id="${esc(n.id)}">${esc(n.name)}</button>`).join("")}</div>`:""}
+    <form class="newname" id="newName"><input id="nnInput" maxlength="24" placeholder="${ns.length?"Neuer Name":"Dein Name"}" aria-label="Name" autocomplete="off"><button class="btn ghost" type="submit">${ns.length?"Hinzufügen":"Los geht's"}</button></form></div>`;
+  $("stage").querySelectorAll(".names .btn").forEach(b=>b.onclick=()=>{const n=ns.find(x=>x.id===b.dataset.id);choosePlayer(n.name)});
+  $("newName").onsubmit=e=>{e.preventDefault();const v=$("nnInput").value.trim();if(slug(v))choosePlayer(v)};
+}
+function choosePlayer(name){
+  const id=slug(name);if(!id)return;
+  player={id,name:name.trim()};try{localStorage.setItem("greta-latein-player",JSON.stringify(player))}catch(e){}
+  if(!localNames.some(n=>n.id===id)){localNames.push(player);try{localStorage.setItem("greta-latein-names",JSON.stringify(localNames))}catch(e){}}
+  loadPlayer();rebuild();lastDrawn=null;drawRandom();
+  $("bubble").innerHTML=`<b>Salve, ${esc(player.name)}!</b><span>Hallo ${esc(player.name)}! Los geht's.</span>`;
+  renderStats();renderStage();ensureScore();
+}
+function switchPlayer(){save();player=null;try{localStorage.removeItem("greta-latein-player")}catch(e){}current=null;
+  $("bubble").innerHTML=`<b>Salve!</b><span>Hallo! Wer spielt heute?</span>`;renderStats();renderStage();if(!$("viewList").hidden)show("play")}
+let scoreChain=Promise.resolve();
+let dbSt="verbinde …",lastErr="",lastOk="",canW=null;
+function dbStatus(){return `<p class="dbst">Online-Bestenliste: ${esc(dbSt)}${canW===false?" · nur Leserechte":""}${lastErr?` · Speichern fehlgeschlagen (${esc(lastErr)})`:lastOk?` · ${esc(lastOk)}`:""}</p>`}
+function writeScore(force){
+  if(!db||!player)return;const me={...player},best=S.best;
+  scoreChain=scoreChain.then(async()=>{try{const ref=db.collection("scores").doc(me.id);const sn=await ref.get();const prev=sn.exists?Number(sn.data().best)||0:-1;
+    if(best>prev||(force&&!sn.exists)){await ref.set({name:me.name,best:Math.max(best,prev,0),updatedAt:new Date().toISOString()});lastOk="gespeichert ✓"}else lastOk="aktuell ✓";lastErr=""}catch(e){lastErr=(e&&(e.code||e.message))||"unbekannter Fehler"}renderBoard()});
+}
+const ensureScore=()=>writeScore(true);
+function renderStage(){
+  if(!player){renderPicker();return}
+  const st=$("stage");
+  if(!selK().length){st.innerHTML=`<div class="card panel idle"><div class="latin">Stapel leer</div><p>Wähle unter „Vokabeln“ aus, welche Wörter in den Stapel sollen.</p><div class="actions" style="justify-content:center"><button class="btn" type="button" id="goL">Vokabeln wählen</button></div></div>`;$("goL").onclick=()=>show("list");return}
+  if(current===null){
+    st.innerHTML=`<div class="card panel idle"><div class="latin">Victoria!</div><p>Alle ${selK().length} Karten im Stapel gewonnen. Beste Serie: ${S.best}.</p><div class="actions" style="justify-content:center"><button class="btn ghost" type="button" id="goL2">Andere Auswahl</button><button class="btn" id="again" type="button">Nochmal mischen</button></div></div>`;
+    $("again").onclick=reshuffle;$("goL2").onclick=()=>show("list");return}
+  const w=BY[current];
+  const noun=isNoun(w);
+  const tags=w.tg?`<div class="tags" id="tg"${noun?" hidden":""}><span class="tag">${esc(TN[w.tg]||w.tg)}</span></div>`:"";
+  st.innerHTML=`<form class="card panel pop" id="cardForm" autocomplete="off">
+    <div class="meta"><span>Lektion ${w.l} ${w.l===NEWEST()?'<span class="neu">neu</span>':""}</span><span>${S.retry.includes(current)?"Nochmal üben":"Latein → Deutsch"}</span></div>
+    <div><div class="latin">${esc(w.la)}</div></div>
+    ${tags}
+    ${w.ex?`<div class="row genus"><label for="zf">Zusatzform <small>z. B. Akkusativ, 3. Person</small></label><input class="answer gen zf" id="zf" maxlength="40" placeholder="…" autocapitalize="off" spellcheck="false"></div>`:""}
+    ${noun?`<div class="row genus"><label for="gen">Geschlecht <small>m / f / n</small></label><input class="answer gen" id="gen" maxlength="14" placeholder="m, f oder n" autocapitalize="off" spellcheck="false"></div>`:""}
+    <div class="row"><input class="answer" id="ans" placeholder="Alle deutschen Bedeutungen …" autocapitalize="off" spellcheck="false" aria-label="Alle deutschen Bedeutungen"></div>
+    <div id="fb"></div>
+    <div class="actions" id="acts">
+      <button class="btn ghost" type="button" id="skip">Weiß ich nicht</button>
+      <button class="btn" type="submit">Prüfen</button>
+    </div></form>`;
+  answered=false;
+  const inp=$("ans"),flds=[$("zf"),$("gen"),inp].filter(Boolean);setTimeout(()=>flds[0].focus({preventScroll:true}),60);
+  $("cardForm").onsubmit=e=>{e.preventDefault();if(answered){next();return}
+    const empty=flds.find(f=>!f.value.trim());if(empty){const ai=flds.indexOf(document.activeElement);const nxt=flds.slice(ai+1).find(f=>!f.value.trim())||empty;if(nxt!==document.activeElement||!inp.value.trim()){nxt.focus();return}}
+    const g=$("gen");curGenus=g?g.value.trim():"";gradeFull(inp.value.trim())};
+  $("skip").onclick=()=>{if(!answered){curGenus="";skipGN=true;lose("<strong>Kein Problem.</strong>"+fullEntry(BY[current]));skipGN=false}};
+}
+const SAY={ok:[["Optime!","Sehr gut!"],["Bene!","Gut gemacht!"],["Euge!","Bravo!"],["Io!","Hurra!"]],near:[["Paene!","Fast! Schau auf die Schreibweise."]],bad:[["Eheu!","Oh weh! Merk sie dir für nächstes Mal."],["Non recte.","Nicht richtig. Gleich nochmal!"]],idle:[["Salve!","Hallo! Was heißt dieses Wort?"],["Quid est?","Was bedeutet das?"],["Age!","Los geht's!"]]};
+function say(mood){const o=SAY[mood][Math.floor(Math.random()*SAY[mood].length)];const j=document.getElementById("julia");j.dataset.mood="";void j.getBoundingClientRect();j.dataset.mood=mood;
+  document.getElementById("bubble").innerHTML=`<b>${o[0]}</b><span>${o[1]}</span>`}
+
+function sayCustom(mood,a,b){say(mood);$("bubble").innerHTML=`<b>${esc(a)}</b><span>${esc(b)}</span>`}
+function grade(v){
+  const w=BY[current];const r=check(v,w.de);
+  if(r.res==="ok")win(`<strong>Richtig!</strong> ${esc(w.la)} = ${esc(w.de)}. Die Karte gehört dir.`);
+  else if(r.res==="near")win(`<strong>Fast perfekt</strong>, gewonnen! Achte auf die Schreibweise: <strong>${esc(r.word)}</strong>.`,"warn");
+  else lose(`<strong>Leider nicht.</strong> Du hast „${esc(v)}“ geschrieben.`);
+}
+let skipGN=false;
+const normL=s=>String(s||"").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[^a-z]/g,"");
+function fullEntry(w){return `<div class="full">${esc(w.la)}${w.ex?", "+esc(w.ex):""}${isNoun(w)?" "+w.tg:""} – ${esc(w.de)}</div>`}
+function checkAll(input,de){const guesses=input.split(/[,;\/]| oder /).map(norm).filter(Boolean);const missing=[];let near=false;
+  de.split(",").map(s=>s.trim()).filter(Boolean).forEach(t=>{const vs=[...variants(t)];let hit=false;
+    for(const g of guesses){const gs=[g];if(g.startsWith("sich "))gs.push(g.slice(5));
+      for(const x of gs)for(const v of vs){if(x===v){hit=true;break}const tol=v.length>=9?2:v.length>=4?1:0;if(tol&&lev(x,v)<=tol&&hit!==true)hit="near"}
+      if(hit===true)break}
+    if(!hit)missing.push(t);else if(hit==="near")near=true});
+  return missing.length?{res:"bad",missing}:{res:near?"near":"ok"}}
+function gradeFull(v){const w=BY[current],rows=[];let ok=true,near=false;
+  const li=(good,label,right,had)=>`<li class="${good?"y":"n"}">${good?"✓":"✗"} ${label}${good?"":`: richtig ist <strong>${esc(right)}</strong>${had?` (du: „${esc(had)}“)`:""}`}</li>`;
+  if(w.ex){const g=($("zf").value||"").trim(),good=normL(g)===normL(w.ex);if(!good)ok=false;rows.push(li(good,"Zusatzform",w.ex,g))}
+  if(isNoun(w)){const good=parseGenus(curGenus)===w.tg;if(good)S.genus=(S.genus||0)+1;else ok=false;rows.push(li(good,"Geschlecht",w.tg+" ("+GN[w.tg]+")",curGenus))}
+  const r=checkAll(v,w.de);if(r.res==="bad"){ok=false;rows.push(`<li class="n">✗ Bedeutung: es fehlt <strong>${esc(r.missing.join(", "))}</strong></li>`)}
+  else{if(r.res==="near")near=true;rows.push(`<li class="y">✓ Bedeutung${r.res==="near"?" (achte auf die Schreibweise)":""}</li>`)}
+  const html=`<ul class="chk">${rows.join("")}</ul>${fullEntry(w)}`;
+  const z=$("zf");if(z)z.disabled=true;
+  skipGN=true;if(ok)win((near?"<strong>Gewonnen!</strong>":"<strong>Alles richtig!</strong> Die Karte gehört dir.")+html,near?"warn":"ok");else lose("<strong>Noch nicht ganz.</strong>"+html);skipGN=false}
+function genusNote(won){const w=BY[current];if(skipGN||!isNoun(w))return"";const g=parseGenus(curGenus),t=`${w.tg} = ${GN[w.tg]}`;
+  if(won&&g===w.tg){S.genus=(S.genus||0)+1;return ` <strong>+ Genus-Punkt</strong> (${t}).`}
+  return ` Geschlecht: <strong>${t}</strong>${curGenus?` (du hattest „${esc(curGenus)}“)`:""}.`}
+function showTag(){const t=$("tg");if(t)t.hidden=false;const g=$("gen");if(g)g.disabled=true}
+function win(msg,cls="ok"){answered=true;msg+=genusNote(true);showTag();say(cls==="ok"?"ok":"near");S.won.push(current);S.retry=S.retry.filter(k=>k!==current);
+  const others=board().filter(x=>x.id!==player.id),leader=others[0],prevBest=S.best;
+  S.streak++;S.best=Math.max(S.best,S.streak);save();
+  if(leader&&leader.best>0&&S.streak===leader.best+1)sayCustom("ok","Novum record!",`Du hast ${leader.name} überholt!`);
+  else if(prevBest>0&&S.streak===prevBest+1)sayCustom("ok","Novum record!","Neuer eigener Rekord!");
+  if(S.best>prevBest)writeScore(false);
+  $("fb").innerHTML=`<div class="fb ${cls}">${msg}</div>`;finishActs();renderStats()}
+function lose(msg){answered=true;const gn=genusNote(false);showTag();say("bad");if(!S.retry.includes(current))S.retry.push(current);S.streak=0;save();
+  $("fb").innerHTML=`<div class="fb bad">${msg}${skipGN?"":` Richtig ist: <strong>${esc(BY[current].de)}</strong>.`} Die Karte wird zurück in den Stapel gemischt.${gn}</div>`;finishActs();renderStats()}
+function finishActs(){$("ans").disabled=true;$("acts").innerHTML=`<span></span><button class="btn" type="submit" id="nx">Nächste Karte</button>`;setTimeout(()=>$("nx")?.focus({preventScroll:true}),30)}
+function next(){drawRandom();say("idle");renderStage()}
+function reshuffle(){const s=selK();S.won=S.won.filter(k=>!s.includes(k));S.streak=0;save();drawRandom();renderStats();renderStage()}
+
+// ---- list view
+function status(k){return S.won.includes(k)?["won","gewonnen"]:S.retry.includes(k)?["retry","nochmal"]:["open","offen"]}
+const keysOf=l=>ALL.filter(w=>w.l===l).map(w=>w.k);
+function quickDefs(){const N=NEWEST();return [["all","Alle",ALL.map(w=>w.k)],...LESSONS().map(l=>["l"+l,`Lektion ${l}${l===N?" (neu)":""}`,keysOf(l)]),["retry","Nur falsche",S.retry.filter(k=>BY[k])]]}
+const same=(a,b)=>a.length===b.length&&a.every(x=>b.includes(x));
+let delArm=null;
+function renderList(){
+  const sel=selK();
+  const VW=(S.view||[]).filter(l=>LESSONS().includes(l));
+  $("quick").innerHTML=quickDefs().map(([k,lab,ids])=>{const pr=k==="all"?!VW.length:k==="retry"?(ids.length>0&&same(ids,sel)):VW.includes(+k.slice(1));
+    return `<button class="chip" type="button" data-k="${k}" aria-pressed="${pr}"${k==="retry"&&!ids.length?" disabled":""}>${lab}${k==="retry"?` (${ids.length})`:""}</button>`}).join("");
+  $("quick").querySelectorAll(".chip").forEach(b=>b.onclick=()=>{const d=quickDefs().find(q=>q[0]===b.dataset.k),k=d[0],ids=d[2];if(!ids.length)return;
+    if(k==="all"||k==="retry"){S.view=[];setSel(ids);return}
+    const l=+k.slice(1);
+    if(VW.includes(l)){S.view=VW.filter(x=>x!==l);setSel(selK().filter(x=>!ids.includes(x)))}
+    else if(!VW.length){S.view=[l];setSel(ids)}
+    else{S.view=[...VW,l].sort((x,y)=>x-y);setSel([...new Set([...selK(),...ids])])}
+    window.scrollTo({top:0})});
+  $("hideDe").checked=S.hide;$("list").classList.toggle("hide",S.hide);
+  const N=NEWEST();
+  $("groups").innerHTML=LESSONS().filter(l=>!VW.length||VW.includes(l)).map(l=>{
+    const ws=ALL.filter(w=>w.l===l),n=ws.filter(w=>sel.includes(w.k)).length,hasCustom=ws.some(w=>w.custom);
+    return `<div class="grp"><h2><label><input type="checkbox" data-l="${l}" ${n===ws.length?"checked":""}> Lektion ${l} ${l===N?'<span class="new">NEU</span>':""}</label><span>${n}/${ws.length} im Stapel</span>${hasCustom&&isEditor?`<button type="button" class="del${delArm===l?" sure":""}" data-del="${l}">${delArm===l?"Wirklich löschen?":(ws.every(w=>w.custom)?"Lektion löschen":"Ergänzungen löschen")}</button>`:""}</h2>
+    ${ws.map((w,j)=>{const [c,t]=status(w.k),on=sel.includes(w.k),id="v"+l+"_"+j;
+      return `<div class="vrow${on?"":" off"}"><input type="checkbox" id="${id}" data-k="${esc(w.k)}" ${on?"checked":""} aria-label="${esc(w.la)} in den Stapel"><label class="la" for="${id}">${esc(w.la)}${isNoun(w)?`<span class="gen-badge g-${w.tg}" title="${GN[w.tg]}">${w.tg}</span>`:w.tg?`<span class="tag-badge" title="${esc(TN[w.tg]||w.tg)}">${esc(w.tg)}</span>`:""}${w.custom&&w.src==="local"?'<span class="mine">nur hier</span>':""}${w.ex?`<small class="exf">(${esc(w.ex)})</small>`:""}</label><span class="dewrap"><span class="de">${esc(w.de)}</span>${!w.custom&&LW[w.la]?`<small class="lw">Merkhilfe: ${esc(LW[w.la])}</small>`:""}</span>${S.hide?`<button type="button" class="pill pbtn ${c}" title="Spielstand: ${t}">zeigen</button>`:`<span class="pill ${c}">${t}</span>`}</div>`}).join("")}</div>`}).join("");
+  $("groups").querySelectorAll("h2 input").forEach(cb=>{const ids=keysOf(+cb.dataset.l),n=ids.filter(k=>sel.includes(k)).length;cb.indeterminate=n>0&&n<ids.length;
+    cb.onchange=()=>setSel(cb.checked?[...new Set([...selK(),...ids])]:selK().filter(k=>!ids.includes(k)))});
+  $("groups").querySelectorAll(".vrow input").forEach(cb=>cb.onchange=()=>{const k=cb.dataset.k;setSel(cb.checked?[...selK(),k]:selK().filter(x=>x!==k))});
+  const tgl=row=>{const d=row.querySelector(".de");d.classList.toggle("show");const on=d.classList.contains("show");row.classList.toggle("show",on);const b=row.querySelector(".pbtn");if(b)b.textContent=on?"verdecken":"zeigen"};
+  $("groups").querySelectorAll(".de").forEach(d=>d.onclick=()=>{if(S.hide)tgl(d.closest(".vrow"))});
+  $("groups").querySelectorAll(".pbtn").forEach(b=>b.onclick=()=>tgl(b.closest(".vrow")));
+  $("groups").querySelectorAll(".del").forEach(b=>b.onclick=()=>{const l=+b.dataset.del;if(delArm!==l){delArm=l;renderList();setTimeout(()=>{if(delArm===l){delArm=null;renderList()}},4000);return}delArm=null;deleteLesson(l)});
+  $("playSel").disabled=!sel.length;$("playSel").textContent=sel.length?`Mit ${stack().length} Karten spielen`:"Nichts ausgewählt";
+  if(!$("addL").value)$("addL").value=NEWEST()+1;
+}
+function setSel(ids){S.sel=[...new Set(ids)];save();if(current!==null&&!S.sel.includes(current))current=null;renderStats();renderList()}
+$("hideDe").onchange=e=>{S.hide=e.target.checked;save();renderList()};
+$("playSel").onclick=()=>{if(!stack().length){const s=selK();S.won=S.won.filter(k=>!s.includes(k))}show("play")};
+
+function show(v){
+  const play=v==="play";$("viewPlay").hidden=!play;$("viewList").hidden=play;
+  $("tabPlay").setAttribute("aria-selected",play);$("tabList").setAttribute("aria-selected",!play);
+  if(play){if(current===null||!stack().includes(current))drawRandom();renderStats();renderStage()}else renderList();
+  window.scrollTo({top:0});
+}
+$("tabPlay").onclick=()=>show("play");$("tabList").onclick=()=>show("list");
+
+// ---- capabilities: db (shared lessons) + sample (photo reading)
+let db=null,sample=null,canImg=false,maxImg=1,ctl=null;
+function refreshAll(){
+  rebuild();renderStats();
+  if(!$("viewList").hidden)renderList();
+  else if(current===null||!BY[current]){drawRandom();renderStage()}
+}
+(async()=>{
+  try{db=await claude.use("db")}catch(e){db=null}
+  dbSt=db?"verbunden":"nicht verbunden – bitte bei Claude anmelden";renderBoard();
+  (async()=>{try{const u=await claude.use("user");if(u){canW=await u.can("data.write");renderBoard()}}catch(e){}})();
+  if(db){
+    try{db.collection("scores").onSnapshot(snap=>{
+      scores=snap.docs.map(d=>{const x=d.data()||{};return{id:d.id,name:String(x.name||d.id).slice(0,24),best:Number(x.best)||0}});
+      renderBoard();if(!player)renderPicker()},e=>{dbSt="Lesefehler ("+((e&&(e.code||e.message))||"?")+")";renderBoard()})}catch(e){}
+    if(player)ensureScore();
+    try{db.collection("lessons").onSnapshot(snap=>{
+      dbLessons=snap.docs.map(d=>{const x=d.data()||{};return{l:Number(x.lesson),words:Array.isArray(x.words)?x.words:[],src:"db",id:d.id}}).filter(L=>L.l>0);
+      refreshAll()},()=>{})}catch(e){}
+  }
+})();
+(async()=>{
+  try{sample=await claude.use("sample")}catch(e){sample=null}
+  if(sample){const caps=await sample.limits().catch(()=>null);canImg=!!caps?.images;maxImg=caps?.images?.maxCount||1}
+  if(!canImg){$("photoLbl").hidden=true;setStatus("Die Foto-Erkennung ist in dieser Ansicht nicht verfügbar. Du kannst Vokabeln aber von Hand eintippen.","")}
+})();
+function setStatus(msg,cls){$("addStatus").innerHTML=msg?`<p class="note ${cls||""}">${msg}</p>`:""}
+
+const PROMPT=`Die Fotos zeigen eine handgeschriebene Latein-Vokabelseite aus einem Schulheft (Spalten LATEIN und DEUTSCH, das Foto kann gedreht sein, manchmal zwei Spalten-Paare nebeneinander).
+Lies jede Vokabelzeile von oben nach unten aus. Ignoriere Überschriften und leere Zeilen.
+Antworte nur mit einem JSON-Array. Jedes Element: {"la": string, "ex": string, "de": string, "tag": string}.
+- "la": das lateinische Wort oder die Wendung ohne Klammerzusatz. Fragezeichen und Ausrufezeichen behalten (z. B. "ubi?", "io!"). Keine Längenstriche.
+- "ex": eine Wortform aus der Klammer, z. B. "cogitat" aus "cogitare (cogitat)" oder "viam" aus "via (viam f)". Sonst "".
+- "tag": grammatische Angabe aus der Klammer, genau einer dieser Werte: "m", "f", "n", "Adv.", "Präp. m. Akk.", "Präp. m. Abl.", "Akk.", "m. Akk.", "Konj.", "Pron." oder "".
+- "de": die deutschen Bedeutungen wie notiert, mehrere durch Komma getrennt, mit Artikel bei Nomen. Offensichtliche Rechtschreibfehler korrigieren.
+Beispiel: [{"la":"via","ex":"viam","de":"der Weg, die Straße","tag":"f"},{"la":"subito","ex":"","de":"plötzlich","tag":"Adv."}]`;
+
+const ERR={not_granted:"Die Erlaubnis für Claude wurde nicht erteilt. Du kannst die Wörter von Hand eintippen.",sampling_disabled:"Claude ist für dieses Konto nicht verfügbar.",rate_limited:"Gerade zu viele Anfragen. Bitte in ein paar Minuten nochmal versuchen.",image_rejected:"Das Foto konnte nicht gelesen werden. Bitte ein anderes JPG- oder PNG-Foto wählen.",refused:"Das Foto konnte nicht ausgewertet werden. Bitte ein anderes Foto versuchen.",invalid_json:"Julia konnte die Liste nicht sauber lesen. Bitte nochmal versuchen, am besten mit einem schärferen Foto.",session_expired:"Bitte neu bei Claude anmelden.",images_unavailable:"Fotos können in dieser Ansicht nicht gesendet werden."};
+
+$("photo").onchange=async e=>{
+  const files=[...e.target.files].slice(0,maxImg);e.target.value="";
+  if(!files.length||!sample)return;
+  ctl=new AbortController();
+  $("addStatus").innerHTML=`<div class="busy"><span class="dots"><i></i><i></i><i></i></span><span>Julia liest ${files.length>1?files.length+" Fotos":"das Foto"} … das kann bis zu einer Minute dauern.</span><button class="btn ghost" type="button" id="stopRead">Stopp</button></div>`;
+  $("stopRead").onclick=()=>ctl&&ctl.abort();
+  $("photoLbl").hidden=true;$("manual").disabled=true;
+  try{
+    const out=await sample.json(PROMPT,{images:files,signal:ctl.signal,modelTier:"default"});
+    const arr=Array.isArray(out)?out:(Array.isArray(out?.words)?out.words:[]);
+    const rows=arr.filter(x=>x&&typeof x==="object").map(x=>({la:String(x.la||"").trim(),ex:String(x.ex||"").trim(),de:String(x.de||"").trim(),tag:TAGS.includes(String(x.tag||"").trim())?String(x.tag).trim():""})).filter(r=>r.la||r.de);
+    if(!rows.length){setStatus("Auf dem Foto wurden keine Vokabeln gefunden. Bitte ein deutlicheres Foto versuchen oder von Hand eintippen.","err")}
+    else{setStatus(`${rows.length} Vokabeln gefunden. Bitte jede Zeile prüfen, besonders die Handschrift.`,"ok");openPreview(rows)}
+  }catch(err){
+    if(err&&err.code!=="cancelled")setStatus(ERR[err.code]||"Das hat nicht geklappt. Bitte nochmal versuchen.","err");else setStatus("","");
+    if(err&&(err.code==="not_granted"||err.code==="sampling_disabled"||err.code==="images_unavailable"))canImg=false;
+  }finally{$("photoLbl").hidden=!canImg;$("manual").disabled=false;ctl=null}
+};
+$("manual").onclick=()=>{setStatus("","");openPreview([{la:"",ex:"",de:"",tag:""},{la:"",ex:"",de:"",tag:""},{la:"",ex:"",de:"",tag:""}])};
+
+let rows=[];
+function openPreview(r){rows=r;$("preview").hidden=false;renderRows()}
+function readRows(){$("prows").querySelectorAll(".prow").forEach((el,i)=>{rows[i]={la:el.querySelector(".la").value.trim(),ex:el.querySelector(".ex").value.trim(),de:el.querySelector(".de").value.trim(),tag:el.querySelector("select").value}})}
+function renderRows(){
+  const known={};ALL.forEach(w=>{known[norm(w.la)]=w.l});
+  $("prows").innerHTML=rows.map((r,i)=>`<div class="prow">
+    <input class="la" id="pla${i}" value="${esc(r.la)}" placeholder="Latein" aria-label="Latein">
+    <input class="ex" id="pex${i}" value="${esc(r.ex)}" placeholder="Zusatz" aria-label="Zusatz">
+    <input class="de" id="pde${i}" value="${esc(r.de)}" placeholder="Deutsch" aria-label="Deutsch">
+    <select id="ptg${i}" aria-label="Merkmal">${TAGS.map(t=>`<option value="${esc(t)}"${t===r.tag?" selected":""}>${t?esc(TN[t]||t):"kein Merkmal"}</option>`).join("")}</select>
+    <button class="x" type="button" data-x="${i}" aria-label="Zeile löschen">✕</button>
+    ${r.la&&known[norm(r.la)]?`<span class="dup">Gibt es schon in Lektion ${known[norm(r.la)]}</span>`:""}</div>`).join("");
+  $("prows").querySelectorAll(".x").forEach(b=>b.onclick=()=>{readRows();rows.splice(+b.dataset.x,1);renderRows()});
+}
+$("addRow").onclick=()=>{readRows();rows.push({la:"",ex:"",de:"",tag:""});renderRows();const l=$("prows").querySelectorAll(".prow .la");l[l.length-1].focus()};
+$("cancelAdd").onclick=()=>{rows=[];$("preview").hidden=true;setStatus("","")};
+$("saveAdd").onclick=async()=>{
+  readRows();const words=rows.filter(r=>r.la&&r.de);const l=Math.round(Number($("addL").value));
+  if(!(l>=1&&l<=99)){setStatus("Bitte eine Lektionsnummer zwischen 1 und 99 eintragen.","err");$("addL").focus();return}
+  if(!words.length){setStatus("Jede Zeile braucht ein lateinisches Wort und eine deutsche Bedeutung.","err");return}
+  const btn=$("saveAdd");btn.disabled=true;btn.textContent="Speichert …";
+  let shared=false;
+  if(db){try{
+    const ref=db.collection("lessons").doc("l"+l);const snap=await ref.get();
+    const prev=snap.exists&&Array.isArray(snap.data().words)?snap.data().words:[];
+    await ref.set({lesson:l,words:[...prev,...words],savedAt:new Date().toISOString()});shared=true;
+  }catch(e){shared=false}}
+  if(!shared){const L=localLessons.find(x=>x.l===l);if(L)L.words=[...L.words,...words];else localLessons.push({l,words,src:"local"});saveLocal();refreshAll()}
+  btn.disabled=false;btn.textContent="Lektion speichern";rows=[];$("preview").hidden=true;$("addL").value="";
+  setStatus(shared?`${words.length} Vokabeln in Lektion ${l} gespeichert. Sie sind jetzt im Stapel.`:`${words.length} Vokabeln in Lektion ${l} gespeichert, aber nur auf diesem Gerät. Für alle Geräte braucht es Bearbeitungsrechte an dieser Seite.`,shared?"ok":"");
+  say("ok");
+};
+let isEditor=true;
+(async()=>{try{const u=await claude.use("user");if(u){isEditor=await u.canEdit();if(!isEditor){$("addbox").hidden=true;if(!$("viewList").hidden)renderList()}}}catch(e){}})();
+async function deleteLesson(l){
+  if(db){try{const ref=db.collection("lessons").doc("l"+l);const s=await ref.get();if(s.exists)await ref.delete();dbLessons=dbLessons.filter(x=>x.l!==l)}catch(e){setStatus("Löschen hat nicht geklappt. Dafür braucht es Bearbeitungsrechte.","err")}}
+  localLessons=localLessons.filter(x=>x.l!==l);saveLocal();
+  if(current&&!BY[current])current=null;refreshAll();
+}
+
+let restartArm=null;
+$("restart").onclick=()=>{
+  const b=$("restart");
+  if(!restartArm){b.classList.add("sure");b.textContent="Wirklich alles auf Null?";restartArm=setTimeout(()=>{restartArm=null;b.classList.remove("sure");b.textContent="Neu starten"},4000);return}
+  clearTimeout(restartArm);restartArm=null;b.classList.remove("sure");b.textContent="Neu starten";
+  S.won=[];S.retry=[];S.streak=0;S.genus=0;save();lastDrawn=null;drawRandom();say("idle");renderStats();renderStage();window.scrollTo({top:0});
+};
+if(player)loadPlayer();rebuild();drawRandom();renderStats();renderStage();
+</script>
+</section>
+
+<section class="gu-view" id="en" data-v="en" role="tabpanel" aria-labelledby="gu-tab-en" hidden>
+<div class="wrap">
+  <header class="bar panel">
+    <h1>Gretas Englischvokabeln</h1>
+    <div class="stats">
+      <div class="stat"><b id="en-sWon">0</b><span>gewonnen</span></div>
+      <div class="stat"><b id="en-sLeft">0</b><span>im Stapel</span></div>
+      <div class="stat"><b id="en-sStreak">0</b><span>Serie</span></div>
+    </div>
+    <div class="progress"><i id="en-prog"></i></div>
+    <div class="record" id="en-record"></div>
+    <div class="tabs" role="tablist">
+      <button class="tab" role="tab" id="en-tabPlay" type="button" aria-selected="true">Spielen</button>
+      <button class="tab" role="tab" id="en-tabList" type="button" aria-selected="false">Vokabeln</button>
+    </div>
+    <button class="dirbtn" type="button" id="en-dir">Englisch → Deutsch</button>
+  </header>
+
+  <div id="en-viewPlay">
+    <div class="hero"><svg class="julia" id="en-julia" data-mood="idle" viewBox="0 0 120 170" role="img" aria-label="Emma, ein Mädchen aus London">
+  <g stroke="#1c1530" stroke-width="3" stroke-linejoin="round" stroke-linecap="round">
+    <path d="M30 168 L40 112 Q60 102 80 112 L90 168 Z" fill="#1f5fa8"/>
+    <path d="M40 112 Q60 128 80 112" fill="none"/>
+    <rect x="42" y="131" width="36" height="7" rx="2" fill="#ffcd3c"/>
+    <path d="M40 116 Q24 128 26 146" fill="none"/><circle cx="26" cy="148" r="6" fill="#f3c9a0"/>
+    <path d="M80 116 Q98 112 104 96" fill="none"/><circle cx="105" cy="92" r="6" fill="#f3c9a0"/>
+    <rect x="53" y="94" width="14" height="14" fill="#f3c9a0"/>
+    <circle cx="60" cy="18" r="13" fill="#b5702c"/><path d="M60 30 L47 23 L47 37 Z M60 30 L73 23 L73 37 Z" fill="#d9472b"/><circle cx="60" cy="30" r="4" fill="#d9472b"/>
+    <ellipse cx="60" cy="62" rx="34" ry="36" fill="#b5702c"/>
+    <ellipse cx="60" cy="66" rx="27" ry="30" fill="#f3c9a0"/>
+    <path d="M33 56 Q45 34 60 40 Q75 34 87 56 Q75 44 60 48 Q45 44 33 56 Z" fill="#b5702c"/>
+    <g fill="#3f9b4a" display="none">
+      <ellipse cx="32" cy="50" rx="7" ry="4" transform="rotate(-50 32 50)"/><ellipse cx="38" cy="38" rx="7" ry="4" transform="rotate(-30 38 38)"/>
+      <ellipse cx="49" cy="30" rx="7" ry="4" transform="rotate(-12 49 30)"/><ellipse cx="88" cy="50" rx="7" ry="4" transform="rotate(50 88 50)"/>
+      <ellipse cx="82" cy="38" rx="7" ry="4" transform="rotate(30 82 38)"/><ellipse cx="71" cy="30" rx="7" ry="4" transform="rotate(12 71 30)"/>
+    </g>
+  </g>
+  <g fill="#1c1530"><ellipse cx="49" cy="66" rx="3.6" ry="5"/><ellipse cx="71" cy="66" rx="3.6" ry="5"/></g>
+  <g fill="#fff"><circle cx="50" cy="64" r="1.3"/><circle cx="72" cy="64" r="1.3"/></g>
+  <g fill="#f29a8c" opacity=".7"><ellipse cx="41" cy="78" rx="5" ry="3"/><ellipse cx="79" cy="78" rx="5" ry="3"/></g>
+  <g fill="none" stroke="#1c1530" stroke-width="3" stroke-linecap="round">
+    <path class="m m-idle" d="M51 82 Q60 89 69 82"/>
+    <path class="m m-ok" d="M49 80 Q60 96 71 80 Z" fill="#fff"/>
+    <path class="m m-bad" d="M52 87 Q60 81 68 87"/>
+  </g>
+</svg><div class="bubble" id="en-bubble" aria-live="polite"><b>Hello!</b><span>Hallo! Wer spielt heute?</span></div></div>
+    <section class="stage" id="en-stage"></section>
+    <p class="stackinfo" id="en-stackinfo"></p>
+    <div class="restart"><button class="btn ghost" type="button" id="en-restart">Neu starten</button></div>
+    <section class="board panel" id="en-board" aria-live="polite"></section>
+  </div>
+
+  <div id="en-viewList" hidden>
+    <details class="addbox panel" id="en-addbox">
+      <summary>Neue Vokabeln hinzufügen</summary>
+      <div class="addin">
+        <p class="note">Fotografiere die Heftseite gerade und gut beleuchtet. Emma liest die Wörter aus, danach kannst du alles prüfen und korrigieren.</p>
+        <div class="addrow">
+          <label class="num" for="en-addL">Unit <input type="number" id="en-addL" min="1" max="99" inputmode="numeric"></label>
+          <label class="btn filebtn" id="en-photoLbl" for="en-photo">Foto wählen<input type="file" id="en-photo" accept="image/jpeg,image/png,image/webp" multiple></label>
+          <button class="btn ghost" type="button" id="en-manual">Von Hand eintippen</button>
+        </div>
+        <div id="en-addStatus"></div>
+        <div id="en-preview" hidden>
+          <div class="phead"><span>Englisch</span><span>Zusatz</span><span>Deutsch</span><span>Merkmal</span><span></span></div>
+          <div id="en-prows"></div>
+          <div class="actions" style="margin-top:10px">
+            <button class="btn ghost" type="button" id="en-addRow">+ Zeile</button>
+            <span style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn ghost" type="button" id="en-cancelAdd">Abbrechen</button><button class="btn" type="button" id="en-saveAdd">Unit speichern</button></span>
+          </div>
+        </div>
+      </div>
+    </details>
+    <section class="list panel" id="en-list">
+      <div class="tools">
+        <div class="chips" id="en-quick" role="group" aria-label="Schnellauswahl"></div>
+        <div class="chips" id="en-quickp" role="group" aria-label="Bereiche" hidden></div>
+        <label class="switch"><input type="checkbox" id="en-hideDe"> Übersetzung verdecken (einzeln aufdecken mit „zeigen“)</label>
+      </div>
+      <div id="en-groups"></div>
+    </section>
+    <div class="sticky"><button class="btn" id="en-playSel" type="button">Mit Auswahl spielen</button></div>
+  </div>
+</div>
+<script type="text/x-deferred">(()=>{
+
+const V=(window.__VOCAB_EN||[]);
+const ALT={};
+const TAGNAME={"Adj.":"Adjektiv","Adv.":"Adverb","Präp.":"Präposition","Konj.":"Konjunktion","Pron.":"Pronomen","unregelm. Verb":"unregelmäßiges Verb"};
+
+const norm=s=>s.toLowerCase().replace(/ä/g,"a").replace(/ö/g,"o").replace(/ü/g,"u").replace(/ß/g,"ss")
+  .replace(/\(.*?\)/g," ").replace(/2\./g,"2 ").replace(/[^a-z0-9 ]/g," ").replace(/\s+/g," ").trim()
+  .replace(/^(der|die|das|ein|eine|einen) /,"").replace(/\b(jn|jm|jdn|jdm|jmdn|jmdm|etw|etwas|sich)\b/g," ").replace(/\s+/g," ").trim();
+const variants=s=>{const n=norm(s);const out=new Set([n]);if(n.startsWith("sich "))out.add(n.slice(5));(ALT[n]||[]).forEach(a=>out.add(norm(a)));return out};
+function lev(a,b){const d=Array.from({length:a.length+1},(_,i)=>[i]);for(let j=1;j<=b.length;j++)d[0][j]=j;
+  for(let i=1;i<=a.length;i++)for(let j=1;j<=b.length;j++)d[i][j]=Math.min(d[i-1][j]+1,d[i][j-1]+1,d[i-1][j-1]+(a[i-1]===b[j-1]?0:1));return d[a.length][b.length]}
+const normEn=s=>String(s).toLowerCase().replace(/[’`]/g,"'").replace(/\(.*?\)/g," ").replace(/\b(sth|sb)\b\.?/g," ").replace(/…|\.\.\./g," ").replace(/[^a-z0-9'\/ -]/g," ").replace(/-/g," ").replace(/\s+/g," ").trim().replace(/^to /,"").replace(/^(the|a|an) /,"");
+const varsEn=s=>{const n=normEn(s),out=new Set(),m=n.match(/(\S+)\/(\S+)/);if(m)m[0].split("/").forEach(alt=>out.add(n.replace(m[0],alt)));else out.add(n);return [...out].map(x=>x.replace(/\//g," ").replace(/\s+/g," ").trim()).filter(Boolean)};
+function checkEn(input,la){const targets=[];la.split(",").forEach(p=>{if(p.trim())varsEn(p).forEach(v=>targets.push([v,p.trim()]))});
+  const guesses=input.split(/[,;]| or /).map(x=>normEn(x).replace(/\//g," ").trim()).filter(Boolean);let near=null;
+  for(const g of guesses)for(const [t,o] of targets){if(g===t)return{res:"ok"};const tol=t.length>=9?2:t.length>=4?1:0;if(tol&&lev(g,t)<=tol&&!near)near=o}
+  return near?{res:"near",word:near}:{res:"bad"}}
+function check(input,de){
+  const targets=[];de.split(",").forEach(p=>{if(p.trim())variants(p).forEach(v=>targets.push([v,p.trim()]))});
+  const guesses=input.split(/[,;\/]| oder /).map(norm).filter(Boolean);
+  let near=null;
+  for(const g of guesses){const gs=new Set([g]);if(g.startsWith("sich "))gs.add(g.slice(5));
+    for(const x of gs)for(const [t,orig] of targets){
+      if(x===t)return{res:"ok"};
+      const tol=t.length>=9?2:t.length>=4?1:0;
+      if(tol&&lev(x,t)<=tol&&!near)near=orig;
+    }}
+  return near?{res:"near",word:near}:{res:"bad"};
+}
+
+
+
+const BASE=V.map(([la,ex,de,l,tg,p,lw])=>({la,ex,de,l,tg,p,lw,custom:false}));
+const keyOf=w=>w.l+"|"+w.la+"|"+w.de;
+BASE.forEach(w=>w.k=keyOf(w));
+const TAGS=["","Verb","unregelm. Verb","Nomen","Adj.","Adv.","Präp.","Konj.","Pron.","Phrase"];
+const TN={...TAGNAME};
+const $=id=>document.getElementById("en-"+id);
+const esc=s=>String(s??"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/"/g,"&quot;");
+
+let S={won:[],retry:[],sel:[],known:[],streak:0,best:0,hide:false};
+try{
+  const s=JSON.parse(localStorage.getItem("greta-englisch-3")||"null");
+  if(s&&Array.isArray(s.sel))S={...S,...s};
+  else{const o=JSON.parse(localStorage.getItem("greta-englisch-2")||"null");
+    if(o&&Array.isArray(o.sel)){const m=a=>(a||[]).map(i=>BASE[i]&&BASE[i].k).filter(Boolean);
+      S={...S,won:m(o.won),retry:m(o.retry),sel:m(o.sel),known:BASE.map(w=>w.k),streak:o.streak||0,best:o.best||0,hide:!!o.hide}}}
+}catch(e){}
+const legacyS=(S.sel.length||S.won.length)?S:null;
+const DEFAULT_S=()=>({won:[],retry:[],sel:[],known:[],streak:0,best:0,hide:false});
+const slug=n=>n.trim().toLowerCase().replace(/ä/g,"ae").replace(/ö/g,"oe").replace(/ü/g,"ue").replace(/ß/g,"ss").replace(/[^a-z0-9]+/g,"-").replace(/^-+|-+$/g,"").slice(0,40);
+let player=null,localNames=[];
+try{player=JSON.parse(localStorage.getItem("greta-englisch-player")||"null")}catch(e){}
+try{localNames=JSON.parse(localStorage.getItem("greta-englisch-names")||"[]")||[]}catch(e){}
+const PKEY=id=>"greta-englisch-p:"+id;
+const save=()=>{try{localStorage.setItem(player?PKEY(player.id):"greta-englisch-3",JSON.stringify(S))}catch(e){}};
+function readPlayerState(id){try{return JSON.parse(localStorage.getItem(PKEY(id))||"null")}catch(e){return null}}
+function loadPlayer(){
+  let st=readPlayerState(player.id);
+  if(!st){let used=false;try{used=localStorage.getItem("greta-englisch-legacy-used")==="1"}catch(e){}
+    if(!used&&legacyS){st=legacyS;try{localStorage.setItem("greta-englisch-legacy-used","1")}catch(e){}}}
+  S={...DEFAULT_S(),...(st||{})};S.streak=0;migrate();
+}
+function migrate(){const f=x=>String(x).includes("§")?x:x+"§en";S.won=[...new Set((S.won||[]).map(f))];S.retry=[...new Set((S.retry||[]).map(f))];if(!["en","de","mix"].includes(S.dir))S.dir="en"}
+const DIRS=()=>S.dir==="mix"?["en","de"]:[S.dir==="de"?"de":"en"];
+const kOf=it=>String(it).split("§")[0],dOf=it=>String(it).split("§")[1]||"en";
+
+let dbLessons=[],localLessons=[];
+try{localLessons=(JSON.parse(localStorage.getItem("greta-englisch-extra")||"[]")||[]).map(L=>({...L,src:"local"}))}catch(e){}
+const saveLocal=()=>{try{localStorage.setItem("greta-englisch-extra",JSON.stringify(localLessons.map(({l,words})=>({l,words}))))}catch(e){}};
+let ALL=[],BY={};
+function rebuild(){
+  const seen=new Set();ALL=BASE.slice();BASE.forEach(w=>seen.add(w.k));
+  [...dbLessons,...localLessons].sort((a,b)=>a.l-b.l).forEach(L=>(L.words||[]).forEach(x=>{
+    const w={la:String(x.la||"").trim(),ex:String(x.ex||"").trim(),de:String(x.de||"").trim(),l:L.l,tg:String(x.tag||"").trim(),custom:true,src:L.src};
+    if(!w.la||!w.de||!(w.l>0))return;w.k=keyOf(w);if(seen.has(w.k))return;seen.add(w.k);ALL.push(w)}));
+  BY={};ALL.forEach(w=>BY[w.k]=w);
+  let ch=false;ALL.forEach(w=>{if(!S.known.includes(w.k)){S.known.push(w.k);S.sel.push(w.k);ch=true}});
+  if(ch)save();
+}
+const LESSONS=()=>[...new Set(ALL.map(w=>w.l))].sort((a,b)=>a-b);
+const NEWEST=()=>{const l=LESSONS();return l.length?Math.max(...l):0};
+const selK=()=>S.sel.filter(k=>BY[k]);
+const stack=()=>{const ds=DIRS();return selK().flatMap(k=>ds.map(d=>k+"§"+d)).filter(it=>!S.won.includes(it))};
+let current=null,answered=false,lastDrawn=null;
+function drawRandom(){const t=stack();if(!t.length){current=null;return}
+  const pool=t.length>1?t.filter(k=>k!==lastDrawn):t;current=pool[Math.floor(Math.random()*pool.length)];lastDrawn=current}
+
+let scores=[];
+function board(){
+  const m=new Map();
+  scores.forEach(x=>m.set(x.id,{id:x.id,name:x.name,best:x.best}));
+  localNames.forEach(n=>{const st=readPlayerState(n.id);const b=Math.max(st?.best||0,n.id===player?.id?S.best:0);const e=m.get(n.id);if(e)e.best=Math.max(e.best,b);else m.set(n.id,{id:n.id,name:n.name,best:b})});
+  if(player&&!m.has(player.id))m.set(player.id,{id:player.id,name:player.name,best:S.best});
+  if(player)m.get(player.id).best=Math.max(m.get(player.id).best,S.best);
+  return [...m.values()].sort((a,b)=>b.best-a.best||a.name.localeCompare(b.name));
+}
+const ROMAN=["1.","2.","3.","4.","5.","6.","7.","8.","9.","10."];
+function renderBoard(){
+  const b=board(),top=b.find(x=>x.best>0);
+  $("record").innerHTML=player?`<span class="who">${esc(player.name)} spielt · <button type="button" id="en-switchP">wechseln</button></span>${top?`<span class="top">Rekord: ${esc(top.name)} – ${top.best} in Folge</span>`:""}`:"";
+  const sp=$("switchP");if(sp)sp.onclick=switchPlayer;
+  $("board").hidden=!player;
+  $("board").innerHTML=`<h2>Bestenliste</h2>${b.length?`<ol>${b.map((x,i)=>`<li class="${x.id===player?.id?"me":""}"><span class="rk">${ROMAN[i]||i+1}</span><span>${esc(x.name)}</span><b>${x.best} in Folge</b></li>`).join("")}</ol>`:'<p class="empty">Noch keine Rekorde.</p>'}${dbStatus()}`;
+}
+function renderStats(){
+  renderBoard();showDir();
+  const sel=selK(),won=sel.filter(k=>S.won.includes(k+"§en")&&S.won.includes(k+"§de")).length,all=sel.length,left=stack().length,tot=all*DIRS().length;
+  $("sWon").textContent=`${won}/${all}`;$("sLeft").textContent=left;$("sStreak").textContent=S.streak;
+  $("prog").style.width=(tot?(tot-left)/tot*100:0)+"%";
+  const ls=LESSONS().filter(l=>sel.some(k=>BY[k].l===l));
+  const custom=all!==ALL.filter(w=>ls.includes(w.l)).length;
+  $("stackinfo").innerHTML=all?`Im Stapel: ${custom?"eigene Auswahl aus ":""}Unit ${ls.join(", ")} · <button type="button" id="en-toList">Auswahl ändern</button>`:"";
+  const tl=$("toList");if(tl)tl.onclick=()=>show("list");
+}
+function allNames(){const m=new Map();scores.forEach(x=>m.set(x.id,x.name));localNames.forEach(n=>m.set(n.id,n.name));return [...m].map(([id,name])=>({id,name})).sort((a,b)=>a.name.localeCompare(b.name))}
+function renderPicker(){
+  const ns=allNames();
+  $("stage").innerHTML=`<div class="card panel idle"><div class="latin">Who are you?</div><p>Wer spielt? Tippe auf deinen Namen.</p>
+    ${ns.length?`<div class="names">${ns.map(n=>`<button class="btn" type="button" data-id="${esc(n.id)}">${esc(n.name)}</button>`).join("")}</div>`:""}
+    <form class="newname" id="en-newName"><input id="en-nnInput" maxlength="24" placeholder="${ns.length?"Neuer Name":"Dein Name"}" aria-label="Name" autocomplete="off"><button class="btn ghost" type="submit">${ns.length?"Hinzufügen":"Los geht's"}</button></form></div>`;
+  $("stage").querySelectorAll(".names .btn").forEach(b=>b.onclick=()=>{const n=ns.find(x=>x.id===b.dataset.id);choosePlayer(n.name)});
+  $("newName").onsubmit=e=>{e.preventDefault();const v=$("nnInput").value.trim();if(slug(v))choosePlayer(v)};
+}
+function choosePlayer(name){
+  const id=slug(name);if(!id)return;
+  player={id,name:name.trim()};try{localStorage.setItem("greta-englisch-player",JSON.stringify(player))}catch(e){}
+  if(!localNames.some(n=>n.id===id)){localNames.push(player);try{localStorage.setItem("greta-englisch-names",JSON.stringify(localNames))}catch(e){}}
+  loadPlayer();rebuild();lastDrawn=null;drawRandom();
+  $("bubble").innerHTML=`<b>Hello, ${esc(player.name)}!</b><span>Hallo ${esc(player.name)}! Los geht's.</span>`;
+  renderStats();renderStage();ensureScore();
+}
+function switchPlayer(){save();player=null;try{localStorage.removeItem("greta-englisch-player")}catch(e){}current=null;
+  $("bubble").innerHTML=`<b>Hello!</b><span>Hallo! Wer spielt heute?</span>`;renderStats();renderStage();if(!$("viewList").hidden)show("play")}
+let scoreChain=Promise.resolve();
+let dbSt="verbinde …",lastErr="",lastOk="",canW=null;
+function dbStatus(){return `<p class="dbst">Online-Bestenliste: ${esc(dbSt)}${canW===false?" · nur Leserechte":""}${lastErr?` · Speichern fehlgeschlagen (${esc(lastErr)})`:lastOk?` · ${esc(lastOk)}`:""}</p>`}
+function writeScore(force){
+  if(!db||!player)return;const me={...player},best=S.best;
+  scoreChain=scoreChain.then(async()=>{try{const ref=db.collection("en_scores").doc(me.id);const sn=await ref.get();const prev=sn.exists?Number(sn.data().best)||0:-1;
+    if(best>prev||(force&&!sn.exists)){await ref.set({name:me.name,best:Math.max(best,prev,0),updatedAt:new Date().toISOString()});lastOk="gespeichert ✓"}else lastOk="aktuell ✓";lastErr=""}catch(e){lastErr=(e&&(e.code||e.message))||"unbekannter Fehler"}renderBoard()});
+}
+const ensureScore=()=>writeScore(true);
+function renderStage(){
+  if(!player){renderPicker();return}
+  const st=$("stage");
+  if(!ALL.length){st.innerHTML=`<div class="card panel idle"><div class="latin">Coming soon!</div><p>Hier kommen bald deine Englischvokabeln hin.</p><div class="actions" style="justify-content:center"><button class="btn" type="button" id="en-goAdd">Vokabeln hinzufügen</button></div></div>`;$("goAdd").onclick=()=>{show("list");$("addbox").open=true};return}
+  if(!selK().length){st.innerHTML=`<div class="card panel idle"><div class="latin">Stapel leer</div><p>Wähle unter „Vokabeln“ aus, welche Wörter in den Stapel sollen.</p><div class="actions" style="justify-content:center"><button class="btn" type="button" id="en-goL">Vokabeln wählen</button></div></div>`;$("goL").onclick=()=>show("list");return}
+  if(current===null){
+    st.innerHTML=`<div class="card panel idle"><div class="latin">You did it!</div><p>Alle Karten im Stapel gewonnen${S.dir==="mix"?" (beide Richtungen)":""}. Beste Serie: ${S.best}.</p><div class="actions" style="justify-content:center"><button class="btn ghost" type="button" id="en-goL2">Andere Auswahl</button><button class="btn" id="en-again" type="button">Nochmal mischen</button></div></div>`;
+    $("again").onclick=reshuffle;$("goL2").onclick=()=>show("list");return}
+  const w=BY[kOf(current)],RD=dOf(current)==="de";
+  const tags=w.tg?`<div class="tags"><span class="tag">${esc(TN[w.tg]||w.tg)}</span></div>`:"";
+  st.innerHTML=`<form class="card panel pop" id="en-cardForm" autocomplete="off">
+    <div class="meta"><span>Unit ${w.l}${w.p?` · ${esc(w.p)}`:""} ${w.l===NEWEST()?'<span class="neu">neu</span>':""}</span><span>${S.retry.includes(current)?"Nochmal üben":(RD?"Deutsch → Englisch":"Englisch → Deutsch")}</span></div>
+    <div><div class="latin">${esc(RD?w.de:w.la)}</div>${!RD&&w.ex?`<div class="extra">(${esc(w.ex)})</div>`:""}</div>
+    ${tags}
+    <div class="row"><input class="answer" id="en-ans" placeholder="${RD?"Englisches Wort …":"Deutsche Bedeutung …"}" autocapitalize="off" spellcheck="false" aria-label="${RD?"Englisches Wort":"Deutsche Übersetzung"}"></div>
+    <div id="en-fb"></div>
+    <div class="actions" id="en-acts">
+      <button class="btn ghost" type="button" id="en-skip">Weiß ich nicht</button>
+      <button class="btn" type="submit">Prüfen</button>
+    </div></form>`;
+  answered=false;
+  const inp=$("ans");setTimeout(()=>inp.focus({preventScroll:true}),60);
+  $("cardForm").onsubmit=e=>{e.preventDefault();if(answered){next();return}const v=inp.value.trim();if(!v){inp.focus();return}grade(v)};
+  $("skip").onclick=()=>{if(!answered)lose("Kein Problem.")};
+}
+const SAY={ok:[["Great!","Super!"],["Well done!","Gut gemacht!"],["Awesome!","Klasse!"],["Yes!","Ja, richtig!"]],near:[["Almost!","Fast! Schau auf die Schreibweise."]],bad:[["Oh no!","Oh weh! Merk sie dir für nächstes Mal."],["Not quite.","Nicht richtig. Gleich nochmal!"]],idle:[["Hello!","Hallo! Was heißt dieses Wort?"],["What's this?","Was bedeutet das?"],["Let's go!","Los geht's!"]]};
+function say(mood){const o=SAY[mood][Math.floor(Math.random()*SAY[mood].length)];const j=$("julia");j.dataset.mood="";void j.getBoundingClientRect();j.dataset.mood=mood;
+  $("bubble").innerHTML=`<b>${o[0]}</b><span>${o[1]}</span>`}
+
+function sayCustom(mood,a,b){say(mood);$("bubble").innerHTML=`<b>${esc(a)}</b><span>${esc(b)}</span>`}
+function grade(v){
+  const w=BY[kOf(current)];const r=dOf(current)==="de"?checkEn(v,w.la):check(v,w.de);
+  if(r.res==="ok")win(`<strong>Richtig!</strong> ${esc(w.la)} = ${esc(w.de)}. Die Karte gehört dir.`);
+  else if(r.res==="near")win(`<strong>Fast perfekt</strong>, gewonnen! Achte auf die Schreibweise: <strong>${esc(r.word)}</strong>.`,"warn");
+  else lose(`<strong>Leider nicht.</strong> Du hast „${esc(v)}“ geschrieben.`);
+}
+function win(msg,cls="ok"){answered=true;say(cls==="ok"?"ok":"near");S.won.push(current);S.retry=S.retry.filter(k=>k!==current);
+  const others=board().filter(x=>x.id!==player.id),leader=others[0],prevBest=S.best;
+  S.streak++;S.best=Math.max(S.best,S.streak);save();
+  if(leader&&leader.best>0&&S.streak===leader.best+1)sayCustom("ok","New record!",`Du hast ${leader.name} überholt!`);
+  else if(prevBest>0&&S.streak===prevBest+1)sayCustom("ok","New record!","Neuer eigener Rekord!");
+  if(S.best>prevBest)writeScore(false);
+  $("fb").innerHTML=`<div class="fb ${cls}">${msg}</div>`;finishActs();renderStats()}
+function lose(msg){answered=true;say("bad");if(!S.retry.includes(current))S.retry.push(current);S.streak=0;save();
+  $("fb").innerHTML=`<div class="fb bad">${msg} Richtig ist: <strong>${esc((w=>dOf(current)==="de"?w.la+(w.ex?" ("+w.ex+")":""):w.de)(BY[kOf(current)]))}</strong>. Die Karte wird zurück in den Stapel gemischt.</div>`;finishActs();renderStats()}
+function finishActs(){$("ans").disabled=true;$("acts").innerHTML=`<span></span><button class="btn" type="submit" id="en-nx">Nächste Karte</button>`;setTimeout(()=>$("nx")?.focus({preventScroll:true}),30)}
+function next(){drawRandom();say("idle");renderStage()}
+function reshuffle(){const s=selK(),ds=DIRS();S.won=S.won.filter(it=>!(s.includes(kOf(it))&&ds.includes(dOf(it))));S.streak=0;save();drawRandom();renderStats();renderStage()}
+
+// ---- list view
+function status(k){return S.won.includes(k)?["won","✓"]:S.retry.includes(k)?["retry","nochmal"]:["open","offen"]}
+const keysOf=l=>ALL.filter(w=>w.l===l).map(w=>w.k);
+function quickDefs(){const N=NEWEST();return [["all","Alle",ALL.map(w=>w.k)],...LESSONS().map(l=>["l"+l,`Unit ${l}${l===N?" (neu)":""}`,keysOf(l)]),["retry","Nur falsche",[...new Set(S.retry.map(kOf))].filter(k=>BY[k])]]}
+const same=(a,b)=>a.length===b.length&&a.every(x=>b.includes(x));
+let delArm=null;
+function renderList(){
+  const sel=selK(),R=S.dir==="de";
+  const VW=(S.view||[]).filter(l=>LESSONS().includes(l));
+  $("quick").innerHTML=quickDefs().map(([k,lab,ids])=>{const pr=k==="all"?!VW.length:k==="retry"?(ids.length>0&&same(ids,sel)):VW.includes(+k.slice(1));
+    return `<button class="chip" type="button" data-k="${k}" aria-pressed="${pr}"${k==="retry"&&!ids.length?" disabled":""}>${lab}${k==="retry"?` (${ids.length})`:""}</button>`}).join("");
+  $("quick").querySelectorAll(".chip").forEach(b=>b.onclick=()=>{const d=quickDefs().find(q=>q[0]===b.dataset.k),k=d[0],ids=d[2];if(!ids.length)return;
+    if(k==="all"||k==="retry"){S.view=[];S.pview=[];setSel(ids);return}
+    const l=+k.slice(1);
+    if(VW.includes(l)){S.view=VW.filter(x=>x!==l);S.pview=(S.pview||[]).filter(x=>+x.split("|")[0]!==l);setSel(selK().filter(x=>!ids.includes(x)))}
+    else if(!VW.length){S.view=[l];setSel(ids)}
+    else{S.view=[...VW,l].sort((x,y)=>x-y);setSel([...new Set([...selK(),...ids])])}
+    window.scrollTo({top:0})});
+  const PV=(S.pview||[]).filter(x=>VW.includes(+x.split("|")[0]));
+  const partsOf=l=>[...new Set(ALL.filter(w=>w.l===l&&w.p).map(w=>w.p))];
+  const pc=VW.flatMap(l=>partsOf(l).map(pp=>[l,pp])),multi=VW.length>1;
+  $("quickp").hidden=!pc.length;
+  $("quickp").innerHTML=pc.length?`<span class="qlab">Bereiche:</span>`+pc.map(([l,pp])=>`<button class="chip" type="button" data-pl="${l}" data-pp="${esc(pp)}" aria-pressed="${PV.includes(l+"|"+pp)}">${multi?`U${l} · `:""}${esc(pp)}</button>`).join(""):"";
+  $("quickp").querySelectorAll(".chip").forEach(b=>b.onclick=()=>{const l=+b.dataset.pl,pp=b.dataset.pp,key=l+"|"+pp;
+    const ids=ALL.filter(w=>w.l===l&&w.p===pp).map(w=>w.k),uids=keysOf(l),mine=PV.filter(x=>+x.split("|")[0]===l);
+    if(PV.includes(key)){S.pview=PV.filter(x=>x!==key);if(mine.length===1)setSel([...new Set([...selK(),...uids])]);else setSel(selK().filter(x=>!ids.includes(x)))}
+    else if(!mine.length){S.pview=[...PV,key];setSel([...selK().filter(x=>!uids.includes(x)),...ids])}
+    else{S.pview=[...PV,key];setSel([...new Set([...selK(),...ids])])}});
+  $("hideDe").checked=S.hide;$("list").classList.toggle("hide",S.hide);
+  const N=NEWEST();
+  $("groups").innerHTML=LESSONS().filter(l=>!VW.length||VW.includes(l)).map(l=>{
+    const pvl=PV.filter(x=>+x.split("|")[0]===l).map(x=>x.slice(x.indexOf("|")+1));
+    const ws=ALL.filter(w=>w.l===l&&(!pvl.length||pvl.includes(w.p))),n=ws.filter(w=>sel.includes(w.k)).length,hasCustom=ws.some(w=>w.custom);
+    return `<div class="grp"><h2><label><input type="checkbox" data-l="${l}" ${n===ws.length?"checked":""}> Unit ${l} ${l===N?'<span class="new">NEU</span>':""}</label><span>${n}/${ws.length} im Stapel</span>${hasCustom&&isEditor?`<button type="button" class="del${delArm===l?" sure":""}" data-del="${l}">${delArm===l?"Wirklich löschen?":(ws.every(w=>w.custom)?"Unit löschen":"Ergänzungen löschen")}</button>`:""}</h2>
+    ${ws.map((w,j)=>{const [c1,t1]=status(w.k+"§en"),[c2,t2]=status(w.k+"§de"),on=sel.includes(w.k),id="en-v"+l+"_"+j;
+      const ph=w.p&&(j===0||ws[j-1].p!==w.p)?(()=>{const ps=ws.filter(x=>x.p===w.p),pn=ps.filter(x=>sel.includes(x.k)).length;return `<div class="prt"><label><input type="checkbox" data-pl="${l}" data-pp="${esc(w.p)}" ${pn===ps.length?"checked":""}> ${esc(w.p)}</label><span>${pn}/${ps.length}</span></div>`})():"";
+      return ph+`<div class="vrow${on?"":" off"}"><input type="checkbox" id="en-${id}" data-k="${esc(w.k)}" ${on?"checked":""} aria-label="${esc(w.la)} in den Stapel"><label class="la" for="en-${id}">${esc(R?w.de:w.la)}${w.custom&&w.src==="local"?'<span class="mine">nur hier</span>':""}${!R&&w.ex?`<small>(${esc(w.ex)})</small>`:""}</label><span class="dewrap"><span class="de">${esc(R?w.la+(w.ex?" ("+w.ex+")":""):w.de)}</span>${w.lw?`<small class="lw">Merkhilfe: ${esc(w.lw)}</small>`:""}</span><span class="pills"><span class="pill ${c1}" title="Englisch → Deutsch">EN→DE ${t1}</span><span class="pill ${c2}" title="Deutsch → Englisch">DE→EN ${t2}</span>${S.hide?`<button type="button" class="pill pbtn open">zeigen</button>`:""}</span></div>`}).join("")}</div>`}).join("");
+  $("groups").querySelectorAll("h2 input").forEach(cb=>{const ids=keysOf(+cb.dataset.l),n=ids.filter(k=>sel.includes(k)).length;cb.indeterminate=n>0&&n<ids.length;
+    cb.onchange=()=>setSel(cb.checked?[...new Set([...selK(),...ids])]:selK().filter(k=>!ids.includes(k)))});
+  $("groups").querySelectorAll(".vrow input").forEach(cb=>cb.onchange=()=>{const k=cb.dataset.k;setSel(cb.checked?[...selK(),k]:selK().filter(x=>x!==k))});
+  const tgl=row=>{const d=row.querySelector(".de");d.classList.toggle("show");const on=d.classList.contains("show");row.classList.toggle("show",on);const b=row.querySelector(".pbtn");if(b)b.textContent=on?"verdecken":"zeigen"};
+  $("groups").querySelectorAll(".de").forEach(d=>d.onclick=()=>{if(S.hide)tgl(d.closest(".vrow"))});
+  $("groups").querySelectorAll(".pbtn").forEach(b=>b.onclick=()=>tgl(b.closest(".vrow")));
+  $("groups").querySelectorAll(".prt input").forEach(cb=>{const ids=ALL.filter(w=>w.l===+cb.dataset.pl&&w.p===cb.dataset.pp).map(w=>w.k),n=ids.filter(k=>sel.includes(k)).length;cb.indeterminate=n>0&&n<ids.length;
+    cb.onchange=()=>setSel(cb.checked?[...new Set([...selK(),...ids])]:selK().filter(k=>!ids.includes(k)))});
+  $("groups").querySelectorAll(".del").forEach(b=>b.onclick=()=>{const l=+b.dataset.del;if(delArm!==l){delArm=l;renderList();setTimeout(()=>{if(delArm===l){delArm=null;renderList()}},4000);return}delArm=null;deleteLesson(l)});
+  if(!ALL.length)$("groups").innerHTML='<p class="note">Noch keine Units eingetragen. Oben über „Neue Vokabeln hinzufügen“ geht es los.</p>';
+  $("playSel").disabled=!sel.length;$("playSel").textContent=sel.length?`Mit ${stack().length} Karten spielen`:"Nichts ausgewählt";
+  if(!$("addL").value)$("addL").value=NEWEST()+1;
+}
+function setSel(ids){S.sel=[...new Set(ids)];save();if(current!==null&&!S.sel.includes(kOf(current)))current=null;renderStats();renderList()}
+$("hideDe").onchange=e=>{S.hide=e.target.checked;save();renderList()};
+$("playSel").onclick=()=>{if(!stack().length){const s=selK(),ds=DIRS();S.won=S.won.filter(it=>!(s.includes(kOf(it))&&ds.includes(dOf(it))))}show("play")};
+
+function show(v){
+  const play=v==="play";$("viewPlay").hidden=!play;$("viewList").hidden=play;
+  $("tabPlay").setAttribute("aria-selected",play);$("tabList").setAttribute("aria-selected",!play);
+  if(play){if(current===null||!stack().includes(current))drawRandom();renderStats();renderStage()}else renderList();
+  window.scrollTo({top:0});
+}
+$("tabPlay").onclick=()=>show("play");
+function showDir(){$("dir").textContent="Richtung: "+(S.dir==="de"?"Deutsch → Englisch":S.dir==="mix"?"beide Richtungen gemischt":"Englisch → Deutsch")+" · tippen zum Wechseln"}
+$("dir").onclick=()=>{S.dir=S.dir==="en"?"de":S.dir==="de"?"mix":"en";save();showDir();current=null;lastDrawn=null;drawRandom();renderStats();if(!$("viewList").hidden)renderList();else if(player){say("idle");renderStage()}};$("tabList").onclick=()=>show("list");
+
+// ---- capabilities: db (shared lessons) + sample (photo reading)
+let db=null,sample=null,canImg=false,maxImg=1,ctl=null;
+function refreshAll(){
+  rebuild();renderStats();
+  if(!$("viewList").hidden)renderList();
+  else if(current===null||!BY[kOf(current)]){drawRandom();renderStage()}
+}
+(async()=>{
+  try{db=await claude.use("db")}catch(e){db=null}
+  dbSt=db?"verbunden":"nicht verbunden – bitte bei Claude anmelden";renderBoard();
+  (async()=>{try{const u=await claude.use("user");if(u){canW=await u.can("data.write");renderBoard()}}catch(e){}})();
+  if(db){
+    try{db.collection("en_scores").onSnapshot(snap=>{
+      scores=snap.docs.map(d=>{const x=d.data()||{};return{id:d.id,name:String(x.name||d.id).slice(0,24),best:Number(x.best)||0}});
+      renderBoard();if(!player)renderPicker()},e=>{dbSt="Lesefehler ("+((e&&(e.code||e.message))||"?")+")";renderBoard()})}catch(e){}
+    if(player)ensureScore();
+    try{db.collection("en_lessons").onSnapshot(snap=>{
+      dbLessons=snap.docs.map(d=>{const x=d.data()||{};return{l:Number(x.lesson),words:Array.isArray(x.words)?x.words:[],src:"db",id:d.id}}).filter(L=>L.l>0);
+      refreshAll()},()=>{})}catch(e){}
+  }
+})();
+(async()=>{
+  try{sample=await claude.use("sample")}catch(e){sample=null}
+  if(sample){const caps=await sample.limits().catch(()=>null);canImg=!!caps?.images;maxImg=caps?.images?.maxCount||1}
+  if(!canImg){$("photoLbl").hidden=true;setStatus("Die Foto-Erkennung ist in dieser Ansicht nicht verfügbar. Du kannst Vokabeln aber von Hand eintippen.","")}
+})();
+function setStatus(msg,cls){$("addStatus").innerHTML=msg?`<p class="note ${cls||""}">${msg}</p>`:""}
+
+const PROMPT=`Die Fotos zeigen eine Englisch-Vokabelseite aus einem Schulheft oder Schulbuch (Spalten Englisch und Deutsch, manchmal mit Lautschrift oder Beispielsatz; das Foto kann gedreht sein).
+Lies jede Vokabelzeile von oben nach unten aus. Ignoriere Überschriften, Lautschrift und leere Zeilen.
+Antworte nur mit einem JSON-Array. Jedes Element: {"la": string, "ex": string, "de": string, "tag": string}.
+- "la": das englische Wort oder die Wendung, so wie notiert (z. B. "to go", "a lot of").
+- "ex": Zusatzformen, z. B. unregelmäßige Verbformen "went, gone" oder ein unregelmäßiger Plural "children". Sonst "".
+- "tag": Wortart, genau einer dieser Werte: "Verb", "unregelm. Verb", "Nomen", "Adj.", "Adv.", "Präp.", "Konj.", "Pron.", "Phrase" oder "".
+- "de": die deutschen Bedeutungen wie notiert, mehrere durch Komma getrennt, mit Artikel bei Nomen. Offensichtliche Rechtschreibfehler korrigieren.
+Beispiel: [{"la":"to go","ex":"went, gone","de":"gehen, fahren","tag":"unregelm. Verb"},{"la":"child","ex":"children","de":"das Kind","tag":"Nomen"}]`;
+
+const ERR={not_granted:"Die Erlaubnis für Claude wurde nicht erteilt. Du kannst die Wörter von Hand eintippen.",sampling_disabled:"Claude ist für dieses Konto nicht verfügbar.",rate_limited:"Gerade zu viele Anfragen. Bitte in ein paar Minuten nochmal versuchen.",image_rejected:"Das Foto konnte nicht gelesen werden. Bitte ein anderes JPG- oder PNG-Foto wählen.",refused:"Das Foto konnte nicht ausgewertet werden. Bitte ein anderes Foto versuchen.",invalid_json:"Emma konnte die Liste nicht sauber lesen. Bitte nochmal versuchen, am besten mit einem schärferen Foto.",session_expired:"Bitte neu bei Claude anmelden.",images_unavailable:"Fotos können in dieser Ansicht nicht gesendet werden."};
+
+$("photo").onchange=async e=>{
+  const files=[...e.target.files].slice(0,maxImg);e.target.value="";
+  if(!files.length||!sample)return;
+  ctl=new AbortController();
+  $("addStatus").innerHTML=`<div class="busy"><span class="dots"><i></i><i></i><i></i></span><span>Emma liest ${files.length>1?files.length+" Fotos":"das Foto"} … das kann bis zu einer Minute dauern.</span><button class="btn ghost" type="button" id="en-stopRead">Stopp</button></div>`;
+  $("stopRead").onclick=()=>ctl&&ctl.abort();
+  $("photoLbl").hidden=true;$("manual").disabled=true;
+  try{
+    const out=await sample.json(PROMPT,{images:files,signal:ctl.signal,modelTier:"default"});
+    const arr=Array.isArray(out)?out:(Array.isArray(out?.words)?out.words:[]);
+    const rows=arr.filter(x=>x&&typeof x==="object").map(x=>({la:String(x.la||"").trim(),ex:String(x.ex||"").trim(),de:String(x.de||"").trim(),tag:TAGS.includes(String(x.tag||"").trim())?String(x.tag).trim():""})).filter(r=>r.la||r.de);
+    if(!rows.length){setStatus("Auf dem Foto wurden keine Vokabeln gefunden. Bitte ein deutlicheres Foto versuchen oder von Hand eintippen.","err")}
+    else{setStatus(`${rows.length} Vokabeln gefunden. Bitte jede Zeile prüfen, besonders die Handschrift.`,"ok");openPreview(rows)}
+  }catch(err){
+    if(err&&err.code!=="cancelled")setStatus(ERR[err.code]||"Das hat nicht geklappt. Bitte nochmal versuchen.","err");else setStatus("","");
+    if(err&&(err.code==="not_granted"||err.code==="sampling_disabled"||err.code==="images_unavailable"))canImg=false;
+  }finally{$("photoLbl").hidden=!canImg;$("manual").disabled=false;ctl=null}
+};
+$("manual").onclick=()=>{setStatus("","");openPreview([{la:"",ex:"",de:"",tag:""},{la:"",ex:"",de:"",tag:""},{la:"",ex:"",de:"",tag:""}])};
+
+let rows=[];
+function openPreview(r){rows=r;$("preview").hidden=false;renderRows()}
+function readRows(){$("prows").querySelectorAll(".prow").forEach((el,i)=>{rows[i]={la:el.querySelector(".la").value.trim(),ex:el.querySelector(".ex").value.trim(),de:el.querySelector(".de").value.trim(),tag:el.querySelector("select").value}})}
+function renderRows(){
+  const known={};ALL.forEach(w=>{known[norm(w.la)]=w.l});
+  $("prows").innerHTML=rows.map((r,i)=>`<div class="prow">
+    <input class="la" id="en-pla${i}" value="${esc(r.la)}" placeholder="Englisch" aria-label="Englisch">
+    <input class="ex" id="en-pex${i}" value="${esc(r.ex)}" placeholder="Zusatz" aria-label="Zusatz">
+    <input class="de" id="en-pde${i}" value="${esc(r.de)}" placeholder="Deutsch" aria-label="Deutsch">
+    <select id="en-ptg${i}" aria-label="Merkmal">${TAGS.map(t=>`<option value="${esc(t)}"${t===r.tag?" selected":""}>${t?esc(TN[t]||t):"kein Merkmal"}</option>`).join("")}</select>
+    <button class="x" type="button" data-x="${i}" aria-label="Zeile löschen">✕</button>
+    ${r.la&&known[norm(r.la)]?`<span class="dup">Gibt es schon in Unit ${known[norm(r.la)]}</span>`:""}</div>`).join("");
+  $("prows").querySelectorAll(".x").forEach(b=>b.onclick=()=>{readRows();rows.splice(+b.dataset.x,1);renderRows()});
+}
+$("addRow").onclick=()=>{readRows();rows.push({la:"",ex:"",de:"",tag:""});renderRows();const l=$("prows").querySelectorAll(".prow .la");l[l.length-1].focus()};
+$("cancelAdd").onclick=()=>{rows=[];$("preview").hidden=true;setStatus("","")};
+$("saveAdd").onclick=async()=>{
+  readRows();const words=rows.filter(r=>r.la&&r.de);const l=Math.round(Number($("addL").value));
+  if(!(l>=1&&l<=99)){setStatus("Bitte eine Unit-Nummer zwischen 1 und 99 eintragen.","err");$("addL").focus();return}
+  if(!words.length){setStatus("Jede Zeile braucht ein englisches Wort und eine deutsche Bedeutung.","err");return}
+  const btn=$("saveAdd");btn.disabled=true;btn.textContent="Speichert …";
+  let shared=false;
+  if(db){try{
+    const ref=db.collection("en_lessons").doc("l"+l);const snap=await ref.get();
+    const prev=snap.exists&&Array.isArray(snap.data().words)?snap.data().words:[];
+    await ref.set({lesson:l,words:[...prev,...words],savedAt:new Date().toISOString()});shared=true;
+  }catch(e){shared=false}}
+  if(!shared){const L=localLessons.find(x=>x.l===l);if(L)L.words=[...L.words,...words];else localLessons.push({l,words,src:"local"});saveLocal();refreshAll()}
+  btn.disabled=false;btn.textContent="Unit speichern";rows=[];$("preview").hidden=true;$("addL").value="";
+  setStatus(shared?`${words.length} Vokabeln in Unit ${l} gespeichert. Sie sind jetzt im Stapel.`:`${words.length} Vokabeln in Unit ${l} gespeichert, aber nur auf diesem Gerät. Für alle Geräte braucht es Bearbeitungsrechte an dieser Seite.`,shared?"ok":"");
+  say("ok");
+};
+let isEditor=true;
+(async()=>{try{const u=await claude.use("user");if(u){isEditor=await u.canEdit();if(!isEditor){$("addbox").hidden=true;if(!$("viewList").hidden)renderList()}}}catch(e){}})();
+async function deleteLesson(l){
+  if(db){try{const ref=db.collection("en_lessons").doc("l"+l);const s=await ref.get();if(s.exists)await ref.delete();dbLessons=dbLessons.filter(x=>x.l!==l)}catch(e){setStatus("Löschen hat nicht geklappt. Dafür braucht es Bearbeitungsrechte.","err")}}
+  localLessons=localLessons.filter(x=>x.l!==l);saveLocal();
+  if(current&&!BY[current])current=null;refreshAll();
+}
+
+let restartArm=null;
+$("restart").onclick=()=>{
+  const b=$("restart");
+  if(!restartArm){b.classList.add("sure");b.textContent="Wirklich alles auf Null?";restartArm=setTimeout(()=>{restartArm=null;b.classList.remove("sure");b.textContent="Neu starten"},4000);return}
+  clearTimeout(restartArm);restartArm=null;b.classList.remove("sure");b.textContent="Neu starten";
+  S.won=[];S.retry=[];S.streak=0;save();lastDrawn=null;drawRandom();say("idle");renderStats();renderStage();window.scrollTo({top:0});
+};
+if(player)loadPlayer();migrate();rebuild();drawRandom();renderStats();renderStage();
+
+})();
+</script>
+</section>
+
+<script type="text/x-deferred">
+(function(){
+  var tabs=document.querySelectorAll('.gu-tab');
+  function pick(v,scroll){
+    if(['wb','lat','en'].indexOf(v)<0)v='wb';
+    tabs.forEach(function(t){t.setAttribute('aria-selected',t.dataset.v===v?'true':'false')});
+    document.getElementById('wb').hidden=v!=='wb';
+    document.getElementById('lat').hidden=v!=='lat';
+    document.getElementById('en').hidden=v!=='en';
+    try{localStorage.setItem('gretas-update-tab',v)}catch(e){}
+    if(scroll)window.scrollTo({top:0});
+  }
+  tabs.forEach(function(t){t.addEventListener('click',function(){pick(t.dataset.v,true)})});
+  var h=(location.hash||'').slice(1), start='wb';
+  if(h==='latein')start='lat';else if(h==='englisch')start='en';else if(h==='weltblick')start='wb';
+  else{try{start=localStorage.getItem('gretas-update-tab')||'wb'}catch(e){}}
+  pick(start,false);
+})();
+</script>
+
+<!-- ===== Anmeldung ===== -->
+<div id="auth" class="auth" hidden>
+  <div class="auth-card">
+    <div class="auth-logo">Gretas <span>Update</span></div>
+    <p class="auth-sub">Weltblick, Latein und Englisch an einem Ort.</p>
+    <div class="auth-tabs" role="tablist">
+      <button type="button" class="auth-tab" id="tab-login" aria-selected="true">Anmelden</button>
+      <button type="button" class="auth-tab" id="tab-reg" aria-selected="false">Neu hier</button>
+    </div>
+    <form id="auth-form" autocomplete="on">
+      <label for="a-name">Name</label>
+      <input id="a-name" name="username" autocomplete="username" maxlength="24" placeholder="z. B. Greta" autocapitalize="words" spellcheck="false" required>
+      <label for="a-pw">Passwort</label>
+      <input id="a-pw" name="password" type="password" autocomplete="current-password" minlength="6" placeholder="mindestens 6 Zeichen" required>
+      <div id="reg-extra" hidden>
+        <label for="a-pw2">Passwort wiederholen</label>
+        <input id="a-pw2" type="password" autocomplete="new-password" minlength="6">
+        <label for="a-code">Klassen-Code</label>
+        <input id="a-code" autocomplete="off" maxlength="40" placeholder="bekommst du von Greta" spellcheck="false">
+      </div>
+      <p class="auth-msg" id="auth-msg" role="alert"></p>
+      <button class="auth-btn" type="submit" id="auth-submit">Anmelden</button>
+    </form>
+    <p class="auth-hint">Passwort vergessen? Sag Gretas Papa Bescheid.</p>
+  </div>
+</div>
+<div id="boot" class="boot">Lade …</div>
+
+<!-- ===== Verwaltung (nur Papa) ===== -->
+<div id="admin" class="admin" hidden>
+  <div class="admin-card">
+    <div class="admin-head"><h2>Verwaltung</h2><button type="button" id="admin-close" aria-label="Schließen">✕</button></div>
+    <section>
+      <h3>Klassen-Code</h3>
+      <p>Neue Mitspielende brauchen diesen Code, um sich zu registrieren.</p>
+      <div class="admin-row"><input id="ad-code" maxlength="40" placeholder="z. B. 7b-latein"><button type="button" id="ad-code-save">Speichern</button></div>
+    </section>
+    <section>
+      <h3>Vokabeln hochladen</h3>
+      <p>Datei von Claude auswählen (vocab_lat.json oder vocab_en.json). Der bisherige Stand wird ersetzt.</p>
+      <div class="admin-row"><select id="ad-lang"><option value="lat">Latein</option><option value="en">Englisch</option></select><input type="file" id="ad-file" accept=".json,application/json"></div>
+      <p id="ad-count" class="admin-note"></p>
+    </section>
+    <p class="admin-msg" id="ad-msg" role="status"></p>
+  </div>
+</div>
+
+<style>
+.auth,.boot{position:fixed;inset:0;z-index:100;display:grid;place-items:center;background:#1d2140;color:#fff;
+  padding:max(16px,env(safe-area-inset-top,0px)) max(16px,env(safe-area-inset-right,0px)) max(16px,env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));font-family:"Fredoka","Trebuchet MS",sans-serif}
+.boot{font-size:20px;font-weight:600}
+.auth-card{width:min(100%,380px);background:#fff;color:#1d2140;border:3px solid #0d0f22;border-radius:20px;box-shadow:6px 6px 0 #0d0f22;padding:22px;display:grid;gap:12px}
+.auth-logo{font-weight:700;font-size:34px;line-height:1}
+.auth-logo span{background:#ffd24d;border-radius:10px;padding:0 8px 2px;display:inline-block;transform:rotate(-2deg)}
+.auth-sub{margin:0;color:#5a5f7d;font-family:"Atkinson Hyperlegible",Verdana,sans-serif}
+.auth-tabs{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.auth-tab{font:600 16px "Fredoka",sans-serif;border:2px solid #1d2140;border-radius:10px;padding:7px;background:#fff;color:#1d2140;cursor:pointer}
+.auth-tab[aria-selected="true"]{background:#1d2140;color:#fff}
+#auth-form{display:grid;gap:6px}
+#auth-form label{font-weight:600;font-size:15px;margin-top:4px}
+#auth-form input{font:500 17px "Atkinson Hyperlegible",Verdana,sans-serif;border:2px solid #1d2140;border-radius:10px;padding:9px 11px;width:100%;box-sizing:border-box;color:#1d2140;background:#f5f7ff}
+#reg-extra{display:grid;gap:6px}
+#reg-extra[hidden]{display:none}
+.auth-msg{margin:4px 0 0;min-height:1.2em;color:#b3261e;font-weight:600;font-size:15px}
+.auth-btn{font:700 18px "Fredoka",sans-serif;border:2.5px solid #0d0f22;border-radius:12px;padding:10px;background:#ffd24d;color:#1d2140;cursor:pointer;box-shadow:3px 3px 0 #0d0f22;margin-top:4px}
+.auth-btn:disabled{opacity:.6}
+.auth-hint{margin:0;font-size:13px;color:#5a5f7d}
+.gu-name{justify-content:space-between}
+.gu-user{display:flex;align-items:center;gap:8px;font:600 14px "Fredoka",sans-serif;color:var(--gu-muted)}
+.gu-user button{font:600 13px "Fredoka",sans-serif;border:1.5px solid var(--gu-muted);border-radius:999px;padding:3px 10px;background:transparent;color:var(--gu-bar-fg);cursor:pointer}
+.admin{position:fixed;inset:0;z-index:90;background:rgba(10,12,30,.6);display:grid;place-items:center;padding:16px}
+.admin-card{width:min(100%,460px);max-height:90vh;overflow:auto;background:#fff;color:#1d2140;border-radius:18px;padding:18px;display:grid;gap:14px;font-family:"Atkinson Hyperlegible",Verdana,sans-serif}
+.admin-head{display:flex;justify-content:space-between;align-items:center}
+.admin-head h2,.admin h3{margin:0;font-family:"Fredoka",sans-serif}
+.admin-head button{border:0;background:none;font-size:22px;cursor:pointer;color:#1d2140}
+.admin p{margin:4px 0}
+.admin-row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.admin-row input,.admin-row select{font:inherit;border:2px solid #1d2140;border-radius:8px;padding:6px 8px;min-width:0}
+.admin-row button{font:600 15px "Fredoka",sans-serif;border:2px solid #1d2140;border-radius:8px;padding:6px 12px;background:#ffd24d;cursor:pointer}
+.admin-note,.admin-msg{font-size:14px;color:#5a5f7d}
+.admin-msg{font-weight:700;color:#23804a}
+/* Funktionen der Claude-Version, die es hier nicht gibt */
+#lat .addbox,#en .addbox,#lat .record .who button,#en .record .who button{display:none!important}
+</style>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script>
+(function(){
+  var firebaseConfig={apiKey:"AIzaSyB4M8xgylHDsjPvpQ6fU9RuelfdQCx00XY",authDomain:"gretas-update.firebaseapp.com",projectId:"gretas-update",storageBucket:"gretas-update.firebasestorage.app",messagingSenderId:"418813230443",appId:"1:418813230443:web:43de439f6bd52c196e202e"};
+  firebase.initializeApp(firebaseConfig);
+  var auth=firebase.auth(),fs=firebase.firestore();
+  var DOMAIN="gretas-update.app",ADMIN="papa";
+  var $=function(id){return document.getElementById(id)};
+  function slug(n){return String(n||"").trim().toLowerCase().replace(/ä/g,"ae").replace(/ö/g,"oe").replace(/ü/g,"ue").replace(/ß/g,"ss").replace(/[^a-z0-9]+/g,"").slice(0,30)}
+  function mail(n){return slug(n)+"@"+DOMAIN}
+  var mode="login",busy=false,registering=false,started=false,uid=null,isAdmin=false;
+
+  // ---------- Anmeldung
+  function setMode(m){mode=m;$("tab-login").setAttribute("aria-selected",m==="login");$("tab-reg").setAttribute("aria-selected",m==="reg");
+    $("reg-extra").hidden=m!=="reg";$("auth-submit").textContent=m==="reg"?"Konto anlegen":"Anmelden";$("a-pw").autocomplete=m==="reg"?"new-password":"current-password";$("auth-msg").textContent=""}
+  $("tab-login").onclick=function(){setMode("login")};$("tab-reg").onclick=function(){setMode("reg")};
+  function msg(t){$("auth-msg").textContent=t}
+  var ERR={"auth/invalid-credential":"Name oder Passwort stimmt nicht.","auth/wrong-password":"Name oder Passwort stimmt nicht.","auth/user-not-found":"Diesen Namen gibt es noch nicht. Tippe auf „Neu hier“.","auth/email-already-in-use":"Diesen Namen gibt es schon. Bitte einen anderen wählen.","auth/weak-password":"Das Passwort braucht mindestens 6 Zeichen.","auth/too-many-requests":"Zu viele Versuche. Bitte kurz warten.","auth/network-request-failed":"Keine Internetverbindung.","badcode":"Der Klassen-Code stimmt nicht."};
+  $("auth-form").onsubmit=async function(e){e.preventDefault();if(busy)return;
+    var name=$("a-name").value.trim(),pw=$("a-pw").value;
+    if(!slug(name)){msg("Bitte einen Namen eingeben (Buchstaben oder Zahlen).");return}
+    if(pw.length<6){msg(ERR["auth/weak-password"]);return}
+    busy=true;$("auth-submit").disabled=true;msg("");
+    try{
+      if(mode==="login"){await auth.signInWithEmailAndPassword(mail(name),pw)}
+      else{
+        if(pw!==$("a-pw2").value){throw {code:"x",message:"Die Passwörter sind nicht gleich."}}
+        registering=true;
+        var cred=await auth.createUserWithEmailAndPassword(mail(name),pw);
+        try{await fs.doc("profiles/"+cred.user.uid).set({name:name.slice(0,24),code:$("a-code").value.trim(),created:firebase.firestore.FieldValue.serverTimestamp()})}
+        catch(err){try{await cred.user.delete()}catch(_){}registering=false;throw {code:"badcode"}}
+        registering=false;await boot(cred.user);
+      }
+    }catch(err){registering=false;msg(ERR[err.code]||err.message||"Das hat nicht geklappt.")}
+    finally{busy=false;$("auth-submit").disabled=false}
+  };
+
+  auth.onAuthStateChanged(function(u){
+    if(!u){$("boot").hidden=true;$("auth").hidden=false;return}
+    if(registering||started)return;
+    boot(u).catch(function(e){$("boot").hidden=true;$("auth").hidden=false;msg("Laden fehlgeschlagen: "+(e.code||e.message))});
+  });
+
+  // ---------- Start nach Anmeldung
+  async function boot(u){
+    if(started)return;started=true;$("auth").hidden=true;$("boot").hidden=false;
+    uid=u.uid;isAdmin=u.email===ADMIN+"@"+DOMAIN;
+    var prof=await fs.doc("profiles/"+uid).get();
+    if(!prof.exists){started=false;await auth.signOut();$("boot").hidden=true;$("auth").hidden=false;msg("Dieses Konto ist nicht freigeschaltet. Bitte neu registrieren.");return}
+    var name=prof.data().name||"Ich";
+    var res=await Promise.all([
+      fs.doc("vocab/lat").get(),fs.doc("vocab/en").get(),fs.doc("progress/"+uid).get(),
+      fetch("weltblick.json?v="+Date.now(),{cache:"no-store"}).then(function(r){return r.ok?r.json():[]}).catch(function(){return []})]);
+    function items(d){try{return d.exists?JSON.parse(d.data().json||"[]"):[]}catch(e){return []}}
+    window.__VOCAB_LAT=items(res[0]);window.__VOCAB_EN=items(res[1]);
+    var pr=res[2].exists?res[2].data():{};
+    var me=JSON.stringify({id:uid,name:name}),LS=window.localStorage;
+    try{
+      ["greta-latein","greta-englisch"].forEach(function(p){LS.setItem(p+"-player",me);LS.setItem(p+"-names","["+me+"]");LS.setItem(p+"-legacy-used","1")});
+      if(pr.lat)LS.setItem("greta-latein-p:"+uid,pr.lat);
+      if(pr.en)LS.setItem("greta-englisch-p:"+uid,pr.en);
+      if(pr.tab)LS.setItem("gretas-update-tab",pr.tab);
+    }catch(e){}
+    $("ausgaben").textContent=JSON.stringify(res[3]||[]);
+    // Anzeige oben
+    $("gu-user").hidden=false;$("gu-uname").textContent=name;$("gu-admin").hidden=!isAdmin;
+    // Fortschritt automatisch sichern
+    var keys=["greta-latein-p:"+uid,"greta-englisch-p:"+uid,"gretas-update-tab"],t=null;
+    function flush(){clearTimeout(t);t=null;var d={updatedAt:firebase.firestore.FieldValue.serverTimestamp()};
+      try{d.lat=LS.getItem(keys[0])||"";d.en=LS.getItem(keys[1])||"";d.tab=LS.getItem(keys[2])||""}catch(e){}
+      fs.doc("progress/"+uid).set(d).catch(function(){})}
+    var orig=Storage.prototype.setItem;
+    Storage.prototype.setItem=function(k,v){orig.call(this,k,v);if(keys.indexOf(k)>=0){clearTimeout(t);t=setTimeout(flush,1200)}};
+    document.addEventListener("visibilitychange",function(){if(document.visibilityState==="hidden"&&t)flush()});
+    // Brücke für die Seiten-Skripte
+    var none={onSnapshot:function(cb){cb({docs:[]});return function(){}},doc:function(){return {get:async function(){return {exists:false}},set:async function(){throw {code:"not_supported"}},delete:async function(){}}}};
+    var db={collection:function(n){if(n==="scores")return fs.collection("scores/lat/players");if(n==="en_scores")return fs.collection("scores/en/players");return none}};
+    window.claude={use:async function(n){if(n==="db")return db;if(n==="user")return {canEdit:async function(){return isAdmin},can:async function(){return true},isOwner:function(){return isAdmin}};return null}};
+    // Seiten starten
+    document.querySelectorAll('script[type="text/x-deferred"]').forEach(function(s){var n=document.createElement("script");n.textContent=s.textContent;s.replaceWith(n)});
+    $("boot").hidden=true;
+  }
+
+  $("gu-logout").onclick=async function(){try{await auth.signOut()}catch(e){}location.reload()};
+
+  // ---------- Verwaltung
+  $("gu-admin").onclick=async function(){$("admin").hidden=false;$("ad-msg").textContent="";
+    try{var a=await fs.doc("vocab/lat").get(),b=await fs.doc("vocab/en").get();
+      $("ad-count").textContent="Aktuell: Latein "+(a.exists?a.data().count:0)+" · Englisch "+(b.exists?b.data().count:0)+" Vokabeln"}catch(e){}};
+  $("admin-close").onclick=function(){$("admin").hidden=true};
+  $("ad-code-save").onclick=async function(){var c=$("ad-code").value.trim();if(c.length<3){$("ad-msg").textContent="Bitte mindestens 3 Zeichen.";return}
+    try{await fs.doc("config/secret").set({code:c});$("ad-msg").textContent="Klassen-Code gespeichert."}catch(e){$("ad-msg").textContent="Fehler: "+(e.code||e.message)}};
+  $("ad-file").onchange=async function(e){var f=e.target.files[0];e.target.value="";if(!f)return;
+    try{var data=JSON.parse(await f.text());var it=Array.isArray(data)?data:data.items;if(!Array.isArray(it)||!it.length)throw new Error("Datei enthält keine Vokabeln");
+      var lang=$("ad-lang").value;await fs.doc("vocab/"+lang).set({json:JSON.stringify(it),count:it.length,updatedAt:firebase.firestore.FieldValue.serverTimestamp()});
+      $("ad-msg").textContent=it.length+" Vokabeln für "+(lang==="lat"?"Latein":"Englisch")+" gespeichert. Seite neu laden, um sie zu sehen."}
+    catch(err){$("ad-msg").textContent="Fehler: "+(err.code||err.message)}};
+})();
+</script>
+
+</body></html>

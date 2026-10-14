@@ -1,0 +1,128 @@
+[
+  {
+    "nr": 2,
+    "datum": "2026-10-15",
+    "themen": [
+      {
+        "bereich": "innen",
+        "schlagzeile": "Neuer Arbeitsminister soll die Rente reformieren",
+        "text": "Bärbel Bas ist als Arbeitsministerin und SPD-Chefin zurückgetreten, aus persönlichen Gründen und nach Kritik an ihrer Arbeit. Nachfolger soll Alexander Schweitzer (SPD) werden. Bundeskanzler Merz will, dass die Regierung die große Rentenreform noch dieses Jahr auf den Weg bringt.",
+        "wichtig": "Die Menschen in Deutschland werden immer älter. Wie die Renten in Zukunft bezahlt werden, betrifft auch deine Generation."
+      },
+      {
+        "bereich": "innen",
+        "schlagzeile": "Bundesrat: Neuer Präsident aus NRW",
+        "text": "Am Freitag soll Hendrik Wüst, der Ministerpräsident von Nordrhein-Westfalen, zum Präsidenten des Bundesrats gewählt werden. Auf der Tagesordnung steht unter anderem, wie Kinder und Jugendliche besser vor gefährlichen Online-Challenges geschützt werden können.",
+        "wichtig": "Ohne den Bundesrat kommen viele Gesetze nicht durch. So reden die Bundesländer in Berlin mit."
+      },
+      {
+        "bereich": "aussen",
+        "schlagzeile": "Ukraine: Schwere Angriffe, Hoffnung auf Gespräche",
+        "text": "Russland hat die Ukraine in der letzten Woche besonders heftig angegriffen. Viele Menschen starben, in mehreren Städten fiel der Strom aus. Präsident Selenskyj hofft, dass es noch im Oktober Gespräche mit Russland gibt, vermittelt von den USA.",
+        "wichtig": "Ohne Strom wird der Winter für viele Familien in der Ukraine sehr hart."
+      },
+      {
+        "bereich": "aussen",
+        "schlagzeile": "Der Papst ist an Krebs erkrankt",
+        "text": "Papst Leo XIV. ist am Dienstag in Rom an der Lunge operiert worden. Danach haben die Ärzte bekannt gegeben, dass er Lungenkrebs hat. Die Operation ist gut verlaufen. Wie die Behandlung weitergeht, ist noch offen.",
+        "wichtig": "Der Papst ist das Oberhaupt der katholischen Kirche und zugleich Staatschef des Vatikans, des kleinsten Staates der Welt."
+      }
+    ],
+    "zahl": {
+      "wert": "0,44 km²",
+      "text": "So klein ist der Vatikan, der Staat, den der Papst regiert. Er ist der kleinste Staat der Welt."
+    },
+    "wort": {
+      "begriff": "Bundesrat",
+      "erklaerung": "Hier reden die Regierungen der 16 Bundesländer mit. Bei vielen Gesetzen muss der Bundesrat zustimmen, sonst gelten sie nicht."
+    },
+    "frage": "Ab welchem Alter sollten Menschen in Rente gehen dürfen? Und wer sollte die Renten bezahlen?",
+    "quellen": [
+      {
+        "titel": "ZDFheute: Alexander Schweitzer soll neuer Arbeitsminister werden",
+        "url": "https://www.zdfheute.de/politik/deutschland/alexander-schweitzer-baerbel-bas-spd-arbeitsminister-100.html"
+      },
+      {
+        "titel": "WiWo: Merz will Rentenreform noch 2026 beschließen",
+        "url": "https://www.wiwo.de/politik/deutschland/arbeitgebertag-friedrich-merz-will-rentenreform-noch-2026-beschliessen/100261883.html"
+      },
+      {
+        "titel": "Bundesrat: Ausblick auf die Plenarsitzung am 16. Oktober 2026",
+        "url": "https://www.bundesrat.de/DE/plenum/bundesrat-kompakt/bundesrat-kompakt-node.html"
+      },
+      {
+        "titel": "Vaterland: Ukraine-Ticker bis 9. Oktober 2026",
+        "url": "https://www.vaterland.li/international/ukraine-ticker-alle-news-vom-1-august-bis-zum-9-oktober-2026-art-765816"
+      },
+      {
+        "titel": "20min: Papst Leo XIV. hat Lungenkrebs – das ist bis jetzt bekannt",
+        "url": "https://20min.ch/story/vatikan-papst-leo-xiv-hat-lungenkrebs-das-ist-bis-jetzt-bekannt-103649314"
+      },
+      {
+        "titel": "Tagesspiegel: Operation an der Lunge von Papst Leo XIV. „erfolgreich“ verlaufen",
+        "url": "https://www.tagesspiegel.de/internationales/dpa-operation-an-der-lunge-von-papst-leo-xiv-erfolgreich-verlaufen-16159007.html"
+      }
+    ]
+  },
+  {
+    "nr": 1,
+    "datum": "2026-10-08",
+    "themen": [
+      {
+        "bereich": "aussen",
+        "schlagzeile": "Streit um eine Meerenge macht Tanken teurer",
+        "text": "Der Iran und die USA streiten seit Februar heftig, zeitweise gab es sogar Krieg. Seitdem sperrt der Iran die Straße von Hormus, eine schmale Wasserstraße für Öltanker. Öffnen will er sie erst, wenn die USA ihre Strafen gegen den Iran aufheben.",
+        "wichtig": "Durch die Meerenge fährt sonst ein Fünftel des Öls der Welt. Fehlt es, wird Tanken und Heizen auch bei uns teurer."
+      },
+      {
+        "bereich": "innen",
+        "schlagzeile": "Tanken billiger, Bus und Bahn teurer",
+        "text": "Seit dem 1. Oktober gibt es den Tankrabatt: bis zu 17 Cent weniger pro Liter, bis Ende Dezember. Das Deutschlandticket kostet ab Januar dagegen 66,80 Euro statt 63 Euro im Monat.",
+        "wichtig": "Manche kritisieren: Der Staat hilft beim Autofahren, während Bus und Bahn teurer werden."
+      },
+      {
+        "bereich": "innen",
+        "schlagzeile": "Abschied von der Kohle",
+        "text": "Deutschland schaltet nach und nach seine Kohlekraftwerke ab, weil sie dem Klima schaden. Für die Menschen, die dort arbeiten, ist das eine große Veränderung.",
+        "wichtig": "Die Politik muss Klimaschutz und Arbeitsplätze zusammenbringen."
+      },
+      {
+        "bereich": "aussen",
+        "schlagzeile": "Frankreich: Jugendliche protestieren für bessere Schulen",
+        "text": "Seit zwei Wochen gehen in Frankreich Jugendliche auf die Straße. Sie wollen kleinere Klassen, mehr Lehrkräfte und saubere Gebäude. Hunderte Schulen waren geschlossen, teilweise wurde es gewalttätig.",
+        "wichtig": "Jugendliche können Politik bewegen. Gestritten wird darüber, wie Protest friedlich bleibt."
+      }
+    ],
+    "zahl": {
+      "wert": "17 Cent",
+      "text": "So viel billiger kann ein Liter Benzin oder Diesel bis Ende Dezember werden."
+    },
+    "wort": {
+      "begriff": "Sanktionen",
+      "erklaerung": "Strafen, die Länder gegen ein anderes Land verhängen, ohne Krieg zu führen. Es darf dann zum Beispiel bestimmte Waren nicht mehr verkaufen."
+    },
+    "frage": "Was würdest du an deiner Schule verbessern? Und wie könntest du dich friedlich dafür einsetzen?",
+    "quellen": [
+      {
+        "titel": "Berliner Zeitung: Iran blockiert Straße von Hormus",
+        "url": "https://www.berliner-zeitung.de/article/hormus-blockade-teheran-fordert-sanktionsende-und-kriegsstopp-10458524"
+      },
+      {
+        "titel": "ZDFheute: Tankrabatt ab 1. Oktober",
+        "url": "https://www.zdfheute.de/politik/deutschland/tankrabatt-oktober-regierung-beschluss-100.html"
+      },
+      {
+        "titel": "Deskmodder: Deutschlandticket ab Januar 66,80 Euro",
+        "url": "https://www.deskmodder.de/blog/2026/09/30/deutschlandticket-wird-teurer-ab-januar-werden-6680-euro-faellig/"
+      },
+      {
+        "titel": "ZDFheute: Schulproteste in Frankreich",
+        "url": "https://www.zdfheute.de/politik/ausland/protest-frankreich-schueler-ausschreitungen-100.html"
+      },
+      {
+        "titel": "logo! vom 6. Oktober 2026",
+        "url": "https://www.logo.de/logo-vom-dienstag-6-oktober-2026-102.html"
+      }
+    ]
+  }
+]
