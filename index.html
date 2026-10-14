@@ -10,9 +10,15 @@
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="icon-180.png"><link rel="icon" href="icon-192.png">
 <style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bagel+Fat+One&family=Fredoka:wght@500;600;700&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bangers&family=Baloo+2:wght@500;700;800&family=Kalam:wght@700&display=swap">
+<link rel="preload" href="fonts/fredoka.woff2" as="font" type="font/woff2" crossorigin>
+<style>
+/* Schriften liegen selbst gehostet im Ordner fonts/ (SIL Open Font License) – keine Verbindung zu Google Fonts */
+@font-face{font-family:"Fredoka";src:url(fonts/fredoka.woff2) format("woff2");font-weight:400 700;font-style:normal;font-display:swap}
+@font-face{font-family:"Bagel Fat One";src:url(fonts/bagel-fat-one.woff2) format("woff2");font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:"Atkinson Hyperlegible";src:url(fonts/atkinson-400.woff2) format("woff2");font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:"Atkinson Hyperlegible";src:url(fonts/atkinson-700.woff2) format("woff2");font-weight:700;font-style:normal;font-display:swap}
+@font-face{font-family:"Atkinson Hyperlegible";src:url(fonts/atkinson-400i.woff2) format("woff2");font-weight:400;font-style:italic;font-display:swap}
+</style>
 <style>
 /* Layout: Ordner mit Registerreitern – oben eine feste Leiste mit Name und zwei Reitern (Weltblick, Latein), darunter das gewählte Fach in voller Größe */
 :root{
@@ -140,7 +146,7 @@ body{background:var(--gu-bar);color:var(--gu-bar-fg)}
 #lat{--sky:#8fd3f4; --dot:rgba(255,255,255,.55); --panel:#ffffff; --ink:#1c1530; --text:#1c1530; --muted:#5d5670;
   --purple:#6a3fb5; --sun:#ffcd3c; --line:#e3ddf0;
   --ok:#23804a; --ok-bg:#dcf5e3; --bad:#c23b2b; --bad-bg:#fde3de; --warn:#9a6400; --warn-bg:#fff1c7;
-  --f-comic:"Bangers","Impact","Arial Black",sans-serif; --f-ui:"Baloo 2",system-ui,-apple-system,"Segoe UI",sans-serif; --f-hand:"Kalam","Comic Sans MS","Bradley Hand",cursive;}
+  --f-comic:"Fredoka","Arial Rounded MT Bold","Trebuchet MS",sans-serif; --f-ui:"Atkinson Hyperlegible",Verdana,"Segoe UI",sans-serif; --f-hand:"Fredoka","Arial Rounded MT Bold",sans-serif; --f-big:"Bagel Fat One","Fredoka",sans-serif;}
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]) #lat{--sky:#1d2552; --dot:rgba(140,160,255,.16); --panel:#fbf9ff; --ink:#0d0a18; color-scheme:dark}}
 :root[data-theme="dark"] #lat{--sky:#1d2552; --dot:rgba(140,160,255,.16); --panel:#fbf9ff; --ink:#0d0a18; color-scheme:dark}
 #lat *{box-sizing:border-box}
@@ -312,7 +318,7 @@ body{background:var(--gu-bar);color:var(--gu-bar-fg)}
 #en{--sky:#8fd3f4; --dot:rgba(255,255,255,.55); --panel:#ffffff; --ink:#1c1530; --text:#1c1530; --muted:#5d5670;
   --purple:#6a3fb5; --sun:#ffcd3c; --line:#e3ddf0;
   --ok:#23804a; --ok-bg:#dcf5e3; --bad:#c23b2b; --bad-bg:#fde3de; --warn:#9a6400; --warn-bg:#fff1c7;
-  --f-comic:"Bangers","Impact","Arial Black",sans-serif; --f-ui:"Baloo 2",system-ui,-apple-system,"Segoe UI",sans-serif; --f-hand:"Kalam","Comic Sans MS","Bradley Hand",cursive;}
+  --f-comic:"Fredoka","Arial Rounded MT Bold","Trebuchet MS",sans-serif; --f-ui:"Atkinson Hyperlegible",Verdana,"Segoe UI",sans-serif; --f-hand:"Fredoka","Arial Rounded MT Bold",sans-serif; --f-big:"Bagel Fat One","Fredoka",sans-serif;}
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]) #en{--sky:#1d2552; --dot:rgba(140,160,255,.16); --panel:#fbf9ff; --ink:#0d0a18; color-scheme:dark}}
 :root[data-theme="dark"] #en{--sky:#1d2552; --dot:rgba(140,160,255,.16); --panel:#fbf9ff; --ink:#0d0a18; color-scheme:dark}
 #en *{box-sizing:border-box}
@@ -466,6 +472,21 @@ body{background:var(--gu-bar);color:var(--gu-bar-fg)}
 #en{--sky:#ffd9cf; --dot:rgba(255,255,255,.6); --purple:#1f5fa8; --line:#dfe6f2; min-height:calc(100vh - 90px)}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]) #en{--sky:#3a1e2c; --dot:rgba(255,170,150,.14); --purple:#1f5fa8}}
 :root[data-theme="dark"] #en{--sky:#3a1e2c; --dot:rgba(255,170,150,.14); --purple:#1f5fa8}
+/* Einheitlicher Look: Latein und Englisch im Stil von Startseite und Weltblick */
+#lat{--sky:#efeaff; --dot:#ddd3fb; --sun:#ffd24d}
+#en{--sky:#e7f0ff; --dot:#cfe0f7; --sun:#ffd24d}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) #lat{--sky:#15132a; --dot:#252146}:root:not([data-theme="light"]) #en{--sky:#0f1a2e; --dot:#1c2a46}}
+:root[data-theme="dark"] #lat{--sky:#15132a; --dot:#252146}
+:root[data-theme="dark"] #en{--sky:#0f1a2e; --dot:#1c2a46}
+#lat,#en{background-image:radial-gradient(var(--dot) 1.6px,transparent 1.8px);background-size:22px 22px}
+#lat .panel,#en .panel{border-width:2.5px;border-radius:20px}
+#lat .bar h1,#en .bar h1{font-family:var(--f-big);letter-spacing:0;text-shadow:none;font-size:clamp(1.7rem,7vw,2.3rem)}
+#lat .bubble b,#en .bubble b{font-family:var(--f-big);font-weight:400;letter-spacing:0;font-size:1.5rem}
+#lat .latin,#en .latin{font-family:var(--f-big);font-weight:400;letter-spacing:0}
+#lat .tab,#en .tab,#lat .btn,#en .btn,#lat .grp h2,#en .grp h2,#lat .addbox>summary,#en .addbox>summary,#lat .new,#en .new,#lat .board h2,#en .board h2{font-weight:700;letter-spacing:.01em}
+#lat .board li .rk,#en .board li .rk{font-family:var(--f-comic);font-weight:700;letter-spacing:0}
+#lat .answer,#en .answer{font-weight:600;color:var(--ink)}
+#lat .stat b,#en .stat b{font-family:var(--f-comic);font-weight:700}
 #en .tag{background:#e3eefb}
 #en .dirbtn{flex-basis:100%;font:700 .92rem var(--f-ui);border:2.5px solid var(--ink);border-radius:10px;padding:6px 10px;background:var(--sun);color:var(--ink);cursor:pointer;box-shadow:3px 3px 0 var(--ink)}
 #en .dirbtn:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--ink)}
@@ -520,6 +541,8 @@ body{background:var(--gu-bar);color:var(--gu-bar-fg)}
 #st .s-hello .s-line{font-family:var(--s-f-head);font-weight:500;font-size:18px;max-width:30ch}
 #st .s-school{justify-self:start;display:inline-flex;align-items:center;gap:8px;background:#1d2140;color:#fff;border-radius:999px;padding:5px 14px 5px 6px;font-family:var(--s-f-head);font-weight:600;font-size:14.5px}
 #st .s-school b{display:grid;place-items:center;width:26px;height:26px;border-radius:50%;background:var(--s-pink);color:#1d2140;font-size:14px}
+#st .s-streak{justify-self:start;display:inline-flex;align-items:center;gap:6px;background:#fff;color:#1d2140;border:2px solid #1d2140;border-radius:999px;padding:4px 12px;font-family:var(--s-f-head);font-weight:600;font-size:15px}
+#st .s-streak b{font-family:var(--s-f-big);font-weight:400;font-size:20px;line-height:1;color:#e5546f}
 #st .s-blob{position:absolute;border-radius:50%;pointer-events:none}
 #st .s-hello > :not(.s-blob){position:relative}
 #st .s-sec{font-family:var(--s-f-head);font-weight:700;font-size:22px;display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
@@ -612,6 +635,7 @@ body{background:var(--gu-bar);color:var(--gu-bar-fg)}
     <h2 id="s-hello">Hallo!</h2>
     <p class="s-line" id="s-line">Schön, dass du da bist.</p>
     <span class="s-school"><b aria-hidden="true">H</b>Heriburg-Gymnasium · Stufe 7</span>
+    <span class="s-streak" id="s-streak" hidden></span>
   </div>
 
   <button type="button" class="s-card s-install" data-inst hidden>
@@ -649,6 +673,12 @@ body{background:var(--gu-bar);color:var(--gu-bar-fg)}
   function visRow(){var v=window.__GUVIS;$("s-vis-t").textContent=v==="me"?"🔒 Deine Rekorde sind nur für dich sichtbar.":"👀 Deine Rekorde sehen alle Mitspielenden.";$("s-vis-b").textContent=v==="me"?"Für alle zeigen":"Nur für mich"}
   visRow();$("s-vis-b").onclick=function(){if(window.__GUsetVis)window.__GUsetVis(window.__GUVIS==="me"?"all":"me")};
   window.addEventListener("gu-vis",visRow);
+  function streakRow(){var st=window.__GUstreak,el=$("s-streak");if(!st||!window.__GUymd){el.hidden=true;return}
+    var t=window.__GUymd(new Date()),y=new Date();y.setDate(y.getDate()-1);y=window.__GUymd(y);el.hidden=false;
+    if(st.last===t)el.innerHTML='🔥 <b>'+st.n+'</b>'+(st.n===1?' Tag geübt – morgen geht’s weiter!':' Tage in Folge geübt!');
+    else if(st.last===y&&st.n>0)el.innerHTML='🔥 <b>'+st.n+'</b>'+(st.n===1?' Tag':' Tage')+' in Folge – heute üben, sonst reißt die Serie!';
+    else el.innerHTML='🔥 Starte heute eine Lern-Serie!'}
+  streakRow();window.addEventListener("gu-streak",streakRow);
   var now=new Date(),h=now.getHours();
   var hi=h<11?"Guten Morgen":h<17?"Hallo":h<22?"Guten Abend":"Noch wach";
   $("s-day").textContent=now.toLocaleDateString("de-DE",{weekday:"long",day:"numeric",month:"long"});
@@ -825,7 +855,7 @@ body{background:var(--gu-bar);color:var(--gu-bar-fg)}
     <path class="m m-ok" d="M49 80 Q60 96 71 80 Z" fill="#fff"/>
     <path class="m m-bad" d="M52 87 Q60 81 68 87"/>
   </g>
-</svg><div class="bubble" id="bubble" aria-live="polite"><b>Salve!</b><span>Hallo! Wer spielt heute?</span></div></div>
+</svg><div class="bubble" id="bubble" aria-live="polite"><b>Salve!</b><span>Auf geht’s – zeig, was du kannst!</span></div></div>
     <section class="stage" id="stage"></section>
     <p class="stackinfo" id="stackinfo"></p>
     <div class="restart"><button class="btn ghost" type="button" id="restart">Neu starten</button></div>
@@ -919,6 +949,7 @@ const slug=n=>n.trim().toLowerCase().replace(/ä/g,"ae").replace(/ö/g,"oe").rep
 let player=null,localNames=[];
 try{player=JSON.parse(localStorage.getItem("greta-latein-player")||"null")}catch(e){}
 try{localNames=JSON.parse(localStorage.getItem("greta-latein-names")||"[]")||[]}catch(e){}
+if(window.__GU){player={id:window.__GU.uid,name:window.__GU.name};localNames=[player]}
 const PKEY=id=>"greta-latein-p:"+id;
 const save=()=>{try{localStorage.setItem(player?PKEY(player.id):"greta-latein-3",JSON.stringify(S))}catch(e){}};
 function readPlayerState(id){try{return JSON.parse(localStorage.getItem(PKEY(id))||"null")}catch(e){return null}}
@@ -970,7 +1001,7 @@ if(window.__GUK)window.__GUK.on(()=>renderBoard());
 const ROMAN=["I","II","III","IV","V","VI","VII","VIII","IX","X"];
 function renderBoard(){
   const b=board(),top=b.find(x=>x.best>0);
-  $("record").innerHTML=player?`<span class="who">${esc(player.name)} spielt · <button type="button" id="switchP">wechseln</button></span>${top?`<span class="top">Rekord: ${esc(top.name)} – ${top.best} in Folge</span>`:""}`:"";
+  $("record").innerHTML=player?`<span class="who">${esc(player.name)} spielt</span>${top?`<span class="top">Rekord: ${esc(top.name)} – ${top.best} in Folge</span>`:""}`:"";
   const sp=$("switchP");if(sp)sp.onclick=switchPlayer;
   $("board").hidden=!player;
   $("board").innerHTML=`<h2>Bestenliste</h2>${b.length?`<ol>${b.map((x,i)=>`<li class="${x.id===player?.id?"me":""}"><span class="rk">${ROMAN[i]||i+1}</span><span class="k-name">${esc(x.name)}${kWho(x)}</span><b>${x.best} in Folge</b>${kBtn(x)}</li>`).join("")}</ol>`:'<p class="empty">Noch keine Rekorde.</p>'}${dbStatus()}`;
@@ -1076,14 +1107,14 @@ function genusNote(won){const w=BY[current];if(skipGN||!isNoun(w))return"";const
   if(won&&g===w.tg){S.genus=(S.genus||0)+1;return ` <strong>+ Genus-Punkt</strong> (${t}).`}
   return ` Geschlecht: <strong>${t}</strong>${curGenus?` (du hattest „${esc(curGenus)}“)`:""}.`}
 function showTag(){const t=$("tg");if(t)t.hidden=false;const g=$("gen");if(g)g.disabled=true}
-function win(msg,cls="ok"){answered=true;msg+=genusNote(true);showTag();say(cls==="ok"?"ok":"near");S.won.push(current);S.retry=S.retry.filter(k=>k!==current);
+function win(msg,cls="ok"){answered=true;window.__GUpracticed&&window.__GUpracticed();msg+=genusNote(true);showTag();say(cls==="ok"?"ok":"near");S.won.push(current);S.retry=S.retry.filter(k=>k!==current);
   const others=board().filter(x=>x.id!==player.id),leader=others[0],prevBest=S.best;
   S.streak++;S.best=Math.max(S.best,S.streak);save();
   if(leader&&leader.best>0&&S.streak===leader.best+1)sayCustom("ok","Novum record!",`Du hast ${leader.name} überholt!`);
   else if(prevBest>0&&S.streak===prevBest+1)sayCustom("ok","Novum record!","Neuer eigener Rekord!");
   if(S.best>prevBest)writeScore(false);
   $("fb").innerHTML=`<div class="fb ${cls}">${msg}</div>`;finishActs();renderStats()}
-function lose(msg){answered=true;const gn=genusNote(false);showTag();say("bad");if(!S.retry.includes(current))S.retry.push(current);S.streak=0;save();
+function lose(msg){answered=true;window.__GUpracticed&&window.__GUpracticed();const gn=genusNote(false);showTag();say("bad");if(!S.retry.includes(current))S.retry.push(current);S.streak=0;save();
   $("fb").innerHTML=`<div class="fb bad">${msg}${skipGN?"":` Richtig ist: <strong>${esc(BY[current].de)}</strong>.`} Die Karte wird zurück in den Stapel gemischt.${gn}</div>`;finishActs();renderStats()}
 function finishActs(){$("ans").disabled=true;$("acts").innerHTML=`<span></span><button class="btn" type="submit" id="nx">Nächste Karte</button>`;setTimeout(()=>$("nx")?.focus({preventScroll:true}),30)}
 function next(){drawRandom();say("idle");renderStage()}
@@ -1291,7 +1322,7 @@ if(player)loadPlayer();rebuild();drawRandom();renderStats();renderStage();
     <path class="m m-ok" d="M49 80 Q60 96 71 80 Z" fill="#fff"/>
     <path class="m m-bad" d="M52 87 Q60 81 68 87"/>
   </g>
-</svg><div class="bubble" id="en-bubble" aria-live="polite"><b>Hello!</b><span>Hallo! Wer spielt heute?</span></div></div>
+</svg><div class="bubble" id="en-bubble" aria-live="polite"><b>Hello!</b><span>Let’s go – zeig, was du kannst!</span></div></div>
     <section class="stage" id="en-stage"></section>
     <p class="stackinfo" id="en-stackinfo"></p>
     <div class="restart"><button class="btn ghost" type="button" id="en-restart">Neu starten</button></div>
@@ -1385,6 +1416,7 @@ const slug=n=>n.trim().toLowerCase().replace(/ä/g,"ae").replace(/ö/g,"oe").rep
 let player=null,localNames=[];
 try{player=JSON.parse(localStorage.getItem("greta-englisch-player")||"null")}catch(e){}
 try{localNames=JSON.parse(localStorage.getItem("greta-englisch-names")||"[]")||[]}catch(e){}
+if(window.__GU){player={id:window.__GU.uid,name:window.__GU.name};localNames=[player]}
 const PKEY=id=>"greta-englisch-p:"+id;
 const save=()=>{try{localStorage.setItem(player?PKEY(player.id):"greta-englisch-3",JSON.stringify(S))}catch(e){}};
 function readPlayerState(id){try{return JSON.parse(localStorage.getItem(PKEY(id))||"null")}catch(e){return null}}
@@ -1439,7 +1471,7 @@ if(window.__GUK)window.__GUK.on(()=>renderBoard());
 const ROMAN=["1.","2.","3.","4.","5.","6.","7.","8.","9.","10."];
 function renderBoard(){
   const b=board(),top=b.find(x=>x.best>0);
-  $("record").innerHTML=player?`<span class="who">${esc(player.name)} spielt · <button type="button" id="en-switchP">wechseln</button></span>${top?`<span class="top">Rekord: ${esc(top.name)} – ${top.best} in Folge</span>`:""}`:"";
+  $("record").innerHTML=player?`<span class="who">${esc(player.name)} spielt</span>${top?`<span class="top">Rekord: ${esc(top.name)} – ${top.best} in Folge</span>`:""}`:"";
   const sp=$("switchP");if(sp)sp.onclick=switchPlayer;
   $("board").hidden=!player;
   $("board").innerHTML=`<h2>Bestenliste</h2>${b.length?`<ol>${b.map((x,i)=>`<li class="${x.id===player?.id?"me":""}"><span class="rk">${ROMAN[i]||i+1}</span><span class="k-name">${esc(x.name)}${kWho(x)}</span><b>${x.best} in Folge</b>${kBtn(x)}</li>`).join("")}</ol>`:'<p class="empty">Noch keine Rekorde.</p>'}${dbStatus()}`;
@@ -1518,14 +1550,14 @@ function grade(v){
   else if(r.res==="near")win(`<strong>Fast perfekt</strong>, gewonnen! Achte auf die Schreibweise: <strong>${esc(r.word)}</strong>.`,"warn");
   else lose(`<strong>Leider nicht.</strong> Du hast „${esc(v)}“ geschrieben.`);
 }
-function win(msg,cls="ok"){answered=true;say(cls==="ok"?"ok":"near");S.won.push(current);S.retry=S.retry.filter(k=>k!==current);
+function win(msg,cls="ok"){answered=true;window.__GUpracticed&&window.__GUpracticed();say(cls==="ok"?"ok":"near");S.won.push(current);S.retry=S.retry.filter(k=>k!==current);
   const others=board().filter(x=>x.id!==player.id),leader=others[0],prevBest=S.best;
   S.streak++;S.best=Math.max(S.best,S.streak);save();
   if(leader&&leader.best>0&&S.streak===leader.best+1)sayCustom("ok","New record!",`Du hast ${leader.name} überholt!`);
   else if(prevBest>0&&S.streak===prevBest+1)sayCustom("ok","New record!","Neuer eigener Rekord!");
   if(S.best>prevBest)writeScore(false);
   $("fb").innerHTML=`<div class="fb ${cls}">${msg}</div>`;finishActs();renderStats()}
-function lose(msg){answered=true;say("bad");if(!S.retry.includes(current))S.retry.push(current);S.streak=0;save();
+function lose(msg){answered=true;window.__GUpracticed&&window.__GUpracticed();say("bad");if(!S.retry.includes(current))S.retry.push(current);S.streak=0;save();
   $("fb").innerHTML=`<div class="fb bad">${msg} Richtig ist: <strong>${esc((w=>dOf(current)==="de"?w.la+(w.ex?" ("+w.ex+")":""):w.de)(BY[kOf(current)]))}</strong>. Die Karte wird zurück in den Stapel gemischt.</div>`;finishActs();renderStats()}
 function finishActs(){$("ans").disabled=true;$("acts").innerHTML=`<span></span><button class="btn" type="submit" id="en-nx">Nächste Karte</button>`;setTimeout(()=>$("nx")?.focus({preventScroll:true}),30)}
 function next(){drawRandom();say("idle");renderStage()}
@@ -1935,7 +1967,7 @@ if(player)loadPlayer();migrate();rebuild();drawRandom();renderStats();renderStag
       el.textContent=n;el.classList.remove("pop");void el.offsetWidth;el.classList.add("pop");n--;setTimeout(step,900)}
     step()}
   function play(){state="play";ok=0;bad=0;run=0;last="";$("m-n").textContent="0";cheer("");rocket(false);show("m-play");next();endAt=Date.now()+DUR*1000;cancelAnimationFrame(raf);tick()}
-  async function finish(){state="end";cancelAnimationFrame(raf);
+  async function finish(){state="end";cancelAnimationFrame(raf);if(ok>0||bad>0)window.__GUpracticed&&window.__GUpracticed();
     $("m-score").textContent=ok;$("m-detail").textContent=(bad?(bad===1?"1-mal abgestürzt.":bad+"-mal abgestürzt."):"Kein einziger Absturz!")+(bad&&run>ok?" Längste Serie: "+run+".":"");
     var best=bests[mode],rec=ok>best&&ok>0;$("m-rec").hidden=!rec;$("m-confetti").innerHTML="";show("m-end");if(rec)confetti();
     if(rec){bests[mode]=ok;$("m-best").textContent=ok;
@@ -2058,6 +2090,11 @@ if(player)loadPlayer();migrate();rebuild();drawRandom();renderStats();renderStag
       <p>Datei von Claude auswählen (vocab_lat.json oder vocab_en.json). Der bisherige Stand wird ersetzt.</p>
       <div class="admin-row"><select id="ad-lang"><option value="lat">Latein</option><option value="en">Englisch</option></select><input type="file" id="ad-file" accept=".json,application/json"></div>
       <p id="ad-count" class="admin-note"></p>
+    </section>
+    <section>
+      <h3>Sicherung</h3>
+      <p>Lädt Vokabeln, Mitspielende, Rekorde, Daumen und Weltblick-Ausgaben als Datei herunter. Vokabeln lassen sich daraus oben unter „Vokabeln hochladen“ wiederherstellen.</p>
+      <div class="admin-row"><button type="button" id="ad-backup">Sicherung herunterladen</button></div>
     </section>
     <section>
       <h3>Mitspielende</h3>
@@ -2199,6 +2236,11 @@ if(player)loadPlayer();migrate();rebuild();drawRandom();renderStats();renderStag
     window.__VOCAB_LAT=items(res[0]);window.__VOCAB_EN=items(res[1]);
     var pr=res[2].exists?res[2].data():{};
     window.__GUVIS=pr.vis||"";window.__GUHIDE=pr.vis==="me";
+    function ymd(d){return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")}
+    window.__GUymd=ymd;window.__GUstreak=(pr.streak&&pr.streak.last)?pr.streak:{n:0,last:""};
+    window.__GUpracticed=function(){var st=window.__GUstreak,t=ymd(new Date());if(st.last===t)return;
+      var y=new Date();y.setDate(y.getDate()-1);st={n:st.last===ymd(y)?st.n+1:1,last:t};window.__GUstreak=st;
+      fs.doc("progress/"+uid).set({streak:st},{merge:true}).catch(function(){});window.dispatchEvent(new Event("gu-streak"))};
     var me=JSON.stringify({id:uid,name:name}),LS=window.localStorage;
     try{
       ["greta-latein","greta-englisch"].forEach(function(p){LS.setItem(p+"-player",me);LS.setItem(p+"-names","["+me+"]");LS.setItem(p+"-legacy-used","1")});
@@ -2212,7 +2254,7 @@ if(player)loadPlayer();migrate();rebuild();drawRandom();renderStats();renderStag
     // Fortschritt automatisch sichern
     var keys=["greta-latein-p:"+uid,"greta-englisch-p:"+uid,"gretas-update-tab"],t=null;
     function flush(){clearTimeout(t);t=null;var d={updatedAt:firebase.firestore.FieldValue.serverTimestamp()};
-      try{d.lat=LS.getItem(keys[0])||"";d.en=LS.getItem(keys[1])||"";d.tab=LS.getItem(keys[2])||""}catch(e){}d.vis=window.__GUVIS||"";
+      try{d.lat=LS.getItem(keys[0])||"";d.en=LS.getItem(keys[1])||"";d.tab=LS.getItem(keys[2])||""}catch(e){}d.vis=window.__GUVIS||"";d.streak=window.__GUstreak||{n:0,last:""};
       fs.doc("progress/"+uid).set(d).catch(function(){})}
     var orig=Storage.prototype.setItem;
     Storage.prototype.setItem=function(k,v){orig.call(this,k,v);if(keys.indexOf(k)>=0){clearTimeout(t);t=setTimeout(flush,1200)}};
@@ -2295,14 +2337,29 @@ if(player)loadPlayer();migrate();rebuild();drawRandom();renderStats();renderStag
       await fs.doc("profiles/"+id).delete();
       $("ad-msg").textContent=name+" wurde entfernt. Tipp: jetzt den Klassen-Code ändern.";loadMembers()}
     catch(err){b.disabled=false;b.classList.remove("sure");b.textContent="Entfernen";armed=null;$("ad-msg").textContent="Entfernen hat nicht geklappt: "+(err.code||err.message)}};
+  $("ad-backup").onclick=async function(){var b=this;b.disabled=true;b.textContent="Wird erstellt …";
+    try{function items(d){try{return d.exists?JSON.parse(d.data().json||"[]"):[]}catch(e){return []}}
+      function rows(sn){var o={};sn.forEach(function(d){var x=d.data()||{};Object.keys(x).forEach(function(k){if(x[k]&&x[k].toDate)x[k]=x[k].toDate().toISOString()});o[d.id]=x});return o}
+      var r=await Promise.all([fs.doc("vocab/lat").get(),fs.doc("vocab/en").get(),fs.collection("profiles").get(),
+        fs.collection("scores/lat/players").get(),fs.collection("scores/en/players").get(),fs.collection("scores/mathe/players").get(),
+        fs.collection("scores/mathe_div/players").get(),fs.collection("scores/kudos/players").get(),
+        fetch("weltblick.json?v="+Date.now(),{cache:"no-store"}).then(function(x){return x.ok?x.json():[]}).catch(function(){return []})]);
+      var out={erstellt:new Date().toISOString(),vocab:{lat:items(r[0]),en:items(r[1])},mitspielende:rows(r[2]),
+        rekorde:{latein:rows(r[3]),englisch:rows(r[4]),mathe_mal:rows(r[5]),mathe_geteilt:rows(r[6])},daumen:rows(r[7]),weltblick:r[8]};
+      Object.keys(out.mitspielende).forEach(function(k){delete out.mitspielende[k].code});
+      var blob=new Blob([JSON.stringify(out,null,2)],{type:"application/json"}),a=document.createElement("a");
+      a.href=URL.createObjectURL(blob);a.download="gretas-update-sicherung-"+new Date().toISOString().slice(0,10)+".json";document.body.appendChild(a);a.click();
+      setTimeout(function(){URL.revokeObjectURL(a.href);a.remove()},2000);
+      $("ad-msg").textContent="Sicherung erstellt: "+out.vocab.lat.length+" Latein- und "+out.vocab.en.length+" Englisch-Vokabeln, "+Object.keys(out.mitspielende).length+" Mitspielende."}
+    catch(e){$("ad-msg").textContent="Sicherung fehlgeschlagen: "+(e.code||e.message)}
+    b.disabled=false;b.textContent="Sicherung herunterladen"};
   $("ad-link-copy").onclick=function(){var i=$("ad-link"),b=this;
     (navigator.clipboard?navigator.clipboard.writeText(i.value):Promise.reject()).then(function(){b.textContent="Kopiert ✓"},function(){i.select();b.textContent="Markiert"})};
   $("admin-close").onclick=function(){$("admin").hidden=true};
   $("ad-code-save").onclick=async function(){var c=$("ad-code").value.trim();if(c.length<3){$("ad-msg").textContent="Bitte mindestens 3 Zeichen.";return}
     try{await fs.doc("config/secret").set({code:c});$("ad-msg").textContent="Klassen-Code gespeichert."}catch(e){$("ad-msg").textContent="Fehler: "+(e.code||e.message)}};
   $("ad-file").onchange=async function(e){var f=e.target.files[0];e.target.value="";if(!f)return;
-    try{var data=JSON.parse(await f.text());var it=Array.isArray(data)?data:data.items;if(!Array.isArray(it)||!it.length)throw new Error("Datei enthält keine Vokabeln");
-      var lang=$("ad-lang").value;await fs.doc("vocab/"+lang).set({json:JSON.stringify(it),count:it.length,updatedAt:firebase.firestore.FieldValue.serverTimestamp()});
+    try{var data=JSON.parse(await f.text());var lang=$("ad-lang").value;var it=Array.isArray(data)?data:(data.items||(data.vocab&&data.vocab[lang]));if(!Array.isArray(it)||!it.length)throw new Error("Datei enthält keine Vokabeln");await fs.doc("vocab/"+lang).set({json:JSON.stringify(it),count:it.length,updatedAt:firebase.firestore.FieldValue.serverTimestamp()});
       $("ad-msg").textContent=it.length+" Vokabeln für "+(lang==="lat"?"Latein":"Englisch")+" gespeichert. Seite neu laden, um sie zu sehen."}
     catch(err){$("ad-msg").textContent="Fehler: "+(err.code||err.message)}};
 })();
