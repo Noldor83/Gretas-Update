@@ -595,6 +595,9 @@ body{background:var(--gu-bar);color:var(--gu-bar-fg)}
 #st .s-install b{display:block;font-family:var(--s-f-head);font-weight:700;font-size:17px}
 #st .s-install .s-sub{font-size:14px;color:var(--s-muted)}
 #st .s-instgo{font-family:var(--s-f-head);font-weight:700;font-size:15px;background:var(--s-sun);color:#1d2140;border:2px solid var(--s-ink);border-radius:999px;padding:5px 12px;white-space:nowrap}
+#st .s-vis{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;font-size:14px;color:var(--s-muted);border-top:2px dashed var(--s-dot);padding-top:12px}
+#st .s-vis button{font:600 14px var(--s-f-head);border:2px solid var(--s-ink);border-radius:999px;padding:4px 12px;background:var(--s-card);color:var(--s-ink);cursor:pointer}
+#st .s-vis button:focus-visible{outline:3px solid var(--s-pink);outline-offset:2px}
 #st .s-note{font-size:13.5px;color:var(--s-muted);text-align:center}
 #st .s-tile{grid-template-columns:1fr auto;align-items:center;column-gap:10px}
 #st .s-tile h3,#st .s-tile .s-what,#st .s-tile .s-rank,#st .s-tile .s-cta{grid-column:1}
@@ -635,6 +638,7 @@ body{background:var(--gu-bar);color:var(--gu-bar-fg)}
       </div>
     </div>
   </div>
+  <div class="s-vis"><span id="s-vis-t">Sichtbarkeit wird geladen …</span><button type="button" id="s-vis-b">Ändern</button></div>
 </div>
 </section>
 
@@ -642,6 +646,9 @@ body{background:var(--gu-bar);color:var(--gu-bar-fg)}
 (function(){
   var $=function(id){return document.getElementById(id)};
   var me=window.__GU||{uid:"ich",name:"du"};
+  function visRow(){var v=window.__GUVIS;$("s-vis-t").textContent=v==="me"?"🔒 Deine Rekorde sind nur für dich sichtbar.":"👀 Deine Rekorde sehen alle Mitspielenden.";$("s-vis-b").textContent=v==="me"?"Für alle zeigen":"Nur für mich"}
+  visRow();$("s-vis-b").onclick=function(){if(window.__GUsetVis)window.__GUsetVis(window.__GUVIS==="me"?"all":"me")};
+  window.addEventListener("gu-vis",visRow);
   var now=new Date(),h=now.getHours();
   var hi=h<11?"Guten Morgen":h<17?"Hallo":h<22?"Guten Abend":"Noch wach";
   $("s-day").textContent=now.toLocaleDateString("de-DE",{weekday:"long",day:"numeric",month:"long"});
@@ -669,7 +676,7 @@ body{background:var(--gu-bar);color:var(--gu-bar-fg)}
   function esc(s){return String(s).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]})}
   var NEWS={},NNAME={lat:"Latein",en:"Englisch",ma:"Mathe (Mal)",md:"Mathe (Geteilt)"},NIC={lat:"La",en:"En",ma:"×",md:":"};
   function renderNews(){var all=[];
-    Object.keys(NEWS).forEach(function(k){var L=NEWS[k],max=Math.max.apply(null,L.map(function(r){return r.best}).concat([0]));
+    Object.keys(NEWS).forEach(function(k){var L=NEWS[k].filter(function(r){return !r.hidden||r.id===me.uid}),max=Math.max.apply(null,L.map(function(r){return r.best}).concat([0]));
       L.forEach(function(r){if(r.best>0&&r.t)all.push({k:k,name:r.name,id:r.id,best:r.best,t:r.t,top:r.best===max})})});
     all.sort(function(a,b){return b.t-a.t});
     var ul=$("s-news");if(!ul)return;
@@ -681,7 +688,8 @@ body{background:var(--gu-bar);color:var(--gu-bar-fg)}
     $("s-"+k).textContent=mine?mine.best:"0";
     var el=$("s-"+k+"-r");
     if(!mine||!mine.best){el.innerHTML='<span class="s-medal">–</span>Noch kein Eintrag';return}
-    var sorted=list.filter(function(r){return r.best>0}).sort(function(a,b){return b.best-a.best});
+    if(mine.hidden){el.innerHTML='<span class="s-medal">–</span>Nur für dich sichtbar';return}
+    var sorted=list.filter(function(r){return r.best>0&&!r.hidden}).sort(function(a,b){return b.best-a.best});
     var pos=1+sorted.filter(function(r){return r.best>mine.best}).length;
     el.innerHTML='<span class="s-medal'+(pos<=3?" r"+pos:"")+'">'+pos+'</span>Platz '+pos+' von '+sorted.length}
   (async function(){
@@ -689,7 +697,7 @@ body{background:var(--gu-bar);color:var(--gu-bar-fg)}
       db.collection("kudos").onSnapshot(function(snap){var kd={};snap.docs.forEach(function(d){kd[d.id]=d.data()||{}});praise(kd)},function(){$("s-praise").innerHTML='<li class="s-empty">Lob konnte nicht geladen werden.</li>'});
       [["lat","scores"],["en","en_scores"],["ma","ma_scores"],["md","md_scores"]].forEach(function(p){
         db.collection(p[1]).onSnapshot(function(snap){
-          var L=snap.docs.map(function(d){var x=d.data()||{};return {id:d.id,best:Number(x.best)||0,name:String(x.name||"?").slice(0,24),t:Date.parse(x.updatedAt)||0}});
+          var L=snap.docs.map(function(d){var x=d.data()||{};return {id:d.id,best:Number(x.best)||0,name:String(x.name||"?").slice(0,24),t:Date.parse(x.updatedAt)||0,hidden:!!x.hidden}});
           rank(L,p[0]);NEWS[p[0]]=L;renderNews()},
           function(){$("s-"+p[0]+"-r").textContent="Nicht geladen"})})}
     catch(e){$("s-praise").innerHTML='<li class="s-empty">Nicht verbunden.</li>';["lat","en","ma","md"].forEach(function(k){$("s-"+k+"-r").textContent="Nicht verbunden"})}
@@ -1002,7 +1010,7 @@ function dbStatus(){return `<p class="dbst">Online-Bestenliste: ${esc(dbSt)}${ca
 function writeScore(force){
   if(!db||!player)return;const me={...player},best=S.best;
   scoreChain=scoreChain.then(async()=>{try{const ref=db.collection("scores").doc(me.id);const sn=await ref.get();const prev=sn.exists?Number(sn.data().best)||0:-1;
-    if(best>prev||(force&&!sn.exists)){await ref.set({name:me.name,best:Math.max(best,prev,0),updatedAt:new Date().toISOString()});lastOk="gespeichert ✓"}else lastOk="aktuell ✓";lastErr=""}catch(e){lastErr=(e&&(e.code||e.message))||"unbekannter Fehler"}renderBoard()});
+    if(best>prev||(force&&!sn.exists)){await ref.set({name:me.name,best:Math.max(best,prev,0),hidden:!!window.__GUHIDE,updatedAt:new Date().toISOString()});lastOk="gespeichert ✓"}else lastOk="aktuell ✓";lastErr=""}catch(e){lastErr=(e&&(e.code||e.message))||"unbekannter Fehler"}renderBoard()});
 }
 const ensureScore=()=>writeScore(true);
 function renderStage(){
@@ -1141,7 +1149,7 @@ function refreshAll(){
   (async()=>{try{const u=await claude.use("user");if(u){canW=await u.can("data.write");renderBoard()}}catch(e){}})();
   if(db){
     try{db.collection("scores").onSnapshot(snap=>{
-      scores=snap.docs.map(d=>{const x=d.data()||{};return{id:d.id,name:String(x.name||d.id).slice(0,24),best:Number(x.best)||0}});
+      scores=snap.docs.map(d=>{const x=d.data()||{};return{id:d.id,name:String(x.name||d.id).slice(0,24),best:Number(x.best)||0,hidden:!!x.hidden}}).filter(x=>!x.hidden||x.id===player?.id);
       renderBoard();if(!player)renderPicker()},e=>{dbSt="Lesefehler ("+((e&&(e.code||e.message))||"?")+")";renderBoard()})}catch(e){}
     if(player)ensureScore();
     try{db.collection("lessons").onSnapshot(snap=>{
@@ -1471,7 +1479,7 @@ function dbStatus(){return `<p class="dbst">Online-Bestenliste: ${esc(dbSt)}${ca
 function writeScore(force){
   if(!db||!player)return;const me={...player},best=S.best;
   scoreChain=scoreChain.then(async()=>{try{const ref=db.collection("en_scores").doc(me.id);const sn=await ref.get();const prev=sn.exists?Number(sn.data().best)||0:-1;
-    if(best>prev||(force&&!sn.exists)){await ref.set({name:me.name,best:Math.max(best,prev,0),updatedAt:new Date().toISOString()});lastOk="gespeichert ✓"}else lastOk="aktuell ✓";lastErr=""}catch(e){lastErr=(e&&(e.code||e.message))||"unbekannter Fehler"}renderBoard()});
+    if(best>prev||(force&&!sn.exists)){await ref.set({name:me.name,best:Math.max(best,prev,0),hidden:!!window.__GUHIDE,updatedAt:new Date().toISOString()});lastOk="gespeichert ✓"}else lastOk="aktuell ✓";lastErr=""}catch(e){lastErr=(e&&(e.code||e.message))||"unbekannter Fehler"}renderBoard()});
 }
 const ensureScore=()=>writeScore(true);
 function renderStage(){
@@ -1600,7 +1608,7 @@ function refreshAll(){
   (async()=>{try{const u=await claude.use("user");if(u){canW=await u.can("data.write");renderBoard()}}catch(e){}})();
   if(db){
     try{db.collection("en_scores").onSnapshot(snap=>{
-      scores=snap.docs.map(d=>{const x=d.data()||{};return{id:d.id,name:String(x.name||d.id).slice(0,24),best:Number(x.best)||0}});
+      scores=snap.docs.map(d=>{const x=d.data()||{};return{id:d.id,name:String(x.name||d.id).slice(0,24),best:Number(x.best)||0,hidden:!!x.hidden}}).filter(x=>!x.hidden||x.id===player?.id);
       renderBoard();if(!player)renderPicker()},e=>{dbSt="Lesefehler ("+((e&&(e.code||e.message))||"?")+")";renderBoard()})}catch(e){}
     if(player)ensureScore();
     try{db.collection("en_lessons").onSnapshot(snap=>{
@@ -1931,11 +1939,11 @@ if(player)loadPlayer();migrate();rebuild();drawRandom();renderStats();renderStag
     $("m-score").textContent=ok;$("m-detail").textContent=(bad?(bad===1?"1-mal abgestürzt.":bad+"-mal abgestürzt."):"Kein einziger Absturz!")+(bad&&run>ok?" Längste Serie: "+run+".":"");
     var best=bests[mode],rec=ok>best&&ok>0;$("m-rec").hidden=!rec;$("m-confetti").innerHTML="";show("m-end");if(rec)confetti();
     if(rec){bests[mode]=ok;$("m-best").textContent=ok;
-      try{if(cols[mode])await cols[mode].doc(me.uid).set({name:me.name,best:ok,updatedAt:new Date().toISOString()})}catch(e){$("m-detail").textContent+=" Rekord konnte nicht gespeichert werden."}}}
+      try{if(cols[mode])await cols[mode].doc(me.uid).set({name:me.name,best:ok,hidden:!!window.__GUHIDE,updatedAt:new Date().toISOString()})}catch(e){$("m-detail").textContent+=" Rekord konnte nicht gespeichert werden."}}}
   $("m-go").onclick=start;$("m-again").onclick=start;
   var kd={},kcol=null,kbusy=false;
   function likesFor(id,v){var out=[];Object.keys(kd).forEach(function(from){if(from===id)return;var L=(kd[from].likes||{})[KC[mode]+":"+id];if(L&&L.v===v)out.push({from:from,name:kd[from].name||"?"})});return out}
-  function board(){var list=data[mode].slice().sort(function(x,y){return y.best-x.best}).slice(0,10);
+  function board(){var list=data[mode].filter(function(r){return !r.hidden||r.id===me.uid}).sort(function(x,y){return y.best-x.best}).slice(0,10);
     if(!list.length){$("m-board").innerHTML='<li><span></span><span class="m-note">Noch kein Ergebnis. Sei die erste Person auf der Liste!</span><span></span><span></span></li>';return}
     $("m-board").innerHTML=list.map(function(r,i){var L=r.best?likesFor(r.id,r.best):[],mine=L.some(function(x){return x.from===me.uid});
       var who=r.id===me.uid&&L.length?'<small>👍 '+esc(L.map(function(x){return x.name}).join(", "))+'</small>':"";
@@ -1951,7 +1959,7 @@ if(player)loadPlayer();migrate();rebuild();drawRandom();renderStats();renderStag
   (async function(){try{var db=await claude.use("db");cols.mul=db.collection("ma_scores");cols.div=db.collection("md_scores");
     kcol=db.collection("kudos");
     kcol.onSnapshot(function(snap){kd={};snap.docs.forEach(function(d){kd[d.id]=d.data()||{}});board()},function(){});
-    ["mul","div"].forEach(function(m){cols[m].onSnapshot(function(snap){data[m]=snap.docs.map(function(d){var x=d.data()||{};return {id:d.id,name:String(x.name||"?").slice(0,24),best:Number(x.best)||0}});
+    ["mul","div"].forEach(function(m){cols[m].onSnapshot(function(snap){data[m]=snap.docs.map(function(d){var x=d.data()||{};return {id:d.id,name:String(x.name||"?").slice(0,24),best:Number(x.best)||0,hidden:!!x.hidden}});
       var mine=data[m].filter(function(r){return r.id===me.uid})[0];if(mine&&mine.best>bests[m]){bests[m]=mine.best;if(m===mode)$("m-best").textContent=mine.best}if(m===mode)board()},
       function(){if(m===mode)$("m-board").innerHTML='<li><span></span><span class="m-note">Bestenliste konnte nicht geladen werden.</span><span></span><span></span></li>'})})}
     catch(e){$("m-board").innerHTML='<li><span></span><span class="m-note">Bestenliste nicht verbunden.</span><span></span><span></span></li>'}})();
@@ -2006,6 +2014,11 @@ if(player)loadPlayer();migrate();rebuild();drawRandom();renderStats();renderStag
     </form>
     <button type="button" class="inst-btn" data-inst hidden>Als App installieren</button>
     <p class="auth-hint">Passwort vergessen? Sag Gretas Papa Bescheid.</p>
+    <details class="auth-privacy"><summary>Datenschutz</summary>
+      <p>Gespeichert werden nur dein selbst gewählter Name, dein Passwort (verschlüsselt), dein Lernstand, deine Rekorde und Daumen. Keine E-Mail-Adresse, keine Werbung, keine Weitergabe.</p>
+      <p>Sehen können das nur angemeldete Mitspielende. Wer möchte, stellt „Nur für mich“ ein.</p>
+      <p>Die Daten liegen bei Google (Firebase). Löschen lassen? Sag Gretas Papa Bescheid.</p>
+    </details>
   </div>
 </div>
 <div id="boot" class="boot">Lade …</div>
@@ -2015,6 +2028,14 @@ if(player)loadPlayer();migrate();rebuild();drawRandom();renderStats();renderStag
   <span>Gretas Update als App auf den Startbildschirm?</span>
   <button type="button" class="inst-btn small" data-inst>Installieren</button>
   <button type="button" class="inst-x" id="inst-x" aria-label="Ausblenden">✕</button>
+</div>
+<div id="vis-dlg" class="admin" hidden>
+  <div class="admin-card">
+    <div class="admin-head"><h2>Wer sieht deine Rekorde?</h2></div>
+    <p>Deine Rekorde, Daumen und Neuigkeiten können alle Mitspielenden sehen – sonst niemand im Internet.</p>
+    <p>Wenn du das nicht möchtest, spielst du ganz normal weiter, tauchst aber nicht in Bestenlisten und Neuigkeiten auf. Du kannst das jederzeit unten auf der Startseite ändern.</p>
+    <div class="vis-btns"><button type="button" class="inst-btn small" id="vis-all">Okay, zeig sie</button><button type="button" class="inst-btn" id="vis-me">Nur für mich</button></div>
+  </div>
 </div>
 <div id="inst-guide" class="admin" hidden>
   <div class="admin-card">
@@ -2101,6 +2122,11 @@ if(player)loadPlayer();migrate();rebuild();drawRandom();renderStats();renderStag
 #ad-link{flex:1}
 .inst-btn{font:700 16px "Fredoka",sans-serif;border:2.5px solid #0d0f22;border-radius:12px;padding:9px;background:#fff;color:#1d2140;cursor:pointer}
 .inst-btn.small{padding:5px 12px;font-size:14px;background:#ffd24d}
+.vis-btns{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:6px}
+.vis-btns .inst-btn{padding:10px 8px;font-size:16px}
+.auth-privacy{font-size:13px;color:#5a5f7d}
+.auth-privacy summary{cursor:pointer;font-weight:700}
+.auth-privacy p{margin:6px 0 0}
 .inst-bar{position:fixed;left:0;right:0;bottom:0;z-index:80;display:flex;align-items:center;gap:10px;background:#1d2140;color:#fff;border-top:3px solid #ffd24d;
   font:600 14px "Fredoka",sans-serif;padding:10px max(16px,env(safe-area-inset-right,0px)) calc(10px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px))}
 .inst-bar span{flex:1;min-width:0}
@@ -2172,6 +2198,7 @@ if(player)loadPlayer();migrate();rebuild();drawRandom();renderStats();renderStag
     function items(d){try{return d.exists?JSON.parse(d.data().json||"[]"):[]}catch(e){return []}}
     window.__VOCAB_LAT=items(res[0]);window.__VOCAB_EN=items(res[1]);
     var pr=res[2].exists?res[2].data():{};
+    window.__GUVIS=pr.vis||"";window.__GUHIDE=pr.vis==="me";
     var me=JSON.stringify({id:uid,name:name}),LS=window.localStorage;
     try{
       ["greta-latein","greta-englisch"].forEach(function(p){LS.setItem(p+"-player",me);LS.setItem(p+"-names","["+me+"]");LS.setItem(p+"-legacy-used","1")});
@@ -2185,7 +2212,7 @@ if(player)loadPlayer();migrate();rebuild();drawRandom();renderStats();renderStag
     // Fortschritt automatisch sichern
     var keys=["greta-latein-p:"+uid,"greta-englisch-p:"+uid,"gretas-update-tab"],t=null;
     function flush(){clearTimeout(t);t=null;var d={updatedAt:firebase.firestore.FieldValue.serverTimestamp()};
-      try{d.lat=LS.getItem(keys[0])||"";d.en=LS.getItem(keys[1])||"";d.tab=LS.getItem(keys[2])||""}catch(e){}
+      try{d.lat=LS.getItem(keys[0])||"";d.en=LS.getItem(keys[1])||"";d.tab=LS.getItem(keys[2])||""}catch(e){}d.vis=window.__GUVIS||"";
       fs.doc("progress/"+uid).set(d).catch(function(){})}
     var orig=Storage.prototype.setItem;
     Storage.prototype.setItem=function(k,v){orig.call(this,k,v);if(keys.indexOf(k)>=0){clearTimeout(t);t=setTimeout(flush,1200)}};
@@ -2194,6 +2221,11 @@ if(player)loadPlayer();migrate();rebuild();drawRandom();renderStats();renderStag
     var none={onSnapshot:function(cb){cb({docs:[]});return function(){}},doc:function(){return {get:async function(){return {exists:false}},set:async function(){throw {code:"not_supported"}},delete:async function(){}}}};
     var db={collection:function(n){if(n==="scores")return fs.collection("scores/lat/players");if(n==="en_scores")return fs.collection("scores/en/players");if(n==="ma_scores")return fs.collection("scores/mathe/players");if(n==="md_scores")return fs.collection("scores/mathe_div/players");if(n==="kudos")return fs.collection("scores/kudos/players");return none}};
     window.__GU={uid:uid,name:name};
+    window.__GUsetVis=function(v){window.__GUVIS=v;window.__GUHIDE=v==="me";
+      fs.doc("progress/"+uid).set({vis:v},{merge:true}).catch(function(){});
+      ["scores/lat/players/","scores/en/players/","scores/mathe/players/","scores/mathe_div/players/"].forEach(function(pth){fs.doc(pth+uid).set({hidden:v==="me"},{merge:true}).catch(function(){})});
+      window.dispatchEvent(new Event("gu-vis"))};
+    if(!pr.vis){$("vis-dlg").hidden=false}
     window.__GUK=(function(){var kd={},subs=[],busy=false,col=fs.collection("scores/kudos/players");
       col.onSnapshot(function(sn){kd={};sn.docs.forEach(function(d){kd[d.id]=d.data()||{}});subs.forEach(function(f){try{f()}catch(e){}})},function(){});
       return {on:function(f){subs.push(f)},
@@ -2235,6 +2267,8 @@ if(player)loadPlayer();migrate();rebuild();drawRandom();renderStats();renderStag
       guide()}});
   })();
 
+  $("vis-all").onclick=function(){if(window.__GUsetVis)window.__GUsetVis("all");$("vis-dlg").hidden=true};
+  $("vis-me").onclick=function(){if(window.__GUsetVis)window.__GUsetVis("me");$("vis-dlg").hidden=true};
   $("gu-logout").onclick=async function(){try{await auth.signOut()}catch(e){}location.reload()};
 
   // ---------- Verwaltung
