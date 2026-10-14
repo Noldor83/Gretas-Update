@@ -1513,10 +1513,24 @@ if(player)loadPlayer();migrate();rebuild();drawRandom();renderStats();renderStag
       <p class="auth-msg" id="auth-msg" role="alert"></p>
       <button class="auth-btn" type="submit" id="auth-submit">Anmelden</button>
     </form>
+    <button type="button" class="inst-btn" data-inst hidden>Als App installieren</button>
     <p class="auth-hint">Passwort vergessen? Sag Gretas Papa Bescheid.</p>
   </div>
 </div>
 <div id="boot" class="boot">Lade …</div>
+
+<!-- ===== App installieren ===== -->
+<div id="inst-bar" class="inst-bar" hidden>
+  <span>Gretas Update als App auf den Startbildschirm?</span>
+  <button type="button" class="inst-btn small" data-inst>Installieren</button>
+  <button type="button" class="inst-x" id="inst-x" aria-label="Ausblenden">✕</button>
+</div>
+<div id="inst-guide" class="admin" hidden>
+  <div class="admin-card">
+    <div class="admin-head"><h2>Als App installieren</h2><button type="button" id="inst-close" aria-label="Schließen">✕</button></div>
+    <div id="inst-steps"></div>
+  </div>
+</div>
 
 <!-- ===== Verwaltung (nur Papa) ===== -->
 <div id="admin" class="admin" hidden>
@@ -1541,7 +1555,7 @@ if(player)loadPlayer();migrate();rebuild();drawRandom();renderStats();renderStag
 .auth,.boot{position:fixed;inset:0;z-index:100;display:grid;place-items:center;background:#1d2140;color:#fff;
   padding:max(16px,env(safe-area-inset-top,0px)) max(16px,env(safe-area-inset-right,0px)) max(16px,env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));font-family:"Fredoka","Trebuchet MS",sans-serif}
 .boot{font-size:20px;font-weight:600}
-.auth-card{width:min(100%,380px);background:#fff;color:#1d2140;border:3px solid #0d0f22;border-radius:20px;box-shadow:6px 6px 0 #0d0f22;padding:22px;display:grid;gap:12px}
+.auth-card{box-sizing:border-box;width:calc(100vw - 32px);max-width:380px;background:#fff;color:#1d2140;border:3px solid #0d0f22;border-radius:20px;box-shadow:6px 6px 0 #0d0f22;padding:22px;display:grid;gap:12px}
 .auth-logo{font-weight:700;font-size:34px;line-height:1}
 .auth-logo span{background:#ffd24d;border-radius:10px;padding:0 8px 2px;display:inline-block;transform:rotate(-2deg)}
 .auth-sub{margin:0;color:#5a5f7d;font-family:"Atkinson Hyperlegible",Verdana,sans-serif}
@@ -1561,7 +1575,7 @@ if(player)loadPlayer();migrate();rebuild();drawRandom();renderStats();renderStag
 .gu-user{display:flex;align-items:center;gap:8px;font:600 14px "Fredoka",sans-serif;color:var(--gu-muted)}
 .gu-user button{font:600 13px "Fredoka",sans-serif;border:1.5px solid var(--gu-muted);border-radius:999px;padding:3px 10px;background:transparent;color:var(--gu-bar-fg);cursor:pointer}
 .admin{position:fixed;inset:0;z-index:90;background:rgba(10,12,30,.6);display:grid;place-items:center;padding:16px}
-.admin-card{width:min(100%,460px);max-height:90vh;overflow:auto;background:#fff;color:#1d2140;border-radius:18px;padding:18px;display:grid;gap:14px;font-family:"Atkinson Hyperlegible",Verdana,sans-serif}
+.admin-card{box-sizing:border-box;width:calc(100vw - 32px);max-width:460px;max-height:90vh;overflow:auto;background:#fff;color:#1d2140;border-radius:18px;padding:18px;display:grid;gap:14px;font-family:"Atkinson Hyperlegible",Verdana,sans-serif}
 .admin-head{display:flex;justify-content:space-between;align-items:center}
 .admin-head h2,.admin h3{margin:0;font-family:"Fredoka",sans-serif}
 .admin-head button{border:0;background:none;font-size:22px;cursor:pointer;color:#1d2140}
@@ -1571,6 +1585,17 @@ if(player)loadPlayer();migrate();rebuild();drawRandom();renderStats();renderStag
 .admin-row button{font:600 15px "Fredoka",sans-serif;border:2px solid #1d2140;border-radius:8px;padding:6px 12px;background:#ffd24d;cursor:pointer}
 .admin-note,.admin-msg{font-size:14px;color:#5a5f7d}
 .admin-msg{font-weight:700;color:#23804a}
+.inst-btn{font:700 16px "Fredoka",sans-serif;border:2.5px solid #0d0f22;border-radius:12px;padding:9px;background:#fff;color:#1d2140;cursor:pointer}
+.inst-btn.small{padding:5px 12px;font-size:14px;background:#ffd24d}
+.inst-bar{position:fixed;left:0;right:0;bottom:0;z-index:80;display:flex;align-items:center;gap:10px;background:#1d2140;color:#fff;border-top:3px solid #ffd24d;
+  font:600 14px "Fredoka",sans-serif;padding:10px max(16px,env(safe-area-inset-right,0px)) calc(10px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px))}
+.inst-bar span{flex:1;min-width:0}
+#inst-guide{z-index:120}
+.inst-x{border:0;background:none;color:#fff;font-size:18px;cursor:pointer}
+#inst-steps ol{margin:0;padding-left:22px;display:grid;gap:10px;font-size:16px;line-height:1.4}
+#inst-steps .ico{display:inline-block;vertical-align:-4px;width:20px;height:20px}
+#inst-steps .note{font-size:14px;color:#5a5f7d;margin-top:10px}
+#inst-steps button{font:600 15px "Fredoka",sans-serif;border:2px solid #1d2140;border-radius:8px;padding:5px 12px;background:#ffd24d;cursor:pointer;margin-top:4px}
 /* Funktionen der Claude-Version, die es hier nicht gibt */
 #lat .addbox,#en .addbox,#lat .record .who button,#en .record .who button{display:none!important}
 </style>
@@ -1659,6 +1684,34 @@ if(player)loadPlayer();migrate();rebuild();drawRandom();renderStats();renderStag
     document.querySelectorAll('script[type="text/x-deferred"]').forEach(function(s){var n=document.createElement("script");n.textContent=s.textContent;s.replaceWith(n)});
     $("boot").hidden=true;
   }
+
+  // ---------- App installieren
+  (function(){
+    var ua=navigator.userAgent,ios=/iPhone|iPad|iPod/.test(ua)||(/Macintosh/.test(ua)&&navigator.maxTouchPoints>1),android=/Android/.test(ua);
+    var standalone=(window.matchMedia&&matchMedia("(display-mode: standalone)").matches)||navigator.standalone===true;
+    var iosOther=ios&&(/CriOS|FxiOS|EdgiOS|OPiOS|GSA\//.test(ua)||/FBAN|FBAV|Instagram|WhatsApp/.test(ua));
+    var deferred=null,btns=document.querySelectorAll("[data-inst]");
+    if("serviceWorker" in navigator){navigator.serviceWorker.register("sw.js").catch(function(){})}
+    function dismissed(){try{return localStorage.getItem("gu-inst-x")==="1"}catch(e){return false}}
+    function show(on){btns.forEach(function(b){b.hidden=!on});$("inst-bar").hidden=!on||dismissed()}
+    if(standalone){show(false);return}
+    show(ios||android);
+    window.addEventListener("beforeinstallprompt",function(e){e.preventDefault();deferred=e;show(true)});
+    window.addEventListener("appinstalled",function(){show(false)});
+    $("inst-x").onclick=function(){try{localStorage.setItem("gu-inst-x","1")}catch(e){}$("inst-bar").hidden=true};
+    $("inst-close").onclick=function(){$("inst-guide").hidden=true};
+    var share='<svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M7 8l5-5 5 5"/><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7"/></svg>';
+    function guide(){var h;
+      if(ios&&iosOther){h='<ol><li>Diese Seite funktioniert als App nur über <b>Safari</b>. Tippe zuerst hier:<br><button type="button" id="inst-copy">Link kopieren</button></li><li>Öffne <b>Safari</b> (blauer Kompass).</li><li>Tippe oben in die Adresszeile und dann auf <b>„Einsetzen und öffnen“</b>.</li><li>Dort wieder auf <b>„Als App installieren“</b> tippen und der Anleitung folgen.</li></ol>'}
+      else if(ios){h='<ol><li>Tippe auf <b>Teilen</b> '+share+' – unten in der Leiste oder hinter <b>„…“</b>.</li><li>Wische nach unten und tippe auf <b>„Zum Home-Bildschirm“</b>.</li><li>Tippe oben rechts auf <b>„Hinzufügen“</b>. Fertig!</li></ol><p class="note">Danach öffnest du Gretas Update immer über das GU-Symbol.</p>'}
+      else{h='<ol><li>Tippe oben rechts auf die drei Punkte <b>⋮</b>.</li><li>Wähle <b>„App installieren“</b> oder <b>„Installieren und Verknüpfung erstellen“</b> bzw. „Zum Startbildschirm hinzufügen“.</li><li>Mit <b>„Installieren“</b> bestätigen. Fertig!</li></ol>'}
+      $("inst-steps").innerHTML=h;$("inst-guide").hidden=false;
+      var c=$("inst-copy");if(c)c.onclick=function(){var u=location.href.split("#")[0];
+        (navigator.clipboard?navigator.clipboard.writeText(u):Promise.reject()).then(function(){c.textContent="Kopiert ✓"},function(){c.outerHTML='<input value="'+u+'" readonly style="width:100%;font:inherit">'})}}
+    btns.forEach(function(b){b.onclick=async function(){
+      if(deferred){deferred.prompt();try{var r=await deferred.userChoice;if(r.outcome==="accepted")show(false)}catch(e){}deferred=null;return}
+      guide()}});
+  })();
 
   $("gu-logout").onclick=async function(){try{await auth.signOut()}catch(e){}location.reload()};
 
