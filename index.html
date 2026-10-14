@@ -136,6 +136,47 @@ body{background:var(--gu-bar);color:var(--gu-bar-fg)}
 #wb footer a{color:var(--purple);overflow-wrap:anywhere}
 #wb footer a:focus-visible{outline:2px solid var(--purple)}
 #wb .empty{text-align:center;color:var(--muted);padding:40px 0}
+#wb .quiz{display:grid;gap:12px;scroll-margin-top:120px}
+#wb .qhead{display:flex;justify-content:space-between;align-items:baseline;gap:8px;flex-wrap:wrap}
+#wb .qhead h3{font-family:var(--f-head);font-weight:700;font-size:26px;color:var(--purple)}
+#wb .qstate{font-family:var(--f-head);font-weight:600;font-size:14px;color:var(--muted)}
+#wb .qintro{font-size:17px;max-width:60ch}
+#wb .qnote{font-size:14px;color:var(--muted)}
+#wb .qprog{font-family:var(--f-head);font-weight:600;font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+#wb .qfrage{font-family:var(--f-head);font-weight:600;font-size:22px;line-height:1.25}
+#wb .qopts{display:grid;gap:8px}
+#wb .qopts.two{grid-template-columns:1fr 1fr}
+#wb .qopt{font:inherit;font-size:17px;text-align:left;border:2.5px solid var(--ink);border-radius:14px;padding:10px 14px;background:var(--paper);color:var(--ink);cursor:pointer}
+#wb .qopts.two .qopt{text-align:center;font-family:var(--f-head);font-weight:600}
+#wb .qopt:hover:not(:disabled){background:var(--innen-bg)}
+#wb .qopt:disabled{cursor:default}
+#wb .qopt.right{background:var(--innen-bg);border-color:var(--innen);font-weight:700}
+#wb .qopt.wrong{background:var(--aussen-bg);border-color:var(--aussen);text-decoration:line-through}
+#wb .qopt:focus-visible,#wb .qbtn:focus-visible,#wb .qest input:focus-visible{outline:3px solid var(--purple);outline-offset:2px}
+#wb .qest{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+#wb .qest input{font:inherit;font-size:20px;width:9em;max-width:100%;border:2.5px solid var(--ink);border-radius:12px;padding:8px 12px;background:var(--paper);color:var(--ink)}
+#wb .qunit{font-family:var(--f-head);font-weight:600;font-size:18px}
+#wb .qbtn{justify-self:start;font-family:var(--f-head);font-weight:700;font-size:18px;border:2.5px solid var(--ink);border-radius:14px;padding:10px 18px;background:var(--yellow);color:var(--yellow-ink);cursor:pointer;box-shadow:3px 3px 0 var(--shadow)}
+#wb .qbtn.small{font-size:16px;padding:8px 14px}
+#wb .qbtn.ghost{background:var(--card);color:var(--ink)}
+#wb .qbtn:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--shadow)}
+#wb .qfb{border:2.5px solid currentColor;border-radius:14px;padding:10px 14px;display:grid;gap:4px}
+#wb .qfb.ok{color:var(--innen);background:var(--innen-bg)}
+#wb .qfb.near{color:var(--ink);background:var(--paper);border-color:var(--yellow)}
+#wb .qfb.bad{color:var(--aussen);background:var(--aussen-bg)}
+#wb .qfb b{font-family:var(--f-head);font-size:18px}
+#wb .qfb p{color:var(--ink);font-size:16px}
+#wb .qres{display:grid;gap:8px;justify-items:start}
+#wb .qscore{font-family:var(--f-mast);font-size:56px;line-height:1;color:var(--purple)}
+#wb .qboard{border-top:2px dashed var(--dot);padding-top:12px;display:grid;gap:8px}
+#wb .qboard h4{font-family:var(--f-head);font-weight:700;font-size:20px}
+#wb .qboard ol{list-style:none;margin:0;padding:0;display:grid;gap:4px}
+#wb .qboard li{display:grid;grid-template-columns:28px minmax(0,1fr) auto auto;gap:8px;align-items:center;padding:6px 8px;border-radius:10px;font-size:16px}
+#wb .qboard li.me{background:var(--innen-bg);font-weight:700}
+#wb .qboard .rk{font-family:var(--f-head);font-weight:700;color:var(--muted);text-align:center}
+#wb .qboard .nm{display:grid;min-width:0;overflow-wrap:anywhere}
+#wb .qboard .nm small{font-size:13px;color:var(--innen)}
+#wb .qboard .pt{font-family:var(--f-head);font-weight:700;font-variant-numeric:tabular-nums}
 @media (max-width:760px){#wb .ressorts{grid-template-columns:1fr}
 #wb .zettel{grid-template-columns:1fr}
 #wb .note.frage,#wb .note.zahl{transform:none}}
@@ -542,13 +583,13 @@ body{background:var(--gu-bar);color:var(--gu-bar-fg)}
 <section class="gu-view" id="st" data-v="st" role="tabpanel" aria-labelledby="gu-tab-st" hidden>
 <style>
 #st{--s-bg:#efeaff; --s-dot:#ddd3fb; --s-card:#ffffff; --s-ink:#1d2140; --s-muted:#585d80; --s-sun:#ffd24d; --s-pink:#ff7aa8; --s-sky:#8fd3f4;
-  --s-lat:#6a3fb5; --s-en:#1f5fa8; --s-ma:#1d8655; --s-gold:#ffc83d; --s-silver:#cfd5e6; --s-bronze:#e3a06b;
+  --s-lat:#6a3fb5; --s-en:#1f5fa8; --s-ma:#1d8655; --s-wb:#d9472b; --s-gold:#ffc83d; --s-silver:#cfd5e6; --s-bronze:#e3a06b;
   --s-f-big:"Bagel Fat One","Fredoka","Arial Rounded MT Bold",sans-serif; --s-f-head:"Fredoka","Arial Rounded MT Bold","Trebuchet MS",sans-serif;
   --s-f-body:"Atkinson Hyperlegible",Verdana,"Segoe UI",sans-serif}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]) #st{--s-bg:#15132a; --s-dot:#252146; --s-card:#1f1c3a; --s-ink:#eeeaff; --s-muted:#b2acd6;
-  --s-sun:#e8c23a; --s-pink:#ff8fb6; --s-sky:#4aa8d6; --s-lat:#a184f0; --s-en:#5d9be6; --s-ma:#3fbf82; color-scheme:dark}}
+  --s-sun:#e8c23a; --s-pink:#ff8fb6; --s-sky:#4aa8d6; --s-lat:#a184f0; --s-en:#5d9be6; --s-ma:#3fbf82; --s-wb:#ff8a70; color-scheme:dark}}
 :root[data-theme="dark"] #st{--s-bg:#15132a; --s-dot:#252146; --s-card:#1f1c3a; --s-ink:#eeeaff; --s-muted:#b2acd6;
-  --s-sun:#e8c23a; --s-pink:#ff8fb6; --s-sky:#4aa8d6; --s-lat:#a184f0; --s-en:#5d9be6; --s-ma:#3fbf82; color-scheme:dark}
+  --s-sun:#e8c23a; --s-pink:#ff8fb6; --s-sky:#4aa8d6; --s-lat:#a184f0; --s-en:#5d9be6; --s-ma:#3fbf82; --s-wb:#ff8a70; color-scheme:dark}
 #st{background-color:var(--s-bg);background-image:radial-gradient(var(--s-dot) 1.6px,transparent 1.8px);background-size:22px 22px;color:var(--s-ink);font-family:var(--s-f-body)}
 #st .s-wrap{max-width:860px;margin:0 auto;padding-block:18px 48px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:grid;gap:18px}
 #st h2,#st h3{margin:0;text-wrap:balance}
@@ -600,6 +641,15 @@ body{background:var(--gu-bar);color:var(--gu-bar-fg)}
 #st .s-tile[data-k="lat"]{border-top-color:var(--s-lat)}
 #st .s-tile[data-k="en"]{border-top-color:var(--s-en)}
 #st .s-tile[data-k="ma"]{border-top-color:var(--s-ma)}
+#st .s-tile[data-k="qz"]{border-top-color:var(--s-wb)}
+#st .s-tile[data-k="qz"] .s-num,#st .s-tile[data-k="qz"] .s-cta{color:var(--s-wb)}
+#st .s-quizhint{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:12px;padding:12px 14px;text-align:left;cursor:pointer;font:inherit;color:var(--s-ink);width:100%;border-color:var(--s-wb)}
+#st .s-quizhint[hidden]{display:none}
+#st .s-quizhint:focus-visible{outline:3px solid var(--s-pink);outline-offset:3px}
+#st .s-qic{display:grid;place-items:center;width:46px;height:46px;border-radius:12px;background:var(--s-wb);color:#fff;font-family:var(--s-f-big);font-size:24px;border:2px solid var(--s-ink)}
+#st .s-quizhint b{display:block;font-family:var(--s-f-head);font-weight:700;font-size:17px}
+#st .s-quizhint .s-sub{font-size:14px;color:var(--s-muted)}
+#st .s-nic.qz{background:#d9472b}
 #st .s-math .s-mrows{grid-column:1 / -1;display:grid;gap:8px;margin:2px 0}
 #st .s-mrow{display:grid;grid-template-columns:30px 70px 48px minmax(0,1fr);align-items:center;gap:8px}
 #st .s-op{display:grid;place-items:center;width:30px;height:30px;border-radius:9px;background:var(--s-ma);color:#fff;font-family:var(--s-f-big);font-size:18px;line-height:1}
@@ -662,6 +712,11 @@ body{background:var(--gu-bar);color:var(--gu-bar-fg)}
     <span><b>Gretas Update als App</b><span class="s-sub">Auf den Startbildschirm legen – dann bist du mit einem Tipp drin.</span></span>
     <span class="s-instgo">So geht’s</span>
   </button>
+  <button type="button" class="s-card s-quizhint" id="s-quizhint" hidden>
+    <span class="s-qic" aria-hidden="true">?</span>
+    <span><b id="s-qh-t">Neues Wochenquiz!</b><span class="s-sub" id="s-qh-s"></span></span>
+    <span class="s-instgo">Los</span>
+  </button>
   <div class="s-grid">
     <div class="s-col">
       <h3 class="s-sec">Neuigkeiten <small>Neue Rekorde</small></h3>
@@ -678,6 +733,7 @@ body{background:var(--gu-bar);color:var(--gu-bar-fg)}
           <div class="s-mrows"><div class="s-mrow"><span class="s-op">×</span><span class="s-mlabel">Mal</span><b class="s-mnum" id="s-ma">–</b><span class="s-rank" id="s-ma-r">Lädt …</span></div>
           <div class="s-mrow"><span class="s-op">:</span><span class="s-mlabel">Geteilt</span><b class="s-mnum" id="s-md">–</b><span class="s-rank" id="s-md-r">Lädt …</span></div></div>
           <span class="s-cta">Rakete starten →</span></button>
+        <button type="button" class="s-card s-tile" data-k="qz" data-quiz="1"><h3>Weltblick-Quiz</h3><p class="s-what">Punkte aus allen Wochenquizzen</p><div class="s-num" id="s-qz">–</div><p class="s-rank" id="s-qz-r">Lädt …</p><span class="s-cta">Zum Wochenquiz →</span></button>
       </div>
     </div>
   </div>
@@ -706,7 +762,11 @@ body{background:var(--gu-bar);color:var(--gu-bar-fg)}
   if(now.getDay()===0||now.getDay()===6)LINES.push("Wochenende – ein kurzes Training geht immer.");
   $("s-line").textContent=LINES[(now.getDate()+h)%LINES.length];
   document.querySelectorAll("#st [data-go]").forEach(function(b){b.onclick=function(){var t=document.getElementById("gu-tab-"+b.dataset.go);if(t)t.click()}});
-  var CAT={ma:"in Mathe (Mal)",md:"in Mathe (Geteilt)",lat:"in Latein",en:"in Englisch"},UNIT={ma:"Punkte",lat:"er-Serie",en:"er-Serie"};
+  document.querySelectorAll("#st [data-quiz]").forEach(function(b){b.onclick=function(){if(window.__GUquizOpen)window.__GUquizOpen()}});
+  var QISSUE=null;try{var AU=JSON.parse(document.getElementById("ausgaben").textContent||"[]");AU.sort(function(a,b){return a.datum<b.datum?1:-1});QISSUE=AU[0]||null}catch(e){}
+  function quizHint(mineWeeks){var c=$("s-quizhint");if(!QISSUE||!(QISSUE.quiz&&QISSUE.quiz.length)||(mineWeeks&&mineWeeks[QISSUE.nr]!=null)){c.hidden=true;return}
+    $("s-qh-t").textContent="Neues Wochenquiz zu Ausgabe Nr. "+QISSUE.nr+"!";$("s-qh-s").textContent=QISSUE.quiz.length+" Fragen zum Weltblick – hol dir bis zu "+(QISSUE.quiz.length*2)+" Punkte.";c.hidden=false}
+  var CAT={ma:"in Mathe (Mal)",md:"in Mathe (Geteilt)",lat:"in Latein",en:"in Englisch",qz:"im Weltblick-Quiz"},UNIT={ma:"Punkte",lat:"er-Serie",en:"er-Serie"};
   var COLS=["#ffd24d","#ff9fc0","#9fdcf7","#a8e6c3","#c9b8ff","#ffc59a"];
   var seen=0;try{seen=Number(localStorage.getItem("gu-kudos-seen"))||0}catch(e){}
   function ago(t){var d=(Date.now()-t)/60000;if(d<1)return "gerade eben";if(d<60)return "vor "+Math.round(d)+" Min.";if(d<1440)return "vor "+Math.round(d/60)+" Std.";
@@ -719,18 +779,19 @@ body{background:var(--gu-bar);color:var(--gu-bar-fg)}
     var ul=$("s-praise"),fresh=items.filter(function(i){return i.t>seen}).length;
     $("s-pcount").textContent=fresh?fresh+" neu":"";
     if(!items.length){ul.innerHTML='<li class="s-empty">Noch kein Daumen hoch. Spiel eine Runde 1×1 – vielleicht lobt dich bald jemand!</li>';return}
-    ul.innerHTML=items.slice(0,3).map(function(i){var c=COLS[(i.name.charCodeAt(0)||0)%COLS.length],u=(i.cat==="ma"||i.cat==="md")?i.v+" Punkte":"deine "+i.v+"er-Serie";
+    ul.innerHTML=items.slice(0,3).map(function(i){var c=COLS[(i.name.charCodeAt(0)||0)%COLS.length],u=(i.cat==="ma"||i.cat==="md"||i.cat==="qz")?i.v+" Punkte":"deine "+i.v+"er-Serie";
       return '<li class="'+(i.t>seen?"new":"")+'"><span class="s-av" style="background:'+c+'" aria-hidden="true">'+esc(i.name.charAt(0).toUpperCase())+'</span><p><b>'+esc(i.name)+'</b> findet '+esc(u)+' '+(CAT[i.cat]||"")+' stark!'+(i.t>seen?'<span class="s-newtag">NEU</span>':'')+' <time>· '+ago(i.t)+'</time></p></li>'}).join("")+(items.length>3?'<li class="s-more">und '+(items.length-3)+(items.length-3===1?' weiterer Daumen':' weitere Daumen')+'</li>':'');
     if(!document.getElementById("st").hidden){try{localStorage.setItem("gu-kudos-seen",String(Date.now()))}catch(e){}}}
   function esc(s){return String(s).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]})}
-  var NEWS={},NNAME={lat:"Latein",en:"Englisch",ma:"Mathe (Mal)",md:"Mathe (Geteilt)"},NIC={lat:"La",en:"En",ma:"×",md:":"};
+  var NEWS={},NNAME={lat:"Latein",en:"Englisch",ma:"Mathe (Mal)",md:"Mathe (Geteilt)",qz:"Weltblick-Quiz"},NIC={lat:"La",en:"En",ma:"×",md:":",qz:"?"};
   function renderNews(){var all=[];
     Object.keys(NEWS).forEach(function(k){var L=NEWS[k].filter(function(r){return !r.hidden||r.id===me.uid}),max=Math.max.apply(null,L.map(function(r){return r.best}).concat([0]));
-      L.forEach(function(r){if(r.best>0&&r.t)all.push({k:k,name:r.name,id:r.id,best:r.best,t:r.t,top:r.best===max})})});
+      L.forEach(function(r){if(r.best>0&&r.t)all.push({k:k,name:r.name,id:r.id,best:r.best,t:r.t,top:r.best===max,last:r.last})})});
     all.sort(function(a,b){return b.t-a.t});
     var ul=$("s-news");if(!ul)return;
     if(!all.length){ul.innerHTML='<li class="s-empty">Noch keine Rekorde. Wer legt den ersten vor?</li>';return}
     ul.innerHTML=all.slice(0,4).map(function(n){var mine=n.id===me.uid,unit=(n.k==="ma"||n.k==="md")?n.best+" Punkte":n.best+" in Folge";
+      if(n.k==="qz"&&n.last)return '<li><span class="s-nic qz" aria-hidden="true">?</span><p><b>'+(mine?"Du":esc(n.name))+'</b> '+(mine?"hast":"hat")+' das Wochenquiz Nr. '+esc(n.last.nr)+' gelöst: <b>'+esc(n.last.p)+' von '+esc(n.last.max)+' Punkten</b> <time>· '+ago(n.t)+'</time></p></li>';
       return '<li class="'+(n.top?"top":"")+'"><span class="s-nic '+n.k+'" aria-hidden="true">'+NIC[n.k]+'</span><p><b>'+(mine?"Du":esc(n.name))+'</b> '+(mine?"hast":"hat")+' einen neuen Rekord in '+NNAME[n.k]+': <b>'+unit+'</b>'+(n.top?'<span class="s-crown">Platz 1</span>':'')+' <time>· '+ago(n.t)+'</time></p></li>'}).join("")}
   function rank(list,k){
     var mine=list.filter(function(r){return r.id===me.uid})[0];
@@ -744,12 +805,12 @@ body{background:var(--gu-bar);color:var(--gu-bar-fg)}
   (async function(){
     try{var db=await claude.use("db");
       db.collection("kudos").onSnapshot(function(snap){var kd={};snap.docs.forEach(function(d){kd[d.id]=d.data()||{}});praise(kd)},function(){$("s-praise").innerHTML='<li class="s-empty">Lob konnte nicht geladen werden.</li>'});
-      [["lat","scores"],["en","en_scores"],["ma","ma_scores"],["md","md_scores"]].forEach(function(p){
+      [["lat","scores"],["en","en_scores"],["ma","ma_scores"],["md","md_scores"],["qz","quiz_scores"]].forEach(function(p){
         db.collection(p[1]).onSnapshot(function(snap){
-          var L=snap.docs.map(function(d){var x=d.data()||{};return {id:d.id,best:Number(x.best)||0,name:String(x.name||"?").slice(0,24),t:Date.parse(x.updatedAt)||0,hidden:!!x.hidden}});
-          rank(L,p[0]);NEWS[p[0]]=L;renderNews()},
+          var L=snap.docs.map(function(d){var x=d.data()||{};return {id:d.id,best:Number(x.best)||0,name:String(x.name||"?").slice(0,24),t:Date.parse(x.updatedAt)||0,hidden:!!x.hidden,last:x.last||null,weeks:x.weeks||null}});
+          rank(L,p[0]);NEWS[p[0]]=L;renderNews();if(p[0]==="qz"){var mq=L.filter(function(r){return r.id===me.uid})[0];quizHint(mq&&mq.weeks)}},
           function(){$("s-"+p[0]+"-r").textContent="Nicht geladen"})})}
-    catch(e){$("s-praise").innerHTML='<li class="s-empty">Nicht verbunden.</li>';["lat","en","ma","md"].forEach(function(k){$("s-"+k+"-r").textContent="Nicht verbunden"})}
+    catch(e){$("s-praise").innerHTML='<li class="s-empty">Nicht verbunden.</li>';["lat","en","ma","md","qz"].forEach(function(k){$("s-"+k+"-r").textContent="Nicht verbunden"})}
   })();
 })();
 </script>
@@ -816,12 +877,92 @@ body{background:var(--gu-bar);color:var(--gu-bar-fg)}
     if(a.wort){var w=el('section','card note wort');w.appendChild(el('h4',null,'Wort der Woche'));w.appendChild(el('b',null,a.wort.begriff));w.appendChild(el('p',null,a.wort.erklaerung));z.appendChild(w)}
     if(a.frage){var f=el('section','card note frage');f.appendChild(el('h4',null,'Frage zum Nachdenken'));f.appendChild(el('p',null,a.frage));z.appendChild(f)}
     main.appendChild(z);
+    var qz=el('section','card quiz');qz.id='quiz';main.appendChild(qz);quizView(qz,a,i===0);
 
     if(a.quellen&&a.quellen.length){foot.appendChild(el('h4',null,'Quellen dieser Ausgabe'));var ol=el('ol');
       a.quellen.forEach(function(q){var li=el('li'),aa=el('a',null,q.titel);aa.href=q.url;aa.target='_blank';aa.rel='noopener';li.appendChild(aa);ol.appendChild(li)});
       foot.appendChild(ol)}
   }
 
+  // ---------- Wochenquiz
+  var me=window.__GU||{uid:"ich",name:"Ich"},QP=null,QBOARD=[],QHIDE=[],qcol=null;
+  var cur={a:null,latest:false,box:null,qs:[],pos:-1,pts:0,max:0,res:null,counts:false};
+  function qesc(s){return String(s).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]})}
+  function num(v){v=String(v).trim().replace(/\s/g,"");if(v.indexOf(",")>=0)v=v.replace(/\./g,"").replace(",",".");return parseFloat(v)}
+  function fmtNum(n){return String(n).replace(".",",")}
+  function qPts(q,v){if(q.typ==="schaetzen"){var g=num(v);if(!(g>0))return 0;var r=Math.abs(Math.log10(g/q.richtig));return r<=0.1?2:(r<=0.5?1:0)}return v===q.richtig?2:0}
+  function qList(a){return (a.quiz||[]).map(function(q,k){return Object.assign({k:k},q)}).filter(function(q){return QHIDE.indexOf(a.nr+":"+q.k)<0})}
+  function isDone(a){return !!(a&&QP&&QP.weeks&&QP.weeks[a.nr]!=null)}
+  function quizView(box,a,latest){cur={a:a,latest:latest,box:box,qs:qList(a),pos:-1,pts:0,max:0,res:null,counts:false};cur.max=cur.qs.length*2;drawQ()}
+  function drawQ(){var box=cur.box;if(!box)return;box.innerHTML="";var a=cur.a,n=cur.qs.length;
+    var head=el("div","qhead");head.appendChild(el("h3",null,"Wochenquiz"));
+    var st=el("span","qstate");
+    if(!n){st.textContent="Kommt mit der nächsten Ausgabe"}
+    else if(!cur.latest){st.textContent="Ältere Ausgabe · nur zum Üben"}
+    else if(isDone(a)){st.textContent="Erledigt: "+QP.weeks[a.nr]+" Punkte · Üben erlaubt"}
+    else{st.textContent=n+" Fragen · der erste Versuch zählt"}
+    head.appendChild(st);box.appendChild(head);
+    if(!n){box.appendChild(el("p","qnote","Zu dieser Ausgabe gibt es noch kein Quiz."));qBoard(box);return}
+    if(cur.pos<0){
+      box.appendChild(el("p","qintro",cur.latest&&!isDone(a)?"Hast du die Ausgabe gelesen? Dann teste dein Wissen – für jede richtige Antwort gibt es 2 Punkte für die Bestenliste.":"Teste noch einmal, was du dir gemerkt hast."));
+      var go=el("button","qbtn",cur.latest&&!isDone(a)?"Quiz starten":"Zum Üben starten");go.type="button";
+      go.onclick=function(){cur.counts=cur.latest&&!isDone(a);cur.pos=0;cur.pts=0;cur.res=null;drawQ()};box.appendChild(go);
+    }else if(cur.pos<n){
+      var q=cur.qs[cur.pos],r=cur.res;
+      box.appendChild(el("p","qprog","Frage "+(cur.pos+1)+" von "+n));
+      box.appendChild(el("h4","qfrage",q.frage));
+      if(q.typ==="mc"||q.typ==="wf"){
+        var opts=q.typ==="mc"?q.optionen.map(function(t,i){return {t:t,v:i}}):[{t:"Stimmt",v:true},{t:"Stimmt nicht",v:false}];
+        var wrap=el("div","qopts"+(q.typ==="wf"?" two":""));
+        opts.forEach(function(o){var b=el("button","qopt",o.t);b.type="button";
+          if(r){b.disabled=true;if(o.v===q.richtig)b.classList.add("right");else if(o.v===r.v)b.classList.add("wrong")}
+          else b.onclick=function(){answer(o.v)};wrap.appendChild(b)});
+        box.appendChild(wrap);
+      }else{
+        var row=el("div","qest"),inp=el("input");inp.type="text";inp.inputMode="decimal";inp.id="q-est";inp.placeholder="Deine Schätzung";inp.autocomplete="off";
+        if(r){inp.value=r.v;inp.disabled=true}
+        row.appendChild(inp);row.appendChild(el("span","qunit",q.einheit||""));
+        if(!r){var sb=el("button","qbtn small","Schätzen");sb.type="button";sb.onclick=function(){if(!(num(inp.value)>0)){inp.focus();return}answer(inp.value)};
+          inp.onkeydown=function(e){if(e.key==="Enter")sb.click()};row.appendChild(sb)}
+        box.appendChild(row);if(!r)setTimeout(function(){inp.focus({preventScroll:true})},30);
+      }
+      if(r){var fb=el("div","qfb "+(r.p===2?"ok":r.p===1?"near":"bad"));
+        var t=r.p===2?"Richtig! +2 Punkte":r.p===1?"Knapp daneben – +1 Punkt":"Leider falsch";
+        if(q.typ==="schaetzen")t+=" · Richtig ist "+fmtNum(q.richtig)+" "+(q.einheit||"");
+        fb.appendChild(el("b",null,t));fb.appendChild(el("p",null,q.erklaerung||""));box.appendChild(fb);
+        var nx=el("button","qbtn",cur.pos+1<n?"Nächste Frage":"Zum Ergebnis");nx.type="button";
+        nx.onclick=function(){cur.pos++;cur.res=null;if(cur.pos>=n)finishQ();drawQ()};box.appendChild(nx);setTimeout(function(){nx.focus({preventScroll:true})},30)}
+    }else{
+      var res=el("div","qres");res.appendChild(el("div","qscore",cur.pts+" / "+cur.max));
+      res.appendChild(el("p",null,cur.pts===cur.max?"Alles richtig – stark!":cur.pts>=cur.max*0.6?"Gut gemacht!":"Lies die Artikel noch einmal, dann klappt es beim nächsten Mal."));
+      res.appendChild(el("p","qnote",cur.counts?(cur.saved===false?"Punkte konnten nicht gespeichert werden.":"Deine Punkte zählen für die Bestenliste."):"Das war Übung – gezählt wird nur der erste Versuch."));
+      var ag=el("button","qbtn ghost","Nochmal üben");ag.type="button";ag.onclick=function(){cur.pos=-1;drawQ()};res.appendChild(ag);box.appendChild(res);
+    }
+    qBoard(box)}
+  function answer(v){var q=cur.qs[cur.pos],p=qPts(q,v);cur.pts+=p;cur.res={v:v,p:p};drawQ()}
+  async function finishQ(){if(!cur.counts||!qcol)return;var w=Object.assign({},(QP&&QP.weeks)||{});if(w[cur.a.nr]!=null)return;
+    w[cur.a.nr]=cur.pts;var tot=0;Object.keys(w).forEach(function(k){tot+=Number(w[k])||0});
+    QP=Object.assign({},QP||{},{weeks:w,best:tot});
+    try{await qcol.doc(me.uid).set({name:me.name,best:tot,weeks:w,last:{nr:cur.a.nr,p:cur.pts,max:cur.max},hidden:!!window.__GUHIDE,updatedAt:new Date().toISOString()});cur.saved=true}
+    catch(e){cur.saved=false;drawQ()}}
+  function qBoard(box){var b=el("div","qboard");b.appendChild(el("h4",null,"Weltblick-Profis"));
+    var list=QBOARD.filter(function(r){return (!r.hidden||r.id===me.uid)&&r.best>0}).sort(function(x,y){return y.best-x.best}).slice(0,10);
+    if(!list.length){b.appendChild(el("p","qnote","Noch keine Punkte. Wer löst das erste Quiz?"));box.appendChild(b);return}
+    var ol=el("ol");list.forEach(function(r,i){var L=window.__GUK?window.__GUK.likes("qz",r.id,r.best):[],mine=L.some(function(x){return x.from===me.uid});
+      var li=el("li",r.id===me.uid?"me":null);
+      li.innerHTML='<span class="rk">'+(i+1)+'</span><span class="nm">'+qesc(r.name)+(r.id===me.uid&&L.length?'<small>👍 '+qesc(L.map(function(x){return x.name}).join(", "))+'</small>':'')+'</span><span class="pt">'+r.best+'</span>'+
+        (r.id===me.uid?'<span class="k-count">'+(L.length?"👍 "+L.length:"")+'</span>':(window.__GUK?'<button type="button" class="k-thumb" data-kcat="qz" data-kid="'+qesc(r.id)+'" data-kv="'+r.best+'" aria-pressed="'+mine+'" aria-label="Daumen hoch für '+qesc(r.name)+'">👍'+(L.length?" "+L.length:"")+'</button>':'<span></span>'));
+      ol.appendChild(li)});
+    b.appendChild(ol);b.appendChild(el("p","qnote","Gesamtpunkte aus allen Wochenquizzen."));box.appendChild(b)}
+  document.addEventListener("click",function(e){var b=e.target.closest('.k-thumb[data-kcat="qz"]');if(!b||!window.__GUK)return;window.__GUK.toggle("qz",b.dataset.kid,Number(b.dataset.kv)).catch(function(){b.textContent="Fehler"})});
+  function calm(){return cur.pos<0||cur.pos>=cur.qs.length}
+  (async function(){try{var db=await claude.use("db");qcol=db.collection("quiz_scores");
+      qcol.onSnapshot(function(snap){QBOARD=snap.docs.map(function(d){var x=d.data()||{};return {id:d.id,name:String(x.name||"?").slice(0,24),best:Number(x.best)||0,hidden:!!x.hidden,weeks:x.weeks||{}}});
+        var mine=QBOARD.filter(function(r){return r.id===me.uid})[0];if(mine)QP=Object.assign({},QP||{},{weeks:mine.weeks,best:mine.best});if(calm())drawQ()},function(){});
+      if(window.__GUK)window.__GUK.on(function(){if(calm())drawQ()});
+      if(window.__GUfs){var h=await window.__GUfs.doc("vocab/quizhide").get();if(h.exists){try{QHIDE=JSON.parse(h.data().json||"[]")}catch(e){QHIDE=[]}}if(cur.a&&calm())quizView(cur.box,cur.a,cur.latest)}
+    }catch(e){}})();
+  window.__GUquizOpen=function(){var t=document.getElementById("gu-tab-wb");if(t)t.click();sel.value="0";render(0);setTimeout(function(){var q=document.getElementById("quiz");if(q)q.scrollIntoView({behavior:"smooth",block:"start"})},80)};
   ausgaben.forEach(function(a,i){var o=el('option',null,'Nr. '+a.nr+' · '+new Date(a.datum+'T12:00:00').toLocaleDateString('de-DE',{day:'numeric',month:'short'}));o.value=i;sel.appendChild(o)});
   sel.addEventListener('change',function(){render(+sel.value);window.scrollTo({top:0})});
   render(0);
@@ -2111,6 +2252,11 @@ if(player)loadPlayer();migrate();rebuild();drawRandom();renderStats();renderStag
       <p id="ad-count" class="admin-note"></p>
     </section>
     <section>
+      <h3>Wochenquiz</h3>
+      <p>Fehlerhafte Fragen der aktuellen Ausgabe hier ausblenden. Sie zählen dann für niemanden.</p>
+      <div id="ad-quiz" class="ad-quiz"><p class="admin-note">Lädt …</p></div>
+    </section>
+    <section>
       <h3>Sicherung</h3>
       <p>Lädt Vokabeln, Mitspielende, Rekorde, Daumen und Weltblick-Ausgaben als Datei herunter. Vokabeln lassen sich daraus oben unter „Vokabeln hochladen“ wiederherstellen.</p>
       <div class="admin-row"><button type="button" id="ad-backup">Sicherung herunterladen</button></div>
@@ -2166,6 +2312,9 @@ if(player)loadPlayer();migrate();rebuild();drawRandom();renderStats();renderStag
 .admin-row button{font:600 15px "Fredoka",sans-serif;border:2px solid #1d2140;border-radius:8px;padding:6px 12px;background:#ffd24d;cursor:pointer}
 .admin-note,.admin-msg{font-size:14px;color:#5a5f7d}
 .admin-msg{font-weight:700;color:#23804a}
+.ad-quiz{display:grid;gap:6px}
+.ad-quiz label{display:flex;gap:8px;align-items:flex-start;font-size:14px;line-height:1.35}
+.ad-quiz input{width:18px;height:18px;flex:none;margin-top:1px}
 .ad-members{list-style:none;margin:6px 0 0;padding:0;display:grid;gap:6px}
 .ad-members li{display:flex;align-items:center;gap:8px;justify-content:space-between;border:2px solid #e3e5f2;border-radius:10px;padding:6px 10px}
 .ad-members .who{display:grid;min-width:0}
@@ -2280,11 +2429,11 @@ if(player)loadPlayer();migrate();rebuild();drawRandom();renderStats();renderStag
     document.addEventListener("visibilitychange",function(){if(document.visibilityState==="hidden"&&t)flush()});
     // Brücke für die Seiten-Skripte
     var none={onSnapshot:function(cb){cb({docs:[]});return function(){}},doc:function(){return {get:async function(){return {exists:false}},set:async function(){throw {code:"not_supported"}},delete:async function(){}}}};
-    var db={collection:function(n){if(n==="scores")return fs.collection("scores/lat/players");if(n==="en_scores")return fs.collection("scores/en/players");if(n==="ma_scores")return fs.collection("scores/mathe/players");if(n==="md_scores")return fs.collection("scores/mathe_div/players");if(n==="kudos")return fs.collection("scores/kudos/players");return none}};
-    window.__GU={uid:uid,name:name};
+    var db={collection:function(n){if(n==="scores")return fs.collection("scores/lat/players");if(n==="en_scores")return fs.collection("scores/en/players");if(n==="ma_scores")return fs.collection("scores/mathe/players");if(n==="md_scores")return fs.collection("scores/mathe_div/players");if(n==="kudos")return fs.collection("scores/kudos/players");if(n==="quiz_scores")return fs.collection("scores/quiz/players");return none}};
+    window.__GU={uid:uid,name:name};window.__GUfs=fs;
     window.__GUsetVis=function(v){window.__GUVIS=v;window.__GUHIDE=v==="me";
       fs.doc("progress/"+uid).set({vis:v},{merge:true}).catch(function(){});
-      ["scores/lat/players/","scores/en/players/","scores/mathe/players/","scores/mathe_div/players/"].forEach(function(pth){fs.doc(pth+uid).set({hidden:v==="me"},{merge:true}).catch(function(){})});
+      ["scores/lat/players/","scores/en/players/","scores/mathe/players/","scores/mathe_div/players/","scores/quiz/players/"].forEach(function(pth){fs.doc(pth+uid).set({hidden:v==="me"},{merge:true}).catch(function(){})});
       window.dispatchEvent(new Event("gu-vis"))};
     if(!pr.vis){$("vis-dlg").hidden=false}
     window.__GUK=(function(){var kd={},subs=[],busy=false,col=fs.collection("scores/kudos/players");
@@ -2336,7 +2485,14 @@ if(player)loadPlayer();migrate();rebuild();drawRandom();renderStats();renderStag
   $("gu-admin").onclick=async function(){$("admin").hidden=false;$("ad-msg").textContent="";
     try{var a=await fs.doc("vocab/lat").get(),b=await fs.doc("vocab/en").get();
       $("ad-count").textContent="Aktuell: Latein "+(a.exists?a.data().count:0)+" · Englisch "+(b.exists?b.data().count:0)+" Vokabeln"}catch(e){}
-    loadMembers()};
+    loadMembers();loadQuizAdmin()};
+  async function loadQuizAdmin(){var box=$("ad-quiz");try{var AU=JSON.parse(document.getElementById("ausgaben").textContent||"[]");AU.sort(function(a,b){return a.datum<b.datum?1:-1});var A=AU[0];
+      if(!A||!A.quiz||!A.quiz.length){box.innerHTML='<p class="admin-note">Die aktuelle Ausgabe hat noch kein Quiz.</p>';return}
+      var hid=[];var h=await fs.doc("vocab/quizhide").get();if(h.exists){try{hid=JSON.parse(h.data().json||"[]")}catch(e){}}
+      box.innerHTML='<p class="admin-note">Ausgabe Nr. '+A.nr+' – Haken = ausgeblendet</p>'+A.quiz.map(function(q,k){var id=A.nr+":"+k;return '<label><input type="checkbox" data-qh="'+esc(id)+'"'+(hid.indexOf(id)>=0?" checked":"")+'> '+esc(q.frage)+'</label>'}).join("");
+      box.onchange=async function(){var list=hid.filter(function(x){return x.split(":")[0]!==String(A.nr)});box.querySelectorAll("input[data-qh]:checked").forEach(function(c){list.push(c.dataset.qh)});
+        try{await fs.doc("vocab/quizhide").set({json:JSON.stringify(list),count:list.length});hid=list;$("ad-msg").textContent="Quiz-Auswahl gespeichert. Gilt beim nächsten Öffnen."}catch(e){$("ad-msg").textContent="Speichern fehlgeschlagen: "+(e.code||e.message)}}}
+    catch(e){box.innerHTML='<p class="admin-note">Quiz konnte nicht geladen werden.</p>'}}
   function esc(s){return String(s).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]})}
   var armed=null;
   async function loadMembers(){var ul=$("ad-members");armed=null;
@@ -2352,7 +2508,7 @@ if(player)loadPlayer();migrate();rebuild();drawRandom();renderStats();renderStag
     if(armed!==id){armed=id;this.querySelectorAll("button[data-rm]").forEach(function(x){x.classList.remove("sure");x.textContent="Entfernen"});
       b.classList.add("sure");b.textContent="Wirklich entfernen?";return}
     b.disabled=true;b.textContent="Entfernt …";
-    try{await Promise.all([fs.doc("scores/lat/players/"+id).delete(),fs.doc("scores/en/players/"+id).delete(),fs.doc("scores/mathe/players/"+id).delete(),fs.doc("scores/mathe_div/players/"+id).delete(),fs.doc("scores/kudos/players/"+id).delete(),fs.doc("progress/"+id).delete()]);
+    try{await Promise.all([fs.doc("scores/lat/players/"+id).delete(),fs.doc("scores/en/players/"+id).delete(),fs.doc("scores/mathe/players/"+id).delete(),fs.doc("scores/mathe_div/players/"+id).delete(),fs.doc("scores/kudos/players/"+id).delete(),fs.doc("scores/quiz/players/"+id).delete(),fs.doc("progress/"+id).delete()]);
       await fs.doc("profiles/"+id).delete();
       $("ad-msg").textContent=name+" wurde entfernt. Tipp: jetzt den Klassen-Code ändern.";loadMembers()}
     catch(err){b.disabled=false;b.classList.remove("sure");b.textContent="Entfernen";armed=null;$("ad-msg").textContent="Entfernen hat nicht geklappt: "+(err.code||err.message)}};
@@ -2362,9 +2518,9 @@ if(player)loadPlayer();migrate();rebuild();drawRandom();renderStats();renderStag
       var r=await Promise.all([fs.doc("vocab/lat").get(),fs.doc("vocab/en").get(),fs.collection("profiles").get(),
         fs.collection("scores/lat/players").get(),fs.collection("scores/en/players").get(),fs.collection("scores/mathe/players").get(),
         fs.collection("scores/mathe_div/players").get(),fs.collection("scores/kudos/players").get(),
-        fetch("weltblick.json?v="+Date.now(),{cache:"no-store"}).then(function(x){return x.ok?x.json():[]}).catch(function(){return []})]);
+        fetch("weltblick.json?v="+Date.now(),{cache:"no-store"}).then(function(x){return x.ok?x.json():[]}).catch(function(){return []}),fs.collection("scores/quiz/players").get()]);
       var out={erstellt:new Date().toISOString(),vocab:{lat:items(r[0]),en:items(r[1])},mitspielende:rows(r[2]),
-        rekorde:{latein:rows(r[3]),englisch:rows(r[4]),mathe_mal:rows(r[5]),mathe_geteilt:rows(r[6])},daumen:rows(r[7]),weltblick:r[8]};
+        rekorde:{latein:rows(r[3]),englisch:rows(r[4]),mathe_mal:rows(r[5]),mathe_geteilt:rows(r[6]),weltblick_quiz:rows(r[9])},daumen:rows(r[7]),weltblick:r[8]};
       Object.keys(out.mitspielende).forEach(function(k){delete out.mitspielende[k].code});
       var blob=new Blob([JSON.stringify(out,null,2)],{type:"application/json"}),a=document.createElement("a");
       a.href=URL.createObjectURL(blob);a.download="gretas-update-sicherung-"+new Date().toISOString().slice(0,10)+".json";document.body.appendChild(a);a.click();

@@ -62,6 +62,54 @@
         "titel": "Tagesspiegel: Operation an der Lunge von Papst Leo XIV. „erfolgreich“ verlaufen",
         "url": "https://www.tagesspiegel.de/internationales/dpa-operation-an-der-lunge-von-papst-leo-xiv-erfolgreich-verlaufen-16159007.html"
       }
+    ],
+    "quiz": [
+      {
+        "typ": "mc",
+        "frage": "Wer soll neuer Arbeitsminister werden?",
+        "optionen": [
+          "Alexander Schweitzer",
+          "Hendrik Wüst",
+          "Friedrich Merz"
+        ],
+        "richtig": 0,
+        "erklaerung": "Bärbel Bas ist zurückgetreten. Alexander Schweitzer von der SPD soll ihr Nachfolger werden."
+      },
+      {
+        "typ": "wf",
+        "frage": "Hendrik Wüst ist Ministerpräsident von Nordrhein-Westfalen.",
+        "richtig": true,
+        "erklaerung": "Stimmt. Er soll am Freitag zum Präsidenten des Bundesrats gewählt werden."
+      },
+      {
+        "typ": "mc",
+        "frage": "Was macht der Bundesrat?",
+        "optionen": [
+          "Die 16 Bundesländer reden dort bei Gesetzen mit",
+          "Er wählt den Bundeskanzler",
+          "Er regiert die Stadt Berlin"
+        ],
+        "richtig": 0,
+        "erklaerung": "Im Bundesrat sitzen die Regierungen der 16 Bundesländer. Bei vielen Gesetzen muss er zustimmen, sonst gelten sie nicht."
+      },
+      {
+        "typ": "mc",
+        "frage": "Warum fiel in mehreren Städten der Ukraine der Strom aus?",
+        "optionen": [
+          "Wegen eines schweren Sturms",
+          "Wegen heftiger Angriffe Russlands",
+          "Weil das Stromnetz erneuert wird"
+        ],
+        "richtig": 1,
+        "erklaerung": "Russland hat die Ukraine in der letzten Woche besonders heftig angegriffen. Dabei fiel in mehreren Städten der Strom aus."
+      },
+      {
+        "typ": "schaetzen",
+        "frage": "Wie groß ist der Vatikan, der kleinste Staat der Welt? Schätze in Quadratkilometern.",
+        "einheit": "km²",
+        "richtig": 0.44,
+        "erklaerung": "Der Vatikan ist nur 0,44 km² groß. Damit ist er der kleinste Staat der Welt."
+      }
     ]
   },
   {
