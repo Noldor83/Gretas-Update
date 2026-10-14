@@ -17,7 +17,7 @@
 /* Layout: Ordner mit Registerreitern – oben eine feste Leiste mit Name und zwei Reitern (Weltblick, Latein), darunter das gewählte Fach in voller Größe */
 :root{
   --gu-bar:#1d2140; --gu-bar-fg:#ffffff; --gu-muted:#b6bad8; --gu-sun:#ffd24d; --gu-sun-ink:#1d2140;
-  --gu-wb:#d9472b; --gu-lat:#6a3fb5; --gu-en:#1f5fa8; --gu-ma:#1d8655; --gu-tab:#2b3060;
+  --gu-st:#ffd24d; --gu-wb:#d9472b; --gu-lat:#6a3fb5; --gu-en:#1f5fa8; --gu-ma:#1d8655; --gu-tab:#2b3060;
   --gu-f-head:"Fredoka","Arial Rounded MT Bold","Trebuchet MS",sans-serif;
 }
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
@@ -33,7 +33,10 @@ body{background:var(--gu-bar);color:var(--gu-bar-fg)}
 .gu-in{max-width:1000px;margin:0 auto;display:grid;gap:8px}
 .gu-name{font-family:var(--gu-f-head);font-weight:700;font-size:20px;line-height:1;display:flex;align-items:center;gap:8px}
 .gu-logo>span{background:var(--gu-sun);color:var(--gu-sun-ink);border-radius:8px;padding:2px 8px 3px;transform:rotate(-2deg);display:inline-block}
-.gu-tabs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
+.gu-tabs{display:grid;grid-template-columns:auto repeat(4,minmax(0,1fr));gap:6px}
+.gu-tab[data-v="st"]{place-items:center;padding-inline:12px}
+.gu-tab[data-v="st"] svg{width:24px;height:24px}
+.gu-tab[data-v="st"][aria-selected="true"]{background:var(--gu-st);color:#1d2140}
 .gu-tab{font-family:var(--gu-f-head);font-weight:600;font-size:18px;line-height:1.1;text-align:left;cursor:pointer;
   border:0;border-radius:14px 14px 0 0;padding:10px 14px 9px;background:var(--gu-tab);color:var(--gu-muted);
   display:grid;gap:1px;transition:background .15s,color .15s}
@@ -43,9 +46,10 @@ body{background:var(--gu-bar);color:var(--gu-bar-fg)}
 .gu-tab[data-v="lat"][aria-selected="true"]{background:var(--gu-lat)}
 .gu-tab[data-v="en"][aria-selected="true"]{background:var(--gu-en)}
 .gu-tab[data-v="ma"][aria-selected="true"]{background:var(--gu-ma)}
-@media (max-width:420px){.gu-tab{font-size:15px;padding:9px 8px 8px}.gu-tab small{font-size:10px;letter-spacing:.03em}}
+@media (max-width:420px){.gu-tabs{gap:4px}.gu-tab{font-size:14px;padding:9px 6px 8px}.gu-tab small{font-size:9.5px;letter-spacing:.02em}.gu-tab[data-v="st"]{padding-inline:9px}}
 .gu-tab:focus-visible{outline:3px solid var(--gu-sun);outline-offset:-3px}
 .gu-view{min-height:calc(100vh - 90px)}
+.gu-view[data-v="st"]{border-top:4px solid var(--gu-st)}
 .gu-view[data-v="wb"]{border-top:4px solid var(--gu-wb)}
 .gu-view[data-v="lat"]{border-top:4px solid var(--gu-lat)}
 .gu-view[data-v="en"]{border-top:4px solid var(--gu-en)}
@@ -479,7 +483,8 @@ body{background:var(--gu-bar);color:var(--gu-bar-fg)}
   <div class="gu-in">
     <div class="gu-name"><span class="gu-logo">Gretas <span>Update</span></span><span class="gu-user" id="gu-user" hidden><span id="gu-uname"></span><button type="button" id="gu-admin" hidden>Verwaltung</button><button type="button" id="gu-logout">Abmelden</button></span></div>
     <nav class="gu-tabs" role="tablist" aria-label="Fächer">
-      <button class="gu-tab" type="button" role="tab" id="gu-tab-wb" data-v="wb" aria-controls="wb" aria-selected="true">Weltblick<small>Politik</small></button>
+      <button class="gu-tab" type="button" role="tab" id="gu-tab-st" data-v="st" aria-controls="st" aria-selected="true" aria-label="Start"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/><path d="M10 20v-5h4v5"/></svg></button>
+      <button class="gu-tab" type="button" role="tab" id="gu-tab-wb" data-v="wb" aria-controls="wb" aria-selected="false">Weltblick<small>Politik</small></button>
       <button class="gu-tab" type="button" role="tab" id="gu-tab-lat" data-v="lat" aria-controls="lat" aria-selected="false">Latein<small>Vokabeln</small></button>
       <button class="gu-tab" type="button" role="tab" id="gu-tab-en" data-v="en" aria-controls="en" aria-selected="false">Englisch<small>Vokabeln</small></button>
       <button class="gu-tab" type="button" role="tab" id="gu-tab-ma" data-v="ma" aria-controls="ma" aria-selected="false">Mathe<small>1×1</small></button>
@@ -487,7 +492,123 @@ body{background:var(--gu-bar);color:var(--gu-bar-fg)}
   </div>
 </header>
 
-<section class="gu-view" id="wb" data-v="wb" role="tabpanel" aria-labelledby="gu-tab-wb">
+<section class="gu-view" id="st" data-v="st" role="tabpanel" aria-labelledby="gu-tab-st" hidden>
+<style>
+#st{--s-bg:#efeaff; --s-dot:#ddd3fb; --s-card:#ffffff; --s-ink:#1d2140; --s-muted:#585d80; --s-sun:#ffd24d; --s-pink:#ff7aa8; --s-sky:#8fd3f4;
+  --s-lat:#6a3fb5; --s-en:#1f5fa8; --s-ma:#1d8655; --s-gold:#ffc83d; --s-silver:#cfd5e6; --s-bronze:#e3a06b;
+  --s-f-big:"Bagel Fat One","Fredoka","Arial Rounded MT Bold",sans-serif; --s-f-head:"Fredoka","Arial Rounded MT Bold","Trebuchet MS",sans-serif;
+  --s-f-body:"Atkinson Hyperlegible",Verdana,"Segoe UI",sans-serif}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) #st{--s-bg:#15132a; --s-dot:#252146; --s-card:#1f1c3a; --s-ink:#eeeaff; --s-muted:#b2acd6;
+  --s-sun:#e8c23a; --s-pink:#ff8fb6; --s-sky:#4aa8d6; --s-lat:#a184f0; --s-en:#5d9be6; --s-ma:#3fbf82; color-scheme:dark}}
+:root[data-theme="dark"] #st{--s-bg:#15132a; --s-dot:#252146; --s-card:#1f1c3a; --s-ink:#eeeaff; --s-muted:#b2acd6;
+  --s-sun:#e8c23a; --s-pink:#ff8fb6; --s-sky:#4aa8d6; --s-lat:#a184f0; --s-en:#5d9be6; --s-ma:#3fbf82; color-scheme:dark}
+#st{background-color:var(--s-bg);background-image:radial-gradient(var(--s-dot) 1.6px,transparent 1.8px);background-size:22px 22px;color:var(--s-ink);font-family:var(--s-f-body)}
+#st .s-wrap{max-width:620px;margin:0 auto;padding-block:18px 48px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:grid;gap:18px}
+#st h2,#st h3{margin:0;text-wrap:balance}
+#st p{margin:0}
+#st .s-card{background:var(--s-card);border:2.5px solid var(--s-ink);border-radius:20px;box-shadow:5px 5px 0 var(--s-ink)}
+#st .s-hello{position:relative;overflow:hidden;padding:22px 20px 20px;display:grid;gap:10px;background:var(--s-sun);color:#1d2140}
+#st .s-hello .s-day{font-family:var(--s-f-head);font-weight:600;font-size:15px;letter-spacing:.04em;text-transform:uppercase;opacity:.75}
+#st .s-hello h2{font-family:var(--s-f-big);font-weight:400;font-size:clamp(34px,10vw,52px);line-height:1;max-width:14ch}
+#st .s-hello .s-line{font-family:var(--s-f-head);font-weight:500;font-size:18px;max-width:30ch}
+#st .s-school{justify-self:start;display:inline-flex;align-items:center;gap:8px;background:#1d2140;color:#fff;border-radius:999px;padding:5px 14px 5px 6px;font-family:var(--s-f-head);font-weight:600;font-size:14.5px}
+#st .s-school b{display:grid;place-items:center;width:26px;height:26px;border-radius:50%;background:var(--s-pink);color:#1d2140;font-size:14px}
+#st .s-blob{position:absolute;border-radius:50%;pointer-events:none}
+#st .s-hello > :not(.s-blob){position:relative}
+#st .s-sec{font-family:var(--s-f-head);font-weight:700;font-size:22px;display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+#st .s-sec small{font-weight:500;font-size:14px;color:var(--s-muted)}
+#st .s-scores{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+#st .s-tile{padding:14px 12px 12px;display:grid;gap:6px;align-content:start;border-top-width:8px;min-width:0}
+#st .s-tile[data-k="lat"]{border-top-color:var(--s-lat)}
+#st .s-tile[data-k="en"]{border-top-color:var(--s-en)}
+#st .s-tile[data-k="ma"]{border-top-color:var(--s-ma)}
+#st .s-tile h3{font-family:var(--s-f-head);font-weight:700;font-size:17px}
+#st .s-tile .s-what{font-size:12.5px;color:var(--s-muted);line-height:1.3}
+#st .s-tile .s-num{font-family:var(--s-f-big);font-size:46px;line-height:1;font-variant-numeric:tabular-nums}
+#st .s-tile[data-k="lat"] .s-num{color:var(--s-lat)}
+#st .s-tile[data-k="en"] .s-num{color:var(--s-en)}
+#st .s-tile[data-k="ma"] .s-num{color:var(--s-ma)}
+#st .s-rank{display:flex;align-items:center;gap:6px;font-family:var(--s-f-head);font-weight:600;font-size:14px}
+#st .s-medal{flex:none;display:grid;place-items:center;width:24px;height:24px;border-radius:50%;border:2px solid var(--s-ink);font-size:12px;font-weight:700;background:var(--s-card);color:var(--s-ink)}
+#st .s-medal.r1{background:var(--s-gold);color:#1d2140}
+#st .s-medal.r2{background:var(--s-silver);color:#1d2140}
+#st .s-medal.r3{background:var(--s-bronze);color:#1d2140}
+#st .s-go{display:grid;gap:12px}
+#st .s-btn{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:14px;width:100%;text-align:left;cursor:pointer;
+  font:inherit;color:#fff;border:2.5px solid var(--s-ink);border-radius:18px;padding:14px 16px;box-shadow:4px 4px 0 var(--s-ink)}
+#st .s-btn:active{transform:translate(2px,2px);box-shadow:2px 2px 0 var(--s-ink)}
+#st .s-btn:focus-visible{outline:3px solid var(--s-pink);outline-offset:3px}
+#st .s-btn[data-go="lat"]{background:#6a3fb5}
+#st .s-btn[data-go="en"]{background:#1f5fa8}
+#st .s-btn[data-go="ma"]{background:#1d8655}
+#st .s-btn .s-ic{display:grid;place-items:center;width:48px;height:48px;border-radius:14px;background:rgba(255,255,255,.18);font-family:var(--s-f-big);font-size:22px;line-height:1}
+#st .s-btn b{display:block;font-family:var(--s-f-head);font-weight:700;font-size:20px;line-height:1.15}
+#st .s-btn span.s-sub{font-size:14px;opacity:.9}
+#st .s-btn .s-arrow{font-family:var(--s-f-head);font-weight:700;font-size:24px}
+#st .s-note{font-size:13.5px;color:var(--s-muted);text-align:center}
+@media (max-width:520px){#st .s-scores{grid-template-columns:1fr}
+  #st .s-tile{grid-template-columns:1fr auto;align-items:center;column-gap:10px}
+  #st .s-tile h3,#st .s-tile .s-what,#st .s-tile .s-rank{grid-column:1}
+  #st .s-tile .s-num{grid-column:2;grid-row:1 / span 3;font-size:42px}}
+</style>
+<div class="s-wrap">
+  <div class="s-card s-hello">
+    <span class="s-blob" aria-hidden="true" style="width:150px;height:150px;right:-40px;top:-50px;background:var(--s-pink);opacity:.55"></span>
+    <span class="s-blob" aria-hidden="true" style="width:90px;height:90px;right:40px;bottom:-40px;background:var(--s-sky);opacity:.7"></span>
+    <p class="s-day" id="s-day">Heute</p>
+    <h2 id="s-hello">Hallo!</h2>
+    <p class="s-line" id="s-line">Schön, dass du da bist.</p>
+    <span class="s-school"><b aria-hidden="true">H</b>Heriburg-Gymnasium · Stufe 7</span>
+  </div>
+
+  <h3 class="s-sec">Deine Rekorde <small id="s-ranknote">Platz in den Bestenlisten</small></h3>
+  <div class="s-scores">
+    <div class="s-card s-tile" data-k="lat"><h3>Latein</h3><p class="s-what">Beste Serie in Folge</p><div class="s-num" id="s-lat">–</div><p class="s-rank" id="s-lat-r">Lädt …</p></div>
+    <div class="s-card s-tile" data-k="en"><h3>Englisch</h3><p class="s-what">Beste Serie in Folge</p><div class="s-num" id="s-en">–</div><p class="s-rank" id="s-en-r">Lädt …</p></div>
+    <div class="s-card s-tile" data-k="ma"><h3>Mathe</h3><p class="s-what">Punkte in 60 Sekunden</p><div class="s-num" id="s-ma">–</div><p class="s-rank" id="s-ma-r">Lädt …</p></div>
+  </div>
+
+  <h3 class="s-sec">Was machst du jetzt?</h3>
+  <div class="s-go">
+    <button type="button" class="s-btn" data-go="lat"><span class="s-ic" aria-hidden="true">Aa</span><span><b>Latein üben</b><span class="s-sub">Vokabeln, bis sie sitzen</span></span><span class="s-arrow" aria-hidden="true">→</span></button>
+    <button type="button" class="s-btn" data-go="en"><span class="s-ic" aria-hidden="true">Hi</span><span><b>Englisch üben</b><span class="s-sub">in beide Richtungen</span></span><span class="s-arrow" aria-hidden="true">→</span></button>
+    <button type="button" class="s-btn" data-go="ma"><span class="s-ic" aria-hidden="true">×</span><span><b>1×1-Rakete starten</b><span class="s-sub">60 Sekunden, ein Fehler und du fällst auf 0</span></span><span class="s-arrow" aria-hidden="true">→</span></button>
+  </div>
+</div>
+</section>
+
+<script type="text/x-deferred">
+(function(){
+  var $=function(id){return document.getElementById(id)};
+  var me=window.__GU||{uid:"ich",name:"du"};
+  var now=new Date(),h=now.getHours();
+  var hi=h<11?"Guten Morgen":h<17?"Hallo":h<22?"Guten Abend":"Noch wach";
+  $("s-day").textContent=now.toLocaleDateString("de-DE",{weekday:"long",day:"numeric",month:"long"});
+  $("s-hello").textContent=hi+", "+me.name+"!";
+  var LINES=["Bereit für eine Runde?","Heute knackst du einen Rekord.","Fünf Minuten üben schlagen eine Stunde Pauken.","Die Rakete wartet schon auf dich.","Kleine Schritte, große Wirkung."];
+  if(now.getDay()===0||now.getDay()===6)LINES.push("Wochenende – ein kurzes Training geht immer.");
+  $("s-line").textContent=LINES[(now.getDate()+h)%LINES.length];
+  document.querySelectorAll("#st .s-btn").forEach(function(b){b.onclick=function(){var t=document.getElementById("gu-tab-"+b.dataset.go);if(t)t.click()}});
+  function rank(list,k){
+    var mine=list.filter(function(r){return r.id===me.uid})[0];
+    $("s-"+k).textContent=mine?mine.best:"0";
+    var el=$("s-"+k+"-r");
+    if(!mine||!mine.best){el.innerHTML='<span class="s-medal">–</span>Noch kein Eintrag';return}
+    var sorted=list.filter(function(r){return r.best>0}).sort(function(a,b){return b.best-a.best});
+    var pos=1+sorted.filter(function(r){return r.best>mine.best}).length;
+    el.innerHTML='<span class="s-medal'+(pos<=3?" r"+pos:"")+'">'+pos+'</span>Platz '+pos+' von '+sorted.length}
+  (async function(){
+    try{var db=await claude.use("db");
+      [["lat","scores"],["en","en_scores"],["ma","ma_scores"]].forEach(function(p){
+        db.collection(p[1]).onSnapshot(function(snap){
+          rank(snap.docs.map(function(d){var x=d.data()||{};return {id:d.id,best:Number(x.best)||0}}),p[0])},
+          function(){$("s-"+p[0]+"-r").textContent="Nicht geladen"})})}
+    catch(e){["lat","en","ma"].forEach(function(k){$("s-"+k+"-r").textContent="Nicht verbunden"})}
+  })();
+})();
+</script>
+
+<section class="gu-view" id="wb" data-v="wb" role="tabpanel" aria-labelledby="gu-tab-wb" hidden>
 <div class="page">
   <div class="topbar">
     <label for="archiv">Ausgabe <select id="archiv"></select></label>
@@ -1680,8 +1801,9 @@ if(player)loadPlayer();migrate();rebuild();drawRandom();renderStats();renderStag
 (function(){
   var tabs=document.querySelectorAll('.gu-tab');
   function pick(v,scroll){
-    if(['wb','lat','en','ma'].indexOf(v)<0)v='wb';
+    if(['st','wb','lat','en','ma'].indexOf(v)<0)v='st';
     tabs.forEach(function(t){t.setAttribute('aria-selected',t.dataset.v===v?'true':'false')});
+    document.getElementById('st').hidden=v!=='st';
     document.getElementById('wb').hidden=v!=='wb';
     document.getElementById('lat').hidden=v!=='lat';
     document.getElementById('en').hidden=v!=='en';
@@ -1690,9 +1812,9 @@ if(player)loadPlayer();migrate();rebuild();drawRandom();renderStats();renderStag
     if(scroll)window.scrollTo({top:0});
   }
   tabs.forEach(function(t){t.addEventListener('click',function(){pick(t.dataset.v,true)})});
-  var h=(location.hash||'').slice(1), start='wb';
+  var h=(location.hash||'').slice(1), start='st';
   if(h==='latein')start='lat';else if(h==='englisch')start='en';else if(h==='mathe')start='ma';else if(h==='weltblick')start='wb';
-  else{try{start=localStorage.getItem('gretas-update-tab')||'wb'}catch(e){}}
+  else if(h==='start')start='st';
   pick(start,false);
 })();
 </script>
