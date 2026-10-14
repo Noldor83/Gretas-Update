@@ -1547,6 +1547,19 @@ if(player)loadPlayer();migrate();rebuild();drawRandom();renderStats();renderStag
       <div class="admin-row"><select id="ad-lang"><option value="lat">Latein</option><option value="en">Englisch</option></select><input type="file" id="ad-file" accept=".json,application/json"></div>
       <p id="ad-count" class="admin-note"></p>
     </section>
+    <section>
+      <h3>Mitspielende</h3>
+      <p>Wer entfernt wird, verliert sofort den Zugang und verschwindet aus der Bestenliste. Danach am besten den Klassen-Code ändern.</p>
+      <ul id="ad-members" class="ad-members"><li class="admin-note">Lädt …</li></ul>
+    </section>
+    <section>
+      <h3>App installieren (für Mitspielende)</h3>
+      <p>Diesen Link im Browser öffnen, nicht über WhatsApp:</p>
+      <div class="admin-row"><input id="ad-link" readonly value="https://noldor83.github.io/Gretas-Update/"><button type="button" id="ad-link-copy">Kopieren</button></div>
+      <p><b>iPhone:</b> nur in Safari. Teilen → „Zum Home-Bildschirm“ → „Hinzufügen“.</p>
+      <p><b>Android:</b> in Chrome oben rechts ⋮ → „App installieren“ oder „Zum Startbildschirm hinzufügen“.</p>
+      <p class="admin-note">Auf der Anmeldeseite gibt es dafür auch den Knopf „Als App installieren“ mit Anleitung.</p>
+    </section>
     <p class="admin-msg" id="ad-msg" role="status"></p>
   </div>
 </div>
@@ -1585,6 +1598,16 @@ if(player)loadPlayer();migrate();rebuild();drawRandom();renderStats();renderStag
 .admin-row button{font:600 15px "Fredoka",sans-serif;border:2px solid #1d2140;border-radius:8px;padding:6px 12px;background:#ffd24d;cursor:pointer}
 .admin-note,.admin-msg{font-size:14px;color:#5a5f7d}
 .admin-msg{font-weight:700;color:#23804a}
+.ad-members{list-style:none;margin:6px 0 0;padding:0;display:grid;gap:6px}
+.ad-members li{display:flex;align-items:center;gap:8px;justify-content:space-between;border:2px solid #e3e5f2;border-radius:10px;padding:6px 10px}
+.ad-members .who{display:grid;min-width:0}
+.ad-members .who b{overflow-wrap:anywhere}
+.ad-members .who small{color:#5a5f7d;font-size:13px}
+.ad-members button{font:600 14px "Fredoka",sans-serif;border:2px solid #c23b2b;color:#c23b2b;background:#fff;border-radius:8px;padding:4px 10px;cursor:pointer;flex:none}
+.ad-members button.sure{background:#c23b2b;color:#fff}
+.ad-members button:disabled{opacity:.5;cursor:default}
+.ad-members .me{font-size:13px;color:#5a5f7d;flex:none}
+#ad-link{flex:1}
 .inst-btn{font:700 16px "Fredoka",sans-serif;border:2.5px solid #0d0f22;border-radius:12px;padding:9px;background:#fff;color:#1d2140;cursor:pointer}
 .inst-btn.small{padding:5px 12px;font-size:14px;background:#ffd24d}
 .inst-bar{position:fixed;left:0;right:0;bottom:0;z-index:80;display:flex;align-items:center;gap:10px;background:#1d2140;color:#fff;border-top:3px solid #ffd24d;
@@ -1718,7 +1741,29 @@ if(player)loadPlayer();migrate();rebuild();drawRandom();renderStats();renderStag
   // ---------- Verwaltung
   $("gu-admin").onclick=async function(){$("admin").hidden=false;$("ad-msg").textContent="";
     try{var a=await fs.doc("vocab/lat").get(),b=await fs.doc("vocab/en").get();
-      $("ad-count").textContent="Aktuell: Latein "+(a.exists?a.data().count:0)+" · Englisch "+(b.exists?b.data().count:0)+" Vokabeln"}catch(e){}};
+      $("ad-count").textContent="Aktuell: Latein "+(a.exists?a.data().count:0)+" · Englisch "+(b.exists?b.data().count:0)+" Vokabeln"}catch(e){}
+    loadMembers()};
+  function esc(s){return String(s).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]})}
+  var armed=null;
+  async function loadMembers(){var ul=$("ad-members");armed=null;
+    try{var snap=await fs.collection("profiles").get();var rows=[];
+      snap.forEach(function(d){var x=d.data()||{},t=x.created&&x.created.toDate?x.created.toDate():null;rows.push({id:d.id,name:x.name||"(ohne Namen)",t:t})});
+      rows.sort(function(a,b){return (a.t?a.t.getTime():0)-(b.t?b.t.getTime():0)});
+      if(!rows.length){ul.innerHTML='<li class="admin-note">Noch niemand angemeldet.</li>';return}
+      ul.innerHTML=rows.map(function(r){var when=r.t?"seit "+r.t.toLocaleDateString("de-DE"):"";
+        return '<li><span class="who"><b>'+esc(r.name)+'</b><small>'+when+'</small></span>'+
+          (r.id===uid?'<span class="me">Du</span>':'<button type="button" data-rm="'+esc(r.id)+'" data-name="'+esc(r.name)+'">Entfernen</button>')+'</li>'}).join("");
+    }catch(e){ul.innerHTML='<li class="admin-note">Liste konnte nicht geladen werden ('+esc(e.code||e.message)+').</li>'}}
+  $("ad-members").onclick=async function(e){var b=e.target.closest("button[data-rm]");if(!b)return;var id=b.dataset.rm,name=b.dataset.name;
+    if(armed!==id){armed=id;this.querySelectorAll("button[data-rm]").forEach(function(x){x.classList.remove("sure");x.textContent="Entfernen"});
+      b.classList.add("sure");b.textContent="Wirklich entfernen?";return}
+    b.disabled=true;b.textContent="Entfernt …";
+    try{await Promise.all([fs.doc("scores/lat/players/"+id).delete(),fs.doc("scores/en/players/"+id).delete(),fs.doc("progress/"+id).delete()]);
+      await fs.doc("profiles/"+id).delete();
+      $("ad-msg").textContent=name+" wurde entfernt. Tipp: jetzt den Klassen-Code ändern.";loadMembers()}
+    catch(err){b.disabled=false;b.classList.remove("sure");b.textContent="Entfernen";armed=null;$("ad-msg").textContent="Entfernen hat nicht geklappt: "+(err.code||err.message)}};
+  $("ad-link-copy").onclick=function(){var i=$("ad-link"),b=this;
+    (navigator.clipboard?navigator.clipboard.writeText(i.value):Promise.reject()).then(function(){b.textContent="Kopiert ✓"},function(){i.select();b.textContent="Markiert"})};
   $("admin-close").onclick=function(){$("admin").hidden=true};
   $("ad-code-save").onclick=async function(){var c=$("ad-code").value.trim();if(c.length<3){$("ad-msg").textContent="Bitte mindestens 3 Zeichen.";return}
     try{await fs.doc("config/secret").set({code:c});$("ad-msg").textContent="Klassen-Code gespeichert."}catch(e){$("ad-msg").textContent="Fehler: "+(e.code||e.message)}};
