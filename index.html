@@ -650,7 +650,9 @@ body{background:var(--gu-bar);color:var(--gu-bar-fg)}
 #st .s-tile[data-k="qz"]{border-top-color:var(--s-wb)}
 #st .s-tile[data-k="ek"]{border-top-color:#0f7c8c}
 #st .s-tile[data-k="ek"] .s-num,#st .s-tile[data-k="ek"] .s-cta{color:var(--s-ek)}
-#st .s-nic.ek{background:#0f7c8c}
+#st .s-nic.ek,#st .s-nic.es{background:#0f7c8c}
+#st .s-op.e{background:var(--s-ek)}
+#st .s-mnum.e{color:var(--s-ek)}
 #st .s-tile[data-k="qz"] .s-num,#st .s-tile[data-k="qz"] .s-cta{color:var(--s-wb)}
 #st .s-quizhint{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:12px;padding:12px 14px;text-align:left;cursor:pointer;font:inherit;color:var(--s-ink);width:100%;border-color:var(--s-wb)}
 #st .s-quizhint[hidden]{display:none}
@@ -743,7 +745,10 @@ body{background:var(--gu-bar);color:var(--gu-bar-fg)}
           <div class="s-mrow"><span class="s-op">:</span><span class="s-mlabel">Geteilt</span><b class="s-mnum" id="s-md">–</b><span class="s-rank" id="s-md-r">Lädt …</span></div></div>
           <span class="s-cta">Rakete starten →</span></button>
         <button type="button" class="s-card s-tile" data-k="qz" data-quiz="1"><h3>Weltblick-Quiz</h3><p class="s-what">Punkte aus allen Wochenquizzen</p><div class="s-num" id="s-qz">–</div><p class="s-rank" id="s-qz-r">Lädt …</p><span class="s-cta">Zum Wochenquiz →</span></button>
-        <button type="button" class="s-card s-tile" data-k="ek" data-go="ek"><h3>Erdkunde</h3><p class="s-what">Richtige Hauptstädte in 60 Sekunden</p><div class="s-num" id="s-ek">–</div><p class="s-rank" id="s-ek-r">Lädt …</p><span class="s-cta">Hauptstadt-Jagd starten →</span></button>
+        <button type="button" class="s-card s-tile s-math" data-k="ek" data-go="ek"><h3>Erdkunde</h3><p class="s-what">Hauptstadt-Jagd</p>
+          <div class="s-mrows"><div class="s-mrow"><span class="s-op e">⏱</span><span class="s-mlabel">60 Sek.</span><b class="s-mnum e" id="s-ek">–</b><span class="s-rank" id="s-ek-r">Lädt …</span></div>
+          <div class="s-mrow"><span class="s-op e">∞</span><span class="s-mlabel">Serie</span><b class="s-mnum e" id="s-es">–</b><span class="s-rank" id="s-es-r">Lädt …</span></div></div>
+          <span class="s-cta">Hauptstadt-Jagd starten →</span></button>
       </div>
     </div>
   </div>
@@ -776,7 +781,7 @@ body{background:var(--gu-bar);color:var(--gu-bar-fg)}
   var QISSUE=null;try{var AU=JSON.parse(document.getElementById("ausgaben").textContent||"[]");AU.sort(function(a,b){return a.datum<b.datum?1:-1});QISSUE=AU[0]||null}catch(e){}
   function quizHint(mineWeeks){var c=$("s-quizhint");if(!QISSUE||!(QISSUE.quiz&&QISSUE.quiz.length)||(mineWeeks&&mineWeeks[QISSUE.nr]!=null)){c.hidden=true;return}
     $("s-qh-t").textContent="Neues Wochenquiz zu Ausgabe Nr. "+QISSUE.nr+"!";$("s-qh-s").textContent=QISSUE.quiz.length+" Fragen zum Weltblick – hol dir bis zu "+(QISSUE.quiz.length*2)+" Punkte.";c.hidden=false}
-  var CAT={ma:"in Mathe (Mal)",md:"in Mathe (Geteilt)",lat:"in Latein",en:"in Englisch",qz:"im Weltblick-Quiz",ek:"in Erdkunde"},UNIT={ma:"Punkte",lat:"er-Serie",en:"er-Serie"};
+  var CAT={ma:"in Mathe (Mal)",md:"in Mathe (Geteilt)",lat:"in Latein",en:"in Englisch",qz:"im Weltblick-Quiz",ek:"in Erdkunde",es:"in Erdkunde (Serie)"},UNIT={ma:"Punkte",lat:"er-Serie",en:"er-Serie"};
   var COLS=["#ffd24d","#ff9fc0","#9fdcf7","#a8e6c3","#c9b8ff","#ffc59a"];
   var seen=0;try{seen=Number(localStorage.getItem("gu-kudos-seen"))||0}catch(e){}
   function ago(t){var d=(Date.now()-t)/60000;if(d<1)return "gerade eben";if(d<60)return "vor "+Math.round(d)+" Min.";if(d<1440)return "vor "+Math.round(d/60)+" Std.";
@@ -789,11 +794,11 @@ body{background:var(--gu-bar);color:var(--gu-bar-fg)}
     var ul=$("s-praise"),fresh=items.filter(function(i){return i.t>seen}).length;
     $("s-pcount").textContent=fresh?fresh+" neu":"";
     if(!items.length){ul.innerHTML='<li class="s-empty">Noch kein Daumen hoch. Spiel eine Runde 1×1 – vielleicht lobt dich bald jemand!</li>';return}
-    ul.innerHTML=items.slice(0,3).map(function(i){var c=COLS[(i.name.charCodeAt(0)||0)%COLS.length],u=(i.cat==="ma"||i.cat==="md"||i.cat==="qz"||i.cat==="ek")?i.v+" Punkte":"deine "+i.v+"er-Serie";
+    ul.innerHTML=items.slice(0,3).map(function(i){var c=COLS[(i.name.charCodeAt(0)||0)%COLS.length],u=(i.cat==="ma"||i.cat==="md"||i.cat==="qz"||i.cat==="ek")?i.v+" Punkte":i.cat==="es"?"deine "+i.v+"er-Serie":"deine "+i.v+"er-Serie";
       return '<li class="'+(i.t>seen?"new":"")+'"><span class="s-av" style="background:'+c+'" aria-hidden="true">'+esc(i.name.charAt(0).toUpperCase())+'</span><p><b>'+esc(i.name)+'</b> findet '+esc(u)+' '+(CAT[i.cat]||"")+' stark!'+(i.t>seen?'<span class="s-newtag">NEU</span>':'')+' <time>· '+ago(i.t)+'</time></p></li>'}).join("")+(items.length>3?'<li class="s-more">und '+(items.length-3)+(items.length-3===1?' weiterer Daumen':' weitere Daumen')+'</li>':'');
     if(!document.getElementById("st").hidden){try{localStorage.setItem("gu-kudos-seen",String(Date.now()))}catch(e){}}}
   function esc(s){return String(s).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]})}
-  var NEWS={},NNAME={lat:"Latein",en:"Englisch",ma:"Mathe (Mal)",md:"Mathe (Geteilt)",qz:"Weltblick-Quiz",ek:"Erdkunde"},NIC={lat:"La",en:"En",ma:"×",md:":",qz:"?",ek:"🌍"};
+  var NEWS={},NNAME={lat:"Latein",en:"Englisch",ma:"Mathe (Mal)",md:"Mathe (Geteilt)",qz:"Weltblick-Quiz",ek:"Erdkunde",es:"Erdkunde (Serie)"},NIC={lat:"La",en:"En",ma:"×",md:":",qz:"?",ek:"🌍",es:"∞"};
   function renderNews(){var all=[];
     Object.keys(NEWS).forEach(function(k){var L=NEWS[k].filter(function(r){return !r.hidden||r.id===me.uid}),max=Math.max.apply(null,L.map(function(r){return r.best}).concat([0]));
       L.forEach(function(r){if(r.best>0&&r.t)all.push({k:k,name:r.name,id:r.id,best:r.best,t:r.t,top:r.best===max,last:r.last})})});
@@ -815,12 +820,12 @@ body{background:var(--gu-bar);color:var(--gu-bar-fg)}
   (async function(){
     try{var db=await claude.use("db");
       db.collection("kudos").onSnapshot(function(snap){var kd={};snap.docs.forEach(function(d){kd[d.id]=d.data()||{}});praise(kd)},function(){$("s-praise").innerHTML='<li class="s-empty">Lob konnte nicht geladen werden.</li>'});
-      [["lat","scores"],["en","en_scores"],["ma","ma_scores"],["md","md_scores"],["qz","quiz_scores"],["ek","ek_scores"]].forEach(function(p){
+      [["lat","scores"],["en","en_scores"],["ma","ma_scores"],["md","md_scores"],["qz","quiz_scores"],["ek","ek_scores"],["es","es_scores"]].forEach(function(p){
         db.collection(p[1]).onSnapshot(function(snap){
           var L=snap.docs.map(function(d){var x=d.data()||{};return {id:d.id,best:Number(x.best)||0,name:String(x.name||"?").slice(0,24),t:Date.parse(x.updatedAt)||0,hidden:!!x.hidden,last:x.last||null,weeks:x.weeks||null}});
           rank(L,p[0]);NEWS[p[0]]=L;renderNews();if(p[0]==="qz"){var mq=L.filter(function(r){return r.id===me.uid})[0];quizHint(mq&&mq.weeks)}},
           function(){$("s-"+p[0]+"-r").textContent="Nicht geladen"})})}
-    catch(e){$("s-praise").innerHTML='<li class="s-empty">Nicht verbunden.</li>';["lat","en","ma","md","qz","ek"].forEach(function(k){$("s-"+k+"-r").textContent="Nicht verbunden"})}
+    catch(e){$("s-praise").innerHTML='<li class="s-empty">Nicht verbunden.</li>';["lat","en","ma","md","qz","ek","es"].forEach(function(k){$("s-"+k+"-r").textContent="Nicht verbunden"})}
   })();
 })();
 </script>
@@ -2240,6 +2245,22 @@ if(player)loadPlayer();migrate();rebuild();drawRandom();renderStats();renderStag
 #ek .e-endbtns{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
 #ek .e-go.e-alt{background:var(--e-sun);color:#13303a}
 #ek .e-play.practice .e-bar,#ek .e-play.practice .e-time{display:none}
+#ek .e-gms{display:grid;grid-template-columns:1fr 1fr;gap:8px;width:100%;max-width:420px}
+#ek .e-gm{font:700 17px var(--e-f-head);border:2.5px solid var(--e-ink);border-radius:14px;padding:8px;background:var(--e-card);color:var(--e-ink);cursor:pointer;display:grid;gap:1px;justify-items:center}
+#ek .e-gm span{font-size:22px;line-height:1}
+#ek .e-gm small{font:500 12.5px var(--e-f-body);color:var(--e-muted)}
+#ek .e-gm[aria-pressed="true"]{background:var(--e-teal);color:var(--e-teal-ink)}
+#ek .e-gm[aria-pressed="true"] small{color:inherit;opacity:.85}
+#ek .e-gm:focus-visible,#ek .e-stop:focus-visible{outline:3px solid var(--e-sun);outline-offset:2px}
+#ek .e-sbar,#ek .e-sact{display:none}
+#ek .e-play.serie .e-bar,#ek .e-play.serie .e-time{display:none}
+#ek .e-play.serie .e-sbar{display:flex;justify-content:space-between;align-items:baseline;gap:8px;flex-wrap:wrap;font:700 20px var(--e-f-head);font-variant-numeric:tabular-nums}
+#ek .e-play.serie .e-sbar b{color:var(--e-teal)}
+#ek .e-sbest{font-size:15px;color:var(--e-muted)}
+#ek .e-play.serie .e-sact{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;align-items:center}
+#ek .e-stop{font:600 15px var(--e-f-head);background:none;border:2px solid var(--e-ink);border-radius:999px;padding:5px 14px;color:var(--e-ink);cursor:pointer}
+#ek .e-bhead{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}
+#ek .e-bhead .e-switch button{font-size:13px;padding:3px 10px}
 #ek .e-pfb{text-align:center;font-family:var(--e-f-head);font-weight:600;font-size:17px;border-radius:12px;padding:8px 10px}
 #ek .e-pfb.ok{background:var(--e-ok-bg);color:var(--e-ok)}
 #ek .e-pfb.bad{background:var(--e-bad-bg);color:var(--e-ink)}
@@ -2300,8 +2321,12 @@ if(player)loadPlayer();migrate();rebuild();drawRandom();renderStats();renderStag
 <div class="e-wrap">
   <div class="e-head"><h2>Erdkunde</h2><span class="e-best">Dein Rekord: <b id="e-best">0</b></span></div>
 
-  <h3 class="e-sec">Hauptstadt-Jagd <small>60 Sekunden, so viele richtige wie möglich</small></h3>
+  <h3 class="e-sec">Hauptstadt-Jagd <small id="e-sub">60 Sekunden, so viele richtige wie möglich</small></h3>
   <div class="e-card e-start" id="e-start">
+    <div class="e-gms" role="group" aria-label="Spielart">
+      <button type="button" class="e-gm" data-gm="zeit" aria-pressed="true"><span>⏱</span>60 Sekunden<small>Tempo-Runde</small></button>
+      <button type="button" class="e-gm" data-gm="serie" aria-pressed="false"><span>∞</span>Serie<small>Ohne Zeit, in Ruhe</small></button>
+    </div>
     <div class="e-regs" role="group" aria-label="Kontinente">
       <button type="button" class="e-reg" data-reg="europa" aria-pressed="true">Europa</button>
       <button type="button" class="e-reg" data-reg="afrika" aria-pressed="false">Afrika</button>
@@ -2316,17 +2341,19 @@ if(player)loadPlayer();migrate();rebuild();drawRandom();renderStats();renderStag
     </div>
     <p id="e-intro">Zu jedem Land die richtige Hauptstadt finden – vier Antworten, eine stimmt.</p>
     <button type="button" class="e-go" id="e-go">Los geht’s</button>
-    <p class="e-note">Falsche Antworten kosten keine Punkte, aber Zeit.</p>
+    <p class="e-note" id="e-rule">Falsche Antworten kosten keine Punkte, aber Zeit.</p>
   </div>
   <div class="e-card" id="e-countbox" hidden><div class="e-count" id="e-count" aria-live="assertive">3</div></div>
   <div class="e-card e-play" id="e-play" hidden>
     <div class="e-bar"><span>⏱ <span id="e-sec">60</span> s</span><span class="e-pts">Punkte: <span id="e-n">0</span></span></div>
     <div class="e-time"><i id="e-tbar"></i></div>
+    <div class="e-sbar"><span>Serie: <b id="e-sn">0</b></span><span class="e-sbest">Beste Serie dieser Runde: <b id="e-sb">0</b></span></div>
     <span class="e-ptag" id="e-ptag" hidden>Fehler üben</span>
     <p class="e-ask" id="e-ask">Wie heißt die Hauptstadt von</p>
     <div class="e-q" id="e-q" aria-live="polite">Finnland</div>
     <div class="e-opts" id="e-opts"></div>
     <p class="e-pfb" id="e-pfb" aria-live="polite" hidden></p>
+    <div class="e-sact"><button type="button" class="e-go e-alt" id="e-snext" hidden>Weiter</button><button type="button" class="e-stop" id="e-stop">Runde beenden</button></div>
   </div>
   <div class="e-card e-end" id="e-end" hidden>
     <p class="e-note" id="e-mode-l"></p>
@@ -2336,8 +2363,8 @@ if(player)loadPlayer();migrate();rebuild();drawRandom();renderStats();renderStag
     <div class="e-review" id="e-review" hidden></div>
     <div class="e-endbtns"><button type="button" class="e-go e-alt" id="e-practice" hidden>Fehler üben</button><button type="button" class="e-go" id="e-again">Nochmal</button></div>
   </div>
-  <div class="e-card e-board"><h3>Bestenliste</h3><ol id="e-board"><li><span></span><span class="e-note">Lädt …</span><span></span><span></span></li></ol>
-    <p class="e-note" style="margin-top:8px">Gezählt wird das beste Ergebnis, egal welche Kontinente gewählt waren.</p></div>
+  <div class="e-card e-board"><div class="e-bhead"><h3>Bestenliste</h3><div class="e-switch" role="group" aria-label="Bestenliste wählen"><button type="button" data-bl="zeit" aria-pressed="true">⏱ 60 s</button><button type="button" data-bl="serie" aria-pressed="false">∞ Serie</button></div></div><ol id="e-board"><li><span></span><span class="e-note">Lädt …</span><span></span><span></span></li></ol>
+    <p class="e-note" style="margin-top:8px" id="e-bnote">Gezählt wird das beste Ergebnis, egal welche Kontinente gewählt waren.</p></div>
 
   <h3 class="e-sec">Land der Woche</h3>
   <article class="e-card e-ldw" id="e-ldw"><p class="e-note" style="padding:18px">Lädt …</p></article>
@@ -2351,15 +2378,20 @@ if(player)loadPlayer();migrate();rebuild();drawRandom();renderStats();renderStag
   var $=function(id){return document.getElementById(id)};
   var me=window.__GU||{uid:"ich",name:"Ich"};
   function esc(s){return String(s).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]})}
-  var DATA=null,MAP=null,loaded=false,REGS=["europa","afrika","asien","nordamerika","suedamerika","ozeanien"],RN={europa:"Europa",afrika:"Afrika",asien:"Asien",nordamerika:"Nordamerika",suedamerika:"Südamerika",ozeanien:"Ozeanien"},regs=["europa"],dir="ls",state="start",DUR=60,endAt=0,raf=0,ok=0,bad=0,lock=false,bag=[],cur=null,best=0,col=null,board=[];
-  try{var sv=JSON.parse(localStorage.getItem("gu-ek-mode")||"{}");if(Array.isArray(sv.regs)){var ok2=sv.regs.filter(function(r){return REGS.indexOf(r)>=0});if(ok2.length)regs=ok2}if(sv.dir==="sl")dir="sl"}catch(e){}
+  var DATA=null,MAP=null,loaded=false,REGS=["europa","afrika","asien","nordamerika","suedamerika","ozeanien"],RN={europa:"Europa",afrika:"Afrika",asien:"Asien",nordamerika:"Nordamerika",suedamerika:"Südamerika",ozeanien:"Ozeanien"},regs=["europa"],dir="ls",gm="zeit",bl="zeit",run=0,runBest=0,bestS=0,colS=null,boardS=[],state="start",DUR=60,endAt=0,raf=0,ok=0,bad=0,lock=false,bag=[],cur=null,best=0,col=null,board=[];
+  try{var sv=JSON.parse(localStorage.getItem("gu-ek-mode")||"{}");if(Array.isArray(sv.regs)){var ok2=sv.regs.filter(function(r){return REGS.indexOf(r)>=0});if(ok2.length)regs=ok2}if(sv.dir==="sl")dir="sl";if(sv.gm==="serie"){gm="serie";bl="serie"}}catch(e){}
   function show(id){["e-start","e-countbox","e-play","e-end"].forEach(function(x){$(x).hidden=x!==id})}
   function regLabel(){return regs.length===REGS.length?"Ganze Welt":regs.map(function(r){return RN[r]}).join(", ")}
   function syncMode(){var all=regs.length===REGS.length;document.querySelectorAll("#ek [data-reg]").forEach(function(b){var on=b.dataset.reg==="alle"?all:regs.indexOf(b.dataset.reg)>=0;b.setAttribute("aria-pressed",on?"true":"false");
       if(DATA&&b.dataset.reg!=="alle"){var n=(DATA.hauptstaedte[b.dataset.reg]||[]).length;b.innerHTML=RN[b.dataset.reg]+'<small>'+n+'</small>'}});
     document.querySelectorAll("#ek [data-dir]").forEach(function(b){b.setAttribute("aria-pressed",b.dataset.dir===dir?"true":"false")});
     $("e-intro").textContent=(dir==="ls"?"Zu jedem Land die richtige Hauptstadt finden":"Zu jeder Hauptstadt das richtige Land finden")+" – vier Antworten, eine stimmt. Gewählt: "+regLabel()+" ("+pool().length+" Länder).";
-    try{localStorage.setItem("gu-ek-mode",JSON.stringify({regs:regs,dir:dir}))}catch(e){}}
+    document.querySelectorAll("#ek [data-gm]").forEach(function(b){b.setAttribute("aria-pressed",b.dataset.gm===gm?"true":"false")});
+    $("e-sub").textContent=gm==="serie"?"Ohne Zeitdruck – wie viele schaffst du am Stück?":"60 Sekunden, so viele richtige wie möglich";
+    $("e-rule").textContent=gm==="serie"?"Jede richtige Antwort verlängert deine Serie. Bei einem Fehler siehst du in Ruhe die Lösung, dann beginnt die Serie neu.":"Falsche Antworten kosten keine Punkte, aber Zeit.";
+    $("e-best").textContent=gm==="serie"?bestS:best;
+    try{localStorage.setItem("gu-ek-mode",JSON.stringify({regs:regs,dir:dir,gm:gm}))}catch(e){}}
+  document.querySelectorAll("#ek [data-gm]").forEach(function(b){b.onclick=function(){if(state==="count"||state==="play")return;gm=b.dataset.gm;bl=gm;syncMode();syncBl()}});
   document.querySelectorAll("#ek [data-reg]").forEach(function(b){b.onclick=function(){if(state==="count"||state==="play")return;var r=b.dataset.reg;
     if(r==="alle")regs=regs.length===REGS.length?["europa"]:REGS.slice();
     else{var i=regs.indexOf(r);if(i>=0){if(regs.length>1)regs.splice(i,1)}else regs.push(r);regs=REGS.filter(function(x){return regs.indexOf(x)>=0})}
@@ -2383,6 +2415,13 @@ if(player)loadPlayer();migrate();rebuild();drawRandom();renderStats();renderStag
       else{b.classList.add("wrong");btns.forEach(function(x){if(x.dataset.v===right)x.classList.add("right");x.disabled=true});PQ.push(cur);
         fb.className="e-pfb bad";fb.innerHTML="Noch nicht: <b>"+esc(cur.stadt)+"</b> ist die Hauptstadt von <b>"+esc(cur.land)+"</b>. Kommt gleich nochmal.";setTimeout(practiceNext,2400)}
       return}
+    if(gm==="serie"){var sf=$("e-pfb");sf.hidden=false;
+      if(hit){run++;if(run>runBest)runBest=run;ok++;$("e-sn").textContent=run;$("e-sb").textContent=runBest;b.classList.add("right");sf.className="e-pfb ok";sf.innerHTML="Richtig! Serie: <b>"+run+"</b>";setTimeout(function(){sf.hidden=true;next()},650)}
+      else{bad++;run=0;$("e-sn").textContent=0;b.classList.add("wrong");btns.forEach(function(x){if(x.dataset.v===right)x.classList.add("right");x.disabled=true});
+        MISS=MISS.filter(function(m){return m.land!==cur.land});MISS.push({land:cur.land,stadt:cur.stadt,falsch:b.dataset.v});
+        sf.className="e-pfb bad";sf.innerHTML="<b>"+esc(cur.stadt)+"</b> ist die Hauptstadt von <b>"+esc(cur.land)+"</b> – nicht "+esc(b.dataset.v)+". Die Serie beginnt neu.";
+        $("e-snext").hidden=false;setTimeout(function(){$("e-snext").focus({preventScroll:true})},30)}
+      return}
     if(hit){ok++;$("e-n").textContent=ok;b.classList.add("right");setTimeout(function(){next()},280)}
     else{bad++;b.classList.add("wrong");btns.forEach(function(x){if(x.dataset.v===right)x.classList.add("right");x.disabled=true});
       MISS=MISS.filter(function(m){return m.land!==cur.land});MISS.push({land:cur.land,stadt:cur.stadt,falsch:b.dataset.v});setTimeout(function(){next()},1300)}});
@@ -2397,28 +2436,39 @@ if(player)loadPlayer();migrate();rebuild();drawRandom();renderStats();renderStag
       return '<li><span><b>'+esc(m.land)+'</b> → Hauptstadt <b class="e-right">'+esc(m.stadt)+'</b><small>Du hattest: <s>'+esc(m.falsch)+'</s></small></span></li>'}).join("")+'</ul>';
     pb.hidden=!!done;pb.textContent="Fehler üben ("+MISS.length+")"}
   $("e-practice").onclick=startPractice;
+  $("e-snext").onclick=function(){this.hidden=true;$("e-pfb").hidden=true;next()};
+  $("e-stop").onclick=function(){if(state==="play"&&gm==="serie")finish()};
   function tick(){var left=Math.max(0,endAt-Date.now());$("e-sec").textContent=Math.ceil(left/1000);
     var bar=$("e-tbar");bar.style.transform="scaleX("+(left/(DUR*1000))+")";bar.classList.toggle("low",left<10000);
     if(left<=0){finish();return}raf=requestAnimationFrame(tick)}
-  function start(){if(!pool().length)return;state="count";show("e-countbox");var n=3,el=$("e-count");
+  function start(){if(!pool().length)return;if(gm==="serie"){play();return}state="count";show("e-countbox");var n=3,el=$("e-count");
     (function step(){if(n===0){el.textContent="Los!";setTimeout(play,450);return}el.textContent=n;n--;setTimeout(step,850)})()}
-  function play(){state="play";ok=0;bad=0;bag=[];MISS=[];rdir=dir;$("e-play").classList.remove("practice");$("e-ptag").hidden=true;$("e-pfb").hidden=true;$("e-n").textContent="0";show("e-play");next();endAt=Date.now()+DUR*1000;cancelAnimationFrame(raf);tick()}
+  function play(){state="play";ok=0;bad=0;run=0;runBest=0;bag=[];MISS=[];rdir=dir;$("e-play").classList.remove("practice");$("e-play").classList.toggle("serie",gm==="serie");$("e-snext").hidden=true;$("e-sn").textContent="0";$("e-sb").textContent="0";$("e-ptag").hidden=true;$("e-pfb").hidden=true;$("e-n").textContent="0";show("e-play");next();if(gm==="serie")return;endAt=Date.now()+DUR*1000;cancelAnimationFrame(raf);tick()}
   async function finish(){state="end";cancelAnimationFrame(raf);if((ok>0||bad>0)&&window.__GUpracticed)window.__GUpracticed();
-    $("e-mode-l").textContent=regLabel()+" · "+(dir==="ls"?"Land → Hauptstadt":"Hauptstadt → Land");
-    $("e-score").textContent=ok;$("e-detail").textContent=bad?(bad===1?"1 Antwort war falsch.":bad+" Antworten waren falsch."):"Keine einzige falsche Antwort!";
-    var rec=ok>best&&ok>0;$("e-rec").hidden=!rec;renderReview(false);show("e-end");
-    if(rec){best=ok;$("e-best").textContent=best;
-      try{if(col)await col.doc(me.uid).set({name:me.name,best:best,mode:regs.join("+")+"-"+dir,hidden:!!window.__GUHIDE,updatedAt:new Date().toISOString()})}catch(e){$("e-detail").textContent+=" Rekord konnte nicht gespeichert werden."}}}
+    $("e-mode-l").textContent=(gm==="serie"?"∞ Serie · ":"⏱ 60 Sekunden · ")+regLabel()+" · "+(dir==="ls"?"Land → Hauptstadt":"Hauptstadt → Land");
+    var sc=gm==="serie"?runBest:ok,old=gm==="serie"?bestS:best;
+    $("e-score").textContent=sc;
+    $("e-detail").textContent=gm==="serie"?(ok+" richtige Antworten insgesamt, "+(bad===1?"1 Fehler.":bad+" Fehler.")+" Gewertet wird deine beste Serie."):(bad?(bad===1?"1 Antwort war falsch.":bad+" Antworten waren falsch."):"Keine einzige falsche Antwort!");
+    var rec=sc>old&&sc>0;$("e-rec").hidden=!rec;renderReview(false);show("e-end");
+    if(rec){if(gm==="serie")bestS=sc;else best=sc;$("e-best").textContent=sc;var c=gm==="serie"?colS:col;
+      try{if(c)await c.doc(me.uid).set({name:me.name,best:sc,mode:regs.join("+")+"-"+dir,hidden:!!window.__GUHIDE,updatedAt:new Date().toISOString()})}catch(e){$("e-detail").textContent+=" Rekord konnte nicht gespeichert werden."}}}
   $("e-go").onclick=start;$("e-again").onclick=function(){show("e-start");state="start"};
-  function drawBoard(){var list=board.filter(function(r){return (!r.hidden||r.id===me.uid)&&r.best>0}).sort(function(a,b){return b.best-a.best}).slice(0,10);
+  setTimeout(function(){syncMode();syncBl()},0);
+  function syncBl(){document.querySelectorAll("#ek [data-bl]").forEach(function(b){b.setAttribute("aria-pressed",b.dataset.bl===bl?"true":"false")});
+    $("e-bnote").textContent=bl==="serie"?"Gezählt wird die längste Serie ohne Fehler, egal welche Kontinente gewählt waren.":"Gezählt wird das beste Ergebnis, egal welche Kontinente gewählt waren.";drawBoard()}
+  document.querySelectorAll("#ek [data-bl]").forEach(function(b){b.onclick=function(){bl=b.dataset.bl;syncBl()}});
+  function drawBoard(){var KC=bl==="serie"?"es":"ek",src=bl==="serie"?boardS:board;var list=src.filter(function(r){return (!r.hidden||r.id===me.uid)&&r.best>0}).sort(function(a,b){return b.best-a.best}).slice(0,10);
     if(!list.length){$("e-board").innerHTML='<li><span></span><span class="e-note">Noch kein Ergebnis. Sei die erste Person auf der Liste!</span><span></span><span></span></li>';return}
-    $("e-board").innerHTML=list.map(function(r,i){var L=window.__GUK?window.__GUK.likes("ek",r.id,r.best):[],mine=L.some(function(x){return x.from===me.uid});
+    $("e-board").innerHTML=list.map(function(r,i){var L=window.__GUK?window.__GUK.likes(KC,r.id,r.best):[],mine=L.some(function(x){return x.from===me.uid});
       return '<li class="'+(r.id===me.uid?"me":"")+'"><span class="rk">'+(i+1)+'</span><span class="nm">'+esc(r.name)+(r.id===me.uid&&L.length?'<small>👍 '+esc(L.map(function(x){return x.name}).join(", "))+'</small>':'')+'</span><span class="pt">'+r.best+'</span>'+
-        (r.id===me.uid?'<span class="k-count">'+(L.length?"👍 "+L.length:"")+'</span>':(window.__GUK?'<button type="button" class="k-thumb" data-kcat="ek" data-kid="'+esc(r.id)+'" data-kv="'+r.best+'" aria-pressed="'+mine+'" aria-label="Daumen hoch für '+esc(r.name)+'">👍'+(L.length?" "+L.length:"")+'</button>':'<span></span>'))+'</li>'}).join("")}
-  document.addEventListener("click",function(e){var b=e.target.closest('.k-thumb[data-kcat="ek"]');if(!b||!window.__GUK)return;window.__GUK.toggle("ek",b.dataset.kid,Number(b.dataset.kv)).catch(function(){b.textContent="Fehler"})});
+        (r.id===me.uid?'<span class="k-count">'+(L.length?"👍 "+L.length:"")+'</span>':(window.__GUK?'<button type="button" class="k-thumb" data-kcat="'+KC+'" data-kid="'+esc(r.id)+'" data-kv="'+r.best+'" aria-pressed="'+mine+'" aria-label="Daumen hoch für '+esc(r.name)+'">👍'+(L.length?" "+L.length:"")+'</button>':'<span></span>'))+'</li>'}).join("")}
+  document.addEventListener("click",function(e){var b=e.target.closest('.k-thumb[data-kcat="ek"],.k-thumb[data-kcat="es"]');if(!b||!window.__GUK)return;window.__GUK.toggle(b.dataset.kcat,b.dataset.kid,Number(b.dataset.kv)).catch(function(){b.textContent="Fehler"})});
   (async function(){try{var db=await claude.use("db");col=db.collection("ek_scores");
     col.onSnapshot(function(snap){board=snap.docs.map(function(d){var x=d.data()||{};return {id:d.id,name:String(x.name||"?").slice(0,24),best:Number(x.best)||0,hidden:!!x.hidden}});
-      var mine=board.filter(function(r){return r.id===me.uid})[0];if(mine&&mine.best>best){best=mine.best;$("e-best").textContent=best}drawBoard()},function(){});
+      var mine=board.filter(function(r){return r.id===me.uid})[0];if(mine&&mine.best>best){best=mine.best;if(gm==="zeit")$("e-best").textContent=best}drawBoard()},function(){});
+    colS=db.collection("es_scores");
+    colS.onSnapshot(function(snap){boardS=snap.docs.map(function(d){var x=d.data()||{};return {id:d.id,name:String(x.name||"?").slice(0,24),best:Number(x.best)||0,hidden:!!x.hidden}});
+      var mine=boardS.filter(function(r){return r.id===me.uid})[0];if(mine&&mine.best>bestS){bestS=mine.best;if(gm==="serie")$("e-best").textContent=bestS}drawBoard()},function(){});
     if(window.__GUK)window.__GUK.on(drawBoard)}catch(e){$("e-board").innerHTML='<li><span></span><span class="e-note">Bestenliste nicht verbunden.</span><span></span><span></span></li>'}})();
 
   // ---------- Land der Woche
@@ -2750,11 +2800,11 @@ if(player)loadPlayer();migrate();rebuild();drawRandom();renderStats();renderStag
     document.addEventListener("visibilitychange",function(){if(document.visibilityState==="hidden"&&t)flush()});
     // Brücke für die Seiten-Skripte
     var none={onSnapshot:function(cb){cb({docs:[]});return function(){}},doc:function(){return {get:async function(){return {exists:false}},set:async function(){throw {code:"not_supported"}},delete:async function(){}}}};
-    var db={collection:function(n){if(n==="scores")return fs.collection("scores/lat/players");if(n==="en_scores")return fs.collection("scores/en/players");if(n==="ma_scores")return fs.collection("scores/mathe/players");if(n==="md_scores")return fs.collection("scores/mathe_div/players");if(n==="kudos")return fs.collection("scores/kudos/players");if(n==="quiz_scores")return fs.collection("scores/quiz/players");if(n==="ek_scores")return fs.collection("scores/erdkunde/players");return none}};
+    var db={collection:function(n){if(n==="scores")return fs.collection("scores/lat/players");if(n==="en_scores")return fs.collection("scores/en/players");if(n==="ma_scores")return fs.collection("scores/mathe/players");if(n==="md_scores")return fs.collection("scores/mathe_div/players");if(n==="kudos")return fs.collection("scores/kudos/players");if(n==="quiz_scores")return fs.collection("scores/quiz/players");if(n==="ek_scores")return fs.collection("scores/erdkunde/players");if(n==="es_scores")return fs.collection("scores/erdkunde_serie/players");return none}};
     window.__GU={uid:uid,name:name};window.__GUfs=fs;
     window.__GUsetVis=function(v){window.__GUVIS=v;window.__GUHIDE=v==="me";
       fs.doc("progress/"+uid).set({vis:v},{merge:true}).catch(function(){});
-      ["scores/lat/players/","scores/en/players/","scores/mathe/players/","scores/mathe_div/players/","scores/quiz/players/","scores/erdkunde/players/"].forEach(function(pth){fs.doc(pth+uid).set({hidden:v==="me"},{merge:true}).catch(function(){})});
+      ["scores/lat/players/","scores/en/players/","scores/mathe/players/","scores/mathe_div/players/","scores/quiz/players/","scores/erdkunde/players/","scores/erdkunde_serie/players/"].forEach(function(pth){fs.doc(pth+uid).set({hidden:v==="me"},{merge:true}).catch(function(){})});
       window.dispatchEvent(new Event("gu-vis"))};
     if(!pr.vis){$("vis-dlg").hidden=false}
     window.__GUK=(function(){var kd={},subs=[],busy=false,col=fs.collection("scores/kudos/players");
@@ -2829,7 +2879,7 @@ if(player)loadPlayer();migrate();rebuild();drawRandom();renderStats();renderStag
     if(armed!==id){armed=id;this.querySelectorAll("button[data-rm]").forEach(function(x){x.classList.remove("sure");x.textContent="Entfernen"});
       b.classList.add("sure");b.textContent="Wirklich entfernen?";return}
     b.disabled=true;b.textContent="Entfernt …";
-    try{await Promise.all([fs.doc("scores/lat/players/"+id).delete(),fs.doc("scores/en/players/"+id).delete(),fs.doc("scores/mathe/players/"+id).delete(),fs.doc("scores/mathe_div/players/"+id).delete(),fs.doc("scores/kudos/players/"+id).delete(),fs.doc("scores/quiz/players/"+id).delete(),fs.doc("scores/erdkunde/players/"+id).delete(),fs.doc("progress/"+id).delete()]);
+    try{await Promise.all([fs.doc("scores/lat/players/"+id).delete(),fs.doc("scores/en/players/"+id).delete(),fs.doc("scores/mathe/players/"+id).delete(),fs.doc("scores/mathe_div/players/"+id).delete(),fs.doc("scores/kudos/players/"+id).delete(),fs.doc("scores/quiz/players/"+id).delete(),fs.doc("scores/erdkunde/players/"+id).delete(),fs.doc("scores/erdkunde_serie/players/"+id).delete(),fs.doc("progress/"+id).delete()]);
       await fs.doc("profiles/"+id).delete();
       $("ad-msg").textContent=name+" wurde entfernt. Tipp: jetzt den Klassen-Code ändern.";loadMembers()}
     catch(err){b.disabled=false;b.classList.remove("sure");b.textContent="Entfernen";armed=null;$("ad-msg").textContent="Entfernen hat nicht geklappt: "+(err.code||err.message)}};
@@ -2839,9 +2889,9 @@ if(player)loadPlayer();migrate();rebuild();drawRandom();renderStats();renderStag
       var r=await Promise.all([fs.doc("vocab/lat").get(),fs.doc("vocab/en").get(),fs.collection("profiles").get(),
         fs.collection("scores/lat/players").get(),fs.collection("scores/en/players").get(),fs.collection("scores/mathe/players").get(),
         fs.collection("scores/mathe_div/players").get(),fs.collection("scores/kudos/players").get(),
-        fetch("weltblick.json?v="+Date.now(),{cache:"no-store"}).then(function(x){return x.ok?x.json():[]}).catch(function(){return []}),fs.collection("scores/quiz/players").get(),fs.collection("scores/erdkunde/players").get()]);
+        fetch("weltblick.json?v="+Date.now(),{cache:"no-store"}).then(function(x){return x.ok?x.json():[]}).catch(function(){return []}),fs.collection("scores/quiz/players").get(),fs.collection("scores/erdkunde/players").get(),fs.collection("scores/erdkunde_serie/players").get()]);
       var out={erstellt:new Date().toISOString(),vocab:{lat:items(r[0]),en:items(r[1])},mitspielende:rows(r[2]),
-        rekorde:{latein:rows(r[3]),englisch:rows(r[4]),mathe_mal:rows(r[5]),mathe_geteilt:rows(r[6]),weltblick_quiz:rows(r[9]),erdkunde:rows(r[10])},daumen:rows(r[7]),weltblick:r[8]};
+        rekorde:{latein:rows(r[3]),englisch:rows(r[4]),mathe_mal:rows(r[5]),mathe_geteilt:rows(r[6]),weltblick_quiz:rows(r[9]),erdkunde:rows(r[10]),erdkunde_serie:rows(r[11])},daumen:rows(r[7]),weltblick:r[8]};
       Object.keys(out.mitspielende).forEach(function(k){delete out.mitspielende[k].code});
       var blob=new Blob([JSON.stringify(out,null,2)],{type:"application/json"}),a=document.createElement("a");
       a.href=URL.createObjectURL(blob);a.download="gretas-update-sicherung-"+new Date().toISOString().slice(0,10)+".json";document.body.appendChild(a);a.click();
