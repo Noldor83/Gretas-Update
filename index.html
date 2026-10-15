@@ -1176,7 +1176,7 @@ if(window.__GUK)window.__GUK.on(()=>renderBoard());
 const ROMAN=["I","II","III","IV","V","VI","VII","VIII","IX","X"];
 function renderBoard(){
   const b=board(),top=b.find(x=>x.best>0);
-  $("record").innerHTML=player?`<span class="mybest">Dein Rekord: <b>${S.best}</b> in Folge</span>`:"";
+  $("record").innerHTML=player?`<span class="mybest">Dein Rekord: <b>${Math.max(S.best||0,(scores.find(x=>x.id===player.id)||{}).best||0)}</b> in Folge</span>`:"";
   const sp=$("switchP");if(sp)sp.onclick=switchPlayer;
   $("board").hidden=!player;
   $("board").innerHTML=`<h2>Bestenliste</h2>${b.length?`<ol>${b.map((x,i)=>`<li class="${x.id===player?.id?"me":""}"><span class="rk">${ROMAN[i]||i+1}</span><span class="k-name">${esc(x.name)}${kWho(x)}</span><b>${x.best} in Folge</b>${kBtn(x)}</li>`).join("")}</ol>`:'<p class="empty">Noch keine Rekorde.</p>'}${dbStatus()}`;
@@ -1646,7 +1646,7 @@ if(window.__GUK)window.__GUK.on(()=>renderBoard());
 const ROMAN=["1.","2.","3.","4.","5.","6.","7.","8.","9.","10."];
 function renderBoard(){
   const b=board(),top=b.find(x=>x.best>0);
-  $("record").innerHTML=player?`<span class="mybest">Dein Rekord: <b>${S.best}</b> in Folge</span>`:"";
+  $("record").innerHTML=player?`<span class="mybest">Dein Rekord: <b>${Math.max(S.best||0,(scores.find(x=>x.id===player.id)||{}).best||0)}</b> in Folge</span>`:"";
   const sp=$("switchP");if(sp)sp.onclick=switchPlayer;
   $("board").hidden=!player;
   $("board").innerHTML=`<h2>Bestenliste</h2>${b.length?`<ol>${b.map((x,i)=>`<li class="${x.id===player?.id?"me":""}"><span class="rk">${ROMAN[i]||i+1}</span><span class="k-name">${esc(x.name)}${kWho(x)}</span><b>${x.best} in Folge</b>${kBtn(x)}</li>`).join("")}</ol>`:'<p class="empty">Noch keine Rekorde.</p>'}${dbStatus()}`;
