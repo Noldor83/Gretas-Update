@@ -2756,7 +2756,7 @@ if(player)loadPlayer();migrate();rebuild();drawRandom();renderStats();renderStag
     round();$("d-play").scrollIntoView({block:"start",behavior:"smooth"})}
   function round(){var P=BYID[G.d.places[G.i]];G.cur=null;G.locked=false;
     $("d-round").textContent="Ort "+(G.i+1)+" von "+G.d.places.length+" · "+(G.first?"gegen "+nameOf(G.d.to,G.d.toName):"Duell von "+nameOf(G.d.from,G.d.fromName));
-    $("d-name").textContent=P.n;$("d-hint").textContent=G.d.set==="all"?"":(P.h||"");
+    $("d-name").textContent=P.n;$("d-hint").textContent=(G.d.set==="all"&&P.id.indexOf("c-")!==0)?"":(P.h||"");
     $("d-status").textContent="Tippe auf die Karte. Mit zwei Fingern oder den Knöpfen kannst du zoomen.";
     $("d-ok").disabled=true;$("d-ok").hidden=false;$("d-next").hidden=true;PM.set([]);PM.home()}
   $("d-ok").onclick=function(){if(!G||!G.cur||G.locked)return;G.locked=true;var P=BYID[G.d.places[G.i]],t=[P.lon,P.lat],d=km(G.cur,t);G.g.push(G.cur);
