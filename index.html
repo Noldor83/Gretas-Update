@@ -2263,6 +2263,19 @@ if(player)loadPlayer();migrate();rebuild();drawRandom();renderStats();renderStag
 #ek .e-nice .e-th{font:700 12px var(--e-f-head);letter-spacing:.06em;text-transform:uppercase;color:var(--e-muted)}
 #ek .e-nice b{display:block;font-family:var(--e-f-head);font-weight:700;font-size:17px}
 #ek .e-nice p{font-size:15.5px;line-height:1.45}
+#ek .e-arch{display:grid;gap:12px}
+#ek .e-old{padding:0;overflow:hidden;box-shadow:3px 3px 0 var(--e-ink)}
+#ek .e-old summary{list-style:none;display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:12px;align-items:center;padding:12px 16px;cursor:pointer}
+#ek .e-old summary::-webkit-details-marker{display:none}
+#ek .e-old summary:focus-visible{outline:3px solid var(--e-sun);outline-offset:-3px}
+#ek .e-oflag{font-size:30px;line-height:1}
+#ek .e-otxt{display:grid;min-width:0}
+#ek .e-otxt b{font-family:var(--e-f-head);font-weight:700;font-size:20px}
+#ek .e-otxt small{font-size:13.5px;color:var(--e-muted)}
+#ek .e-ochev{font-size:20px;color:var(--e-muted);transition:transform .2s}
+#ek .e-old[open] .e-ochev{transform:rotate(180deg)}
+#ek .e-obody{display:grid;gap:16px;padding-bottom:4px;border-top:2px dashed var(--e-dot)}
+#ek .e-oin{padding:14px 18px 0;font-size:16px}
 @media (prefers-reduced-motion:reduce){#ek *{animation:none!important;transition:none!important}}
 </style>
 <div class="e-wrap">
@@ -2306,6 +2319,8 @@ if(player)loadPlayer();migrate();rebuild();drawRandom();renderStats();renderStag
 
   <h3 class="e-sec">Land der Woche</h3>
   <article class="e-card e-ldw" id="e-ldw"><p class="e-note" style="padding:18px">Lädt …</p></article>
+  <h3 class="e-sec">Frühere Länder <small>Antippen zum Aufklappen</small></h3>
+  <div class="e-arch" id="e-arch"><p class="e-note">Lädt …</p></div>
 </div>
 </section>
 
@@ -2371,31 +2386,45 @@ if(player)loadPlayer();migrate();rebuild();drawRandom();renderStats();renderStag
     var x=l*(0.8707-0.131979*p2+p4*(-0.013791+p4*(0.003971*p2-0.001529*p4))),y=p*(1.007226+p2*(0.015085+p4*(-0.044475+0.028874*p2-0.005916*p4)));
     return [m.tx+m.scale*x,m.ty-m.scale*y]}
   function fmtKm(n){return "rund "+Number(n).toLocaleString("de-DE")+" km"}
-  function renderLdw(){var L=DATA&&DATA.laender&&DATA.laender[0],box=$("e-ldw");if(!L){box.innerHTML='<p class="e-note" style="padding:18px">Bald gibt es hier das erste Land der Woche.</p>';return}
-    var h='<div class="e-ldw-head"><span class="e-kicker">Land der Woche · Nr. '+esc(L.nr)+'</span><h3>'+esc(L.name)+' '+(L.flagge||"")+'</h3><p>'+esc(L.einleitung||"")+'</p></div>';
-    h+='<div class="e-mapbox"><svg id="e-map" role="img" aria-label="Weltkarte: '+esc(L.name)+' ist rot markiert, Deutschland gelb. Eine gestrichelte Linie verbindet Berlin und '+esc(L.hauptstadt)+'."></svg>'+
+  var IC={Kultur:"🎭",Politik:"🏛️",Herausforderung:"⚠️",Natur:"🌲",Geschichte:"📜",Wirtschaft:"💼"};
+  function fmtDate(d){try{return new Date(d+"T12:00:00").toLocaleDateString("de-DE",{day:"numeric",month:"long",year:"numeric"})}catch(e){return d}}
+  function ldwBody(L){var h='<div class="e-mapbox"><svg class="e-map" role="img" aria-label="Weltkarte: '+esc(L.name)+' ist rot markiert, Deutschland gelb. Eine gestrichelte Linie verbindet Berlin und '+esc(L.hauptstadt)+'."></svg>'+
       '<div class="e-map-ctrl"><div class="e-switch" role="group" aria-label="Kartenausschnitt"><button type="button" data-view="nah" aria-pressed="true">Nah</button><button type="button" data-view="welt" aria-pressed="false">Welt</button></div></div></div>'+
       (L.entfernung_km?'<div class="e-dist">Berlin → '+esc(L.hauptstadt)+': <b>'+fmtKm(L.entfernung_km)+'</b> Luftlinie</div>':'');
     h+='<div class="e-legend"><span><i style="background:var(--e-red)"></i>'+esc(L.name)+'</span><span><i style="background:var(--e-de)"></i>Deutschland</span><span><i style="background:transparent;border-style:dashed"></i>Luftlinie Berlin – '+esc(L.hauptstadt)+'</span></div>';
     h+='<div class="e-facts">'+(L.fakten||[]).map(function(f){return '<div class="e-fact"><span>'+esc(f.label)+'</span><b>'+esc(f.wert)+'</b>'+(f.hinweis?'<small>'+esc(f.hinweis)+'</small>':'')+'</div>'}).join("")+'</div>';
-    var IC={Kultur:"🎭",Politik:"🏛️",Herausforderung:"⚠️",Natur:"🌲",Geschichte:"📜",Wirtschaft:"💼"};
     h+='<div class="e-nice"><h4>Gut zu wissen</h4>'+(L.nice||[]).map(function(n){return '<article><span class="e-nic" aria-hidden="true">'+(IC[n.thema]||"💡")+'</span><div><span class="e-th">'+esc(n.thema)+'</span><b>'+esc(n.titel)+'</b><p>'+esc(n.text)+'</p></div></article>'}).join("")+'</div>';
-    box.innerHTML=h;
-    box.querySelectorAll("[data-view]").forEach(function(b){b.onclick=function(){view=b.dataset.view;box.querySelectorAll("[data-view]").forEach(function(x){x.setAttribute("aria-pressed",x===b?"true":"false")});drawMap(L)}});
-    drawMap(L)}
-  function drawMap(L){var svg=$("e-map");if(!svg||!MAP)return;var m=MAP.meta,NS="http://www.w3.org/2000/svg";
-    var paths="";Object.keys(MAP.paths).forEach(function(id){var f=id===L.iso?"var(--e-red)":(id==="276"?"var(--e-de)":"var(--e-land)");paths+='<path d="'+MAP.paths[id]+'" fill="'+f+'"'+(id===L.iso?' id="e-target"':(id==="276"?' id="e-de"':''))+'/>'});
+    return h}
+  function wire(el,L){var view="nah";el.querySelectorAll("[data-view]").forEach(function(b){b.onclick=function(){view=b.dataset.view;el.querySelectorAll("[data-view]").forEach(function(x){x.setAttribute("aria-pressed",x===b?"true":"false")});drawMap(el,L,view)}});drawMap(el,L,view)}
+  function renderLdw(){var LL=(DATA&&DATA.laender)||[],L=LL[0],box=$("e-ldw");if(!L){box.innerHTML='<p class="e-note" style="padding:18px">Bald gibt es hier das erste Land der Woche.</p>';return}
+    box.innerHTML='<div class="e-ldw-head"><span class="e-kicker">Land der Woche · Nr. '+esc(L.nr)+' · '+esc(fmtDate(L.datum))+'</span><h3>'+esc(L.name)+' '+(L.flagge||"")+'</h3><p>'+esc(L.einleitung||"")+'</p></div>'+ldwBody(L);
+    wire(box,L);
+    var arch=$("e-arch"),old=LL.slice(1);
+    if(!old.length){arch.innerHTML='<p class="e-note">Hier sammeln sich die Länder der vergangenen Wochen.</p>';return}
+    arch.innerHTML=old.map(function(o,i){return '<details class="e-card e-old" data-i="'+(i+1)+'"><summary><span class="e-oflag" aria-hidden="true">'+(o.flagge||"🌍")+'</span><span class="e-otxt"><b>'+esc(o.name)+'</b><small>Nr. '+esc(o.nr)+' · '+esc(fmtDate(o.datum))+' · Hauptstadt '+esc(o.hauptstadt)+'</small></span><span class="e-ochev" aria-hidden="true">▾</span></summary><div class="e-obody"></div></details>'}).join("");
+    arch.querySelectorAll("details").forEach(function(d){d.addEventListener("toggle",function(){if(!d.open)return;var bx=d.querySelector(".e-obody");if(bx.dataset.done)return;bx.dataset.done="1";
+      var o=LL[+d.dataset.i];bx.innerHTML='<p class="e-oin">'+esc(o.einleitung||"")+'</p>'+ldwBody(o);wire(bx,o)})})}
+  // Umriss nur aus den Landesteilen nahe der Hauptstadt (ohne ferne Überseegebiete)
+  function nearBox(d,c){var rings=String(d).split("M").slice(1),bx=null;
+    rings.forEach(function(r){var n=r.match(/-?\d+(?:\.\d+)?/g);if(!n)return;var x0=1e9,y0=1e9,x1=-1e9,y1=-1e9;
+      for(var i=0;i+1<n.length;i+=2){var x=+n[i],y=+n[i+1];if(x<x0)x0=x;if(x>x1)x1=x;if(y<y0)y0=y;if(y>y1)y1=y}
+      var cx=(x0+x1)/2,cy=(y0+y1)/2,near=(c[0]>=x0-30&&c[0]<=x1+30&&c[1]>=y0-30&&c[1]<=y1+30)||Math.hypot(cx-c[0],cy-c[1])<60;
+      if(!near)return;bx=bx?{x0:Math.min(bx.x0,x0),y0:Math.min(bx.y0,y0),x1:Math.max(bx.x1,x1),y1:Math.max(bx.y1,y1)}:{x0:x0,y0:y0,x1:x1,y1:y1}});
+    if(!bx)bx={x0:c[0]-10,y0:c[1]-10,x1:c[0]+10,y1:c[1]+10};
+    return {x:bx.x0,y:bx.y0,width:bx.x1-bx.x0,height:bx.y1-bx.y0}}
+  function drawMap(el,L,view){var svg=el.querySelector(".e-map");if(!svg||!MAP)return;var m=MAP.meta;
+    var paths="";Object.keys(MAP.paths).forEach(function(id){var f=id===L.iso?"var(--e-red)":(id==="276"?"var(--e-de)":"var(--e-land)");paths+='<path d="'+MAP.paths[id]+'" fill="'+f+'"'+(id===L.iso?' data-t="1"':(id==="276"?' data-de="1"':''))+'/>'});
     var a=proj(BERLIN[0],BERLIN[1]),b=proj(L.koord[0],L.koord[1]);
     svg.innerHTML='<rect x="-2000" y="-2000" width="5000" height="5000" fill="var(--e-sea)"/><g stroke="var(--e-land-line)" stroke-width="0.35" stroke-linejoin="round">'+paths+'</g>'+
-      '<line id="e-line" x1="'+a[0]+'" y1="'+a[1]+'" x2="'+b[0]+'" y2="'+b[1]+'" stroke="var(--e-ink)" stroke-linecap="round" fill="none"/>'+
-      '<circle id="e-c1" cx="'+a[0]+'" cy="'+a[1]+'" fill="var(--e-ink)"/><circle id="e-c2" cx="'+b[0]+'" cy="'+b[1]+'" fill="var(--e-card)" stroke="var(--e-ink)"/>';
-    var vb;if(view==="welt"){vb=[0,0,m.w,m.h]}else{var t=$("e-target").getBBox(),g=$("e-de").getBBox();
+      '<line x1="'+a[0]+'" y1="'+a[1]+'" x2="'+b[0]+'" y2="'+b[1]+'" stroke="var(--e-ink)" stroke-linecap="round" fill="none"/>'+
+      '<circle class="c1" cx="'+a[0]+'" cy="'+a[1]+'" fill="var(--e-ink)"/><circle class="c2" cx="'+b[0]+'" cy="'+b[1]+'" fill="var(--e-card)" stroke="var(--e-ink)"/>';
+    var vb;var tg=svg.querySelector('[data-t]');if(view==="welt"||!tg){vb=[0,0,m.w,m.h]}else{var t=nearBox(MAP.paths[L.iso],b),g=svg.querySelector('[data-de]').getBBox();
       var x0=Math.min(t.x,g.x),y0=Math.min(t.y,g.y),x1=Math.max(t.x+t.width,g.x+g.width),y1=Math.max(t.y+t.height,g.y+g.height);
       var w=Math.max(x1-x0,40)*1.3,hh=Math.max(y1-y0,25)*1.3,ar=16/10;if(w/hh<ar)w=hh*ar;else hh=w/ar;
       var cx=(x0+x1)/2,cy=(y0+y1)/2;vb=[cx-w/2,cy-hh/2,w,hh]}
     svg.setAttribute("viewBox",vb.join(" "));var k=vb[2]/Math.max(280,svg.clientWidth||360);
-    var ln=$("e-line");ln.setAttribute("stroke-width",2.2*k);ln.setAttribute("stroke-dasharray",(6*k)+" "+(5*k));
-    $("e-c1").setAttribute("r",4*k);$("e-c2").setAttribute("r",4.5*k);$("e-c2").setAttribute("stroke-width",2*k);
+    var ln=svg.querySelector("line");ln.setAttribute("stroke-width",2.2*k);ln.setAttribute("stroke-dasharray",(6*k)+" "+(5*k));
+    var c1=svg.querySelector(".c1"),c2=svg.querySelector(".c2");c1.setAttribute("r",4*k);c2.setAttribute("r",4.5*k);c2.setAttribute("stroke-width",2*k);
     svg.querySelector("g").setAttribute("stroke-width",Math.max(0.15,0.9*k))}
   async function load(){if(loaded)return;loaded=true;
     try{var r=await Promise.all([fetch("erdkunde.json?v="+Date.now(),{cache:"no-store"}).then(function(x){return x.json()}),fetch("weltkarte.json").then(function(x){return x.json()})]);DATA=r[0];MAP=r[1]}
