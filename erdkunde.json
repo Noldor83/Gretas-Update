@@ -1,0 +1,407 @@
+{
+  "_hinweis": "Land der Woche: neueste Ausgabe zuerst. iso = ISO-3166-Zahlencode (wie in weltkarte.json), koord = [Längengrad, Breitengrad] der Hauptstadt.",
+  "laender": [
+    {
+      "nr": 1,
+      "datum": "2026-10-15",
+      "name": "Finnland",
+      "iso": "246",
+      "flagge": "🇫🇮",
+      "hauptstadt": "Helsinki",
+      "koord": [
+        24.9384,
+        60.1699
+      ],
+      "entfernung_km": 1100,
+      "einleitung": "Finnland liegt ganz im Norden Europas, zwischen Schweden und Russland. Ein Teil des Landes liegt nördlich des Polarkreises.",
+      "fakten": [
+        {
+          "label": "Einwohner",
+          "wert": "rund 5,6 Millionen",
+          "hinweis": "Deutschland hat etwa 15-mal so viele."
+        },
+        {
+          "label": "Hauptstadt",
+          "wert": "Helsinki"
+        },
+        {
+          "label": "Landessprachen",
+          "wert": "Finnisch und Schwedisch"
+        },
+        {
+          "label": "Fläche",
+          "wert": "rund 338.000 km²",
+          "hinweis": "Fast so groß wie Deutschland."
+        },
+        {
+          "label": "Währung",
+          "wert": "Euro"
+        },
+        {
+          "label": "Seen",
+          "wert": "rund 188.000",
+          "hinweis": "Darum heißt es auch „Land der tausend Seen“."
+        }
+      ],
+      "nice": [
+        {
+          "thema": "Kultur",
+          "titel": "Ein Land voller Saunen",
+          "text": "In Finnland gibt es rund 3 Millionen Saunen – bei 5,6 Millionen Menschen. Die finnische Sauna-Kultur steht seit 2020 auf der Liste des immateriellen Kulturerbes der UNESCO."
+        },
+        {
+          "thema": "Politik",
+          "titel": "Neu in der NATO",
+          "text": "Finnland hat eine rund 1.340 km lange Grenze mit Russland. Nach dem russischen Angriff auf die Ukraine ist Finnland 2023 dem Verteidigungsbündnis NATO beigetreten."
+        },
+        {
+          "thema": "Herausforderung",
+          "titel": "Immer weniger Kinder",
+          "text": "In Finnland werden so wenige Kinder geboren wie kaum je zuvor. Wenn die Bevölkerung altert, fehlen künftig Menschen, die arbeiten und die Renten bezahlen."
+        }
+      ]
+    }
+  ],
+  "hauptstaedte": {
+    "europa": [
+      {
+        "land": "Albanien",
+        "stadt": "Tirana"
+      },
+      {
+        "land": "Andorra",
+        "stadt": "Andorra la Vella"
+      },
+      {
+        "land": "Belarus",
+        "stadt": "Minsk"
+      },
+      {
+        "land": "Belgien",
+        "stadt": "Brüssel"
+      },
+      {
+        "land": "Bosnien und Herzegowina",
+        "stadt": "Sarajevo"
+      },
+      {
+        "land": "Bulgarien",
+        "stadt": "Sofia"
+      },
+      {
+        "land": "Dänemark",
+        "stadt": "Kopenhagen"
+      },
+      {
+        "land": "Deutschland",
+        "stadt": "Berlin"
+      },
+      {
+        "land": "Estland",
+        "stadt": "Tallinn"
+      },
+      {
+        "land": "Finnland",
+        "stadt": "Helsinki"
+      },
+      {
+        "land": "Frankreich",
+        "stadt": "Paris"
+      },
+      {
+        "land": "Griechenland",
+        "stadt": "Athen"
+      },
+      {
+        "land": "Irland",
+        "stadt": "Dublin"
+      },
+      {
+        "land": "Island",
+        "stadt": "Reykjavík"
+      },
+      {
+        "land": "Italien",
+        "stadt": "Rom"
+      },
+      {
+        "land": "Kroatien",
+        "stadt": "Zagreb"
+      },
+      {
+        "land": "Lettland",
+        "stadt": "Riga"
+      },
+      {
+        "land": "Liechtenstein",
+        "stadt": "Vaduz"
+      },
+      {
+        "land": "Litauen",
+        "stadt": "Vilnius"
+      },
+      {
+        "land": "Luxemburg",
+        "stadt": "Luxemburg"
+      },
+      {
+        "land": "Malta",
+        "stadt": "Valletta"
+      },
+      {
+        "land": "Moldau",
+        "stadt": "Chișinău"
+      },
+      {
+        "land": "Monaco",
+        "stadt": "Monaco"
+      },
+      {
+        "land": "Montenegro",
+        "stadt": "Podgorica"
+      },
+      {
+        "land": "Niederlande",
+        "stadt": "Amsterdam"
+      },
+      {
+        "land": "Nordmazedonien",
+        "stadt": "Skopje"
+      },
+      {
+        "land": "Norwegen",
+        "stadt": "Oslo"
+      },
+      {
+        "land": "Österreich",
+        "stadt": "Wien"
+      },
+      {
+        "land": "Polen",
+        "stadt": "Warschau"
+      },
+      {
+        "land": "Portugal",
+        "stadt": "Lissabon"
+      },
+      {
+        "land": "Rumänien",
+        "stadt": "Bukarest"
+      },
+      {
+        "land": "Russland",
+        "stadt": "Moskau"
+      },
+      {
+        "land": "San Marino",
+        "stadt": "San Marino"
+      },
+      {
+        "land": "Schweden",
+        "stadt": "Stockholm"
+      },
+      {
+        "land": "Schweiz",
+        "stadt": "Bern"
+      },
+      {
+        "land": "Serbien",
+        "stadt": "Belgrad"
+      },
+      {
+        "land": "Slowakei",
+        "stadt": "Bratislava"
+      },
+      {
+        "land": "Slowenien",
+        "stadt": "Ljubljana"
+      },
+      {
+        "land": "Spanien",
+        "stadt": "Madrid"
+      },
+      {
+        "land": "Tschechien",
+        "stadt": "Prag"
+      },
+      {
+        "land": "Türkei",
+        "stadt": "Ankara"
+      },
+      {
+        "land": "Ukraine",
+        "stadt": "Kiew"
+      },
+      {
+        "land": "Ungarn",
+        "stadt": "Budapest"
+      },
+      {
+        "land": "Vatikanstadt",
+        "stadt": "Vatikanstadt"
+      },
+      {
+        "land": "Vereinigtes Königreich",
+        "stadt": "London"
+      },
+      {
+        "land": "Zypern",
+        "stadt": "Nikosia"
+      }
+    ],
+    "welt": [
+      {
+        "land": "USA",
+        "stadt": "Washington, D.C."
+      },
+      {
+        "land": "Kanada",
+        "stadt": "Ottawa"
+      },
+      {
+        "land": "Mexiko",
+        "stadt": "Mexiko-Stadt"
+      },
+      {
+        "land": "Kuba",
+        "stadt": "Havanna"
+      },
+      {
+        "land": "Brasilien",
+        "stadt": "Brasília"
+      },
+      {
+        "land": "Argentinien",
+        "stadt": "Buenos Aires"
+      },
+      {
+        "land": "Chile",
+        "stadt": "Santiago de Chile"
+      },
+      {
+        "land": "Peru",
+        "stadt": "Lima"
+      },
+      {
+        "land": "Kolumbien",
+        "stadt": "Bogotá"
+      },
+      {
+        "land": "Venezuela",
+        "stadt": "Caracas"
+      },
+      {
+        "land": "China",
+        "stadt": "Peking"
+      },
+      {
+        "land": "Japan",
+        "stadt": "Tokio"
+      },
+      {
+        "land": "Südkorea",
+        "stadt": "Seoul"
+      },
+      {
+        "land": "Nordkorea",
+        "stadt": "Pjöngjang"
+      },
+      {
+        "land": "Mongolei",
+        "stadt": "Ulaanbaatar"
+      },
+      {
+        "land": "Indien",
+        "stadt": "Neu-Delhi"
+      },
+      {
+        "land": "Pakistan",
+        "stadt": "Islamabad"
+      },
+      {
+        "land": "Afghanistan",
+        "stadt": "Kabul"
+      },
+      {
+        "land": "Iran",
+        "stadt": "Teheran"
+      },
+      {
+        "land": "Irak",
+        "stadt": "Bagdad"
+      },
+      {
+        "land": "Saudi-Arabien",
+        "stadt": "Riad"
+      },
+      {
+        "land": "Jordanien",
+        "stadt": "Amman"
+      },
+      {
+        "land": "Syrien",
+        "stadt": "Damaskus"
+      },
+      {
+        "land": "Libanon",
+        "stadt": "Beirut"
+      },
+      {
+        "land": "Kasachstan",
+        "stadt": "Astana"
+      },
+      {
+        "land": "Thailand",
+        "stadt": "Bangkok"
+      },
+      {
+        "land": "Vietnam",
+        "stadt": "Hanoi"
+      },
+      {
+        "land": "Philippinen",
+        "stadt": "Manila"
+      },
+      {
+        "land": "Australien",
+        "stadt": "Canberra"
+      },
+      {
+        "land": "Neuseeland",
+        "stadt": "Wellington"
+      },
+      {
+        "land": "Ägypten",
+        "stadt": "Kairo"
+      },
+      {
+        "land": "Marokko",
+        "stadt": "Rabat"
+      },
+      {
+        "land": "Algerien",
+        "stadt": "Algier"
+      },
+      {
+        "land": "Tunesien",
+        "stadt": "Tunis"
+      },
+      {
+        "land": "Kenia",
+        "stadt": "Nairobi"
+      },
+      {
+        "land": "Nigeria",
+        "stadt": "Abuja"
+      },
+      {
+        "land": "Äthiopien",
+        "stadt": "Addis Abeba"
+      },
+      {
+        "land": "Ghana",
+        "stadt": "Accra"
+      }
+    ]
+  }
+}

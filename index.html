@@ -23,15 +23,15 @@
 /* Layout: Ordner mit Registerreitern – oben eine feste Leiste mit Name und zwei Reitern (Weltblick, Latein), darunter das gewählte Fach in voller Größe */
 :root{
   --gu-bar:#1d2140; --gu-bar-fg:#ffffff; --gu-muted:#b6bad8; --gu-sun:#ffd24d; --gu-sun-ink:#1d2140;
-  --gu-st:#ffd24d; --gu-wb:#d9472b; --gu-lat:#6a3fb5; --gu-en:#1f5fa8; --gu-ma:#1d8655; --gu-tab:#2b3060;
+  --gu-st:#ffd24d; --gu-wb:#d9472b; --gu-lat:#6a3fb5; --gu-en:#1f5fa8; --gu-ma:#1d8655; --gu-ek:#0f7c8c; --gu-tab:#2b3060;
   --gu-f-head:"Fredoka","Arial Rounded MT Bold","Trebuchet MS",sans-serif;
 }
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
   --gu-bar:#0c0e1d; --gu-bar-fg:#eef0ff; --gu-muted:#9a9ec0; --gu-sun:#e8c23a; --gu-sun-ink:#13162a;
-  --gu-wb:#c8432a; --gu-lat:#7b55d0; --gu-en:#2a6cb8; --gu-ma:#22955f; --gu-tab:#1d2140; color-scheme:dark}}
+  --gu-wb:#c8432a; --gu-lat:#7b55d0; --gu-en:#2a6cb8; --gu-ma:#22955f; --gu-ek:#14899a; --gu-tab:#1d2140; color-scheme:dark}}
 :root[data-theme="dark"]{
   --gu-bar:#0c0e1d; --gu-bar-fg:#eef0ff; --gu-muted:#9a9ec0; --gu-sun:#e8c23a; --gu-sun-ink:#13162a;
-  --gu-wb:#c8432a; --gu-lat:#7b55d0; --gu-en:#2a6cb8; --gu-ma:#22955f; --gu-tab:#1d2140; color-scheme:dark}
+  --gu-wb:#c8432a; --gu-lat:#7b55d0; --gu-en:#2a6cb8; --gu-ma:#22955f; --gu-ek:#14899a; --gu-tab:#1d2140; color-scheme:dark}
 body{background:var(--gu-bar);color:var(--gu-bar-fg)}
 
 .gu-bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;background:var(--gu-bar);color:var(--gu-bar-fg);
@@ -39,7 +39,9 @@ body{background:var(--gu-bar);color:var(--gu-bar-fg)}
 .gu-in{max-width:1000px;margin:0 auto;display:grid;gap:8px}
 .gu-name{font-family:var(--gu-f-head);font-weight:700;font-size:20px;line-height:1;display:flex;align-items:center;gap:8px}
 .gu-logo>span{background:var(--gu-sun);color:var(--gu-sun-ink);border-radius:8px;padding:2px 8px 3px;transform:rotate(-2deg);display:inline-block}
-.gu-tabs{display:grid;grid-template-columns:auto repeat(4,minmax(min-content,1fr));gap:6px}
+.gu-tabs{display:grid;grid-template-columns:auto repeat(5,minmax(min-content,1fr));gap:6px;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch;scroll-padding-inline:16px}
+.gu-tabs::-webkit-scrollbar{display:none}
+.gu-in{min-width:0}
 .gu-tab[data-v="st"]{place-items:center;padding-inline:12px}
 .gu-tab[data-v="st"] svg{width:24px;height:24px}
 .gu-tab[data-v="st"][aria-selected="true"]{background:var(--gu-st);color:#1d2140}
@@ -52,7 +54,8 @@ body{background:var(--gu-bar);color:var(--gu-bar-fg)}
 .gu-tab[data-v="lat"][aria-selected="true"]{background:var(--gu-lat)}
 .gu-tab[data-v="en"][aria-selected="true"]{background:var(--gu-en)}
 .gu-tab[data-v="ma"][aria-selected="true"]{background:var(--gu-ma)}
-@media (max-width:420px){.gu-tabs{gap:4px}.gu-tab{font-size:14px;padding:9px 6px 8px}.gu-tab small{font-size:9.5px;letter-spacing:.02em}.gu-tab[data-v="st"]{padding-inline:9px}}
+.gu-tab[data-v="ek"][aria-selected="true"]{background:var(--gu-ek)}
+@media (max-width:640px){.gu-tabs{gap:4px}.gu-tab{font-size:14px;padding:9px 6px 8px}.gu-tab small{font-size:9.5px;letter-spacing:.02em}.gu-tab[data-v="st"]{padding-inline:9px}}
 @media (max-width:370px){.gu-tab{font-size:13px;padding:8px 5px 7px}.gu-tab small{font-size:9px;letter-spacing:0}.gu-tab[data-v="st"]{padding-inline:7px}.gu-tab[data-v="st"] svg{width:20px;height:20px}}
 .gu-tab:focus-visible{outline:3px solid var(--gu-sun);outline-offset:-3px}
 .gu-view{min-height:calc(100vh - 90px)}
@@ -61,6 +64,7 @@ body{background:var(--gu-bar);color:var(--gu-bar-fg)}
 .gu-view[data-v="lat"]{border-top:4px solid var(--gu-lat)}
 .gu-view[data-v="en"]{border-top:4px solid var(--gu-en)}
 .gu-view[data-v="ma"]{border-top:4px solid var(--gu-ma)}
+.gu-view[data-v="ek"]{border-top:4px solid var(--gu-ek)}
 @media (prefers-reduced-motion:reduce){.gu-tab{transition:none}}
 
 /* ===== Der Weltblick ===== */
@@ -576,6 +580,7 @@ body{background:var(--gu-bar);color:var(--gu-bar-fg)}
       <button class="gu-tab" type="button" role="tab" id="gu-tab-lat" data-v="lat" aria-controls="lat" aria-selected="false">Latein<small>Vokabeln</small></button>
       <button class="gu-tab" type="button" role="tab" id="gu-tab-en" data-v="en" aria-controls="en" aria-selected="false">Englisch<small>Vokabeln</small></button>
       <button class="gu-tab" type="button" role="tab" id="gu-tab-ma" data-v="ma" aria-controls="ma" aria-selected="false">Mathe<small>1×1</small></button>
+      <button class="gu-tab" type="button" role="tab" id="gu-tab-ek" data-v="ek" aria-controls="ek" aria-selected="false">Erdkunde<small>Länder</small></button>
     </nav>
   </div>
 </header>
@@ -583,13 +588,13 @@ body{background:var(--gu-bar);color:var(--gu-bar-fg)}
 <section class="gu-view" id="st" data-v="st" role="tabpanel" aria-labelledby="gu-tab-st" hidden>
 <style>
 #st{--s-bg:#efeaff; --s-dot:#ddd3fb; --s-card:#ffffff; --s-ink:#1d2140; --s-muted:#585d80; --s-sun:#ffd24d; --s-pink:#ff7aa8; --s-sky:#8fd3f4;
-  --s-lat:#6a3fb5; --s-en:#1f5fa8; --s-ma:#1d8655; --s-wb:#d9472b; --s-gold:#ffc83d; --s-silver:#cfd5e6; --s-bronze:#e3a06b;
+  --s-lat:#6a3fb5; --s-en:#1f5fa8; --s-ma:#1d8655; --s-wb:#d9472b; --s-ek:#0f7c8c; --s-gold:#ffc83d; --s-silver:#cfd5e6; --s-bronze:#e3a06b;
   --s-f-big:"Bagel Fat One","Fredoka","Arial Rounded MT Bold",sans-serif; --s-f-head:"Fredoka","Arial Rounded MT Bold","Trebuchet MS",sans-serif;
   --s-f-body:"Atkinson Hyperlegible",Verdana,"Segoe UI",sans-serif}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]) #st{--s-bg:#15132a; --s-dot:#252146; --s-card:#1f1c3a; --s-ink:#eeeaff; --s-muted:#b2acd6;
-  --s-sun:#e8c23a; --s-pink:#ff8fb6; --s-sky:#4aa8d6; --s-lat:#a184f0; --s-en:#5d9be6; --s-ma:#3fbf82; --s-wb:#ff8a70; color-scheme:dark}}
+  --s-sun:#e8c23a; --s-pink:#ff8fb6; --s-sky:#4aa8d6; --s-lat:#a184f0; --s-en:#5d9be6; --s-ma:#3fbf82; --s-wb:#ff8a70; --s-ek:#3cc3d4; color-scheme:dark}}
 :root[data-theme="dark"] #st{--s-bg:#15132a; --s-dot:#252146; --s-card:#1f1c3a; --s-ink:#eeeaff; --s-muted:#b2acd6;
-  --s-sun:#e8c23a; --s-pink:#ff8fb6; --s-sky:#4aa8d6; --s-lat:#a184f0; --s-en:#5d9be6; --s-ma:#3fbf82; --s-wb:#ff8a70; color-scheme:dark}
+  --s-sun:#e8c23a; --s-pink:#ff8fb6; --s-sky:#4aa8d6; --s-lat:#a184f0; --s-en:#5d9be6; --s-ma:#3fbf82; --s-wb:#ff8a70; --s-ek:#3cc3d4; color-scheme:dark}
 #st{background-color:var(--s-bg);background-image:radial-gradient(var(--s-dot) 1.6px,transparent 1.8px);background-size:22px 22px;color:var(--s-ink);font-family:var(--s-f-body)}
 #st .s-wrap{max-width:860px;margin:0 auto;padding-block:18px 48px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:grid;gap:18px}
 #st h2,#st h3{margin:0;text-wrap:balance}
@@ -642,6 +647,9 @@ body{background:var(--gu-bar);color:var(--gu-bar-fg)}
 #st .s-tile[data-k="en"]{border-top-color:var(--s-en)}
 #st .s-tile[data-k="ma"]{border-top-color:var(--s-ma)}
 #st .s-tile[data-k="qz"]{border-top-color:var(--s-wb)}
+#st .s-tile[data-k="ek"]{border-top-color:#0f7c8c}
+#st .s-tile[data-k="ek"] .s-num,#st .s-tile[data-k="ek"] .s-cta{color:var(--s-ek)}
+#st .s-nic.ek{background:#0f7c8c}
 #st .s-tile[data-k="qz"] .s-num,#st .s-tile[data-k="qz"] .s-cta{color:var(--s-wb)}
 #st .s-quizhint{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:12px;padding:12px 14px;text-align:left;cursor:pointer;font:inherit;color:var(--s-ink);width:100%;border-color:var(--s-wb)}
 #st .s-quizhint[hidden]{display:none}
@@ -734,6 +742,7 @@ body{background:var(--gu-bar);color:var(--gu-bar-fg)}
           <div class="s-mrow"><span class="s-op">:</span><span class="s-mlabel">Geteilt</span><b class="s-mnum" id="s-md">–</b><span class="s-rank" id="s-md-r">Lädt …</span></div></div>
           <span class="s-cta">Rakete starten →</span></button>
         <button type="button" class="s-card s-tile" data-k="qz" data-quiz="1"><h3>Weltblick-Quiz</h3><p class="s-what">Punkte aus allen Wochenquizzen</p><div class="s-num" id="s-qz">–</div><p class="s-rank" id="s-qz-r">Lädt …</p><span class="s-cta">Zum Wochenquiz →</span></button>
+        <button type="button" class="s-card s-tile" data-k="ek" data-go="ek"><h3>Erdkunde</h3><p class="s-what">Richtige Hauptstädte in 60 Sekunden</p><div class="s-num" id="s-ek">–</div><p class="s-rank" id="s-ek-r">Lädt …</p><span class="s-cta">Hauptstadt-Jagd starten →</span></button>
       </div>
     </div>
   </div>
@@ -766,7 +775,7 @@ body{background:var(--gu-bar);color:var(--gu-bar-fg)}
   var QISSUE=null;try{var AU=JSON.parse(document.getElementById("ausgaben").textContent||"[]");AU.sort(function(a,b){return a.datum<b.datum?1:-1});QISSUE=AU[0]||null}catch(e){}
   function quizHint(mineWeeks){var c=$("s-quizhint");if(!QISSUE||!(QISSUE.quiz&&QISSUE.quiz.length)||(mineWeeks&&mineWeeks[QISSUE.nr]!=null)){c.hidden=true;return}
     $("s-qh-t").textContent="Neues Wochenquiz zu Ausgabe Nr. "+QISSUE.nr+"!";$("s-qh-s").textContent=QISSUE.quiz.length+" Fragen zum Weltblick – hol dir bis zu "+(QISSUE.quiz.length*2)+" Punkte.";c.hidden=false}
-  var CAT={ma:"in Mathe (Mal)",md:"in Mathe (Geteilt)",lat:"in Latein",en:"in Englisch",qz:"im Weltblick-Quiz"},UNIT={ma:"Punkte",lat:"er-Serie",en:"er-Serie"};
+  var CAT={ma:"in Mathe (Mal)",md:"in Mathe (Geteilt)",lat:"in Latein",en:"in Englisch",qz:"im Weltblick-Quiz",ek:"in Erdkunde"},UNIT={ma:"Punkte",lat:"er-Serie",en:"er-Serie"};
   var COLS=["#ffd24d","#ff9fc0","#9fdcf7","#a8e6c3","#c9b8ff","#ffc59a"];
   var seen=0;try{seen=Number(localStorage.getItem("gu-kudos-seen"))||0}catch(e){}
   function ago(t){var d=(Date.now()-t)/60000;if(d<1)return "gerade eben";if(d<60)return "vor "+Math.round(d)+" Min.";if(d<1440)return "vor "+Math.round(d/60)+" Std.";
@@ -779,18 +788,18 @@ body{background:var(--gu-bar);color:var(--gu-bar-fg)}
     var ul=$("s-praise"),fresh=items.filter(function(i){return i.t>seen}).length;
     $("s-pcount").textContent=fresh?fresh+" neu":"";
     if(!items.length){ul.innerHTML='<li class="s-empty">Noch kein Daumen hoch. Spiel eine Runde 1×1 – vielleicht lobt dich bald jemand!</li>';return}
-    ul.innerHTML=items.slice(0,3).map(function(i){var c=COLS[(i.name.charCodeAt(0)||0)%COLS.length],u=(i.cat==="ma"||i.cat==="md"||i.cat==="qz")?i.v+" Punkte":"deine "+i.v+"er-Serie";
+    ul.innerHTML=items.slice(0,3).map(function(i){var c=COLS[(i.name.charCodeAt(0)||0)%COLS.length],u=(i.cat==="ma"||i.cat==="md"||i.cat==="qz"||i.cat==="ek")?i.v+" Punkte":"deine "+i.v+"er-Serie";
       return '<li class="'+(i.t>seen?"new":"")+'"><span class="s-av" style="background:'+c+'" aria-hidden="true">'+esc(i.name.charAt(0).toUpperCase())+'</span><p><b>'+esc(i.name)+'</b> findet '+esc(u)+' '+(CAT[i.cat]||"")+' stark!'+(i.t>seen?'<span class="s-newtag">NEU</span>':'')+' <time>· '+ago(i.t)+'</time></p></li>'}).join("")+(items.length>3?'<li class="s-more">und '+(items.length-3)+(items.length-3===1?' weiterer Daumen':' weitere Daumen')+'</li>':'');
     if(!document.getElementById("st").hidden){try{localStorage.setItem("gu-kudos-seen",String(Date.now()))}catch(e){}}}
   function esc(s){return String(s).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]})}
-  var NEWS={},NNAME={lat:"Latein",en:"Englisch",ma:"Mathe (Mal)",md:"Mathe (Geteilt)",qz:"Weltblick-Quiz"},NIC={lat:"La",en:"En",ma:"×",md:":",qz:"?"};
+  var NEWS={},NNAME={lat:"Latein",en:"Englisch",ma:"Mathe (Mal)",md:"Mathe (Geteilt)",qz:"Weltblick-Quiz",ek:"Erdkunde"},NIC={lat:"La",en:"En",ma:"×",md:":",qz:"?",ek:"🌍"};
   function renderNews(){var all=[];
     Object.keys(NEWS).forEach(function(k){var L=NEWS[k].filter(function(r){return !r.hidden||r.id===me.uid}),max=Math.max.apply(null,L.map(function(r){return r.best}).concat([0]));
       L.forEach(function(r){if(r.best>0&&r.t)all.push({k:k,name:r.name,id:r.id,best:r.best,t:r.t,top:r.best===max,last:r.last})})});
     all.sort(function(a,b){return b.t-a.t});
     var ul=$("s-news");if(!ul)return;
     if(!all.length){ul.innerHTML='<li class="s-empty">Noch keine Rekorde. Wer legt den ersten vor?</li>';return}
-    ul.innerHTML=all.slice(0,4).map(function(n){var mine=n.id===me.uid,unit=(n.k==="ma"||n.k==="md")?n.best+" Punkte":n.best+" in Folge";
+    ul.innerHTML=all.slice(0,4).map(function(n){var mine=n.id===me.uid,unit=(n.k==="ma"||n.k==="md"||n.k==="ek")?n.best+" Punkte":n.best+" in Folge";
       if(n.k==="qz"&&n.last)return '<li><span class="s-nic qz" aria-hidden="true">?</span><p><b>'+(mine?"Du":esc(n.name))+'</b> '+(mine?"hast":"hat")+' das Wochenquiz Nr. '+esc(n.last.nr)+' gelöst: <b>'+esc(n.last.p)+' von '+esc(n.last.max)+' Punkten</b> <time>· '+ago(n.t)+'</time></p></li>';
       return '<li class="'+(n.top?"top":"")+'"><span class="s-nic '+n.k+'" aria-hidden="true">'+NIC[n.k]+'</span><p><b>'+(mine?"Du":esc(n.name))+'</b> '+(mine?"hast":"hat")+' einen neuen Rekord in '+NNAME[n.k]+': <b>'+unit+'</b>'+(n.top?'<span class="s-crown">Platz 1</span>':'')+' <time>· '+ago(n.t)+'</time></p></li>'}).join("")}
   function rank(list,k){
@@ -805,12 +814,12 @@ body{background:var(--gu-bar);color:var(--gu-bar-fg)}
   (async function(){
     try{var db=await claude.use("db");
       db.collection("kudos").onSnapshot(function(snap){var kd={};snap.docs.forEach(function(d){kd[d.id]=d.data()||{}});praise(kd)},function(){$("s-praise").innerHTML='<li class="s-empty">Lob konnte nicht geladen werden.</li>'});
-      [["lat","scores"],["en","en_scores"],["ma","ma_scores"],["md","md_scores"],["qz","quiz_scores"]].forEach(function(p){
+      [["lat","scores"],["en","en_scores"],["ma","ma_scores"],["md","md_scores"],["qz","quiz_scores"],["ek","ek_scores"]].forEach(function(p){
         db.collection(p[1]).onSnapshot(function(snap){
           var L=snap.docs.map(function(d){var x=d.data()||{};return {id:d.id,best:Number(x.best)||0,name:String(x.name||"?").slice(0,24),t:Date.parse(x.updatedAt)||0,hidden:!!x.hidden,last:x.last||null,weeks:x.weeks||null}});
           rank(L,p[0]);NEWS[p[0]]=L;renderNews();if(p[0]==="qz"){var mq=L.filter(function(r){return r.id===me.uid})[0];quizHint(mq&&mq.weeks)}},
           function(){$("s-"+p[0]+"-r").textContent="Nicht geladen"})})}
-    catch(e){$("s-praise").innerHTML='<li class="s-empty">Nicht verbunden.</li>';["lat","en","ma","md","qz"].forEach(function(k){$("s-"+k+"-r").textContent="Nicht verbunden"})}
+    catch(e){$("s-praise").innerHTML='<li class="s-empty">Nicht verbunden.</li>';["lat","en","ma","md","qz","ek"].forEach(function(k){$("s-"+k+"-r").textContent="Nicht verbunden"})}
   })();
 })();
 </script>
@@ -2159,23 +2168,243 @@ if(player)loadPlayer();migrate();rebuild();drawRandom();renderStats();renderStag
 })();
 </script>
 
+<section class="gu-view" id="ek" data-v="ek" role="tabpanel" aria-labelledby="gu-tab-ek" hidden>
+<style>
+/* Erdkunde: Atlas-Look – Meeresblau, Kartenpapier, rote Markierung */
+#ek{--e-bg:#e6f3f7; --e-dot:#c9e3ec; --e-card:#ffffff; --e-ink:#13303a; --e-muted:#4d6a74; --e-sea:#cfe6f1; --e-land:#a9bfcc; --e-land-line:#ffffff;
+  --e-teal:#0f7c8c; --e-teal-ink:#ffffff; --e-red:#e0393e; --e-de:#ffc83d; --e-sun:#ffd24d; --e-ok:#1d8655; --e-ok-bg:#d6f3e2; --e-bad:#c23b2b; --e-bad-bg:#fde3de;
+  --e-f-big:"Bagel Fat One","Fredoka","Arial Rounded MT Bold",sans-serif; --e-f-head:"Fredoka","Arial Rounded MT Bold","Trebuchet MS",sans-serif;
+  --e-f-body:"Atkinson Hyperlegible",Verdana,"Segoe UI",sans-serif}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) #ek{--e-bg:#0d1f26; --e-dot:#173540; --e-card:#152b33; --e-ink:#e4f3f7; --e-muted:#9fbcc6;
+  --e-sea:#10313d; --e-land:#46626e; --e-land-line:#152b33; --e-teal:#3cc3d4; --e-teal-ink:#06262c; --e-red:#ff6b6f; --e-ok:#4fd197; --e-ok-bg:#163f35; --e-bad:#ff8a70; --e-bad-bg:#46202a; color-scheme:dark}}
+:root[data-theme="dark"] #ek{--e-bg:#0d1f26; --e-dot:#173540; --e-card:#152b33; --e-ink:#e4f3f7; --e-muted:#9fbcc6;
+  --e-sea:#10313d; --e-land:#46626e; --e-land-line:#152b33; --e-teal:#3cc3d4; --e-teal-ink:#06262c; --e-red:#ff6b6f; --e-ok:#4fd197; --e-ok-bg:#163f35; --e-bad:#ff8a70; --e-bad-bg:#46202a; color-scheme:dark}
+#ek{background-color:var(--e-bg);background-image:radial-gradient(var(--e-dot) 1.6px,transparent 1.8px);background-size:22px 22px;color:var(--e-ink);font-family:var(--e-f-body)}
+#ek .e-wrap{max-width:720px;margin:0 auto;padding-block:16px 48px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:grid;gap:18px}
+#ek h2,#ek h3,#ek h4{margin:0;text-wrap:balance}
+#ek p{margin:0}
+#ek .e-head{display:flex;align-items:baseline;justify-content:space-between;gap:10px;flex-wrap:wrap}
+#ek .e-head h2{font-family:var(--e-f-big);font-weight:400;font-size:clamp(34px,9vw,46px);line-height:1;color:var(--e-teal)}
+#ek .e-best{font-family:var(--e-f-head);font-weight:600;font-size:15px;color:var(--e-muted)}
+#ek .e-best b{color:var(--e-teal);font-variant-numeric:tabular-nums}
+#ek .e-card{background:var(--e-card);border:2.5px solid var(--e-ink);border-radius:20px;box-shadow:5px 5px 0 var(--e-ink);padding:18px}
+#ek .e-sec{font-family:var(--e-f-head);font-weight:700;font-size:22px;display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+#ek .e-sec small{font-weight:500;font-size:14px;color:var(--e-muted)}
+#ek .e-switch{display:inline-flex;gap:4px;border:2px solid var(--e-ink);border-radius:999px;padding:3px;background:var(--e-card);flex-wrap:wrap}
+#ek .e-switch button{font:600 15px var(--e-f-head);border:0;border-radius:999px;padding:5px 14px;background:transparent;color:var(--e-ink);cursor:pointer}
+#ek .e-switch button[aria-pressed="true"]{background:var(--e-teal);color:var(--e-teal-ink)}
+#ek .e-switch button:focus-visible,#ek .e-go:focus-visible,#ek .e-opt:focus-visible{outline:3px solid var(--e-sun);outline-offset:2px}
+#ek .e-opts-row{display:flex;gap:8px;flex-wrap:wrap}
+#ek .e-start{display:grid;gap:14px;justify-items:center;text-align:center}
+#ek .e-start p{font-size:17px;max-width:40ch}
+#ek .e-go{font:700 22px var(--e-f-head);background:var(--e-teal);color:var(--e-teal-ink);border:2.5px solid var(--e-ink);border-radius:14px;padding:12px 26px;cursor:pointer;box-shadow:3px 3px 0 var(--e-ink)}
+#ek .e-go:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--e-ink)}
+#ek .e-count{font-family:var(--e-f-big);font-size:clamp(100px,36vw,150px);line-height:1;text-align:center;color:var(--e-teal);padding:24px 0}
+#ek .e-play{display:grid;gap:12px}
+#ek .e-bar{display:flex;justify-content:space-between;font:700 20px var(--e-f-head);font-variant-numeric:tabular-nums}
+#ek .e-bar .e-pts{color:var(--e-teal)}
+#ek .e-time{height:12px;border:2px solid var(--e-ink);border-radius:8px;overflow:hidden;background:var(--e-card)}
+#ek .e-time i{display:block;height:100%;width:100%;background:var(--e-teal);transform-origin:left}
+#ek .e-time i.low{background:var(--e-red)}
+#ek .e-ask{font-family:var(--e-f-head);font-weight:600;font-size:15px;color:var(--e-muted);text-align:center}
+#ek .e-q{font-family:var(--e-f-big);font-weight:400;font-size:clamp(30px,9vw,44px);line-height:1.05;text-align:center;overflow-wrap:anywhere}
+#ek .e-opts{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+#ek .e-opt{font:600 17px var(--e-f-head);min-height:58px;border:2.5px solid var(--e-ink);border-radius:14px;padding:8px 10px;background:var(--e-sea);color:var(--e-ink);cursor:pointer;overflow-wrap:anywhere;touch-action:manipulation}
+#ek .e-opt:disabled{cursor:default}
+#ek .e-opt.right{background:var(--e-ok-bg);border-color:var(--e-ok);color:var(--e-ink)}
+#ek .e-opt.wrong{background:var(--e-bad-bg);border-color:var(--e-bad);text-decoration:line-through}
+#ek .e-end{display:grid;gap:10px;justify-items:center;text-align:center}
+#ek .e-score{font-family:var(--e-f-big);font-size:80px;line-height:1;color:var(--e-teal);font-variant-numeric:tabular-nums}
+#ek .e-rec{background:var(--e-sun);color:#13303a;font:700 16px var(--e-f-head);border:2px solid var(--e-ink);border-radius:999px;padding:3px 14px;transform:rotate(-2deg)}
+#ek .e-note{font-size:14px;color:var(--e-muted)}
+#ek .e-board ol{list-style:none;margin:8px 0 0;padding:0;display:grid;gap:4px}
+#ek .e-board li{display:grid;grid-template-columns:28px minmax(0,1fr) auto auto;gap:8px;align-items:center;padding:6px 8px;border-radius:10px;font-size:16px}
+#ek .e-board li.me{background:var(--e-ok-bg);font-weight:700}
+#ek .e-board .rk{font-family:var(--e-f-head);font-weight:700;color:var(--e-muted);text-align:center}
+#ek .e-board .nm{display:grid;min-width:0;overflow-wrap:anywhere}
+#ek .e-board .nm small{font-size:13px;color:var(--e-ok)}
+#ek .e-board .pt{font-family:var(--e-f-head);font-weight:700;font-variant-numeric:tabular-nums}
+#ek .e-board h3{font-family:var(--e-f-head);font-weight:700;font-size:20px}
+/* Land der Woche */
+#ek .e-ldw{display:grid;gap:16px;padding:0;overflow:hidden}
+#ek .e-ldw-head{padding:18px 18px 0;display:grid;gap:6px}
+#ek .e-kicker{font:700 13px var(--e-f-head);letter-spacing:.08em;text-transform:uppercase;color:var(--e-red)}
+#ek .e-ldw-head h3{font-family:var(--e-f-big);font-weight:400;font-size:clamp(34px,10vw,52px);line-height:1}
+#ek .e-ldw-head p{font-size:17px;max-width:60ch}
+#ek .e-mapbox{position:relative;background:var(--e-sea);border-block:2.5px solid var(--e-ink)}
+#ek .e-mapbox svg{display:block;width:100%;height:auto}
+#ek .e-map-ctrl{position:absolute;top:10px;right:10px}
+#ek .e-map-ctrl .e-switch button{font-size:13px;padding:3px 10px}
+#ek .e-dist{margin:0 18px;justify-self:start;background:var(--e-card);border:2px solid var(--e-ink);border-radius:999px;padding:4px 12px;font:600 15px var(--e-f-head)}
+#ek .e-dist b{color:var(--e-red)}
+#ek .e-legend{display:flex;gap:14px;flex-wrap:wrap;padding:0 18px;font-size:13px;color:var(--e-muted)}
+#ek .e-legend span{display:inline-flex;align-items:center;gap:6px}
+#ek .e-legend i{width:14px;height:14px;border-radius:4px;border:1.5px solid var(--e-ink);display:inline-block}
+#ek .e-facts{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;padding:0 18px}
+#ek .e-fact{border:2px solid var(--e-ink);border-radius:14px;padding:10px 12px;background:var(--e-bg);display:grid;gap:2px;align-content:start}
+#ek .e-fact span{font:700 12px var(--e-f-head);letter-spacing:.06em;text-transform:uppercase;color:var(--e-muted)}
+#ek .e-fact b{font-family:var(--e-f-head);font-weight:700;font-size:19px;line-height:1.15}
+#ek .e-fact small{font-size:13px;color:var(--e-muted);line-height:1.3}
+#ek .e-nice{display:grid;gap:10px;padding:0 18px 18px}
+#ek .e-nice h4{font-family:var(--e-f-head);font-weight:700;font-size:20px}
+#ek .e-nice article{display:grid;grid-template-columns:auto minmax(0,1fr);gap:12px;align-items:start;border-radius:14px;padding:12px;background:var(--e-bg)}
+#ek .e-nic{display:grid;place-items:center;width:40px;height:40px;border-radius:12px;border:2px solid var(--e-ink);font-size:20px;background:var(--e-sun)}
+#ek .e-nice article:nth-child(3) .e-nic{background:#ffb3c7}
+#ek .e-nice article:nth-child(4) .e-nic{background:#a8e6c3}
+#ek .e-nice .e-th{font:700 12px var(--e-f-head);letter-spacing:.06em;text-transform:uppercase;color:var(--e-muted)}
+#ek .e-nice b{display:block;font-family:var(--e-f-head);font-weight:700;font-size:17px}
+#ek .e-nice p{font-size:15.5px;line-height:1.45}
+@media (prefers-reduced-motion:reduce){#ek *{animation:none!important;transition:none!important}}
+</style>
+<div class="e-wrap">
+  <div class="e-head"><h2>Erdkunde</h2><span class="e-best">Dein Rekord: <b id="e-best">0</b></span></div>
+
+  <h3 class="e-sec">Hauptstadt-Jagd <small>60 Sekunden, so viele richtige wie möglich</small></h3>
+  <div class="e-card e-start" id="e-start">
+    <div class="e-opts-row">
+      <div class="e-switch" role="group" aria-label="Region"><button type="button" data-reg="europa" aria-pressed="true">Europa</button><button type="button" data-reg="welt" aria-pressed="false">Welt</button></div>
+      <div class="e-switch" role="group" aria-label="Richtung"><button type="button" data-dir="ls" aria-pressed="true">Land → Hauptstadt</button><button type="button" data-dir="sl" aria-pressed="false">Hauptstadt → Land</button></div>
+    </div>
+    <p id="e-intro">Zu jedem Land die richtige Hauptstadt finden – vier Antworten, eine stimmt.</p>
+    <button type="button" class="e-go" id="e-go">Los geht’s</button>
+    <p class="e-note">Falsche Antworten kosten keine Punkte, aber Zeit.</p>
+  </div>
+  <div class="e-card" id="e-countbox" hidden><div class="e-count" id="e-count" aria-live="assertive">3</div></div>
+  <div class="e-card e-play" id="e-play" hidden>
+    <div class="e-bar"><span>⏱ <span id="e-sec">60</span> s</span><span class="e-pts">Punkte: <span id="e-n">0</span></span></div>
+    <div class="e-time"><i id="e-tbar"></i></div>
+    <p class="e-ask" id="e-ask">Wie heißt die Hauptstadt von</p>
+    <div class="e-q" id="e-q" aria-live="polite">Finnland</div>
+    <div class="e-opts" id="e-opts"></div>
+  </div>
+  <div class="e-card e-end" id="e-end" hidden>
+    <p class="e-note" id="e-mode-l"></p>
+    <div class="e-score" id="e-score">0</div>
+    <span class="e-rec" id="e-rec" hidden>Neuer Rekord!</span>
+    <p id="e-detail" class="e-note"></p>
+    <button type="button" class="e-go" id="e-again">Nochmal</button>
+  </div>
+  <div class="e-card e-board"><h3>Bestenliste</h3><ol id="e-board"><li><span></span><span class="e-note">Lädt …</span><span></span><span></span></li></ol>
+    <p class="e-note" style="margin-top:8px">Gezählt wird das beste Ergebnis, egal ob Europa oder Welt.</p></div>
+
+  <h3 class="e-sec">Land der Woche</h3>
+  <article class="e-card e-ldw" id="e-ldw"><p class="e-note" style="padding:18px">Lädt …</p></article>
+</div>
+</section>
+
+<script type="text/x-deferred">
+(function(){
+  var $=function(id){return document.getElementById(id)};
+  var me=window.__GU||{uid:"ich",name:"Ich"};
+  function esc(s){return String(s).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]})}
+  var DATA=null,MAP=null,loaded=false,reg="europa",dir="ls",state="start",DUR=60,endAt=0,raf=0,ok=0,bad=0,lock=false,bag=[],cur=null,best=0,col=null,board=[];
+  try{var sv=JSON.parse(localStorage.getItem("gu-ek-mode")||"{}");if(sv.reg==="welt")reg="welt";if(sv.dir==="sl")dir="sl"}catch(e){}
+  function show(id){["e-start","e-countbox","e-play","e-end"].forEach(function(x){$(x).hidden=x!==id})}
+  function syncMode(){document.querySelectorAll("#ek [data-reg]").forEach(function(b){b.setAttribute("aria-pressed",b.dataset.reg===reg?"true":"false")});
+    document.querySelectorAll("#ek [data-dir]").forEach(function(b){b.setAttribute("aria-pressed",b.dataset.dir===dir?"true":"false")});
+    $("e-intro").textContent=(dir==="ls"?"Zu jedem Land die richtige Hauptstadt finden":"Zu jeder Hauptstadt das richtige Land finden")+" – vier Antworten, eine stimmt. "+(reg==="europa"?"Alle Länder Europas.":"Länder aus aller Welt.");
+    try{localStorage.setItem("gu-ek-mode",JSON.stringify({reg:reg,dir:dir}))}catch(e){}}
+  document.querySelectorAll("#ek [data-reg]").forEach(function(b){b.onclick=function(){reg=b.dataset.reg;syncMode()}});
+  document.querySelectorAll("#ek [data-dir]").forEach(function(b){b.onclick=function(){dir=b.dataset.dir;syncMode()}});
+  syncMode();
+  function pool(){return (DATA&&DATA.hauptstaedte&&DATA.hauptstaedte[reg])||[]}
+  function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=a[i];a[i]=a[j];a[j]=t}return a}
+  function next(){var P=pool();if(!bag.length)bag=shuffle(P.slice());cur=bag.pop();
+    var key=dir==="ls"?"stadt":"land",others=shuffle(P.filter(function(x){return x[key]!==cur[key]})).slice(0,3).map(function(x){return x[key]});
+    var opts=shuffle(others.concat([cur[key]]));
+    $("e-ask").textContent=dir==="ls"?"Wie heißt die Hauptstadt von":"Zu welchem Land gehört die Hauptstadt";
+    $("e-q").textContent=dir==="ls"?cur.land:cur.stadt;
+    $("e-opts").innerHTML=opts.map(function(o){return '<button type="button" class="e-opt" data-v="'+esc(o)+'">'+esc(o)+'</button>'}).join("");lock=false}
+  $("e-opts").addEventListener("click",function(e){var b=e.target.closest(".e-opt");if(!b||lock||state!=="play")return;lock=true;
+    var right=dir==="ls"?cur.stadt:cur.land,btns=this.querySelectorAll(".e-opt");
+    if(b.dataset.v===right){ok++;$("e-n").textContent=ok;b.classList.add("right");setTimeout(next,280)}
+    else{bad++;b.classList.add("wrong");btns.forEach(function(x){if(x.dataset.v===right)x.classList.add("right");x.disabled=true});setTimeout(next,1300)}});
+  function tick(){var left=Math.max(0,endAt-Date.now());$("e-sec").textContent=Math.ceil(left/1000);
+    var bar=$("e-tbar");bar.style.transform="scaleX("+(left/(DUR*1000))+")";bar.classList.toggle("low",left<10000);
+    if(left<=0){finish();return}raf=requestAnimationFrame(tick)}
+  function start(){if(!pool().length)return;state="count";show("e-countbox");var n=3,el=$("e-count");
+    (function step(){if(n===0){el.textContent="Los!";setTimeout(play,450);return}el.textContent=n;n--;setTimeout(step,850)})()}
+  function play(){state="play";ok=0;bad=0;bag=[];$("e-n").textContent="0";show("e-play");next();endAt=Date.now()+DUR*1000;cancelAnimationFrame(raf);tick()}
+  async function finish(){state="end";cancelAnimationFrame(raf);if((ok>0||bad>0)&&window.__GUpracticed)window.__GUpracticed();
+    $("e-mode-l").textContent=(reg==="europa"?"Europa":"Welt")+" · "+(dir==="ls"?"Land → Hauptstadt":"Hauptstadt → Land");
+    $("e-score").textContent=ok;$("e-detail").textContent=bad?(bad===1?"1 Antwort war falsch.":bad+" Antworten waren falsch."):"Keine einzige falsche Antwort!";
+    var rec=ok>best&&ok>0;$("e-rec").hidden=!rec;show("e-end");
+    if(rec){best=ok;$("e-best").textContent=best;
+      try{if(col)await col.doc(me.uid).set({name:me.name,best:best,mode:reg+"-"+dir,hidden:!!window.__GUHIDE,updatedAt:new Date().toISOString()})}catch(e){$("e-detail").textContent+=" Rekord konnte nicht gespeichert werden."}}}
+  $("e-go").onclick=start;$("e-again").onclick=function(){show("e-start");state="start"};
+  function drawBoard(){var list=board.filter(function(r){return (!r.hidden||r.id===me.uid)&&r.best>0}).sort(function(a,b){return b.best-a.best}).slice(0,10);
+    if(!list.length){$("e-board").innerHTML='<li><span></span><span class="e-note">Noch kein Ergebnis. Sei die erste Person auf der Liste!</span><span></span><span></span></li>';return}
+    $("e-board").innerHTML=list.map(function(r,i){var L=window.__GUK?window.__GUK.likes("ek",r.id,r.best):[],mine=L.some(function(x){return x.from===me.uid});
+      return '<li class="'+(r.id===me.uid?"me":"")+'"><span class="rk">'+(i+1)+'</span><span class="nm">'+esc(r.name)+(r.id===me.uid&&L.length?'<small>👍 '+esc(L.map(function(x){return x.name}).join(", "))+'</small>':'')+'</span><span class="pt">'+r.best+'</span>'+
+        (r.id===me.uid?'<span class="k-count">'+(L.length?"👍 "+L.length:"")+'</span>':(window.__GUK?'<button type="button" class="k-thumb" data-kcat="ek" data-kid="'+esc(r.id)+'" data-kv="'+r.best+'" aria-pressed="'+mine+'" aria-label="Daumen hoch für '+esc(r.name)+'">👍'+(L.length?" "+L.length:"")+'</button>':'<span></span>'))+'</li>'}).join("")}
+  document.addEventListener("click",function(e){var b=e.target.closest('.k-thumb[data-kcat="ek"]');if(!b||!window.__GUK)return;window.__GUK.toggle("ek",b.dataset.kid,Number(b.dataset.kv)).catch(function(){b.textContent="Fehler"})});
+  (async function(){try{var db=await claude.use("db");col=db.collection("ek_scores");
+    col.onSnapshot(function(snap){board=snap.docs.map(function(d){var x=d.data()||{};return {id:d.id,name:String(x.name||"?").slice(0,24),best:Number(x.best)||0,hidden:!!x.hidden}});
+      var mine=board.filter(function(r){return r.id===me.uid})[0];if(mine&&mine.best>best){best=mine.best;$("e-best").textContent=best}drawBoard()},function(){});
+    if(window.__GUK)window.__GUK.on(drawBoard)}catch(e){$("e-board").innerHTML='<li><span></span><span class="e-note">Bestenliste nicht verbunden.</span><span></span><span></span></li>'}})();
+
+  // ---------- Land der Woche
+  var BERLIN=[13.405,52.52],view="nah";
+  function proj(lon,lat){var m=MAP.meta,l=lon*Math.PI/180,p=lat*Math.PI/180,p2=p*p,p4=p2*p2;
+    var x=l*(0.8707-0.131979*p2+p4*(-0.013791+p4*(0.003971*p2-0.001529*p4))),y=p*(1.007226+p2*(0.015085+p4*(-0.044475+0.028874*p2-0.005916*p4)));
+    return [m.tx+m.scale*x,m.ty-m.scale*y]}
+  function fmtKm(n){return "rund "+Number(n).toLocaleString("de-DE")+" km"}
+  function renderLdw(){var L=DATA&&DATA.laender&&DATA.laender[0],box=$("e-ldw");if(!L){box.innerHTML='<p class="e-note" style="padding:18px">Bald gibt es hier das erste Land der Woche.</p>';return}
+    var h='<div class="e-ldw-head"><span class="e-kicker">Land der Woche · Nr. '+esc(L.nr)+'</span><h3>'+esc(L.name)+' '+(L.flagge||"")+'</h3><p>'+esc(L.einleitung||"")+'</p></div>';
+    h+='<div class="e-mapbox"><svg id="e-map" role="img" aria-label="Weltkarte: '+esc(L.name)+' ist rot markiert, Deutschland gelb. Eine gestrichelte Linie verbindet Berlin und '+esc(L.hauptstadt)+'."></svg>'+
+      '<div class="e-map-ctrl"><div class="e-switch" role="group" aria-label="Kartenausschnitt"><button type="button" data-view="nah" aria-pressed="true">Nah</button><button type="button" data-view="welt" aria-pressed="false">Welt</button></div></div></div>'+
+      (L.entfernung_km?'<div class="e-dist">Berlin → '+esc(L.hauptstadt)+': <b>'+fmtKm(L.entfernung_km)+'</b> Luftlinie</div>':'');
+    h+='<div class="e-legend"><span><i style="background:var(--e-red)"></i>'+esc(L.name)+'</span><span><i style="background:var(--e-de)"></i>Deutschland</span><span><i style="background:transparent;border-style:dashed"></i>Luftlinie Berlin – '+esc(L.hauptstadt)+'</span></div>';
+    h+='<div class="e-facts">'+(L.fakten||[]).map(function(f){return '<div class="e-fact"><span>'+esc(f.label)+'</span><b>'+esc(f.wert)+'</b>'+(f.hinweis?'<small>'+esc(f.hinweis)+'</small>':'')+'</div>'}).join("")+'</div>';
+    var IC={Kultur:"🎭",Politik:"🏛️",Herausforderung:"⚠️",Natur:"🌲",Geschichte:"📜",Wirtschaft:"💼"};
+    h+='<div class="e-nice"><h4>Gut zu wissen</h4>'+(L.nice||[]).map(function(n){return '<article><span class="e-nic" aria-hidden="true">'+(IC[n.thema]||"💡")+'</span><div><span class="e-th">'+esc(n.thema)+'</span><b>'+esc(n.titel)+'</b><p>'+esc(n.text)+'</p></div></article>'}).join("")+'</div>';
+    box.innerHTML=h;
+    box.querySelectorAll("[data-view]").forEach(function(b){b.onclick=function(){view=b.dataset.view;box.querySelectorAll("[data-view]").forEach(function(x){x.setAttribute("aria-pressed",x===b?"true":"false")});drawMap(L)}});
+    drawMap(L)}
+  function drawMap(L){var svg=$("e-map");if(!svg||!MAP)return;var m=MAP.meta,NS="http://www.w3.org/2000/svg";
+    var paths="";Object.keys(MAP.paths).forEach(function(id){var f=id===L.iso?"var(--e-red)":(id==="276"?"var(--e-de)":"var(--e-land)");paths+='<path d="'+MAP.paths[id]+'" fill="'+f+'"'+(id===L.iso?' id="e-target"':(id==="276"?' id="e-de"':''))+'/>'});
+    var a=proj(BERLIN[0],BERLIN[1]),b=proj(L.koord[0],L.koord[1]);
+    svg.innerHTML='<rect x="-2000" y="-2000" width="5000" height="5000" fill="var(--e-sea)"/><g stroke="var(--e-land-line)" stroke-width="0.35" stroke-linejoin="round">'+paths+'</g>'+
+      '<line id="e-line" x1="'+a[0]+'" y1="'+a[1]+'" x2="'+b[0]+'" y2="'+b[1]+'" stroke="var(--e-ink)" stroke-linecap="round" fill="none"/>'+
+      '<circle id="e-c1" cx="'+a[0]+'" cy="'+a[1]+'" fill="var(--e-ink)"/><circle id="e-c2" cx="'+b[0]+'" cy="'+b[1]+'" fill="var(--e-card)" stroke="var(--e-ink)"/>';
+    var vb;if(view==="welt"){vb=[0,0,m.w,m.h]}else{var t=$("e-target").getBBox(),g=$("e-de").getBBox();
+      var x0=Math.min(t.x,g.x),y0=Math.min(t.y,g.y),x1=Math.max(t.x+t.width,g.x+g.width),y1=Math.max(t.y+t.height,g.y+g.height);
+      var w=Math.max(x1-x0,40)*1.3,hh=Math.max(y1-y0,25)*1.3,ar=16/10;if(w/hh<ar)w=hh*ar;else hh=w/ar;
+      var cx=(x0+x1)/2,cy=(y0+y1)/2;vb=[cx-w/2,cy-hh/2,w,hh]}
+    svg.setAttribute("viewBox",vb.join(" "));var k=vb[2]/Math.max(280,svg.clientWidth||360);
+    var ln=$("e-line");ln.setAttribute("stroke-width",2.2*k);ln.setAttribute("stroke-dasharray",(6*k)+" "+(5*k));
+    $("e-c1").setAttribute("r",4*k);$("e-c2").setAttribute("r",4.5*k);$("e-c2").setAttribute("stroke-width",2*k);
+    svg.querySelector("g").setAttribute("stroke-width",Math.max(0.15,0.9*k))}
+  async function load(){if(loaded)return;loaded=true;
+    try{var r=await Promise.all([fetch("erdkunde.json?v="+Date.now(),{cache:"no-store"}).then(function(x){return x.json()}),fetch("weltkarte.json").then(function(x){return x.json()})]);DATA=r[0];MAP=r[1]}
+    catch(e){loaded=false;$("e-ldw").innerHTML='<p class="e-note" style="padding:18px">Konnte nicht geladen werden. Bitte Internetverbindung prüfen.</p>';return}
+    renderLdw()}
+  var tab=$("gu-tab-ek");if(tab)tab.addEventListener("click",load);
+  if(!$("ek").hidden)load();
+  window.__GUekLoad=load;
+})();
+</script>
+
 <script type="text/x-deferred">
 (function(){
   var tabs=document.querySelectorAll('.gu-tab');
   function pick(v,scroll){
-    if(['st','wb','lat','en','ma'].indexOf(v)<0)v='st';
+    if(['st','wb','lat','en','ma','ek'].indexOf(v)<0)v='st';
     tabs.forEach(function(t){t.setAttribute('aria-selected',t.dataset.v===v?'true':'false')});
     document.getElementById('st').hidden=v!=='st';
     document.getElementById('wb').hidden=v!=='wb';
     document.getElementById('lat').hidden=v!=='lat';
     document.getElementById('en').hidden=v!=='en';
     document.getElementById('ma').hidden=v!=='ma';
+    document.getElementById('ek').hidden=v!=='ek';
+    if(v==='ek'&&window.__GUekLoad)window.__GUekLoad();
     try{localStorage.setItem('gretas-update-tab',v)}catch(e){}
+    var st=document.getElementById('gu-tab-'+v);if(st&&st.scrollIntoView)st.scrollIntoView({block:'nearest',inline:'nearest'});
     if(scroll)window.scrollTo({top:0});
   }
   tabs.forEach(function(t){t.addEventListener('click',function(){pick(t.dataset.v,true)})});
   var h=(location.hash||'').slice(1), start='st';
-  if(h==='latein')start='lat';else if(h==='englisch')start='en';else if(h==='mathe')start='ma';else if(h==='weltblick')start='wb';
+  if(h==='latein')start='lat';else if(h==='englisch')start='en';else if(h==='mathe')start='ma';else if(h==='erdkunde')start='ek';else if(h==='weltblick')start='wb';
   else if(h==='start')start='st';
   pick(start,false);
 })();
@@ -2429,11 +2658,11 @@ if(player)loadPlayer();migrate();rebuild();drawRandom();renderStats();renderStag
     document.addEventListener("visibilitychange",function(){if(document.visibilityState==="hidden"&&t)flush()});
     // Brücke für die Seiten-Skripte
     var none={onSnapshot:function(cb){cb({docs:[]});return function(){}},doc:function(){return {get:async function(){return {exists:false}},set:async function(){throw {code:"not_supported"}},delete:async function(){}}}};
-    var db={collection:function(n){if(n==="scores")return fs.collection("scores/lat/players");if(n==="en_scores")return fs.collection("scores/en/players");if(n==="ma_scores")return fs.collection("scores/mathe/players");if(n==="md_scores")return fs.collection("scores/mathe_div/players");if(n==="kudos")return fs.collection("scores/kudos/players");if(n==="quiz_scores")return fs.collection("scores/quiz/players");return none}};
+    var db={collection:function(n){if(n==="scores")return fs.collection("scores/lat/players");if(n==="en_scores")return fs.collection("scores/en/players");if(n==="ma_scores")return fs.collection("scores/mathe/players");if(n==="md_scores")return fs.collection("scores/mathe_div/players");if(n==="kudos")return fs.collection("scores/kudos/players");if(n==="quiz_scores")return fs.collection("scores/quiz/players");if(n==="ek_scores")return fs.collection("scores/erdkunde/players");return none}};
     window.__GU={uid:uid,name:name};window.__GUfs=fs;
     window.__GUsetVis=function(v){window.__GUVIS=v;window.__GUHIDE=v==="me";
       fs.doc("progress/"+uid).set({vis:v},{merge:true}).catch(function(){});
-      ["scores/lat/players/","scores/en/players/","scores/mathe/players/","scores/mathe_div/players/","scores/quiz/players/"].forEach(function(pth){fs.doc(pth+uid).set({hidden:v==="me"},{merge:true}).catch(function(){})});
+      ["scores/lat/players/","scores/en/players/","scores/mathe/players/","scores/mathe_div/players/","scores/quiz/players/","scores/erdkunde/players/"].forEach(function(pth){fs.doc(pth+uid).set({hidden:v==="me"},{merge:true}).catch(function(){})});
       window.dispatchEvent(new Event("gu-vis"))};
     if(!pr.vis){$("vis-dlg").hidden=false}
     window.__GUK=(function(){var kd={},subs=[],busy=false,col=fs.collection("scores/kudos/players");
@@ -2508,7 +2737,7 @@ if(player)loadPlayer();migrate();rebuild();drawRandom();renderStats();renderStag
     if(armed!==id){armed=id;this.querySelectorAll("button[data-rm]").forEach(function(x){x.classList.remove("sure");x.textContent="Entfernen"});
       b.classList.add("sure");b.textContent="Wirklich entfernen?";return}
     b.disabled=true;b.textContent="Entfernt …";
-    try{await Promise.all([fs.doc("scores/lat/players/"+id).delete(),fs.doc("scores/en/players/"+id).delete(),fs.doc("scores/mathe/players/"+id).delete(),fs.doc("scores/mathe_div/players/"+id).delete(),fs.doc("scores/kudos/players/"+id).delete(),fs.doc("scores/quiz/players/"+id).delete(),fs.doc("progress/"+id).delete()]);
+    try{await Promise.all([fs.doc("scores/lat/players/"+id).delete(),fs.doc("scores/en/players/"+id).delete(),fs.doc("scores/mathe/players/"+id).delete(),fs.doc("scores/mathe_div/players/"+id).delete(),fs.doc("scores/kudos/players/"+id).delete(),fs.doc("scores/quiz/players/"+id).delete(),fs.doc("scores/erdkunde/players/"+id).delete(),fs.doc("progress/"+id).delete()]);
       await fs.doc("profiles/"+id).delete();
       $("ad-msg").textContent=name+" wurde entfernt. Tipp: jetzt den Klassen-Code ändern.";loadMembers()}
     catch(err){b.disabled=false;b.classList.remove("sure");b.textContent="Entfernen";armed=null;$("ad-msg").textContent="Entfernen hat nicht geklappt: "+(err.code||err.message)}};
@@ -2518,9 +2747,9 @@ if(player)loadPlayer();migrate();rebuild();drawRandom();renderStats();renderStag
       var r=await Promise.all([fs.doc("vocab/lat").get(),fs.doc("vocab/en").get(),fs.collection("profiles").get(),
         fs.collection("scores/lat/players").get(),fs.collection("scores/en/players").get(),fs.collection("scores/mathe/players").get(),
         fs.collection("scores/mathe_div/players").get(),fs.collection("scores/kudos/players").get(),
-        fetch("weltblick.json?v="+Date.now(),{cache:"no-store"}).then(function(x){return x.ok?x.json():[]}).catch(function(){return []}),fs.collection("scores/quiz/players").get()]);
+        fetch("weltblick.json?v="+Date.now(),{cache:"no-store"}).then(function(x){return x.ok?x.json():[]}).catch(function(){return []}),fs.collection("scores/quiz/players").get(),fs.collection("scores/erdkunde/players").get()]);
       var out={erstellt:new Date().toISOString(),vocab:{lat:items(r[0]),en:items(r[1])},mitspielende:rows(r[2]),
-        rekorde:{latein:rows(r[3]),englisch:rows(r[4]),mathe_mal:rows(r[5]),mathe_geteilt:rows(r[6]),weltblick_quiz:rows(r[9])},daumen:rows(r[7]),weltblick:r[8]};
+        rekorde:{latein:rows(r[3]),englisch:rows(r[4]),mathe_mal:rows(r[5]),mathe_geteilt:rows(r[6]),weltblick_quiz:rows(r[9]),erdkunde:rows(r[10])},daumen:rows(r[7]),weltblick:r[8]};
       Object.keys(out.mitspielende).forEach(function(k){delete out.mitspielende[k].code});
       var blob=new Blob([JSON.stringify(out,null,2)],{type:"application/json"}),a=document.createElement("a");
       a.href=URL.createObjectURL(blob);a.download="gretas-update-sicherung-"+new Date().toISOString().slice(0,10)+".json";document.body.appendChild(a);a.click();
