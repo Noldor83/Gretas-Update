@@ -2194,7 +2194,16 @@ if(player)loadPlayer();migrate();rebuild();drawRandom();renderStats();renderStag
 #ek .e-switch button{font:600 15px var(--e-f-head);border:0;border-radius:999px;padding:5px 14px;background:transparent;color:var(--e-ink);cursor:pointer}
 #ek .e-switch button[aria-pressed="true"]{background:var(--e-teal);color:var(--e-teal-ink)}
 #ek .e-switch button:focus-visible,#ek .e-go:focus-visible,#ek .e-opt:focus-visible{outline:3px solid var(--e-sun);outline-offset:2px}
-#ek .e-opts-row{display:flex;gap:8px;flex-wrap:wrap}
+#ek .e-opts-row{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+#ek .e-regs{display:flex;flex-wrap:wrap;gap:6px;justify-content:center}
+#ek .e-reg{font:600 15px var(--e-f-head);border:2px solid var(--e-ink);border-radius:999px;padding:5px 12px;background:var(--e-card);color:var(--e-ink);cursor:pointer}
+#ek .e-reg small{font:500 12px var(--e-f-body);color:var(--e-muted);margin-left:3px}
+#ek .e-reg[aria-pressed="true"]{background:var(--e-teal);color:var(--e-teal-ink)}
+#ek .e-reg[aria-pressed="true"] small{color:inherit;opacity:.85}
+#ek .e-reg.all{border-style:dashed}
+#ek .e-dir{display:grid;grid-template-columns:1fr 1fr;border-radius:16px;width:100%;max-width:400px}
+#ek .e-dir button{border-radius:12px;font-size:14px;padding:6px 8px}
+#ek .e-reg:focus-visible{outline:3px solid var(--e-sun);outline-offset:2px}
 #ek .e-start{display:grid;gap:14px;justify-items:center;text-align:center}
 #ek .e-start p{font-size:17px;max-width:40ch}
 #ek .e-go{font:700 22px var(--e-f-head);background:var(--e-teal);color:var(--e-teal-ink);border:2.5px solid var(--e-ink);border-radius:14px;padding:12px 26px;cursor:pointer;box-shadow:3px 3px 0 var(--e-ink)}
@@ -2261,9 +2270,17 @@ if(player)loadPlayer();migrate();rebuild();drawRandom();renderStats();renderStag
 
   <h3 class="e-sec">Hauptstadt-Jagd <small>60 Sekunden, so viele richtige wie möglich</small></h3>
   <div class="e-card e-start" id="e-start">
+    <div class="e-regs" role="group" aria-label="Kontinente">
+      <button type="button" class="e-reg" data-reg="europa" aria-pressed="true">Europa</button>
+      <button type="button" class="e-reg" data-reg="afrika" aria-pressed="false">Afrika</button>
+      <button type="button" class="e-reg" data-reg="asien" aria-pressed="false">Asien</button>
+      <button type="button" class="e-reg" data-reg="nordamerika" aria-pressed="false">Nordamerika</button>
+      <button type="button" class="e-reg" data-reg="suedamerika" aria-pressed="false">Südamerika</button>
+      <button type="button" class="e-reg" data-reg="ozeanien" aria-pressed="false">Ozeanien</button>
+      <button type="button" class="e-reg all" data-reg="alle" aria-pressed="false">🌍 Ganze Welt</button>
+    </div>
     <div class="e-opts-row">
-      <div class="e-switch" role="group" aria-label="Region"><button type="button" data-reg="europa" aria-pressed="true">Europa</button><button type="button" data-reg="welt" aria-pressed="false">Welt</button></div>
-      <div class="e-switch" role="group" aria-label="Richtung"><button type="button" data-dir="ls" aria-pressed="true">Land → Hauptstadt</button><button type="button" data-dir="sl" aria-pressed="false">Hauptstadt → Land</button></div>
+      <div class="e-switch e-dir" role="group" aria-label="Richtung"><button type="button" data-dir="ls" aria-pressed="true">Land → Hauptstadt</button><button type="button" data-dir="sl" aria-pressed="false">Hauptstadt → Land</button></div>
     </div>
     <p id="e-intro">Zu jedem Land die richtige Hauptstadt finden – vier Antworten, eine stimmt.</p>
     <button type="button" class="e-go" id="e-go">Los geht’s</button>
@@ -2285,7 +2302,7 @@ if(player)loadPlayer();migrate();rebuild();drawRandom();renderStats();renderStag
     <button type="button" class="e-go" id="e-again">Nochmal</button>
   </div>
   <div class="e-card e-board"><h3>Bestenliste</h3><ol id="e-board"><li><span></span><span class="e-note">Lädt …</span><span></span><span></span></li></ol>
-    <p class="e-note" style="margin-top:8px">Gezählt wird das beste Ergebnis, egal ob Europa oder Welt.</p></div>
+    <p class="e-note" style="margin-top:8px">Gezählt wird das beste Ergebnis, egal welche Kontinente gewählt waren.</p></div>
 
   <h3 class="e-sec">Land der Woche</h3>
   <article class="e-card e-ldw" id="e-ldw"><p class="e-note" style="padding:18px">Lädt …</p></article>
@@ -2297,17 +2314,22 @@ if(player)loadPlayer();migrate();rebuild();drawRandom();renderStats();renderStag
   var $=function(id){return document.getElementById(id)};
   var me=window.__GU||{uid:"ich",name:"Ich"};
   function esc(s){return String(s).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]})}
-  var DATA=null,MAP=null,loaded=false,reg="europa",dir="ls",state="start",DUR=60,endAt=0,raf=0,ok=0,bad=0,lock=false,bag=[],cur=null,best=0,col=null,board=[];
-  try{var sv=JSON.parse(localStorage.getItem("gu-ek-mode")||"{}");if(sv.reg==="welt")reg="welt";if(sv.dir==="sl")dir="sl"}catch(e){}
+  var DATA=null,MAP=null,loaded=false,REGS=["europa","afrika","asien","nordamerika","suedamerika","ozeanien"],RN={europa:"Europa",afrika:"Afrika",asien:"Asien",nordamerika:"Nordamerika",suedamerika:"Südamerika",ozeanien:"Ozeanien"},regs=["europa"],dir="ls",state="start",DUR=60,endAt=0,raf=0,ok=0,bad=0,lock=false,bag=[],cur=null,best=0,col=null,board=[];
+  try{var sv=JSON.parse(localStorage.getItem("gu-ek-mode")||"{}");if(Array.isArray(sv.regs)){var ok2=sv.regs.filter(function(r){return REGS.indexOf(r)>=0});if(ok2.length)regs=ok2}if(sv.dir==="sl")dir="sl"}catch(e){}
   function show(id){["e-start","e-countbox","e-play","e-end"].forEach(function(x){$(x).hidden=x!==id})}
-  function syncMode(){document.querySelectorAll("#ek [data-reg]").forEach(function(b){b.setAttribute("aria-pressed",b.dataset.reg===reg?"true":"false")});
+  function regLabel(){return regs.length===REGS.length?"Ganze Welt":regs.map(function(r){return RN[r]}).join(", ")}
+  function syncMode(){var all=regs.length===REGS.length;document.querySelectorAll("#ek [data-reg]").forEach(function(b){var on=b.dataset.reg==="alle"?all:regs.indexOf(b.dataset.reg)>=0;b.setAttribute("aria-pressed",on?"true":"false");
+      if(DATA&&b.dataset.reg!=="alle"){var n=(DATA.hauptstaedte[b.dataset.reg]||[]).length;b.innerHTML=RN[b.dataset.reg]+'<small>'+n+'</small>'}});
     document.querySelectorAll("#ek [data-dir]").forEach(function(b){b.setAttribute("aria-pressed",b.dataset.dir===dir?"true":"false")});
-    $("e-intro").textContent=(dir==="ls"?"Zu jedem Land die richtige Hauptstadt finden":"Zu jeder Hauptstadt das richtige Land finden")+" – vier Antworten, eine stimmt. "+(reg==="europa"?"Alle Länder Europas.":"Länder aus aller Welt.");
-    try{localStorage.setItem("gu-ek-mode",JSON.stringify({reg:reg,dir:dir}))}catch(e){}}
-  document.querySelectorAll("#ek [data-reg]").forEach(function(b){b.onclick=function(){reg=b.dataset.reg;syncMode()}});
+    $("e-intro").textContent=(dir==="ls"?"Zu jedem Land die richtige Hauptstadt finden":"Zu jeder Hauptstadt das richtige Land finden")+" – vier Antworten, eine stimmt. Gewählt: "+regLabel()+" ("+pool().length+" Länder).";
+    try{localStorage.setItem("gu-ek-mode",JSON.stringify({regs:regs,dir:dir}))}catch(e){}}
+  document.querySelectorAll("#ek [data-reg]").forEach(function(b){b.onclick=function(){if(state==="count"||state==="play")return;var r=b.dataset.reg;
+    if(r==="alle")regs=regs.length===REGS.length?["europa"]:REGS.slice();
+    else{var i=regs.indexOf(r);if(i>=0){if(regs.length>1)regs.splice(i,1)}else regs.push(r);regs=REGS.filter(function(x){return regs.indexOf(x)>=0})}
+    syncMode()}});
   document.querySelectorAll("#ek [data-dir]").forEach(function(b){b.onclick=function(){dir=b.dataset.dir;syncMode()}});
   syncMode();
-  function pool(){return (DATA&&DATA.hauptstaedte&&DATA.hauptstaedte[reg])||[]}
+  function pool(){if(!DATA||!DATA.hauptstaedte)return [];var o=[];regs.forEach(function(r){o=o.concat(DATA.hauptstaedte[r]||[])});return o}
   function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=a[i];a[i]=a[j];a[j]=t}return a}
   function next(){var P=pool();if(!bag.length)bag=shuffle(P.slice());cur=bag.pop();
     var key=dir==="ls"?"stadt":"land",others=shuffle(P.filter(function(x){return x[key]!==cur[key]})).slice(0,3).map(function(x){return x[key]});
@@ -2326,11 +2348,11 @@ if(player)loadPlayer();migrate();rebuild();drawRandom();renderStats();renderStag
     (function step(){if(n===0){el.textContent="Los!";setTimeout(play,450);return}el.textContent=n;n--;setTimeout(step,850)})()}
   function play(){state="play";ok=0;bad=0;bag=[];$("e-n").textContent="0";show("e-play");next();endAt=Date.now()+DUR*1000;cancelAnimationFrame(raf);tick()}
   async function finish(){state="end";cancelAnimationFrame(raf);if((ok>0||bad>0)&&window.__GUpracticed)window.__GUpracticed();
-    $("e-mode-l").textContent=(reg==="europa"?"Europa":"Welt")+" · "+(dir==="ls"?"Land → Hauptstadt":"Hauptstadt → Land");
+    $("e-mode-l").textContent=regLabel()+" · "+(dir==="ls"?"Land → Hauptstadt":"Hauptstadt → Land");
     $("e-score").textContent=ok;$("e-detail").textContent=bad?(bad===1?"1 Antwort war falsch.":bad+" Antworten waren falsch."):"Keine einzige falsche Antwort!";
     var rec=ok>best&&ok>0;$("e-rec").hidden=!rec;show("e-end");
     if(rec){best=ok;$("e-best").textContent=best;
-      try{if(col)await col.doc(me.uid).set({name:me.name,best:best,mode:reg+"-"+dir,hidden:!!window.__GUHIDE,updatedAt:new Date().toISOString()})}catch(e){$("e-detail").textContent+=" Rekord konnte nicht gespeichert werden."}}}
+      try{if(col)await col.doc(me.uid).set({name:me.name,best:best,mode:regs.join("+")+"-"+dir,hidden:!!window.__GUHIDE,updatedAt:new Date().toISOString()})}catch(e){$("e-detail").textContent+=" Rekord konnte nicht gespeichert werden."}}}
   $("e-go").onclick=start;$("e-again").onclick=function(){show("e-start");state="start"};
   function drawBoard(){var list=board.filter(function(r){return (!r.hidden||r.id===me.uid)&&r.best>0}).sort(function(a,b){return b.best-a.best}).slice(0,10);
     if(!list.length){$("e-board").innerHTML='<li><span></span><span class="e-note">Noch kein Ergebnis. Sei die erste Person auf der Liste!</span><span></span><span></span></li>';return}
@@ -2378,7 +2400,7 @@ if(player)loadPlayer();migrate();rebuild();drawRandom();renderStats();renderStag
   async function load(){if(loaded)return;loaded=true;
     try{var r=await Promise.all([fetch("erdkunde.json?v="+Date.now(),{cache:"no-store"}).then(function(x){return x.json()}),fetch("weltkarte.json").then(function(x){return x.json()})]);DATA=r[0];MAP=r[1]}
     catch(e){loaded=false;$("e-ldw").innerHTML='<p class="e-note" style="padding:18px">Konnte nicht geladen werden. Bitte Internetverbindung prüfen.</p>';return}
-    renderLdw()}
+    syncMode();renderLdw()}
   var tab=$("gu-tab-ek");if(tab)tab.addEventListener("click",load);
   if(!$("ek").hidden)load();
   window.__GUekLoad=load;

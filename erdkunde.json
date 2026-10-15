@@ -249,7 +249,239 @@
         "stadt": "Nikosia"
       }
     ],
-    "welt": [
+    "afrika": [
+      {
+        "land": "Ägypten",
+        "stadt": "Kairo"
+      },
+      {
+        "land": "Algerien",
+        "stadt": "Algier"
+      },
+      {
+        "land": "Angola",
+        "stadt": "Luanda"
+      },
+      {
+        "land": "Äthiopien",
+        "stadt": "Addis Abeba"
+      },
+      {
+        "land": "Botswana",
+        "stadt": "Gaborone"
+      },
+      {
+        "land": "Demokratische Republik Kongo",
+        "stadt": "Kinshasa"
+      },
+      {
+        "land": "Ghana",
+        "stadt": "Accra"
+      },
+      {
+        "land": "Kamerun",
+        "stadt": "Jaunde"
+      },
+      {
+        "land": "Kenia",
+        "stadt": "Nairobi"
+      },
+      {
+        "land": "Libyen",
+        "stadt": "Tripolis"
+      },
+      {
+        "land": "Madagaskar",
+        "stadt": "Antananarivo"
+      },
+      {
+        "land": "Mali",
+        "stadt": "Bamako"
+      },
+      {
+        "land": "Marokko",
+        "stadt": "Rabat"
+      },
+      {
+        "land": "Mosambik",
+        "stadt": "Maputo"
+      },
+      {
+        "land": "Namibia",
+        "stadt": "Windhuk"
+      },
+      {
+        "land": "Niger",
+        "stadt": "Niamey"
+      },
+      {
+        "land": "Nigeria",
+        "stadt": "Abuja"
+      },
+      {
+        "land": "Ruanda",
+        "stadt": "Kigali"
+      },
+      {
+        "land": "Sambia",
+        "stadt": "Lusaka"
+      },
+      {
+        "land": "Senegal",
+        "stadt": "Dakar"
+      },
+      {
+        "land": "Simbabwe",
+        "stadt": "Harare"
+      },
+      {
+        "land": "Somalia",
+        "stadt": "Mogadischu"
+      },
+      {
+        "land": "Tunesien",
+        "stadt": "Tunis"
+      },
+      {
+        "land": "Uganda",
+        "stadt": "Kampala"
+      }
+    ],
+    "asien": [
+      {
+        "land": "Afghanistan",
+        "stadt": "Kabul"
+      },
+      {
+        "land": "Armenien",
+        "stadt": "Eriwan"
+      },
+      {
+        "land": "Aserbaidschan",
+        "stadt": "Baku"
+      },
+      {
+        "land": "Bangladesch",
+        "stadt": "Dhaka"
+      },
+      {
+        "land": "China",
+        "stadt": "Peking"
+      },
+      {
+        "land": "Georgien",
+        "stadt": "Tiflis"
+      },
+      {
+        "land": "Indien",
+        "stadt": "Neu-Delhi"
+      },
+      {
+        "land": "Irak",
+        "stadt": "Bagdad"
+      },
+      {
+        "land": "Iran",
+        "stadt": "Teheran"
+      },
+      {
+        "land": "Japan",
+        "stadt": "Tokio"
+      },
+      {
+        "land": "Jordanien",
+        "stadt": "Amman"
+      },
+      {
+        "land": "Kambodscha",
+        "stadt": "Phnom Penh"
+      },
+      {
+        "land": "Kasachstan",
+        "stadt": "Astana"
+      },
+      {
+        "land": "Katar",
+        "stadt": "Doha"
+      },
+      {
+        "land": "Kuwait",
+        "stadt": "Kuwait-Stadt"
+      },
+      {
+        "land": "Laos",
+        "stadt": "Vientiane"
+      },
+      {
+        "land": "Libanon",
+        "stadt": "Beirut"
+      },
+      {
+        "land": "Malaysia",
+        "stadt": "Kuala Lumpur"
+      },
+      {
+        "land": "Mongolei",
+        "stadt": "Ulaanbaatar"
+      },
+      {
+        "land": "Myanmar",
+        "stadt": "Naypyidaw"
+      },
+      {
+        "land": "Nepal",
+        "stadt": "Kathmandu"
+      },
+      {
+        "land": "Nordkorea",
+        "stadt": "Pjöngjang"
+      },
+      {
+        "land": "Oman",
+        "stadt": "Maskat"
+      },
+      {
+        "land": "Pakistan",
+        "stadt": "Islamabad"
+      },
+      {
+        "land": "Philippinen",
+        "stadt": "Manila"
+      },
+      {
+        "land": "Saudi-Arabien",
+        "stadt": "Riad"
+      },
+      {
+        "land": "Singapur",
+        "stadt": "Singapur"
+      },
+      {
+        "land": "Südkorea",
+        "stadt": "Seoul"
+      },
+      {
+        "land": "Syrien",
+        "stadt": "Damaskus"
+      },
+      {
+        "land": "Thailand",
+        "stadt": "Bangkok"
+      },
+      {
+        "land": "Usbekistan",
+        "stadt": "Taschkent"
+      },
+      {
+        "land": "Vereinigte Arabische Emirate",
+        "stadt": "Abu Dhabi"
+      },
+      {
+        "land": "Vietnam",
+        "stadt": "Hanoi"
+      }
+    ],
+    "nordamerika": [
       {
         "land": "USA",
         "stadt": "Washington, D.C."
@@ -263,105 +495,93 @@
         "stadt": "Mexiko-Stadt"
       },
       {
+        "land": "Guatemala",
+        "stadt": "Guatemala-Stadt"
+      },
+      {
+        "land": "Honduras",
+        "stadt": "Tegucigalpa"
+      },
+      {
+        "land": "El Salvador",
+        "stadt": "San Salvador"
+      },
+      {
+        "land": "Nicaragua",
+        "stadt": "Managua"
+      },
+      {
+        "land": "Costa Rica",
+        "stadt": "San José"
+      },
+      {
+        "land": "Panama",
+        "stadt": "Panama-Stadt"
+      },
+      {
         "land": "Kuba",
         "stadt": "Havanna"
+      },
+      {
+        "land": "Jamaika",
+        "stadt": "Kingston"
+      },
+      {
+        "land": "Haiti",
+        "stadt": "Port-au-Prince"
+      },
+      {
+        "land": "Dominikanische Republik",
+        "stadt": "Santo Domingo"
+      }
+    ],
+    "suedamerika": [
+      {
+        "land": "Argentinien",
+        "stadt": "Buenos Aires"
       },
       {
         "land": "Brasilien",
         "stadt": "Brasília"
       },
       {
-        "land": "Argentinien",
-        "stadt": "Buenos Aires"
-      },
-      {
         "land": "Chile",
         "stadt": "Santiago de Chile"
       },
       {
-        "land": "Peru",
-        "stadt": "Lima"
+        "land": "Ecuador",
+        "stadt": "Quito"
+      },
+      {
+        "land": "Guyana",
+        "stadt": "Georgetown"
       },
       {
         "land": "Kolumbien",
         "stadt": "Bogotá"
       },
       {
+        "land": "Paraguay",
+        "stadt": "Asunción"
+      },
+      {
+        "land": "Peru",
+        "stadt": "Lima"
+      },
+      {
+        "land": "Suriname",
+        "stadt": "Paramaribo"
+      },
+      {
+        "land": "Uruguay",
+        "stadt": "Montevideo"
+      },
+      {
         "land": "Venezuela",
         "stadt": "Caracas"
-      },
-      {
-        "land": "China",
-        "stadt": "Peking"
-      },
-      {
-        "land": "Japan",
-        "stadt": "Tokio"
-      },
-      {
-        "land": "Südkorea",
-        "stadt": "Seoul"
-      },
-      {
-        "land": "Nordkorea",
-        "stadt": "Pjöngjang"
-      },
-      {
-        "land": "Mongolei",
-        "stadt": "Ulaanbaatar"
-      },
-      {
-        "land": "Indien",
-        "stadt": "Neu-Delhi"
-      },
-      {
-        "land": "Pakistan",
-        "stadt": "Islamabad"
-      },
-      {
-        "land": "Afghanistan",
-        "stadt": "Kabul"
-      },
-      {
-        "land": "Iran",
-        "stadt": "Teheran"
-      },
-      {
-        "land": "Irak",
-        "stadt": "Bagdad"
-      },
-      {
-        "land": "Saudi-Arabien",
-        "stadt": "Riad"
-      },
-      {
-        "land": "Jordanien",
-        "stadt": "Amman"
-      },
-      {
-        "land": "Syrien",
-        "stadt": "Damaskus"
-      },
-      {
-        "land": "Libanon",
-        "stadt": "Beirut"
-      },
-      {
-        "land": "Kasachstan",
-        "stadt": "Astana"
-      },
-      {
-        "land": "Thailand",
-        "stadt": "Bangkok"
-      },
-      {
-        "land": "Vietnam",
-        "stadt": "Hanoi"
-      },
-      {
-        "land": "Philippinen",
-        "stadt": "Manila"
-      },
+      }
+    ],
+    "ozeanien": [
       {
         "land": "Australien",
         "stadt": "Canberra"
@@ -371,36 +591,28 @@
         "stadt": "Wellington"
       },
       {
-        "land": "Ägypten",
-        "stadt": "Kairo"
+        "land": "Papua-Neuguinea",
+        "stadt": "Port Moresby"
       },
       {
-        "land": "Marokko",
-        "stadt": "Rabat"
+        "land": "Fidschi",
+        "stadt": "Suva"
       },
       {
-        "land": "Algerien",
-        "stadt": "Algier"
+        "land": "Samoa",
+        "stadt": "Apia"
       },
       {
-        "land": "Tunesien",
-        "stadt": "Tunis"
+        "land": "Tonga",
+        "stadt": "Nukuʻalofa"
       },
       {
-        "land": "Kenia",
-        "stadt": "Nairobi"
+        "land": "Vanuatu",
+        "stadt": "Port Vila"
       },
       {
-        "land": "Nigeria",
-        "stadt": "Abuja"
-      },
-      {
-        "land": "Äthiopien",
-        "stadt": "Addis Abeba"
-      },
-      {
-        "land": "Ghana",
-        "stadt": "Accra"
+        "land": "Salomonen",
+        "stadt": "Honiara"
       }
     ]
   }
