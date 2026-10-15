@@ -2760,10 +2760,10 @@ if(player)loadPlayer();migrate();rebuild();drawRandom();renderStats();renderStag
     $("d-status").textContent="Tippe auf die Karte. Mit zwei Fingern oder den Knöpfen kannst du zoomen.";
     $("d-ok").disabled=true;$("d-ok").hidden=false;$("d-next").hidden=true;PM.set([]);PM.home()}
   $("d-ok").onclick=function(){if(!G||!G.cur||G.locked)return;G.locked=true;var P=BYID[G.d.places[G.i]],t=[P.lon,P.lat],d=km(G.cur,t);G.g.push(G.cur);
-    var a=proj(G.cur[0],G.cur[1]),b=proj(t[0],t[1]),mk=[{line:1,a:a,b:b,c:"var(--e-ink)"},{p:a,c:"var(--e-teal)"}],pts=[a,b],txt="Du: <b>"+fmtKm(d)+"</b> daneben.";
+    var a=proj(G.cur[0],G.cur[1]),b=proj(t[0],t[1]),mk=[{line:1,a:a,b:b,c:"var(--e-ink)"},{p:b,c:"var(--e-red)",flag:1,t:P.n},{p:a,c:"var(--e-teal)"}],pts=[a,b],txt="Du: <b>"+fmtKm(d)+"</b> daneben.";
     if(!G.first){var o=pairG(G.d.g||[],G.i),c=proj(o[0],o[1]),od=km(o,t),on=nameOf(G.d.from,G.d.fromName);mk.push({line:1,a:c,b:b,c:"var(--e-muted)"},{p:c,c:"var(--e-sun)",t:on});pts.push(c);
       txt+=" "+esc(on)+": <b>"+fmtKm(od)+"</b>. "+(d<od?"Runde für dich!":od<d?"Runde für "+esc(on)+".":"Gleich weit!")}
-    mk.push({p:b,c:"var(--e-red)",flag:1,t:P.n});PM.set(mk);PM.fit(pts);
+    PM.set(mk);PM.fit(pts);
     $("d-status").innerHTML=txt;$("d-ok").hidden=true;$("d-next").hidden=false;$("d-next").textContent=G.i+1<G.d.places.length?"Nächster Ort":"Ergebnis";$("d-next").focus()};
   $("d-next").onclick=function(){if(!G)return;G.i++;if(G.i<G.d.places.length){round();return}finishPlay()};
   $("d-quit").onclick=function(){if(G&&G.i>0&&!confirm("Duell abbrechen? Deine Tipps werden nicht gespeichert."))return;G=null;view("d-home")};
@@ -2789,12 +2789,13 @@ if(player)loadPlayer();migrate();rebuild();drawRandom();renderStats();renderStag
     $("d-ha").textContent=ha;$("d-hb").textContent=hb;
     $("d-rows").innerHTML=s.rows.map(function(r,i){return '<tr tabindex="0" data-i="'+i+'"><td><b>'+esc(r.P.n)+'</b><small>'+esc(r.P.h||"")+'</small></td><td class="'+(r.da<r.db?"w":"")+'">'+fmtKm(r.da)+'</td><td class="'+(r.db<r.da?"w":"")+'">'+fmtKm(r.db)+'</td></tr>'}).join("")+
       '<tr data-i="all" tabindex="0"><td><b>Gesamt</b></td><td class="'+(s.ta<s.tb?"w":"")+'">'+fmtKm(s.ta)+'</td><td class="'+(s.tb<s.ta?"w":"")+'">'+fmtKm(s.tb)+'</td></tr>';
-    $("d-legend").innerHTML='<span><i style="background:var(--e-teal)"></i>'+esc(ha)+'</span><span><i style="background:var(--e-sun)"></i>'+esc(hb)+'</span><span><i style="background:var(--e-red)"></i>richtiger Ort</span>';
+    var cA=meA?"var(--e-teal)":"var(--e-sun)",cB=meA?"var(--e-sun)":"var(--e-teal)";
+    $("d-legend").innerHTML='<span><i style="background:'+cA+'"></i>'+esc(ha)+'</span><span><i style="background:'+cB+'"></i>'+esc(hb)+'</span><span><i style="background:var(--e-red)"></i>richtiger Ort</span>';
     if(!RM)RM=makeMap($("d-rmap"),{});
     function showRow(i){$("d-rows").querySelectorAll("tr").forEach(function(tr){tr.classList.toggle("on",tr.dataset.i===String(i))});
       var list=i==="all"?s.rows:[s.rows[i]],mk=[],pts=[];
       list.forEach(function(r){var a=proj(r.ga[0],r.ga[1]),b=proj(r.gb[0],r.gb[1]),t=proj(r.P.lon,r.P.lat);
-        mk.push({line:1,a:a,b:t,c:"var(--e-teal)"},{line:1,a:b,b:t,c:"var(--e-muted)"},{p:a,c:"var(--e-teal)",r:i==="all"?5:7},{p:b,c:"var(--e-sun)",r:i==="all"?5:7},{p:t,c:"var(--e-red)",flag:1,t:i==="all"?"":r.P.n,r:i==="all"?5:7});pts.push(a,b,t)});
+        mk.push({line:1,a:a,b:t,c:meA?"var(--e-ink)":"var(--e-muted)"},{line:1,a:b,b:t,c:meA?"var(--e-muted)":"var(--e-ink)"},{p:t,c:"var(--e-red)",flag:1,t:i==="all"?"":r.P.n,r:i==="all"?5:7},{p:a,c:cA,r:i==="all"?5:7},{p:b,c:cB,r:i==="all"?5:7});pts.push(a,b,t)});
       RM.set(mk);if(i==="all")RM.home();else RM.fit(pts)}
     $("d-rows").querySelectorAll("tr").forEach(function(tr){tr.onclick=function(){showRow(tr.dataset.i==="all"?"all":+tr.dataset.i)};tr.onkeydown=function(e){if(e.key==="Enter"||e.key===" "){e.preventDefault();tr.onclick()}}});
     requestAnimationFrame(function(){showRow(0)});
