@@ -356,6 +356,7 @@ body{background:var(--gu-bar);color:var(--gu-bar-fg)}
 #lat .chk{list-style:none;margin:6px 0 4px;padding:0;display:grid;gap:2px}
 #lat .chk li.y{color:var(--ok)}#lat .chk li.n{color:var(--bad)}
 #lat .fb .full{margin-top:6px;padding-top:6px;border-top:2px dotted currentColor;font-weight:800;color:var(--ink)}
+#lat .fb .full .lw{display:block;font-weight:500;font-style:italic;font-size:.85rem;color:var(--muted);margin-top:2px}
 #lat .dbst,#en .dbst{margin:8px 0 0;font-size:.78rem;font-weight:700;color:var(--muted)}
 #lat .answer.gen{flex:0 1 9.5em;font-size:1.2rem;padding:6px 10px}
 
@@ -1089,7 +1090,7 @@ function check(input,de){
 
 
 
-const BASE=V.map(([la,ex,de,l,tg])=>({la,ex,de,l,tg,custom:false}));
+const BASE=V.map(([la,ex,de,l,tg,lw,info])=>({la,ex,de,l,tg,lw:lw||"",info:info||"",custom:false}));
 const keyOf=w=>w.l+"|"+w.la;
 BASE.forEach(w=>w.k=keyOf(w));
 const TAGS=["","m","f","n","Adv.","Präp. m. Akk.","Präp. m. Abl.","Akk.","m. Akk.","Konj.","Pron."];
@@ -1225,7 +1226,7 @@ function renderStage(){
   const tags=w.tg?`<div class="tags" id="tg"${noun?" hidden":""}><span class="tag">${esc(TN[w.tg]||w.tg)}</span></div>`:"";
   st.innerHTML=`<form class="card panel pop" id="cardForm" autocomplete="off">
     <div class="meta"><span>Lektion ${w.l} ${w.l===NEWEST()?'<span class="neu">neu</span>':""}</span><span>${S.retry.includes(current)?"Nochmal üben":"Latein → Deutsch"}</span></div>
-    <div><div class="latin">${esc(w.la)}</div></div>
+    <div><div class="latin">${esc(w.la)}</div>${w.info?`<div class="extra">${esc(w.info)}</div>`:""}</div>
     ${tags}
     ${w.ex?`<div class="row genus"><label for="zf">Zusatzform <small>z. B. Akkusativ, 3. Person</small></label><input class="answer gen zf" id="zf" maxlength="40" placeholder="…" autocapitalize="off" spellcheck="false"></div>`:""}
     ${noun?`<div class="row genus"><label for="gen">Geschlecht <small>m / f / n</small></label><input class="answer gen" id="gen" maxlength="14" placeholder="m, f oder n" autocapitalize="off" spellcheck="false"></div>`:""}
@@ -1255,7 +1256,7 @@ function grade(v){
 }
 let skipGN=false;
 const normL=s=>String(s||"").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[^a-z]/g,"");
-function fullEntry(w){return `<div class="full">${esc(w.la)}${w.ex?", "+esc(w.ex):""}${isNoun(w)?" "+w.tg:""} – ${esc(w.de)}</div>`}
+function fullEntry(w){const m=w.lw||LW[w.la];return `<div class="full">${esc(w.la)}${w.ex?", "+esc(w.ex):""}${isNoun(w)?" "+w.tg:""} – ${esc(w.de)}${w.info?`<small class="lw">Hinweis: ${esc(w.info)}</small>`:""}${m?`<small class="lw">Merkhilfe: ${esc(m)}</small>`:""}</div>`}
 function checkAll(input,de){const guesses=input.split(/[,;\/]| oder /).map(norm).filter(Boolean);const missing=[];let near=false;
   de.split(",").map(s=>s.trim()).filter(Boolean).forEach(t=>{const vs=[...variants(t)];let hit=false;
     for(const g of guesses){const gs=[g];if(g.startsWith("sich "))gs.push(g.slice(5));
@@ -1313,7 +1314,7 @@ function renderList(){
     const ws=ALL.filter(w=>w.l===l),n=ws.filter(w=>sel.includes(w.k)).length,hasCustom=ws.some(w=>w.custom);
     return `<div class="grp"><h2><label><input type="checkbox" data-l="${l}" ${n===ws.length?"checked":""}> Lektion ${l} ${l===N?'<span class="new">NEU</span>':""}</label><span>${n}/${ws.length} im Stapel</span>${hasCustom&&isEditor?`<button type="button" class="del${delArm===l?" sure":""}" data-del="${l}">${delArm===l?"Wirklich löschen?":(ws.every(w=>w.custom)?"Lektion löschen":"Ergänzungen löschen")}</button>`:""}</h2>
     ${ws.map((w,j)=>{const [c,t]=status(w.k),on=sel.includes(w.k),id="v"+l+"_"+j;
-      return `<div class="vrow${on?"":" off"}"><input type="checkbox" id="${id}" data-k="${esc(w.k)}" ${on?"checked":""} aria-label="${esc(w.la)} in den Stapel"><label class="la" for="${id}">${esc(w.la)}${isNoun(w)?`<span class="gen-badge g-${w.tg}" title="${GN[w.tg]}">${w.tg}</span>`:w.tg?`<span class="tag-badge" title="${esc(TN[w.tg]||w.tg)}">${esc(w.tg)}</span>`:""}${w.custom&&w.src==="local"?'<span class="mine">nur hier</span>':""}${w.ex?`<small class="exf">(${esc(w.ex)})</small>`:""}</label><span class="dewrap"><span class="de">${esc(w.de)}</span>${!w.custom&&LW[w.la]?`<small class="lw">Merkhilfe: ${esc(LW[w.la])}</small>`:""}</span>${S.hide?`<button type="button" class="pill pbtn ${c}" title="Spielstand: ${t}">zeigen</button>`:`<span class="pill ${c}">${t}</span>`}</div>`}).join("")}</div>`}).join("");
+      return `<div class="vrow${on?"":" off"}"><input type="checkbox" id="${id}" data-k="${esc(w.k)}" ${on?"checked":""} aria-label="${esc(w.la)} in den Stapel"><label class="la" for="${id}">${esc(w.la)}${isNoun(w)?`<span class="gen-badge g-${w.tg}" title="${GN[w.tg]}">${w.tg}</span>`:w.tg?`<span class="tag-badge" title="${esc(TN[w.tg]||w.tg)}">${esc(w.tg)}</span>`:""}${w.custom&&w.src==="local"?'<span class="mine">nur hier</span>':""}${w.ex?`<small class="exf">(${esc(w.ex)})</small>`:""}</label><span class="dewrap"><span class="de">${esc(w.de)}</span>${w.info?`<small class="lw">Hinweis: ${esc(w.info)}</small>`:""}${!w.custom&&(w.lw||LW[w.la])?`<small class="lw">Merkhilfe: ${esc(w.lw||LW[w.la])}</small>`:""}</span>${S.hide?`<button type="button" class="pill pbtn ${c}" title="Spielstand: ${t}">zeigen</button>`:`<span class="pill ${c}">${t}</span>`}</div>`}).join("")}</div>`}).join("");
   $("groups").querySelectorAll("h2 input").forEach(cb=>{const ids=keysOf(+cb.dataset.l),n=ids.filter(k=>sel.includes(k)).length;cb.indeterminate=n>0&&n<ids.length;
     cb.onchange=()=>setSel(cb.checked?[...new Set([...selK(),...ids])]:selK().filter(k=>!ids.includes(k)))});
   $("groups").querySelectorAll(".vrow input").forEach(cb=>cb.onchange=()=>{const k=cb.dataset.k;setSel(cb.checked?[...selK(),k]:selK().filter(x=>x!==k))});
