@@ -2392,6 +2392,11 @@ if(player)loadPlayer();migrate();rebuild();drawRandom();renderStats();renderStag
 #ek .d-sets button[aria-pressed="true"]{background:var(--e-teal);color:var(--e-teal-ink)}
 #ek .d-sets button:focus-visible{outline:3px solid var(--e-sun);outline-offset:2px}
 @media (max-width:520px){#ek .d-list li{grid-template-columns:auto minmax(0,1fr)}#ek .d-acts{grid-column:2;justify-content:flex-start}}
+#ek .d-list li.d-tap{cursor:pointer}
+#ek .d-list li.d-tap:focus-visible{outline:3px solid var(--e-sun);outline-offset:2px}
+#ek .d-chev{font:700 26px var(--e-f-head);color:var(--e-teal);line-height:1;padding:0 4px}
+@media (max-width:520px){#ek .d-list li.d-tap{grid-template-columns:auto minmax(0,1fr) auto}}
+#ek .d-bil{font-size:14px}
 #ek .d-legend{display:flex;gap:14px;flex-wrap:wrap;font-size:13px;color:var(--e-muted)}
 #ek .d-legend i{display:inline-block;width:11px;height:11px;border-radius:50%;border:2px solid var(--e-ink);margin-right:5px;vertical-align:-1px}
 </style>
@@ -2456,7 +2461,7 @@ if(player)loadPlayer();migrate();rebuild();drawRandom();renderStats();renderStag
       <div class="d-btns"><button type="button" class="e-go" id="d-start" disabled>Herausfordern &amp; loslegen</button></div>
     </div>
     <div class="d-block" id="d-waitbox" hidden><h4>Warten auf …</h4><ul class="d-list" id="d-wait"></ul></div>
-    <div class="d-block"><h4>Ergebnisse</h4><ul class="d-list" id="d-done"><li><span></span><p class="e-note">Noch keine Duelle gespielt.</p><span></span></li></ul></div>
+    <div class="d-block"><h4>Ergebnisse</h4><p class="e-note d-bil" id="d-bil" hidden></p><ul class="d-list" id="d-done"><li><span></span><p class="e-note">Noch keine Duelle gespielt.</p><span></span></li></ul><div class="d-btns"><button type="button" class="d-mini d-off" id="d-more" hidden>Ältere anzeigen</button></div></div>
   </div>
   <div class="e-card d-play" id="d-play" hidden>
     <div class="d-top"><span class="d-round" id="d-round">Ort 1 von 5</span><button type="button" class="e-stop" id="d-quit">Abbrechen</button></div>
@@ -2642,7 +2647,7 @@ if(player)loadPlayer();migrate();rebuild();drawRandom();renderStats();renderStag
 (function(){
   var $=function(id){return document.getElementById(id)};
   var me=window.__GU||{uid:"ich",name:"Ich"},fs=window.__GUfs;
-  var ROUNDS=5,ORTE=null,MAP=null,BYID={},ALL={},PROFS=[],opp=null,dset="cap",started=false,G=null,RES=null,LANDSVG="";
+  var showAll=false,ROUNDS=5,ORTE=null,MAP=null,BYID={},ALL={},PROFS=[],opp=null,dset="cap",started=false,G=null,RES=null,LANDSVG="";
   function esc(s){return String(s).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]})}
   var SETN={cap:"Nur Hauptstädte",all:"Alles inkl. Sehenswürdigkeiten"};
   /* ---------- Geometrie ---------- */
@@ -2727,11 +2732,14 @@ if(player)loadPlayer();migrate();rebuild();drawRandom();renderStats();renderStag
     $("d-inv").innerHTML=c.inv.map(function(x){var n=nameOf(x.d.from,x.d.fromName);return '<li class="d-inv">'+av(n)+'<p><b>'+esc(n)+'</b> fordert dich heraus<small>'+esc(SETN[x.d.set]||"")+' · '+ago(Date.parse(x.d.t)||0)+'</small></p><span class="d-acts"><button type="button" class="d-mini" data-acc="'+esc(x.d.id)+'">Annehmen</button><button type="button" class="d-mini d-off" data-dec="'+esc(x.d.id)+'">Ablehnen</button></span></li>'}).join("");
     $("d-waitbox").hidden=!c.wait.length;
     $("d-wait").innerHTML=c.wait.map(function(x){var n=nameOf(x.d.to,x.d.toName);return '<li>'+av(n)+'<p><b>'+esc(n)+'</b> ist dran<small>'+esc(SETN[x.d.set]||"")+' · gestartet '+ago(Date.parse(x.d.t)||0)+'</small></p><span class="d-acts"><button type="button" class="d-mini d-off" data-wd="'+esc(x.d.id)+'">Zurückziehen</button></span></li>'}).join("");
-    var dn=c.done.slice(0,8);
+    var dn=c.done.slice(0,showAll?10:3),bil={};
+    c.done.forEach(function(x){if(x.declined)return;var o=x.mineFirst?x.d.to:x.d.from,s=score(x.d,x.r),w=(s.win==="a")===x.mineFirst&&s.win!=="=",l=s.win!=="="&&!w;bil[o]=bil[o]||{n:x.mineFirst?nameOf(x.d.to,x.d.toName):nameOf(x.d.from,x.d.fromName),w:0,l:0};if(w)bil[o].w++;if(l)bil[o].l++});
+    var bk=Object.keys(bil);$("d-bil").hidden=!bk.length;$("d-bil").innerHTML="Bilanz (Siege : Niederlagen): "+bk.map(function(k){return "gegen "+esc(bil[k].n)+" <b>"+bil[k].w+" : "+bil[k].l+"</b>"}).join(" · ");
+    var more=$("d-more"),nAll=Math.min(c.done.length,10);more.hidden=nAll<=3;more.textContent=showAll?"Weniger anzeigen":"Ältere anzeigen ("+(nAll-3)+")";more.onclick=function(){showAll=!showAll;render()};
     $("d-done").innerHTML=dn.length?dn.map(function(x){var other=x.mineFirst?nameOf(x.d.to,x.d.toName):nameOf(x.d.from,x.d.fromName),isNew=x.mineFirst&&!seen[x.d.id];
       if(x.declined)return '<li>'+av(other,"lose")+'<p><b>'+esc(other)+'</b> hat abgelehnt<small>'+esc(SETN[x.d.set]||"")+' · '+ago(x.t)+'</small></p><span class="d-acts"><button type="button" class="d-mini d-off" data-ok="'+esc(x.d.id)+'">OK</button></span></li>';
       var s=score(x.d,x.r),mine=x.mineFirst?s.wa:s.wb,theirs=x.mineFirst?s.wb:s.wa,res=s.win==="="?"Unentschieden":((s.win==="a")===x.mineFirst?"Gewonnen":"Verloren");
-      return '<li>'+av(other,res==="Gewonnen"?"win":res==="Verloren"?"lose":"")+'<p><b>'+res+' '+mine+' : '+theirs+'</b> gegen '+esc(other)+(isNew?'<span class="d-new-tag">NEU</span>':'')+'<small>'+esc(SETN[x.d.set]||"")+' · '+ago(x.t)+'</small></p><span class="d-acts"><button type="button" class="d-mini" data-res="'+esc(x.d.id)+'">Ansehen</button></span></li>'}).join("")
+      return '<li class="d-tap" tabindex="0" role="button" data-res="'+esc(x.d.id)+'" aria-label="Ergebnis ansehen">'+av(other,res==="Gewonnen"?"win":res==="Verloren"?"lose":"")+'<p><b>'+res+' '+mine+' : '+theirs+'</b> gegen '+esc(other)+(isNew?'<span class="d-new-tag">NEU</span>':'')+'<small>'+esc(SETN[x.d.set]||"")+' · '+ago(x.t)+'</small></p><span class="d-chev" aria-hidden="true">›</span></li>'}).join("")
       :'<li><span></span><p class="e-note">Noch keine Duelle gespielt.</p><span></span></li>';
     var ob=$("d-opps"),others=PROFS.filter(function(p){return p.id!==me.uid});
     if(!others.length)ob.innerHTML='<span class="e-note">Noch niemand sonst angemeldet.</span>';
@@ -2742,7 +2750,7 @@ if(player)loadPlayer();migrate();rebuild();drawRandom();renderStats();renderStag
     document.querySelectorAll("#ek [data-dec]").forEach(function(b){b.onclick=function(){var id=b.dataset.dec,x=c.inv.filter(function(i){return i.d.id===id})[0];if(!x)return;var o={};o[id]={id:id,from:x.d.from,declined:true,t:new Date().toISOString()};b.disabled=true;save({duels:o}).then(refresh)}});
     document.querySelectorAll("#ek [data-wd]").forEach(function(b){b.onclick=function(){var id=b.dataset.wd,o={};o[id]={withdrawn:true};b.disabled=true;save({duels:o}).then(refresh)}});
     document.querySelectorAll("#ek [data-ok]").forEach(function(b){b.onclick=function(){var id=b.dataset.ok,o={};o[id]={withdrawn:true};var s={};s[id]=true;b.disabled=true;save({duels:o,seen:s}).then(refresh)}});
-    document.querySelectorAll("#ek [data-res]").forEach(function(b){b.onclick=function(){var x=c.done.filter(function(i){return i.d.id===b.dataset.res})[0];if(x)showRes(x)}})}
+    document.querySelectorAll("#ek [data-res]").forEach(function(b){b.onclick=function(){var x=c.done.filter(function(i){return i.d.id===b.dataset.res})[0];if(x)showRes(x)};b.onkeydown=function(e){if(e.key==="Enter"||e.key===" "){e.preventDefault();b.onclick()}}})}
   document.querySelectorAll("#ek [data-dset]").forEach(function(b){b.onclick=function(){dset=b.dataset.dset;document.querySelectorAll("#ek [data-dset]").forEach(function(x){x.setAttribute("aria-pressed",x.dataset.dset===dset?"true":"false")})}});
   /* ---------- Spielen ---------- */
   function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=a[i];a[i]=a[j];a[j]=t}return a}
