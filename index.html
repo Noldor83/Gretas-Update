@@ -1072,12 +1072,12 @@ const TAGNAME={m:"maskulin",f:"feminin",n:"neutrum","Adv.":"Adverb","Akk.":"Akku
 const norm=s=>s.toLowerCase().replace(/ä/g,"a").replace(/ö/g,"o").replace(/ü/g,"u").replace(/ß/g,"ss")
   .replace(/\(.*?\)/g," ").replace(/2\./g,"2 ").replace(/[^a-z0-9 ]/g," ").replace(/\s+/g," ").trim()
   .replace(/^(der|die|das|ein|eine|einen) /,"");
-const variants=s=>{const n=norm(s);const out=new Set([n]);const full=norm(String(s).replace(/[()]/g,""));if(full)out.add(full);[...out].forEach(v=>{if(v.startsWith("sich "))out.add(v.slice(5))});(ALT[n]||[]).forEach(a=>out.add(norm(a)));return out};
+const variants=s=>{const n=norm(s);const out=new Set([n]);const G=[];const base=String(s).replace(/\(([^)]*)\)/g,(m,g)=>{G.push(g);return "\u0001"+(G.length-1)+"\u0001"});let combos=[base];G.forEach((g,i)=>{const opts=[...new Set(["",g,...g.split(/[\/,;]| oder /).map(x=>x.trim())])];const nx=[];combos.forEach(c=>opts.forEach(o=>{if(nx.length<64)nx.push(c.replace("\u0001"+i+"\u0001",o))}));combos=nx});combos.forEach(c=>{const v=norm(c);if(v)out.add(v)});[...out].forEach(v=>{if(v.startsWith("sich "))out.add(v.slice(5))});(ALT[n]||[]).forEach(a=>out.add(norm(a)));return out};
 function lev(a,b){const d=Array.from({length:a.length+1},(_,i)=>[i]);for(let j=1;j<=b.length;j++)d[0][j]=j;
   for(let i=1;i<=a.length;i++)for(let j=1;j<=b.length;j++)d[i][j]=Math.min(d[i-1][j]+1,d[i][j-1]+1,d[i-1][j-1]+(a[i-1]===b[j-1]?0:1));return d[a.length][b.length]}
 function check(input,de){
-  const targets=[];de.split(",").forEach(p=>{if(p.trim())variants(p).forEach(v=>targets.push([v,p.trim()]))});
-  const guesses=input.split(/[,;\/]| oder /).map(norm).filter(Boolean);
+  const targets=[];de.replace(/\([^)]*\)/g,m=>m.replace(/[,;\/]/g,"\u0002")).split(",").map(x=>x.replace(/\u0002/g,",")).forEach(p=>{if(p.trim())variants(p).forEach(v=>targets.push([v,p.trim()]))});
+  const guesses=input.replace(/\([^)]*\)/g,m=>m.replace(/[,;\/]/g," ")).split(/[,;\/]| oder /).map(norm).filter(Boolean);
   let near=null;
   for(const g of guesses){const gs=new Set([g]);if(g.startsWith("sich "))gs.add(g.slice(5));
     for(const x of gs)for(const [t,orig] of targets){
@@ -1257,8 +1257,8 @@ function grade(v){
 let skipGN=false;
 const normL=s=>String(s||"").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[^a-z]/g,"");
 function fullEntry(w){const m=w.lw||LW[w.la];return `<div class="full">${esc(w.la)}${w.ex?", "+esc(w.ex):""}${isNoun(w)?" "+w.tg:""} – ${esc(w.de)}${w.info?`<small class="lw">Hinweis: ${esc(w.info)}</small>`:""}${m?`<small class="lw">Merkhilfe: ${esc(m)}</small>`:""}</div>`}
-function checkAll(input,de){const guesses=input.split(/[,;\/]| oder /).map(norm).filter(Boolean);const missing=[];let near=false;
-  de.split(",").map(s=>s.trim()).filter(Boolean).forEach(t=>{const vs=[...variants(t)];let hit=false;
+function checkAll(input,de){const guesses=input.replace(/\([^)]*\)/g,m=>m.replace(/[,;\/]/g," ")).split(/[,;\/]| oder /).map(norm).filter(Boolean);const missing=[];let near=false;
+  de.replace(/\([^)]*\)/g,m=>m.replace(/[,;\/]/g,"\u0002")).split(",").map(s=>s.replace(/\u0002/g,",").trim()).filter(Boolean).forEach(t=>{const vs=[...variants(t)];let hit=false;
     for(const g of guesses){const gs=[g];if(g.startsWith("sich "))gs.push(g.slice(5));
       for(const x of gs)for(const v of vs){if(x===v){hit=true;break}const tol=v.length>=9?2:v.length>=4?1:0;if(tol&&lev(x,v)<=tol&&hit!==true)hit="near"}
       if(hit===true)break}
@@ -1540,7 +1540,7 @@ const TAGNAME={"Adj.":"Adjektiv","Adv.":"Adverb","Präp.":"Präposition","Konj."
 const norm=s=>s.toLowerCase().replace(/ä/g,"a").replace(/ö/g,"o").replace(/ü/g,"u").replace(/ß/g,"ss")
   .replace(/\(.*?\)/g," ").replace(/2\./g,"2 ").replace(/[^a-z0-9 ]/g," ").replace(/\s+/g," ").trim()
   .replace(/^(der|die|das|ein|eine|einen) /,"").replace(/\b(jn|jm|jdn|jdm|jmdn|jmdm|etw|etwas|sich)\b/g," ").replace(/\s+/g," ").trim();
-const variants=s=>{const n=norm(s);const out=new Set([n]);const full=norm(String(s).replace(/[()]/g,""));if(full)out.add(full);[...out].forEach(v=>{if(v.startsWith("sich "))out.add(v.slice(5))});(ALT[n]||[]).forEach(a=>out.add(norm(a)));return out};
+const variants=s=>{const n=norm(s);const out=new Set([n]);const G=[];const base=String(s).replace(/\(([^)]*)\)/g,(m,g)=>{G.push(g);return "\u0001"+(G.length-1)+"\u0001"});let combos=[base];G.forEach((g,i)=>{const opts=[...new Set(["",g,...g.split(/[\/,;]| oder /).map(x=>x.trim())])];const nx=[];combos.forEach(c=>opts.forEach(o=>{if(nx.length<64)nx.push(c.replace("\u0001"+i+"\u0001",o))}));combos=nx});combos.forEach(c=>{const v=norm(c);if(v)out.add(v)});[...out].forEach(v=>{if(v.startsWith("sich "))out.add(v.slice(5))});(ALT[n]||[]).forEach(a=>out.add(norm(a)));return out};
 function lev(a,b){const d=Array.from({length:a.length+1},(_,i)=>[i]);for(let j=1;j<=b.length;j++)d[0][j]=j;
   for(let i=1;i<=a.length;i++)for(let j=1;j<=b.length;j++)d[i][j]=Math.min(d[i-1][j]+1,d[i][j-1]+1,d[i-1][j-1]+(a[i-1]===b[j-1]?0:1));return d[a.length][b.length]}
 const normEn=s=>String(s).toLowerCase().replace(/[’`]/g,"'").replace(/\(.*?\)/g," ").replace(/\b(sth|sb)\b\.?/g," ").replace(/…|\.\.\./g," ").replace(/[^a-z0-9'\/ -]/g," ").replace(/-/g," ").replace(/\s+/g," ").trim().replace(/^to /,"").replace(/^(the|a|an) /,"");
@@ -1550,8 +1550,8 @@ function checkEn(input,la){const targets=[];la.split(",").forEach(p=>{if(p.trim(
   for(const g of guesses)for(const [t,o] of targets){if(g===t)return{res:"ok"};const tol=t.length>=9?2:t.length>=4?1:0;if(tol&&lev(g,t)<=tol&&!near)near=o}
   return near?{res:"near",word:near}:{res:"bad"}}
 function check(input,de){
-  const targets=[];de.split(",").forEach(p=>{if(p.trim())variants(p).forEach(v=>targets.push([v,p.trim()]))});
-  const guesses=input.split(/[,;\/]| oder /).map(norm).filter(Boolean);
+  const targets=[];de.replace(/\([^)]*\)/g,m=>m.replace(/[,;\/]/g,"\u0002")).split(",").map(x=>x.replace(/\u0002/g,",")).forEach(p=>{if(p.trim())variants(p).forEach(v=>targets.push([v,p.trim()]))});
+  const guesses=input.replace(/\([^)]*\)/g,m=>m.replace(/[,;\/]/g," ")).split(/[,;\/]| oder /).map(norm).filter(Boolean);
   let near=null;
   for(const g of guesses){const gs=new Set([g]);if(g.startsWith("sich "))gs.add(g.slice(5));
     for(const x of gs)for(const [t,orig] of targets){
