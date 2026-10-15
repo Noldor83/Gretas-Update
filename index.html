@@ -658,6 +658,8 @@ body{background:var(--gu-bar);color:var(--gu-bar-fg)}
 #st .s-quizhint[hidden]{display:none}
 #st .s-quizhint:focus-visible{outline:3px solid var(--s-pink);outline-offset:3px}
 #st .s-qic{display:grid;place-items:center;width:46px;height:46px;border-radius:12px;background:var(--s-wb);color:#fff;font-family:var(--s-f-big);font-size:24px;border:2px solid var(--s-ink)}
+#st .s-duelhint{border-color:#0f7c8c}
+#st .s-duelhint .s-qic{background:#0f7c8c;font-size:22px}
 #st .s-quizhint b{display:block;font-family:var(--s-f-head);font-weight:700;font-size:17px}
 #st .s-quizhint .s-sub{font-size:14px;color:var(--s-muted)}
 #st .s-nic.qz{background:#d9472b}
@@ -727,6 +729,11 @@ body{background:var(--gu-bar);color:var(--gu-bar-fg)}
     <span class="s-qic" aria-hidden="true">?</span>
     <span><b id="s-qh-t">Neues Wochenquiz!</b><span class="s-sub" id="s-qh-s"></span></span>
     <span class="s-instgo">Los</span>
+  </button>
+  <button type="button" class="s-card s-quizhint s-duelhint" id="s-duelhint" hidden>
+    <span class="s-qic" aria-hidden="true">🌍</span>
+    <span><b id="s-dh-t">Weltkarten-Duell</b><span class="s-sub" id="s-dh-s"></span></span>
+    <span class="s-instgo">Ansehen</span>
   </button>
   <div class="s-grid">
     <div class="s-col">
@@ -808,6 +815,15 @@ body{background:var(--gu-bar);color:var(--gu-bar-fg)}
     ul.innerHTML=all.slice(0,4).map(function(n){var mine=n.id===me.uid,unit=(n.k==="ma"||n.k==="md"||n.k==="ek")?n.best+" Punkte":n.best+" in Folge";
       if(n.k==="qz"&&n.last)return '<li><span class="s-nic qz" aria-hidden="true">?</span><p><b>'+(mine?"Du":esc(n.name))+'</b> '+(mine?"hast":"hat")+' das Wochenquiz Nr. '+esc(n.last.nr)+' gelöst: <b>'+esc(n.last.p)+' von '+esc(n.last.max)+' Punkten</b> <time>· '+ago(n.t)+'</time></p></li>';
       return '<li class="'+(n.top?"top":"")+'"><span class="s-nic '+n.k+'" aria-hidden="true">'+NIC[n.k]+'</span><p><b>'+(mine?"Du":esc(n.name))+'</b> '+(mine?"hast":"hat")+' einen neuen Rekord in '+NNAME[n.k]+': <b>'+unit+'</b>'+(n.top?'<span class="s-crown">Platz 1</span>':'')+' <time>· '+ago(n.t)+'</time></p></li>'}).join("")}
+  function duelHint(A){var c=$("s-duelhint");if(!c)return;var mine=(A[me.uid]&&A[me.uid].duels)||{},seen=(A[me.uid]&&A[me.uid].seen)||{},inv=[],res=[];
+    Object.keys(A).forEach(function(u){if(u===me.uid)return;var dd=(A[u]&&A[u].duels)||{};Object.keys(dd).forEach(function(id){var d=dd[id];
+      if(d&&d.from===u&&d.to===me.uid&&d.places&&!d.withdrawn&&!mine[id])inv.push(String(A[u].name||"Jemand").slice(0,24))})});
+    Object.keys(mine).forEach(function(id){var d=mine[id];if(!d||d.from!==me.uid||!d.places||seen[id])return;var r=((A[d.to]||{}).duels||{})[id];if(r&&r.done&&!d.withdrawn)res.push(String((A[d.to]||{}).name||d.toName||"Jemand").slice(0,24))});
+    if(!inv.length&&!res.length){c.hidden=true;return}
+    c.hidden=false;
+    if(inv.length){$("s-dh-t").textContent=inv[0]+(inv.length>1?" und "+(inv.length-1)+" weitere fordern":" fordert")+" dich heraus!";$("s-dh-s").textContent="Weltkarten-Duell in Erdkunde – wer tippt näher dran?"}
+    else{$("s-dh-t").textContent=res[0]+" hat euer Duell gespielt!";$("s-dh-s").textContent="Das Ergebnis wartet in Erdkunde."}
+    c.onclick=function(){var t=document.getElementById("gu-tab-ek");if(t)t.click();setTimeout(function(){var s=document.getElementById("d-sec");if(s)s.scrollIntoView({block:"start",behavior:"smooth"})},350)}}
   function rank(list,k){
     var mine=list.filter(function(r){return r.id===me.uid})[0];
     $("s-"+k).textContent=mine?mine.best:"0";
@@ -819,6 +835,7 @@ body{background:var(--gu-bar);color:var(--gu-bar-fg)}
     el.innerHTML='<span class="s-medal'+(pos<=3?" r"+pos:"")+'">'+pos+'</span>Platz '+pos+' von '+sorted.length}
   (async function(){
     try{var db=await claude.use("db");
+      db.collection("duel_scores").onSnapshot(function(snap){var A={};snap.docs.forEach(function(d){A[d.id]=d.data()||{}});duelHint(A)},function(){});
       db.collection("kudos").onSnapshot(function(snap){var kd={};snap.docs.forEach(function(d){kd[d.id]=d.data()||{}});praise(kd)},function(){$("s-praise").innerHTML='<li class="s-empty">Lob konnte nicht geladen werden.</li>'});
       [["lat","scores"],["en","en_scores"],["ma","ma_scores"],["md","md_scores"],["qz","quiz_scores"],["ek","ek_scores"],["es","es_scores"]].forEach(function(p){
         db.collection(p[1]).onSnapshot(function(snap){
@@ -2317,6 +2334,66 @@ if(player)loadPlayer();migrate();rebuild();drawRandom();renderStats();renderStag
 #ek .e-obody{display:grid;gap:16px;padding-bottom:4px;border-top:2px dashed var(--e-dot)}
 #ek .e-oin{padding:14px 18px 0;font-size:16px}
 @media (prefers-reduced-motion:reduce){#ek *{animation:none!important;transition:none!important}}
+/* Weltkarten-Duell */
+#ek .d-card{display:grid;gap:16px}
+#ek .d-block{display:grid;gap:8px}
+#ek .d-block h4{font:700 17px var(--e-f-head)}
+#ek .d-block + .d-block{border-top:2px dashed var(--e-dot);padding-top:14px}
+#ek .d-lbl{font:600 14px var(--e-f-head);color:var(--e-muted)}
+#ek .d-opps{display:flex;flex-wrap:wrap;gap:6px}
+#ek .d-opps button{font:600 15px var(--e-f-head);border:2px solid var(--e-ink);border-radius:999px;padding:5px 14px;background:var(--e-card);color:var(--e-ink);cursor:pointer}
+#ek .d-opps button[aria-pressed="true"]{background:var(--e-teal);color:var(--e-teal-ink)}
+#ek .d-opps button:focus-visible,#ek .d-mini:focus-visible,#ek .d-zoom button:focus-visible,#ek .d-rows tr:focus-visible{outline:3px solid var(--e-sun);outline-offset:2px}
+#ek .d-list{list-style:none;margin:0;padding:0;display:grid;gap:6px}
+#ek .d-list li{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:10px;align-items:center;padding:8px 10px;border-radius:12px;background:var(--e-sea)}
+#ek .d-list li.d-inv{outline:2.5px solid var(--e-sun)}
+#ek .d-list p{font-size:14.5px;line-height:1.3}
+#ek .d-list p b{font-family:var(--e-f-head);font-weight:700}
+#ek .d-list small{display:block;font-size:12.5px;color:var(--e-muted)}
+#ek .d-av{display:grid;place-items:center;width:34px;height:34px;border-radius:50%;border:2px solid var(--e-ink);font:700 15px var(--e-f-head);background:var(--e-sun);color:#13303a}
+#ek .d-av.win{background:var(--e-ok);color:#fff}
+#ek .d-av.lose{background:var(--e-land);color:var(--e-ink)}
+#ek .d-acts{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+#ek .d-mini{font:700 14px var(--e-f-head);border:2px solid var(--e-ink);border-radius:999px;padding:4px 12px;background:var(--e-teal);color:var(--e-teal-ink);cursor:pointer;white-space:nowrap}
+#ek .d-mini.d-off{background:var(--e-card);color:var(--e-ink)}
+#ek .d-new-tag{display:inline-block;margin-left:6px;font:700 11px var(--e-f-head);letter-spacing:.06em;background:var(--e-red);color:#fff;border-radius:999px;padding:1px 7px;vertical-align:middle}
+#ek .d-play{display:grid;gap:12px}
+#ek .d-top{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap}
+#ek .d-round{font:700 14px var(--e-f-head);letter-spacing:.06em;text-transform:uppercase;color:var(--e-muted)}
+#ek .d-target{display:grid;gap:2px}
+#ek .d-target b{font-family:var(--e-f-big);font-weight:400;font-size:clamp(30px,8vw,42px);line-height:1.05;color:var(--e-teal);overflow-wrap:anywhere}
+#ek .d-target span{font:500 16px var(--e-f-head);color:var(--e-muted)}
+#ek .d-mapbox{position:relative;width:100%;aspect-ratio:16/10;max-height:62vh;border:2.5px solid var(--e-ink);border-radius:14px;overflow:hidden;background:var(--e-sea)}
+#ek .d-mapbox svg{display:block;width:100%;height:100%;touch-action:none;cursor:crosshair;user-select:none;-webkit-user-select:none}
+#ek .d-mapbox.d-ro svg{cursor:grab}
+#ek .d-zoom{position:absolute;right:8px;top:8px;display:grid;gap:6px}
+#ek .d-zoom button{width:38px;height:38px;border:2px solid var(--e-ink);border-radius:10px;background:var(--e-card);color:var(--e-ink);font:700 20px var(--e-f-head);line-height:1;cursor:pointer;display:grid;place-items:center}
+#ek .d-status{font-size:15px;min-height:1.4em}
+#ek .d-status b{font-family:var(--e-f-head)}
+#ek .d-btns{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+#ek .d-btns .e-go[disabled]{opacity:.45;cursor:default;box-shadow:none}
+#ek .d-score{display:flex;align-items:center;justify-content:center;gap:14px;font-family:var(--e-f-head);font-weight:700;font-size:18px;text-align:center;flex-wrap:wrap}
+#ek .d-score .d-big{font-family:var(--e-f-big);font-weight:400;font-size:clamp(40px,12vw,58px);line-height:1;color:var(--e-teal);font-variant-numeric:tabular-nums}
+#ek .d-verdict{text-align:center;font:700 19px var(--e-f-head)}
+#ek .d-rows{width:100%;border-collapse:separate;border-spacing:0 4px;font-size:14.5px}
+#ek .d-rows th{font:600 13px var(--e-f-head);color:var(--e-muted);text-align:right;padding:0 8px}
+#ek .d-rows th:first-child{text-align:left}
+#ek .d-rows td{padding:7px 8px;background:var(--e-sea);text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+#ek .d-rows td:first-child{text-align:left;border-radius:10px 0 0 10px;white-space:normal}
+#ek .d-rows td:last-child{border-radius:0 10px 10px 0}
+#ek .d-rows tr{cursor:pointer}
+#ek .d-rows tr.on td{background:var(--e-ok-bg)}
+#ek .d-rows td.w{font-weight:700;color:var(--e-ok)}
+#ek .d-rows td small{display:block;font-size:12px;color:var(--e-muted)}
+#ek .d-sets{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+#ek .d-sets button{display:grid;gap:2px;text-align:left;border:2px solid var(--e-ink);border-radius:14px;padding:8px 12px;background:var(--e-card);color:var(--e-ink);cursor:pointer;font:inherit}
+#ek .d-sets b{font:700 16px var(--e-f-head)}
+#ek .d-sets small{font-size:12.5px;opacity:.85;line-height:1.25}
+#ek .d-sets button[aria-pressed="true"]{background:var(--e-teal);color:var(--e-teal-ink)}
+#ek .d-sets button:focus-visible{outline:3px solid var(--e-sun);outline-offset:2px}
+@media (max-width:520px){#ek .d-list li{grid-template-columns:auto minmax(0,1fr)}#ek .d-acts{grid-column:2;justify-content:flex-start}}
+#ek .d-legend{display:flex;gap:14px;flex-wrap:wrap;font-size:13px;color:var(--e-muted)}
+#ek .d-legend i{display:inline-block;width:11px;height:11px;border-radius:50%;border:2px solid var(--e-ink);margin-right:5px;vertical-align:-1px}
 </style>
 <div class="e-wrap">
   <div class="e-head"><h2>Erdkunde</h2><span class="e-best">Dein Rekord: <b id="e-best">0</b></span></div>
@@ -2365,6 +2442,39 @@ if(player)loadPlayer();migrate();rebuild();drawRandom();renderStats();renderStag
   </div>
   <div class="e-card e-board"><div class="e-bhead"><h3>Bestenliste</h3><div class="e-switch" role="group" aria-label="Bestenliste wählen"><button type="button" data-bl="zeit" aria-pressed="true">⏱ 60 s</button><button type="button" data-bl="serie" aria-pressed="false">∞ Serie</button></div></div><ol id="e-board"><li><span></span><span class="e-note">Lädt …</span><span></span><span></span></li></ol>
     <p class="e-note" style="margin-top:8px" id="e-bnote">Gezählt wird das beste Ergebnis, egal welche Kontinente gewählt waren.</p></div>
+
+  <h3 class="e-sec" id="d-sec">Weltkarten-Duell <small>Wer tippt näher dran?</small></h3>
+  <div class="e-card d-card" id="d-home">
+    <div class="d-block" id="d-invbox" hidden><h4>Einladungen</h4><ul class="d-list" id="d-inv"></ul></div>
+    <div class="d-block">
+      <h4>Neues Duell</h4>
+      <p class="e-note">Fünf Orte, eine leere Weltkarte. Du tippst zuerst, danach ist dein Gegenüber mit denselben Orten dran. Wer näher dran ist, gewinnt die Runde.</p>
+      <span class="d-lbl">Gegen wen?</span>
+      <div class="d-opps" id="d-opps" role="group" aria-label="Gegenüber wählen"><span class="e-note">Lädt …</span></div>
+      <span class="d-lbl">Welche Orte?</span>
+      <div class="d-sets" role="group" aria-label="Orte wählen"><button type="button" data-dset="cap" aria-pressed="true"><b>Nur Hauptstädte</b><small>135 Hauptstädte der Welt</small></button><button type="button" data-dset="all" aria-pressed="false"><b>Alles</b><small>inkl. großer Städte und Sehenswürdigkeiten</small></button></div>
+      <div class="d-btns"><button type="button" class="e-go" id="d-start" disabled>Herausfordern &amp; loslegen</button></div>
+    </div>
+    <div class="d-block" id="d-waitbox" hidden><h4>Warten auf …</h4><ul class="d-list" id="d-wait"></ul></div>
+    <div class="d-block"><h4>Ergebnisse</h4><ul class="d-list" id="d-done"><li><span></span><p class="e-note">Noch keine Duelle gespielt.</p><span></span></li></ul></div>
+  </div>
+  <div class="e-card d-play" id="d-play" hidden>
+    <div class="d-top"><span class="d-round" id="d-round">Ort 1 von 5</span><button type="button" class="e-stop" id="d-quit">Abbrechen</button></div>
+    <div class="d-target"><b id="d-name">…</b><span id="d-hint"></span></div>
+    <div class="d-mapbox" id="d-map"></div>
+    <p class="d-status" id="d-status" aria-live="polite">Tippe auf die Karte. Mit zwei Fingern oder den Knöpfen kannst du zoomen.</p>
+    <div class="d-btns"><button type="button" class="e-go" id="d-ok" disabled>Tipp abgeben</button><button type="button" class="e-go e-alt" id="d-next" hidden>Weiter</button></div>
+  </div>
+  <div class="e-card d-play" id="d-res" hidden>
+    <div class="d-top"><span class="d-round" id="d-rset">Ergebnis</span><button type="button" class="e-stop" id="d-back">Zurück</button></div>
+    <div class="d-score" id="d-score"></div>
+    <p class="d-verdict" id="d-verdict"></p>
+    <div class="d-mapbox d-ro" id="d-rmap"></div>
+    <div class="d-legend" id="d-legend"></div>
+    <table class="d-rows"><thead><tr><th>Ort</th><th id="d-ha"></th><th id="d-hb"></th></tr></thead><tbody id="d-rows"></tbody></table>
+    <p class="e-note">Tippe auf eine Zeile, um den Ort auf der Karte zu sehen.</p>
+    <div class="d-btns"><button type="button" class="e-go" id="d-again">Revanche</button></div>
+  </div>
 
   <h3 class="e-sec">Land der Woche</h3>
   <article class="e-card e-ldw" id="e-ldw"><p class="e-note" style="padding:18px">Lädt …</p></article>
@@ -2526,6 +2636,189 @@ if(player)loadPlayer();migrate();rebuild();drawRandom();renderStats();renderStag
   window.__GUekLoad=load;
 })();
 </script>
+
+<script type="text/x-deferred">
+/* Weltkarten-Duell: nacheinander, je eigenes Dokument scores/duel/players/{uid} */
+(function(){
+  var $=function(id){return document.getElementById(id)};
+  var me=window.__GU||{uid:"ich",name:"Ich"},fs=window.__GUfs;
+  var ROUNDS=5,ORTE=null,MAP=null,BYID={},ALL={},PROFS=[],opp=null,dset="cap",started=false,G=null,RES=null,LANDSVG="";
+  function esc(s){return String(s).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]})}
+  var SETN={cap:"Nur Hauptstädte",all:"Alles inkl. Sehenswürdigkeiten"};
+  /* ---------- Geometrie ---------- */
+  var A=1.007226,B=0.015085,C=-0.044475,D=0.028874,E=-0.005916;
+  function fx(p){var p2=p*p,p4=p2*p2;return 0.8707-0.131979*p2+p4*(-0.013791+p4*(0.003971*p2-0.001529*p4))}
+  function fy(p){var p2=p*p,p4=p2*p2;return p*(A+p2*(B+p4*(C+D*p2+E*p4)))}
+  function proj(lon,lat){var m=MAP.meta,l=lon*Math.PI/180,p=lat*Math.PI/180;return [m.tx+m.scale*l*fx(p),m.ty-m.scale*fy(p)]}
+  function unproj(X,Y){var m=MAP.meta,x=(X-m.tx)/m.scale,y=(m.ty-Y)/m.scale;if(Math.abs(y)>fy(Math.PI/2))return null;
+    var p=y/A;for(var i=0;i<12;i++){var p2=p*p,p6=p2*p2*p2,d=A+3*B*p2+7*C*p6+9*D*p6*p2+11*E*p6*p2*p2;var s=(fy(p)-y)/d;p-=s;if(Math.abs(s)<1e-10)break}
+    var l=x/fx(p);if(Math.abs(l)>Math.PI)return null;return [l*180/Math.PI,p*180/Math.PI]}
+  function km(a,b){var R=6371,r=Math.PI/180,dl=(b[1]-a[1])*r,dn=(b[0]-a[0])*r,h=Math.sin(dl/2)*Math.sin(dl/2)+Math.cos(a[1]*r)*Math.cos(b[1]*r)*Math.sin(dn/2)*Math.sin(dn/2);return 2*R*Math.asin(Math.min(1,Math.sqrt(h)))}
+  function fmtKm(d){return d<1?"unter 1 km":Math.round(d).toLocaleString("de-DE")+" km"}
+  /* ---------- Karte mit Zoom ---------- */
+  function makeMap(box,opts){opts=opts||{};var NS="http://www.w3.org/2000/svg";
+    box.innerHTML='<svg xmlns="'+NS+'" role="img" aria-label="Weltkarte ohne Beschriftung"><rect x="-3000" y="-3000" width="7000" height="7000" fill="var(--e-sea)"/><g fill="var(--e-land)" stroke="var(--e-land-line)" stroke-width="0.7" stroke-linejoin="round">'+LANDSVG+'</g><g class="d-ov"></g></svg>'+
+      '<div class="d-zoom"><button type="button" data-z="in" aria-label="Hineinzoomen">+</button><button type="button" data-z="out" aria-label="Herauszoomen">−</button><button type="button" data-z="home" aria-label="Ganze Welt zeigen">⌂</button></div>';
+    box.querySelectorAll("g")[0].querySelectorAll("path").forEach(function(p){p.setAttribute("vector-effect","non-scaling-stroke")});
+    var svg=box.querySelector("svg"),ov=box.querySelector(".d-ov"),W=MAP.meta.w,H=MAP.meta.h,vb={cx:W/2,cy:H/2,w:W},marks=[];
+    function ar(){var r=box.getBoundingClientRect();return r.width&&r.height?r.width/r.height:1.6}
+    function maxW(){var a=ar();return Math.max(W*1.02,H*1.04*a)}
+    function apply(){var a=ar(),mw=maxW();vb.w=Math.min(mw,Math.max(28,vb.w));var h=vb.w/a;
+      vb.cx=Math.min(W,Math.max(0,vb.cx));vb.cy=Math.min(H,Math.max(0,vb.cy));
+      if(vb.w>=mw-0.01){vb.cx=W/2;vb.cy=H/2}
+      svg.setAttribute("viewBox",[vb.cx-vb.w/2,vb.cy-h/2,vb.w,h].join(" "));draw()}
+    function k(){var r=box.getBoundingClientRect();return vb.w/Math.max(1,r.width)}
+    function draw(){var s=k(),h="";
+      marks.forEach(function(m){if(m.line){h+='<line x1="'+m.a[0]+'" y1="'+m.a[1]+'" x2="'+m.b[0]+'" y2="'+m.b[1]+'" stroke="'+m.c+'" stroke-width="'+2.2*s+'" stroke-dasharray="'+5*s+' '+4*s+'" stroke-linecap="round"/>'}});
+      marks.forEach(function(m){if(m.line)return;var r=(m.r||7)*s;
+        if(m.flag){h+='<circle cx="'+m.p[0]+'" cy="'+m.p[1]+'" r="'+r*1.25+'" fill="'+m.c+'" stroke="var(--e-card)" stroke-width="'+2.5*s+'"/><circle cx="'+m.p[0]+'" cy="'+m.p[1]+'" r="'+r*0.42+'" fill="var(--e-card)"/>'}
+        else h+='<circle cx="'+m.p[0]+'" cy="'+m.p[1]+'" r="'+r+'" fill="'+m.c+'" stroke="var(--e-ink)" stroke-width="'+2*s+'"/>';
+        if(m.t)h+='<text x="'+(m.p[0]+r*1.6)+'" y="'+(m.p[1]+4.5*s)+'" font-size="'+13*s+'" font-family="Fredoka,Arial Rounded MT Bold,sans-serif" font-weight="700" fill="var(--e-ink)" stroke="var(--e-card)" stroke-width="'+3*s+'" paint-order="stroke">'+esc(m.t)+'</text>'});
+      ov.innerHTML=h}
+    function toSvg(cx,cy){var pt=svg.createSVGPoint();pt.x=cx;pt.y=cy;var mtx=svg.getScreenCTM();if(!mtx)return null;var q=pt.matrixTransform(mtx.inverse());return [q.x,q.y]}
+    function zoomAt(f,p){var nw=Math.min(maxW(),Math.max(28,vb.w/f)),g=nw/vb.w;if(p){vb.cx=p[0]+(vb.cx-p[0])*g;vb.cy=p[1]+(vb.cy-p[1])*g}vb.w=nw;apply()}
+    box.querySelectorAll("[data-z]").forEach(function(b){b.onclick=function(e){e.stopPropagation();var z=b.dataset.z;if(z==="home"){vb={cx:W/2,cy:H/2,w:maxW()};apply()}else zoomAt(z==="in"?1.8:1/1.8,null)}});
+    var P={},moved=false,t0=0,last=null,pinch=null;
+    svg.addEventListener("pointerdown",function(e){P[e.pointerId]={x:e.clientX,y:e.clientY};try{svg.setPointerCapture(e.pointerId)}catch(_){}
+      var ids=Object.keys(P);if(ids.length===1){moved=false;t0=Date.now();last={x:e.clientX,y:e.clientY}}else if(ids.length===2){moved=true;var a=P[ids[0]],b=P[ids[1]];pinch={d:Math.hypot(a.x-b.x,a.y-b.y),w:vb.w}}});
+    svg.addEventListener("pointermove",function(e){if(!P[e.pointerId])return;P[e.pointerId]={x:e.clientX,y:e.clientY};var ids=Object.keys(P);
+      if(ids.length===2&&pinch){var a=P[ids[0]],b=P[ids[1]],d=Math.hypot(a.x-b.x,a.y-b.y);if(d>10){var mid=toSvg((a.x+b.x)/2,(a.y+b.y)/2);zoomAt(vb.w/(pinch.w*pinch.d/d),mid)}return}
+      if(ids.length===1&&last){var dx=e.clientX-last.x,dy=e.clientY-last.y;if(!moved&&Math.hypot(dx,dy)<6)return;
+        moved=true;var s=k();vb.cx-=dx*s;vb.cy-=dy*s;last={x:e.clientX,y:e.clientY};apply()}});
+    function up(e){if(!P[e.pointerId])return;var single=Object.keys(P).length===1;delete P[e.pointerId];if(Object.keys(P).length<2)pinch=null;
+      if(Object.keys(P).length===1){var id=Object.keys(P)[0];last={x:P[id].x,y:P[id].y}}
+      if(single&&!moved&&Date.now()-t0<800&&opts.onTap){var q=toSvg(e.clientX,e.clientY);if(q)opts.onTap(q)}}
+    svg.addEventListener("pointerup",up);svg.addEventListener("pointercancel",function(e){delete P[e.pointerId];pinch=null;moved=true});
+    svg.addEventListener("wheel",function(e){e.preventDefault();zoomAt(e.deltaY<0?1.25:0.8,toSvg(e.clientX,e.clientY))},{passive:false});
+    var api={set:function(m){marks=m;draw()},home:function(){vb={cx:W/2,cy:H/2,w:maxW()};apply()},
+      fit:function(pts){var x0=1e9,y0=1e9,x1=-1e9,y1=-1e9;pts.forEach(function(p){x0=Math.min(x0,p[0]);y0=Math.min(y0,p[1]);x1=Math.max(x1,p[0]);y1=Math.max(y1,p[1])});
+        var a=ar(),w=Math.max((x1-x0)*1.5,(y1-y0)*1.5*a,90);vb={cx:(x0+x1)/2,cy:(y0+y1)/2,w:w};apply()},
+      refresh:apply};
+    if(window.ResizeObserver)new ResizeObserver(function(){apply()}).observe(box);
+    requestAnimationFrame(function(){api.home()});
+    return api}
+  /* ---------- Daten ---------- */
+  function myDoc(){return ALL[me.uid]||{}}
+  function duelsOf(uid){return (ALL[uid]&&ALL[uid].duels)||{}}
+  function nameOf(uid,fb){var p=PROFS.filter(function(x){return x.id===uid})[0];return (p&&p.name)||(ALL[uid]&&ALL[uid].name)||fb||"?"}
+  function flatG(g){var o=[];g.forEach(function(p){o.push(p?Math.round(p[0]*100)/100:0,p?Math.round(p[1]*100)/100:0)});return o}
+  function pairG(f,i){return [Number(f[2*i])||0,Number(f[2*i+1])||0]}
+  function collect(){var inv=[],wait=[],done=[],md=duelsOf(me.uid);
+    Object.keys(ALL).forEach(function(u){if(u===me.uid)return;var dd=duelsOf(u);Object.keys(dd).forEach(function(id){var d=dd[id];if(!d||d.from!==u||d.to!==me.uid||!d.places)return;
+      var r=md[id];if(d.withdrawn&&!(r&&r.done))return;
+      if(!r)inv.push({d:d});else if(r.done)done.push({d:d,r:r,t:Date.parse(r.t)||0,mineFirst:false})})});
+    Object.keys(md).forEach(function(id){var d=md[id];if(!d||d.from!==me.uid||!d.places)return;var r=duelsOf(d.to)[id];
+      if(d.withdrawn&&!(r&&r.done))return;
+      if(!r)wait.push({d:d});else if(r.declined)done.push({d:d,r:r,declined:true,t:Date.parse(r.t)||0,mineFirst:true});else if(r.done)done.push({d:d,r:r,t:Date.parse(r.t)||0,mineFirst:true})});
+    inv.sort(function(a,b){return (Date.parse(b.d.t)||0)-(Date.parse(a.d.t)||0)});wait.sort(function(a,b){return (Date.parse(b.d.t)||0)-(Date.parse(a.d.t)||0)});done.sort(function(a,b){return b.t-a.t});
+    return {inv:inv,wait:wait,done:done}}
+  function score(d,r){var rows=[],wa=0,wb=0,ta=0,tb=0;d.places.forEach(function(pid,i){var P=BYID[pid];if(!P)return;var t=[P.lon,P.lat],ga=pairG(d.g||[],i),gb=pairG(r.g||[],i),da=km(ga,t),db=km(gb,t);
+      ta+=da;tb+=db;if(da<db)wa++;else if(db<da)wb++;rows.push({P:P,ga:ga,gb:gb,da:da,db:db})});
+    var win=wa>wb?"a":wb>wa?"b":ta<tb?"a":tb<ta?"b":"=";return {rows:rows,wa:wa,wb:wb,ta:ta,tb:tb,win:win}}
+  function myWins(){var n=0;collect().done.forEach(function(x){if(x.declined)return;var s=score(x.d,x.r);if((s.win==="a"&&x.mineFirst)||(s.win==="b"&&!x.mineFirst))n++});return n}
+  function save(patch){if(!fs)return Promise.resolve();var cur=myDoc();var o={name:me.name,best:Number.isInteger(cur.best)?cur.best:0,updatedAt:new Date().toISOString()};
+    Object.keys(patch).forEach(function(k){o[k]=patch[k]});return fs.doc("scores/duel/players/"+me.uid).set(o,{merge:true})}
+  function syncBest(){if(!ORTE)return;var n=myWins();if(n!==(myDoc().best||0)&&fs)fs.doc("scores/duel/players/"+me.uid).set({name:me.name,best:n},{merge:true}).catch(function(){})}
+  /* ---------- Startseite des Duells ---------- */
+  function av(n,cls){return '<span class="d-av '+(cls||"")+'" aria-hidden="true">'+esc(String(n||"?").charAt(0).toUpperCase())+'</span>'}
+  function ago(t){var d=Math.round((Date.now()-t)/60000);if(d<2)return "gerade eben";if(d<60)return "vor "+d+" Min.";var h=Math.round(d/60);if(h<24)return "vor "+h+" Std.";var g=Math.round(h/24);return g===1?"gestern":"vor "+g+" Tagen"}
+  function render(){if(!ORTE)return;var c=collect(),seen=myDoc().seen||{};
+    $("d-invbox").hidden=!c.inv.length;
+    $("d-inv").innerHTML=c.inv.map(function(x){var n=nameOf(x.d.from,x.d.fromName);return '<li class="d-inv">'+av(n)+'<p><b>'+esc(n)+'</b> fordert dich heraus<small>'+esc(SETN[x.d.set]||"")+' · '+ago(Date.parse(x.d.t)||0)+'</small></p><span class="d-acts"><button type="button" class="d-mini" data-acc="'+esc(x.d.id)+'">Annehmen</button><button type="button" class="d-mini d-off" data-dec="'+esc(x.d.id)+'">Ablehnen</button></span></li>'}).join("");
+    $("d-waitbox").hidden=!c.wait.length;
+    $("d-wait").innerHTML=c.wait.map(function(x){var n=nameOf(x.d.to,x.d.toName);return '<li>'+av(n)+'<p><b>'+esc(n)+'</b> ist dran<small>'+esc(SETN[x.d.set]||"")+' · gestartet '+ago(Date.parse(x.d.t)||0)+'</small></p><span class="d-acts"><button type="button" class="d-mini d-off" data-wd="'+esc(x.d.id)+'">Zurückziehen</button></span></li>'}).join("");
+    var dn=c.done.slice(0,8);
+    $("d-done").innerHTML=dn.length?dn.map(function(x){var other=x.mineFirst?nameOf(x.d.to,x.d.toName):nameOf(x.d.from,x.d.fromName),isNew=x.mineFirst&&!seen[x.d.id];
+      if(x.declined)return '<li>'+av(other,"lose")+'<p><b>'+esc(other)+'</b> hat abgelehnt<small>'+esc(SETN[x.d.set]||"")+' · '+ago(x.t)+'</small></p><span class="d-acts"><button type="button" class="d-mini d-off" data-ok="'+esc(x.d.id)+'">OK</button></span></li>';
+      var s=score(x.d,x.r),mine=x.mineFirst?s.wa:s.wb,theirs=x.mineFirst?s.wb:s.wa,res=s.win==="="?"Unentschieden":((s.win==="a")===x.mineFirst?"Gewonnen":"Verloren");
+      return '<li>'+av(other,res==="Gewonnen"?"win":res==="Verloren"?"lose":"")+'<p><b>'+res+' '+mine+' : '+theirs+'</b> gegen '+esc(other)+(isNew?'<span class="d-new-tag">NEU</span>':'')+'<small>'+esc(SETN[x.d.set]||"")+' · '+ago(x.t)+'</small></p><span class="d-acts"><button type="button" class="d-mini" data-res="'+esc(x.d.id)+'">Ansehen</button></span></li>'}).join("")
+      :'<li><span></span><p class="e-note">Noch keine Duelle gespielt.</p><span></span></li>';
+    var ob=$("d-opps"),others=PROFS.filter(function(p){return p.id!==me.uid});
+    if(!others.length)ob.innerHTML='<span class="e-note">Noch niemand sonst angemeldet.</span>';
+    else ob.innerHTML=others.map(function(p){return '<button type="button" data-opp="'+esc(p.id)+'" aria-pressed="'+(opp===p.id)+'">'+esc(p.name)+'</button>'}).join("");
+    ob.querySelectorAll("[data-opp]").forEach(function(b){b.onclick=function(){opp=b.dataset.opp;render()}});
+    $("d-start").disabled=!opp;
+    document.querySelectorAll("#ek [data-acc]").forEach(function(b){b.onclick=function(){var x=c.inv.filter(function(i){return i.d.id===b.dataset.acc})[0];if(x)play(x.d,false)}});
+    document.querySelectorAll("#ek [data-dec]").forEach(function(b){b.onclick=function(){var id=b.dataset.dec,x=c.inv.filter(function(i){return i.d.id===id})[0];if(!x)return;var o={};o[id]={id:id,from:x.d.from,declined:true,t:new Date().toISOString()};b.disabled=true;save({duels:o}).then(refresh)}});
+    document.querySelectorAll("#ek [data-wd]").forEach(function(b){b.onclick=function(){var id=b.dataset.wd,o={};o[id]={withdrawn:true};b.disabled=true;save({duels:o}).then(refresh)}});
+    document.querySelectorAll("#ek [data-ok]").forEach(function(b){b.onclick=function(){var id=b.dataset.ok,o={};o[id]={withdrawn:true};var s={};s[id]=true;b.disabled=true;save({duels:o,seen:s}).then(refresh)}});
+    document.querySelectorAll("#ek [data-res]").forEach(function(b){b.onclick=function(){var x=c.done.filter(function(i){return i.d.id===b.dataset.res})[0];if(x)showRes(x)}})}
+  document.querySelectorAll("#ek [data-dset]").forEach(function(b){b.onclick=function(){dset=b.dataset.dset;document.querySelectorAll("#ek [data-dset]").forEach(function(x){x.setAttribute("aria-pressed",x.dataset.dset===dset?"true":"false")})}});
+  /* ---------- Spielen ---------- */
+  function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=a[i];a[i]=a[j];a[j]=t}return a}
+  function pick(set){var caps=shuffle(ORTE.cap.slice());if(set==="cap")return caps.slice(0,ROUNDS).map(function(p){return p.id});
+    var more=shuffle(ORTE.mehr.slice());return shuffle(caps.slice(0,2).concat(more.slice(0,ROUNDS-2))).map(function(p){return p.id})}
+  function view(id){["d-home","d-play","d-res"].forEach(function(x){$(x).hidden=x!==id})}
+  var PM=null,RM=null;
+  function play(d,first){G={d:d,first:first,i:0,g:[],cur:null,locked:false};view("d-play");
+    if(!PM)PM=makeMap($("d-map"),{onTap:function(q){if(!G||G.locked)return;var ll=unproj(q[0],q[1]);if(!ll){$("d-status").textContent="Das liegt außerhalb der Karte – tippe auf die Weltkarte.";return}
+      G.cur=ll;PM.set([{p:q,c:"var(--e-teal)"}]);$("d-ok").disabled=false;$("d-status").innerHTML="Passt das? Dann <b>Tipp abgeben</b> – oder tippe woanders hin."}});
+    round();$("d-play").scrollIntoView({block:"start",behavior:"smooth"})}
+  function round(){var P=BYID[G.d.places[G.i]];G.cur=null;G.locked=false;
+    $("d-round").textContent="Ort "+(G.i+1)+" von "+G.d.places.length+" · "+(G.first?"gegen "+nameOf(G.d.to,G.d.toName):"Duell von "+nameOf(G.d.from,G.d.fromName));
+    $("d-name").textContent=P.n;$("d-hint").textContent=P.h||"";
+    $("d-status").textContent="Tippe auf die Karte. Mit zwei Fingern oder den Knöpfen kannst du zoomen.";
+    $("d-ok").disabled=true;$("d-ok").hidden=false;$("d-next").hidden=true;PM.set([]);PM.home()}
+  $("d-ok").onclick=function(){if(!G||!G.cur||G.locked)return;G.locked=true;var P=BYID[G.d.places[G.i]],t=[P.lon,P.lat],d=km(G.cur,t);G.g.push(G.cur);
+    var a=proj(G.cur[0],G.cur[1]),b=proj(t[0],t[1]),mk=[{line:1,a:a,b:b,c:"var(--e-ink)"},{p:a,c:"var(--e-teal)"}],pts=[a,b],txt="Du: <b>"+fmtKm(d)+"</b> daneben.";
+    if(!G.first){var o=pairG(G.d.g||[],G.i),c=proj(o[0],o[1]),od=km(o,t),on=nameOf(G.d.from,G.d.fromName);mk.push({line:1,a:c,b:b,c:"var(--e-muted)"},{p:c,c:"var(--e-sun)",t:on});pts.push(c);
+      txt+=" "+esc(on)+": <b>"+fmtKm(od)+"</b>. "+(d<od?"Runde für dich!":od<d?"Runde für "+esc(on)+".":"Gleich weit!")}
+    mk.push({p:b,c:"var(--e-red)",flag:1,t:P.n});PM.set(mk);PM.fit(pts);
+    $("d-status").innerHTML=txt;$("d-ok").hidden=true;$("d-next").hidden=false;$("d-next").textContent=G.i+1<G.d.places.length?"Nächster Ort":"Ergebnis";$("d-next").focus()};
+  $("d-next").onclick=function(){if(!G)return;G.i++;if(G.i<G.d.places.length){round();return}finishPlay()};
+  $("d-quit").onclick=function(){if(G&&G.i>0&&!confirm("Duell abbrechen? Deine Tipps werden nicht gespeichert."))return;G=null;view("d-home")};
+  function finishPlay(){var g=G,now=new Date().toISOString(),o={};
+    $("d-next").disabled=true;$("d-status").textContent="Wird gespeichert …";
+    if(g.first){var d=g.d;d.g=flatG(g.g);d.t=now;o[d.id]=d}else o[g.d.id]={id:g.d.id,from:g.d.from,g:flatG(g.g),done:true,t:now};
+    save({duels:o}).then(function(){$("d-next").disabled=false;G=null;
+      if(window.__GUpracticed)try{window.__GUpracticed()}catch(e){}
+      return refresh().then(function(){if(g.first){view("d-home");$("d-wait").scrollIntoView({block:"center",behavior:"smooth"});flash("Gespeichert! Jetzt ist "+nameOf(g.d.to,g.d.toName)+" dran.")}
+        else{var x=collect().done.filter(function(i){return i.d.id===g.d.id})[0];if(x)showRes(x);else view("d-home")}})})
+    .catch(function(){$("d-next").disabled=false;$("d-status").textContent="Speichern hat nicht geklappt. Bitte Internetverbindung prüfen und nochmal auf „Ergebnis“ tippen.";G.i--})}
+  function flash(t){var li=document.createElement("li");li.className="d-inv";li.innerHTML='<span class="d-av win" aria-hidden="true">✓</span><p><b>'+esc(t)+'</b></p><span></span>';$("d-waitbox").hidden=false;$("d-wait").prepend(li)}
+  $("d-start").onclick=function(){if(!opp||!ORTE)return;var id=Date.now().toString(36)+Math.random().toString(36).slice(2,6);
+    play({id:id,from:me.uid,to:opp,fromName:me.name,toName:nameOf(opp),set:dset,places:pick(dset),g:[],t:new Date().toISOString()},true)};
+  /* ---------- Ergebnis ---------- */
+  function showRes(x){RES=x;view("d-res");var s=score(x.d,x.r),na=nameOf(x.d.from,x.d.fromName),nb=nameOf(x.d.to,x.d.toName);
+    var meA=x.mineFirst,ha=meA?"Du":na,hb=meA?nb:"Du";
+    $("d-rset").textContent=SETN[x.d.set]||"Ergebnis";
+    $("d-score").innerHTML='<span>'+esc(ha)+'</span><span class="d-big">'+s.wa+' : '+s.wb+'</span><span>'+esc(hb)+'</span>';
+    var v=s.win==="="?"Unentschieden – genau gleich weit!":((s.win==="a")===meA?"Du hast gewonnen! 🏆":esc(meA?nb:na)+" hat gewonnen.");
+    if(s.wa===s.wb&&s.win!=="=")v+=" (Gleichstand bei den Runden – entschieden hat die Gesamtstrecke.)";
+    $("d-verdict").innerHTML=v;
+    $("d-ha").textContent=ha;$("d-hb").textContent=hb;
+    $("d-rows").innerHTML=s.rows.map(function(r,i){return '<tr tabindex="0" data-i="'+i+'"><td><b>'+esc(r.P.n)+'</b><small>'+esc(r.P.h||"")+'</small></td><td class="'+(r.da<r.db?"w":"")+'">'+fmtKm(r.da)+'</td><td class="'+(r.db<r.da?"w":"")+'">'+fmtKm(r.db)+'</td></tr>'}).join("")+
+      '<tr data-i="all" tabindex="0"><td><b>Gesamt</b></td><td class="'+(s.ta<s.tb?"w":"")+'">'+fmtKm(s.ta)+'</td><td class="'+(s.tb<s.ta?"w":"")+'">'+fmtKm(s.tb)+'</td></tr>';
+    $("d-legend").innerHTML='<span><i style="background:var(--e-teal)"></i>'+esc(ha)+'</span><span><i style="background:var(--e-sun)"></i>'+esc(hb)+'</span><span><i style="background:var(--e-red)"></i>richtiger Ort</span>';
+    if(!RM)RM=makeMap($("d-rmap"),{});
+    function showRow(i){$("d-rows").querySelectorAll("tr").forEach(function(tr){tr.classList.toggle("on",tr.dataset.i===String(i))});
+      var list=i==="all"?s.rows:[s.rows[i]],mk=[],pts=[];
+      list.forEach(function(r){var a=proj(r.ga[0],r.ga[1]),b=proj(r.gb[0],r.gb[1]),t=proj(r.P.lon,r.P.lat);
+        mk.push({line:1,a:a,b:t,c:"var(--e-teal)"},{line:1,a:b,b:t,c:"var(--e-muted)"},{p:a,c:"var(--e-teal)",r:i==="all"?5:7},{p:b,c:"var(--e-sun)",r:i==="all"?5:7},{p:t,c:"var(--e-red)",flag:1,t:i==="all"?"":r.P.n,r:i==="all"?5:7});pts.push(a,b,t)});
+      RM.set(mk);if(i==="all")RM.home();else RM.fit(pts)}
+    $("d-rows").querySelectorAll("tr").forEach(function(tr){tr.onclick=function(){showRow(tr.dataset.i==="all"?"all":+tr.dataset.i)};tr.onkeydown=function(e){if(e.key==="Enter"||e.key===" "){e.preventDefault();tr.onclick()}}});
+    requestAnimationFrame(function(){showRow(0)});
+    if(x.mineFirst&&!(myDoc().seen||{})[x.d.id]){var sn={};sn[x.d.id]=true;save({seen:sn}).catch(function(){})}
+    $("d-res").scrollIntoView({block:"start",behavior:"smooth"})}
+  $("d-back").onclick=function(){RES=null;view("d-home");render()};
+  $("d-again").onclick=function(){if(!RES)return;var o=RES.mineFirst?RES.d.to:RES.d.from;opp=o;dset=RES.d.set;
+    document.querySelectorAll("#ek [data-dset]").forEach(function(x){x.setAttribute("aria-pressed",x.dataset.dset===dset?"true":"false")});$("d-start").onclick()};
+  /* ---------- Laden ---------- */
+  function refresh(){if(!fs)return Promise.resolve();return fs.collection("scores/duel/players").get().then(function(s){var o={};s.docs.forEach(function(d){o[d.id]=d.data()||{}});ALL=o;render();syncBest()}).catch(function(){})}
+  async function init(){if(started)return;started=true;
+    try{var r=await Promise.all([fetch("duellorte.json?v="+Date.now(),{cache:"no-store"}).then(function(x){return x.json()}),fetch("weltkarte.json").then(function(x){return x.json()})]);ORTE=r[0];MAP=r[1]}
+    catch(e){started=false;$("d-opps").innerHTML='<span class="e-note">Konnte nicht geladen werden. Bitte Internetverbindung prüfen.</span>';return}
+    ORTE.cap.concat(ORTE.mehr).forEach(function(p){BYID[p.id]=p});
+    LANDSVG=Object.keys(MAP.paths).map(function(id){return '<path d="'+MAP.paths[id]+'"/>'}).join("");
+    if(!fs){render();return}
+    try{var ps=await fs.collection("profiles").get();PROFS=ps.docs.map(function(d){return {id:d.id,name:String((d.data()||{}).name||"?").slice(0,24)}}).sort(function(a,b){return a.name.localeCompare(b.name,"de")})}catch(e){PROFS=[]}
+    fs.collection("scores/duel/players").onSnapshot(function(s){var o={};s.docs.forEach(function(d){o[d.id]=d.data()||{}});ALL=o;if(!G)render();syncBest()},function(){render()})}
+  var tab=$("gu-tab-ek");if(tab)tab.addEventListener("click",init);
+  if(!$("ek").hidden)init();
+  window.__GUduelInit=init;
+})();
+</script>
+
 
 <script type="text/x-deferred">
 (function(){
@@ -2800,7 +3093,7 @@ if(player)loadPlayer();migrate();rebuild();drawRandom();renderStats();renderStag
     document.addEventListener("visibilitychange",function(){if(document.visibilityState==="hidden"&&t)flush()});
     // Brücke für die Seiten-Skripte
     var none={onSnapshot:function(cb){cb({docs:[]});return function(){}},doc:function(){return {get:async function(){return {exists:false}},set:async function(){throw {code:"not_supported"}},delete:async function(){}}}};
-    var db={collection:function(n){if(n==="scores")return fs.collection("scores/lat/players");if(n==="en_scores")return fs.collection("scores/en/players");if(n==="ma_scores")return fs.collection("scores/mathe/players");if(n==="md_scores")return fs.collection("scores/mathe_div/players");if(n==="kudos")return fs.collection("scores/kudos/players");if(n==="quiz_scores")return fs.collection("scores/quiz/players");if(n==="ek_scores")return fs.collection("scores/erdkunde/players");if(n==="es_scores")return fs.collection("scores/erdkunde_serie/players");return none}};
+    var db={collection:function(n){if(n==="scores")return fs.collection("scores/lat/players");if(n==="en_scores")return fs.collection("scores/en/players");if(n==="ma_scores")return fs.collection("scores/mathe/players");if(n==="md_scores")return fs.collection("scores/mathe_div/players");if(n==="kudos")return fs.collection("scores/kudos/players");if(n==="quiz_scores")return fs.collection("scores/quiz/players");if(n==="ek_scores")return fs.collection("scores/erdkunde/players");if(n==="es_scores")return fs.collection("scores/erdkunde_serie/players");if(n==="duel_scores")return fs.collection("scores/duel/players");return none}};
     window.__GU={uid:uid,name:name};window.__GUfs=fs;
     window.__GUsetVis=function(v){window.__GUVIS=v;window.__GUHIDE=v==="me";
       fs.doc("progress/"+uid).set({vis:v},{merge:true}).catch(function(){});
@@ -2879,7 +3172,7 @@ if(player)loadPlayer();migrate();rebuild();drawRandom();renderStats();renderStag
     if(armed!==id){armed=id;this.querySelectorAll("button[data-rm]").forEach(function(x){x.classList.remove("sure");x.textContent="Entfernen"});
       b.classList.add("sure");b.textContent="Wirklich entfernen?";return}
     b.disabled=true;b.textContent="Entfernt …";
-    try{await Promise.all([fs.doc("scores/lat/players/"+id).delete(),fs.doc("scores/en/players/"+id).delete(),fs.doc("scores/mathe/players/"+id).delete(),fs.doc("scores/mathe_div/players/"+id).delete(),fs.doc("scores/kudos/players/"+id).delete(),fs.doc("scores/quiz/players/"+id).delete(),fs.doc("scores/erdkunde/players/"+id).delete(),fs.doc("scores/erdkunde_serie/players/"+id).delete(),fs.doc("progress/"+id).delete()]);
+    try{await Promise.all([fs.doc("scores/lat/players/"+id).delete(),fs.doc("scores/en/players/"+id).delete(),fs.doc("scores/mathe/players/"+id).delete(),fs.doc("scores/mathe_div/players/"+id).delete(),fs.doc("scores/kudos/players/"+id).delete(),fs.doc("scores/quiz/players/"+id).delete(),fs.doc("scores/erdkunde/players/"+id).delete(),fs.doc("scores/erdkunde_serie/players/"+id).delete(),fs.doc("scores/duel/players/"+id).delete(),fs.doc("progress/"+id).delete()]);
       await fs.doc("profiles/"+id).delete();
       $("ad-msg").textContent=name+" wurde entfernt. Tipp: jetzt den Klassen-Code ändern.";loadMembers()}
     catch(err){b.disabled=false;b.classList.remove("sure");b.textContent="Entfernen";armed=null;$("ad-msg").textContent="Entfernen hat nicht geklappt: "+(err.code||err.message)}};
@@ -2889,9 +3182,9 @@ if(player)loadPlayer();migrate();rebuild();drawRandom();renderStats();renderStag
       var r=await Promise.all([fs.doc("vocab/lat").get(),fs.doc("vocab/en").get(),fs.collection("profiles").get(),
         fs.collection("scores/lat/players").get(),fs.collection("scores/en/players").get(),fs.collection("scores/mathe/players").get(),
         fs.collection("scores/mathe_div/players").get(),fs.collection("scores/kudos/players").get(),
-        fetch("weltblick.json?v="+Date.now(),{cache:"no-store"}).then(function(x){return x.ok?x.json():[]}).catch(function(){return []}),fs.collection("scores/quiz/players").get(),fs.collection("scores/erdkunde/players").get(),fs.collection("scores/erdkunde_serie/players").get()]);
+        fetch("weltblick.json?v="+Date.now(),{cache:"no-store"}).then(function(x){return x.ok?x.json():[]}).catch(function(){return []}),fs.collection("scores/quiz/players").get(),fs.collection("scores/erdkunde/players").get(),fs.collection("scores/erdkunde_serie/players").get(),fs.collection("scores/duel/players").get()]);
       var out={erstellt:new Date().toISOString(),vocab:{lat:items(r[0]),en:items(r[1])},mitspielende:rows(r[2]),
-        rekorde:{latein:rows(r[3]),englisch:rows(r[4]),mathe_mal:rows(r[5]),mathe_geteilt:rows(r[6]),weltblick_quiz:rows(r[9]),erdkunde:rows(r[10]),erdkunde_serie:rows(r[11])},daumen:rows(r[7]),weltblick:r[8]};
+        rekorde:{latein:rows(r[3]),englisch:rows(r[4]),mathe_mal:rows(r[5]),mathe_geteilt:rows(r[6]),weltblick_quiz:rows(r[9]),erdkunde:rows(r[10]),erdkunde_serie:rows(r[11])},duelle:rows(r[12]),daumen:rows(r[7]),weltblick:r[8]};
       Object.keys(out.mitspielende).forEach(function(k){delete out.mitspielende[k].code});
       var blob=new Blob([JSON.stringify(out,null,2)],{type:"application/json"}),a=document.createElement("a");
       a.href=URL.createObjectURL(blob);a.download="gretas-update-sicherung-"+new Date().toISOString().slice(0,10)+".json";document.body.appendChild(a);a.click();
