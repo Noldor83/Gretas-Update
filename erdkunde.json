@@ -2,6 +2,67 @@
   "_hinweis": "Land der Woche: neueste Ausgabe zuerst. iso = ISO-3166-Zahlencode (wie in weltkarte.json), koord = [Längengrad, Breitengrad] der Hauptstadt.",
   "laender": [
     {
+      "nr": 2,
+      "datum": "2026-10-22",
+      "name": "Australien",
+      "iso": "036",
+      "flagge": "🇦🇺",
+      "hauptstadt": "Canberra",
+      "koord": [
+        149.13,
+        -35.2809
+      ],
+      "entfernung_km": 16100,
+      "einleitung": "Australien liegt auf der Südhalbkugel zwischen dem Indischen und dem Pazifischen Ozean. Es ist das einzige Land, das einen ganzen Kontinent einnimmt.",
+      "fakten": [
+        {
+          "label": "Einwohner",
+          "wert": "rund 28 Millionen",
+          "hinweis": "Deutschland hat etwa 3-mal so viele."
+        },
+        {
+          "label": "Hauptstadt",
+          "wert": "Canberra"
+        },
+        {
+          "label": "Landessprache",
+          "wert": "Englisch",
+          "hinweis": "Eine offiziell festgelegte Amtssprache gibt es nicht."
+        },
+        {
+          "label": "Fläche",
+          "wert": "rund 7,7 Millionen km²",
+          "hinweis": "Etwa 21-mal so groß wie Deutschland."
+        },
+        {
+          "label": "Währung",
+          "wert": "Australischer Dollar"
+        },
+        {
+          "label": "Jahreszeiten",
+          "wert": "umgekehrt wie bei uns",
+          "hinweis": "Wenn bei uns Herbst ist, ist in Australien Frühling. Weihnachten ist dort mitten im Sommer."
+        }
+      ],
+      "nice": [
+        {
+          "thema": "Kultur",
+          "titel": "Die ältesten Kulturen der Welt",
+          "text": "Die Aborigines und die Torres-Strait-Insulaner leben schon seit mehr als 50.000 Jahren in Australien. Ihre Kulturen gehören zu den ältesten, die es heute noch gibt. Der große rote Felsen Uluru ist für sie ein heiliger Ort."
+        },
+        {
+          "thema": "Politik",
+          "titel": "Social Media erst ab 16",
+          "text": "Seit Dezember 2025 dürfen Kinder und Jugendliche unter 16 Jahren in Australien kein Konto bei Plattformen wie TikTok, Instagram oder Snapchat haben. Australien war damit das erste Land der Welt mit so einem Verbot. Auch Deutschland denkt gerade über eine Altersgrenze nach."
+        },
+        {
+          "thema": "Herausforderung",
+          "titel": "Das Riff in Gefahr",
+          "text": "Vor der Küste liegt das Great Barrier Reef, das größte Korallenriff der Welt. Weil das Meer durch den Klimawandel wärmer wird, sind dort in den letzten Jahren immer wieder viele Korallen ausgebleicht. Auch Dürren und Buschbrände machen dem Land zu schaffen."
+        }
+      ]
+    },
+    {
       "nr": 1,
       "datum": "2026-10-15",
       "name": "Finnland",

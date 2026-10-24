@@ -1,5 +1,126 @@
 [
   {
+    "nr": 3,
+    "datum": "2026-10-22",
+    "themen": [
+      {
+        "bereich": "innen",
+        "schlagzeile": "Social Media erst ab 13?",
+        "text": "Die Bundesregierung will Kinder im Internet besser schützen. Kinder unter 13 Jahren sollen Plattformen wie TikTok, Instagram oder Snapchat grundsätzlich nicht mehr nutzen dürfen, für 13- bis 18-Jährige soll es abgestufte Regeln geben. Wann das gilt und wie das Alter geprüft wird, ist noch offen. Kritik kommt unter anderem von der Bundesschülerkonferenz: „Schutz ja, Verbot nein“.",
+        "wichtig": "Diese Pläne betreffen direkt Kinder und Jugendliche in deinem Alter."
+      },
+      {
+        "bereich": "innen",
+        "schlagzeile": "Milliarden für Deutschland",
+        "text": "Bundeskanzler Merz hat in Berlin rund 200 Fachleute aus Unternehmen und Geldanlage-Firmen aus aller Welt zu einem Gipfel eingeladen. Sie haben Investitionen von rund 230 Milliarden Euro zugesagt, zum Beispiel für Energie, Rechenzentren und Künstliche Intelligenz.",
+        "wichtig": "Wenn Firmen in Deutschland investieren, entstehen neue Fabriken und Arbeitsplätze."
+      },
+      {
+        "bereich": "aussen",
+        "schlagzeile": "Frankreich: Ausgangssperren nach Krawallen",
+        "text": "In Frankreich protestieren viele Menschen, darunter viele junge Leute aus Schulen und Universitäten, gegen hohe Preise und soziale Ungerechtigkeit. Am vergangenen Wochenende kam es in mehreren Städten zu Gewalt und Plünderungen. Die Regierung hat deshalb nachts Ausgangssperren verhängt, zum Beispiel in Teilen von Paris und Lyon.",
+        "wichtig": "Frankreich ist Deutschlands wichtigster Nachbar in Europa. In etwa einem halben Jahr wählt das Land einen neuen Präsidenten."
+      },
+      {
+        "bereich": "aussen",
+        "schlagzeile": "Alberta bleibt bei Kanada",
+        "text": "In der kanadischen Provinz Alberta haben die Menschen am Montag abgestimmt, ob sie den Weg zu einer Abspaltung von Kanada beginnen wollen. Nach dem vorläufigen Ergebnis haben sich rund drei Viertel dafür entschieden, bei Kanada zu bleiben. Das amtliche Endergebnis kommt am 29. Oktober.",
+        "wichtig": "In einer Volksabstimmung entscheiden die Menschen selbst über eine wichtige Frage."
+      }
+    ],
+    "zahl": {
+      "wert": "230 Milliarden Euro",
+      "text": "So viel Geld haben Unternehmen beim Investitionsgipfel in Berlin zugesagt, um es in Deutschland anzulegen."
+    },
+    "wort": {
+      "begriff": "Ausgangssperre",
+      "erklaerung": "Während einer Ausgangssperre dürfen die Menschen zu bestimmten Zeiten nicht oder nur mit gutem Grund auf die Straße. Ein Staat verhängt sie nur in Ausnahmefällen, zum Beispiel bei schweren Krawallen."
+    },
+    "frage": "Ab welchem Alter sollten Kinder TikTok, Instagram und Co. nutzen dürfen? Und wer sollte das kontrollieren: die Eltern, die Firmen oder der Staat?",
+    "quellen": [
+      {
+        "titel": "ZDFheute: Kinderschutz im Netz – Regierung plant Social-Media-Verbot bis 13",
+        "url": "https://www.zdfheute.de/politik/deutschland/kinderschutz-online-ki-social-media-verbot-regierung-100.html"
+      },
+      {
+        "titel": "News4teachers: Social-Media-Verbot für Kinder – Bundesregierung beschließt Altersgrenze",
+        "url": "https://www.news4teachers.de/2026/10/social-media-verbot-fuer-kinder-bundesregierung-beschliesst-altersgrenze-trotz-kritik-daran/"
+      },
+      {
+        "titel": "logo!: Sendung vom 21.10.2026",
+        "url": "https://www.logo.de/logo-vom-mittwoch-21-oktober-2026-100.html"
+      },
+      {
+        "titel": "Bundeskanzler: Invest in Germany-Summit in Berlin",
+        "url": "https://www.bundeskanzler.de/bk-de/aktuelles/invest-in-germany-summit-2457594"
+      },
+      {
+        "titel": "ZDFheute: Ausschreitungen in Frankreich – Wie die Krise politisch spaltet",
+        "url": "https://www.zdfheute.de/politik/ausland/frankreich-ausschreitungen-proteste-gewalt-politik-100.html"
+      },
+      {
+        "titel": "taz: Ausgangssperren in Frankreich",
+        "url": "https://taz.de/Ausgangssperren-in-Frankreich/!6222840/"
+      },
+      {
+        "titel": "ZDFheute: Alberta – Mehrheit bei Referendum gegen Abspaltung von Kanada",
+        "url": "https://www.zdfheute.de/politik/ausland/kanada-alberta-mehrheit-gegen-losloesung-100.html"
+      },
+      {
+        "titel": "Tiroler Tageszeitung: Klare Mehrheit in Alberta gegen Unabhängigkeit von Kanada",
+        "url": "https://www.tt.com/artikel/30944966/klare-mehrheit-in-alberta-gegen-unabhaengigkeit-von-kanada"
+      }
+    ],
+    "quiz": [
+      {
+        "typ": "mc",
+        "frage": "Bis zu welchem Alter sollen Kinder nach den Plänen der Bundesregierung grundsätzlich kein Social Media nutzen dürfen?",
+        "optionen": [
+          "Unter 10 Jahren",
+          "Unter 16 Jahren",
+          "Unter 13 Jahren"
+        ],
+        "richtig": 2,
+        "erklaerung": "Kinder unter 13 Jahren sollen Plattformen wie TikTok oder Instagram grundsätzlich nicht nutzen dürfen."
+      },
+      {
+        "typ": "mc",
+        "frage": "Wogegen protestieren viele Menschen in Frankreich?",
+        "optionen": [
+          "Gegen hohe Preise und soziale Ungerechtigkeit",
+          "Gegen ein neues Fußballstadion",
+          "Gegen längere Sommerferien"
+        ],
+        "richtig": 0,
+        "erklaerung": "Die Proteste richten sich gegen hohe Lebenshaltungskosten und soziale Ungerechtigkeit."
+      },
+      {
+        "typ": "mc",
+        "frage": "Wozu gehört die Provinz Alberta?",
+        "optionen": [
+          "Zu den USA",
+          "Zu Kanada",
+          "Zu Australien"
+        ],
+        "richtig": 1,
+        "erklaerung": "Alberta ist eine Provinz in Kanada, und die Mehrheit will laut vorläufigem Ergebnis auch dabei bleiben."
+      },
+      {
+        "typ": "wf",
+        "frage": "Bei einer Ausgangssperre darf man rund um die Uhr ganz normal auf die Straße gehen.",
+        "richtig": false,
+        "erklaerung": "Falsch. Während einer Ausgangssperre darf man zu bestimmten Zeiten nicht oder nur mit gutem Grund nach draußen."
+      },
+      {
+        "typ": "schaetzen",
+        "frage": "Wie viel Geld haben Unternehmen beim Investitionsgipfel in Berlin zugesagt? Schätze in Milliarden Euro.",
+        "einheit": "Milliarden Euro",
+        "richtig": 230,
+        "erklaerung": "Es wurden rund 230 Milliarden Euro an Investitionen in Deutschland zugesagt."
+      }
+    ]
+  },
+  {
     "nr": 2,
     "datum": "2026-10-15",
     "themen": [
