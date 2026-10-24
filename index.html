@@ -725,7 +725,7 @@ body{background:var(--gu-bar);color:var(--gu-bar-fg)}
     <span><b>Gretas Update als App</b><span class="s-sub">Auf den Startbildschirm legen – dann bist du mit einem Tipp drin.</span></span>
     <span class="s-instgo">So geht’s</span>
   </button>
-  <button type="button" class="s-card s-quizhint" id="s-quizhint" hidden>
+  <button type="button" class="s-card s-quizhint" id="s-quizhint" data-quiz="1" hidden>
     <span class="s-qic" aria-hidden="true">?</span>
     <span><b id="s-qh-t">Neues Wochenquiz!</b><span class="s-sub" id="s-qh-s"></span></span>
     <span class="s-instgo">Los</span>
@@ -994,7 +994,7 @@ body{background:var(--gu-bar);color:var(--gu-bar-fg)}
       if(window.__GUK)window.__GUK.on(function(){if(calm())drawQ()});
       if(window.__GUfs){var h=await window.__GUfs.doc("vocab/quizhide").get();if(h.exists){try{QHIDE=JSON.parse(h.data().json||"[]")}catch(e){QHIDE=[]}}if(cur.a&&calm())quizView(cur.box,cur.a,cur.latest)}
     }catch(e){}})();
-  window.__GUquizOpen=function(){var t=document.getElementById("gu-tab-wb");if(t)t.click();sel.value="0";render(0);setTimeout(function(){var q=document.getElementById("quiz");if(q)q.scrollIntoView({behavior:"smooth",block:"start"})},80)};
+  window.__GUquizOpen=function(){var t=document.getElementById("gu-tab-wb");if(t)t.click();sel.value="0";render(0);setTimeout(function(){var q=document.getElementById("quiz");if(q)q.scrollIntoView({behavior:"smooth",block:"start"})},350)};
   ausgaben.forEach(function(a,i){var o=el('option',null,'Nr. '+a.nr+' · '+new Date(a.datum+'T12:00:00').toLocaleDateString('de-DE',{day:'numeric',month:'short'}));o.value=i;sel.appendChild(o)});
   sel.addEventListener('change',function(){render(+sel.value);window.scrollTo({top:0})});
   render(0);
