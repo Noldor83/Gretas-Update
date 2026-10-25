@@ -2371,7 +2371,7 @@ if(player)loadPlayer();migrate();rebuild();drawRandom();renderStats();renderStag
 #ek .d-target{display:grid;gap:2px}
 #ek .d-target b{font-family:var(--e-f-big);font-weight:400;font-size:clamp(30px,8vw,42px);line-height:1.05;color:var(--e-teal);overflow-wrap:anywhere}
 #ek .d-target span{font:500 16px var(--e-f-head);color:var(--e-muted)}
-#ek .d-mapbox{position:relative;width:100%;aspect-ratio:16/10;max-height:62vh;border:2.5px solid var(--e-ink);border-radius:14px;overflow:hidden;background:var(--e-sea)}
+#ek .d-mapbox{position:relative;touch-action:none;-webkit-touch-callout:none;-webkit-user-select:none;user-select:none;width:100%;aspect-ratio:16/10;max-height:62vh;border:2.5px solid var(--e-ink);border-radius:14px;overflow:hidden;background:var(--e-sea)}
 #ek .d-mapbox svg{display:block;width:100%;height:100%;touch-action:none;cursor:crosshair;user-select:none;-webkit-user-select:none}
 #ek .d-mapbox.d-ro svg{cursor:grab}
 #ek .d-zoom{position:absolute;right:8px;top:8px;display:grid;gap:6px}
@@ -2694,7 +2694,12 @@ if(player)loadPlayer();migrate();rebuild();drawRandom();renderStats();renderStag
     function toSvg(cx,cy){var pt=svg.createSVGPoint();pt.x=cx;pt.y=cy;var mtx=svg.getScreenCTM();if(!mtx)return null;var q=pt.matrixTransform(mtx.inverse());return [q.x,q.y]}
     function zoomAt(f,p){var nw=Math.min(maxW(),Math.max(28,vb.w/f)),g=nw/vb.w;if(p){vb.cx=p[0]+(vb.cx-p[0])*g;vb.cy=p[1]+(vb.cy-p[1])*g}vb.w=nw;apply()}
     box.querySelectorAll("[data-z]").forEach(function(b){b.onclick=function(e){e.stopPropagation();var z=b.dataset.z;if(z==="home"){vb={cx:W/2,cy:H/2,w:maxW()};apply()}else zoomAt(z==="in"?1.8:1/1.8,null)}});
-    var P={},moved=false,t0=0,last=null,pinch=null;
+    var P={},moved=false,t0=0,last=null,pinch=null,lastTap=0;
+    function tap(cx,cy){if(!opts.onTap||Date.now()-lastTap<450)return;lastTap=Date.now();var q=toSvg(cx,cy);if(q)opts.onTap(q)}
+    /* iPhone-Absicherung: Seite darf beim Ziehen auf der Karte nicht scrollen, und ein Tipp wird auch über Touch-Ereignisse erkannt */
+    var T=null;box.addEventListener("touchmove",function(e){if(e.target.closest&&e.target.closest(".d-zoom"))return;e.preventDefault();if(T&&e.touches.length===1){var t=e.touches[0];if(Math.hypot(t.clientX-T.x,t.clientY-T.y)>10)T.m=true}else if(T)T.m=true},{passive:false});
+    svg.addEventListener("touchstart",function(e){T=e.touches.length===1?{x:e.touches[0].clientX,y:e.touches[0].clientY,t:Date.now(),m:false}:(T?Object.assign(T,{m:true}):null)},{passive:true});
+    svg.addEventListener("touchend",function(e){if(!T||e.touches.length)return;var c=e.changedTouches[0],ok=!T.m&&Date.now()-T.t<800&&Math.hypot(c.clientX-T.x,c.clientY-T.y)<=10;T=null;if(ok)setTimeout(function(){tap(c.clientX,c.clientY)},60)},{passive:true});
     svg.addEventListener("pointerdown",function(e){P[e.pointerId]={x:e.clientX,y:e.clientY};try{svg.setPointerCapture(e.pointerId)}catch(_){}
       var ids=Object.keys(P);if(ids.length===1){moved=false;t0=Date.now();last={x:e.clientX,y:e.clientY}}else if(ids.length===2){moved=true;var a=P[ids[0]],b=P[ids[1]];pinch={d:Math.hypot(a.x-b.x,a.y-b.y),w:vb.w}}});
     svg.addEventListener("pointermove",function(e){if(!P[e.pointerId])return;P[e.pointerId]={x:e.clientX,y:e.clientY};var ids=Object.keys(P);
@@ -2703,7 +2708,7 @@ if(player)loadPlayer();migrate();rebuild();drawRandom();renderStats();renderStag
         moved=true;var s=k();vb.cx-=dx*s;vb.cy-=dy*s;last={x:e.clientX,y:e.clientY};apply()}});
     function up(e){if(!P[e.pointerId])return;var single=Object.keys(P).length===1;delete P[e.pointerId];if(Object.keys(P).length<2)pinch=null;
       if(Object.keys(P).length===1){var id=Object.keys(P)[0];last={x:P[id].x,y:P[id].y}}
-      if(single&&!moved&&Date.now()-t0<800&&opts.onTap){var q=toSvg(e.clientX,e.clientY);if(q)opts.onTap(q)}}
+      if(single&&!moved&&Date.now()-t0<800)tap(e.clientX,e.clientY)}
     svg.addEventListener("pointerup",up);svg.addEventListener("pointercancel",function(e){delete P[e.pointerId];pinch=null;moved=true});
     svg.addEventListener("wheel",function(e){e.preventDefault();zoomAt(e.deltaY<0?1.25:0.8,toSvg(e.clientX,e.clientY))},{passive:false});
     var api={set:function(m){marks=m;draw()},home:function(){vb={cx:W/2,cy:H/2,w:maxW()};apply()},
