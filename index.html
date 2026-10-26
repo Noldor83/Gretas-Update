@@ -580,7 +580,7 @@ body{background:var(--gu-bar);color:var(--gu-bar-fg)}
       <button class="gu-tab" type="button" role="tab" id="gu-tab-wb" data-v="wb" aria-controls="wb" aria-selected="false">Weltblick<small>Politik</small></button>
       <button class="gu-tab" type="button" role="tab" id="gu-tab-lat" data-v="lat" aria-controls="lat" aria-selected="false">Latein<small>Vokabeln</small></button>
       <button class="gu-tab" type="button" role="tab" id="gu-tab-en" data-v="en" aria-controls="en" aria-selected="false">Englisch<small>Vokabeln</small></button>
-      <button class="gu-tab" type="button" role="tab" id="gu-tab-ma" data-v="ma" aria-controls="ma" aria-selected="false">Mathe<small>1×1</small></button>
+      <button class="gu-tab" type="button" role="tab" id="gu-tab-ma" data-v="ma" aria-controls="ma" aria-selected="false">Mathe<small>Rechnen</small></button>
       <button class="gu-tab" type="button" role="tab" id="gu-tab-ek" data-v="ek" aria-controls="ek" aria-selected="false">Erdkunde<small>Länder</small></button>
     </nav>
   </div>
@@ -659,6 +659,8 @@ body{background:var(--gu-bar);color:var(--gu-bar-fg)}
 #st .s-quizhint:focus-visible{outline:3px solid var(--s-pink);outline-offset:3px}
 #st .s-qic{display:grid;place-items:center;width:46px;height:46px;border-radius:12px;background:var(--s-wb);color:#fff;font-family:var(--s-f-big);font-size:24px;border:2px solid var(--s-ink)}
 #st .s-duelhint{border-color:#0f7c8c}
+#st .s-alltaghint{border-color:#1d8655}
+#st .s-alltaghint .s-qic{background:#1d8655}
 #st .s-duelhint .s-qic{background:#0f7c8c;font-size:22px}
 #st .s-quizhint b{display:block;font-family:var(--s-f-head);font-weight:700;font-size:17px}
 #st .s-quizhint .s-sub{font-size:14px;color:var(--s-muted)}
@@ -735,6 +737,11 @@ body{background:var(--gu-bar);color:var(--gu-bar-fg)}
     <span><b id="s-dh-t">Weltkarten-Duell</b><span class="s-sub" id="s-dh-s"></span></span>
     <span class="s-instgo">Ansehen</span>
   </button>
+  <button type="button" class="s-card s-quizhint s-alltaghint" id="s-alltag" hidden>
+    <span class="s-qic" aria-hidden="true">%</span>
+    <span><b id="s-al-t">Alltagsrechnen</b><span class="s-sub" id="s-al-s"></span></span>
+    <span class="s-instgo">Rechnen</span>
+  </button>
   <div class="s-grid">
     <div class="s-col">
       <h3 class="s-sec">Neuigkeiten <small>Neue Rekorde</small></h3>
@@ -776,6 +783,14 @@ body{background:var(--gu-bar);color:var(--gu-bar-fg)}
     else if(st.last===y&&st.n>0)el.innerHTML='🔥 <b>'+st.n+'</b>'+(st.n===1?' Tag':' Tage')+' in Folge – heute üben, sonst reißt die Serie!';
     else el.innerHTML='🔥 Starte heute eine Lern-Serie!'}
   streakRow();window.addEventListener("gu-streak",streakRow);
+  function alltagRow(){var a=window.__GUalltag,el=$("s-alltag");if(!el)return;if(!a||!window.__GUymd){el.hidden=true;return}
+    var t=window.__GUymd(new Date()),y=new Date();y.setDate(y.getDate()-1);y=window.__GUymd(y);var today=a.day===t?(a.today||0):0,n=(a.last===t||a.last===y)?(a.n||0):0,T,S;
+    if(a.last===t){T="Alltagsrechnen: "+n+(n===1?" Tag":" Tage")+" in Folge ✓";S="Heute geschafft – "+today+" Aufgaben gerechnet. Stark!"}
+    else if(n>0){T="Alltagsrechnen: "+n+(n===1?" Tag":" Tage")+" in Folge";S="Heute noch "+(5-today)+(5-today===1?" Aufgabe":" Aufgaben")+", sonst reißt dein Rechen-Run."}
+    else {T="Alltagsrechnen";S=today?"Heute schon "+today+" von 5 Aufgaben – weiter so!":"Prozent, Plus & Minus, Brüche – 5 Aufgaben am Tag starten deinen Rechen-Run."}
+    $("s-al-t").textContent=T;$("s-al-s").textContent=S;el.hidden=false;
+    el.onclick=function(){if(window.__GUalltagOpen)window.__GUalltagOpen()}}
+  alltagRow();window.addEventListener("gu-alltag",alltagRow);
   var now=new Date(),h=now.getHours();
   var hi=h<11?"Guten Morgen":h<17?"Hallo":h<22?"Guten Abend":"Noch wach";
   $("s-day").textContent=now.toLocaleDateString("de-DE",{weekday:"long",day:"numeric",month:"long"});
@@ -1954,6 +1969,51 @@ if(player)loadPlayer();migrate();rebuild();drawRandom();renderStats();renderStag
 #ma h2,#ma h3{margin:0;text-wrap:balance}
 #ma p{margin:0}
 #ma .m-card{background:var(--m-card);border:2.5px solid var(--m-line);border-radius:18px;box-shadow:4px 4px 0 var(--m-shadow);padding:18px}
+#ma .m-switch{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+#ma .m-sw{font:700 17px var(--m-f-head);border:2.5px solid var(--m-line);border-radius:14px;padding:10px 8px;background:var(--m-key);color:var(--m-ink);cursor:pointer;box-shadow:3px 3px 0 var(--m-shadow)}
+#ma .m-sw[aria-pressed="true"]{background:var(--m-sun);color:#14231b;border-color:var(--m-sun)}
+#ma .m-sw:focus-visible{outline:3px solid var(--m-pink);outline-offset:2px}
+#ma .m-wrap{grid-template-columns:minmax(0,1fr)}
+#ma #ma-1x1,#ma #ma-alltag{display:grid;grid-template-columns:minmax(0,1fr);gap:16px;min-width:0}
+#ma #ma-1x1[hidden],#ma #ma-alltag[hidden]{display:none}
+#ma .a-run{display:grid;gap:10px}
+#ma .a-runtop{display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:center}
+#ma .a-flame{font-size:34px;line-height:1}
+#ma .a-runtop b{display:block;font:700 19px var(--m-f-head)}
+#ma .a-dots{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
+#ma .a-dots i{height:12px;border-radius:6px;border:2px solid var(--m-line);background:transparent}
+#ma .a-dots i.on{background:var(--m-green);border-color:var(--m-green)}
+#ma .a-lvls{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+#ma .a-lvl{font:700 14px var(--m-f-head);border:2px solid var(--m-line);border-radius:12px;padding:8px 4px;background:transparent;color:var(--m-ink);cursor:pointer;line-height:1.15}
+#ma .a-lvl[aria-pressed="true"]{background:var(--m-ink);color:var(--m-bg)}
+#ma .a-lvl:focus-visible{outline:3px solid var(--m-pink);outline-offset:2px}
+@media (max-width:420px){#ma .a-lvls{grid-template-columns:1fr 1fr}}
+#ma .a-task{display:grid;gap:12px}
+#ma .a-tag{justify-self:start;font:700 13px var(--m-f-head);letter-spacing:.04em;text-transform:uppercase;color:var(--m-sun)}
+#ma .a-ctx{font-size:18px;line-height:1.45}
+#ma .a-q{font:700 20px/1.3 var(--m-f-head)}
+#ma .a-fr{display:inline-flex;align-items:baseline;font-weight:700;white-space:nowrap}
+#ma .a-fr sup,#ma .a-fr sub{font-size:.78em;line-height:1}
+#ma .a-row{display:flex;align-items:center;gap:10px}
+#ma .a-in{flex:1 1 0;width:0;min-width:0;font:700 26px var(--m-f-head);color:var(--m-ink);background:var(--m-key);border:2.5px solid var(--m-line);border-radius:12px;padding:8px 12px;font-variant-numeric:tabular-nums}
+#ma .a-in:focus{outline:3px solid var(--m-sun);outline-offset:1px}
+#ma .a-in.ok{background:var(--m-ok-bg);border-color:var(--m-ok)}
+#ma .a-in.bad{background:var(--m-bad-bg);border-color:var(--m-bad)}
+#ma .a-unit{font:700 20px var(--m-f-head);color:var(--m-muted);white-space:nowrap}
+#ma .a-fb{font:600 17px/1.4 var(--m-f-head);border-radius:12px;padding:10px 12px;border:2px solid var(--m-ok);background:var(--m-ok-bg)}
+#ma .a-fb.bad{border-color:var(--m-bad);background:var(--m-bad-bg)}
+#ma .a-fb.tip{border-color:var(--m-sun);background:rgba(255,210,77,.12)}
+#ma .a-steps{border:2px dashed var(--m-line);border-radius:12px;padding:10px 12px;display:grid;gap:6px}
+#ma .a-steps b{font:700 16px var(--m-f-head);color:var(--m-sun)}
+#ma .a-steps ol{margin:0;padding-left:22px;display:grid;gap:6px;font-size:16.5px;line-height:1.4}
+#ma .a-btns{display:flex;flex-wrap:wrap;gap:8px}
+#ma .a-btns .m-go{flex:1 1 auto;font-size:19px;padding:10px 14px}
+#ma .a-alt{font:700 16px var(--m-f-head);border:2px solid var(--m-line);border-radius:12px;padding:8px 14px;background:transparent;color:var(--m-ink);cursor:pointer}
+#ma .a-alt:focus-visible{outline:3px solid var(--m-pink);outline-offset:2px}
+#ma .a-foot{text-align:center}
+#ma .a-run.win{animation:apop .6s ease}
+@keyframes apop{40%{transform:scale(1.03)}}
+@media (prefers-reduced-motion:reduce){#ma .a-run.win{animation:none}}
 #ma .m-head{display:flex;align-items:baseline;justify-content:space-between;gap:10px;flex-wrap:wrap}
 #ma .m-head h2{font-family:var(--m-f-big);font-weight:400;font-size:clamp(32px,9vw,44px);line-height:1;color:var(--m-green)}
 #ma .m-best{font-family:var(--m-f-head);font-weight:600;font-size:15px;color:var(--m-muted)}
@@ -2051,6 +2111,11 @@ if(player)loadPlayer();migrate();rebuild();drawRandom();renderStats();renderStag
 </style>
 <div class="m-space" aria-hidden="true"><div class="m-planet"></div><div class="m-moon"></div></div>
 <div class="m-wrap">
+  <div class="m-switch" role="group" aria-label="Was möchtest du üben?">
+    <button type="button" class="m-sw" data-view="x" aria-pressed="true">🚀 1×1-Rakete</button>
+    <button type="button" class="m-sw" data-view="alltag" aria-pressed="false">🛒 Alltagsrechnen</button>
+  </div>
+  <div id="ma-1x1">
   <div class="m-head"><h2 id="m-title">Kleines 1×1</h2><span class="m-best">Dein Rekord: <b id="m-best">0</b></span></div>
 
   <div class="m-card m-start" id="m-start">
@@ -2108,6 +2173,35 @@ if(player)loadPlayer();migrate();rebuild();drawRandom();renderStats();renderStag
   <div class="m-card m-board">
     <div class="m-bhead"><h3>Bestenliste</h3><div class="m-chips" role="group" aria-label="Bestenliste wählen"><button type="button" class="m-chip" data-mode="mul" aria-pressed="true">× Mal</button><button type="button" class="m-chip" data-mode="div" aria-pressed="false">: Geteilt</button></div></div>
     <ol id="m-board"><li><span></span><span class="m-note">Lädt …</span><span></span></li></ol>
+  </div>
+  </div>
+  <div id="ma-alltag" hidden>
+    <div class="m-head"><h2>Alltagsrechnen</h2><span class="m-best">Übungsmodus · ohne Punkte</span></div>
+    <div class="m-card a-run" id="a-run">
+      <div class="a-runtop"><span class="a-flame" aria-hidden="true">🔥</span><div><b id="a-run-t">Dein Rechen-Run</b><span class="m-note" id="a-run-s"></span></div></div>
+      <div class="a-dots" id="a-dots" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
+    </div>
+    <div class="a-lvls" role="group" aria-label="Thema wählen">
+      <button type="button" class="a-lvl" data-l="pm" aria-pressed="false">Plus &amp; Minus</button>
+      <button type="button" class="a-lvl" data-l="pz" aria-pressed="true">Prozent</button>
+      <button type="button" class="a-lvl" data-l="br" aria-pressed="false">Brüche &amp; Teilen</button>
+      <button type="button" class="a-lvl" data-l="mix" aria-pressed="false">Gemischt</button>
+    </div>
+    <form class="m-card a-task" id="a-form" autocomplete="off" novalidate>
+      <span class="a-tag" id="a-tag"></span>
+      <p class="a-ctx" id="a-ctx"></p>
+      <p class="a-q" id="a-q"></p>
+      <div class="a-row"><input class="a-in" id="a-in" type="text" inputmode="decimal" enterkeyhint="done" autocomplete="off" autocorrect="off" spellcheck="false" aria-label="Deine Antwort" placeholder="Deine Antwort"><span class="a-unit" id="a-unit"></span></div>
+      <div class="a-fb" id="a-fb" hidden aria-live="polite"></div>
+      <div class="a-steps" id="a-steps" hidden><b id="a-steps-t">So rechnest du’s im Kopf</b><ol id="a-ol"></ol></div>
+      <div class="a-btns">
+        <button type="submit" class="m-go" id="a-check">Prüfen</button>
+        <button type="button" class="a-alt" id="a-tip">Tipp</button>
+        <button type="button" class="a-alt" id="a-sol" hidden>Lösung zeigen</button>
+        <button type="button" class="m-go" id="a-next" hidden>Nächste Aufgabe →</button>
+      </div>
+    </form>
+    <p class="m-note a-foot">Kein Zeitdruck, keine Punkte. Ein Tag zählt für deinen Run, sobald du 5 Aufgaben gerechnet hast.</p>
   </div>
 </div>
 </section>
@@ -2188,6 +2282,245 @@ if(player)loadPlayer();migrate();rebuild();drawRandom();renderStats();renderStag
       function(){if(m===mode)$("m-board").innerHTML='<li><span></span><span class="m-note">Bestenliste konnte nicht geladen werden.</span><span></span><span></span></li>'})})}
     catch(e){$("m-board").innerHTML='<li><span></span><span class="m-note">Bestenliste nicht verbunden.</span><span></span><span></span></li>'}})();
   setMode(mode);
+})();
+</script>
+
+<script type="text/x-deferred">
+(function(){
+  var $=function(id){return document.getElementById(id)};
+  /* ---------- Aufgaben-Generator Alltagsrechnen ---------- */
+  function R(a,b){return a+Math.floor(Math.random()*(b-a+1))}
+  function pick(a){return a[Math.floor(Math.random()*a.length)]}
+  function nf(x,d){return Number(x).toLocaleString("de-DE",{maximumFractionDigits:d==null?2:d})}
+  function eur(c){return (c%100===0?nf(c/100,0):(c/100).toLocaleString("de-DE",{minimumFractionDigits:2,maximumFractionDigits:2}))+" €"}
+  function eur2(c){return (c/100).toLocaleString("de-DE",{minimumFractionDigits:2,maximumFractionDigits:2})+" €"}
+  function fr(a,b){return '<span class="a-fr"><sup>'+a+'</sup>⁄<sub>'+b+'</sub></span>'}
+  function gcd(a,b){a=Math.abs(a);b=Math.abs(b);while(b){var t=b;b=a%b;a=t}return a}
+  function hm(m){m=((m%1440)+1440)%1440;return Math.floor(m/60)+":"+String(m%60).padStart(2,"0")}
+  function r2(x){return Math.round(x*100)/100}
+  // Prozent einer Zahl über 10 % bzw. 1 % – liefert Rechenweg-Schritte
+  function pctSteps(p,base,fmt,label){var s=[],ten=r2(base/10),one=r2(base/100),res=r2(base*p/100);label=label||fmt(base);
+    if(p===50){s.push("50 % ist die Hälfte: "+label+" : 2 = "+fmt(res))}
+    else if(p===25){s.push("25 % ist ein Viertel: "+label+" : 4 = "+fmt(res))}
+    else if(p===75){s.push("75 % sind drei Viertel. Ein Viertel: "+label+" : 4 = "+fmt(r2(base/4)));s.push("Mal 3: "+fmt(r2(base/4))+" · 3 = "+fmt(res))}
+    else if(p===10){s.push("10 %: Teile durch 10 – das Komma rutscht eine Stelle nach links: "+fmt(res))}
+    else if(p===5){s.push("Erst 10 %: "+label+" : 10 = "+fmt(ten));s.push("5 % ist die Hälfte davon: "+fmt(ten)+" : 2 = "+fmt(res))}
+    else if(p===15){s.push("Erst 10 %: "+fmt(ten));s.push("5 % ist die Hälfte davon: "+fmt(r2(ten/2)));s.push("15 % = 10 % + 5 % = "+fmt(ten)+" + "+fmt(r2(ten/2))+" = "+fmt(res))}
+    else if(p%10===0){s.push("Erst 10 %: "+label+" : 10 = "+fmt(ten));s.push(p+" % sind "+(p/10)+" × 10 %: "+fmt(ten)+" · "+(p/10)+" = "+fmt(res))}
+    else {s.push("Erst 1 %: "+label+" : 100 = "+fmt(one));s.push(p+" % sind "+p+" × 1 %: "+fmt(one)+" · "+p+" = "+fmt(res))}
+    return s}
+  function lst(a,u){u=u||"";var s=a.map(function(x){return x+u});return s.length>1?s.slice(0,-1).join(", ")+" und "+s[s.length-1]:s[0]}
+  var G={pm:[],pz:[],br:[]};
+  // ===== Stufe 1: Plus & Minus =====
+  G.pm.push(function(){var n=R(3,4),xs=[];for(var i=0;i<n;i++)xs.push(R(11,89));
+    var c=pick([["Flohmarkt","Auf dem Flohmarkt verdienst du an "+n+" Tagen "+lst(xs," €")+".","Wie viel Geld ist das zusammen?","€"],
+      ["Pfand","Eure Klasse sammelt Pfandflaschen: "+lst(xs)+" Stück.","Wie viele Flaschen sind das insgesamt?","Flaschen"],
+      ["Ausflug","Zum Ausflug fahren "+n+" Klassen mit "+lst(xs)+" Kindern.","Wie viele Kinder fahren mit?","Kinder"]]);
+    var Z=xs.map(function(x){return Math.floor(x/10)*10}),E=xs.map(function(x){return x%10}),z=Z.reduce(function(a,b){return a+b}),e=E.reduce(function(a,b){return a+b});
+    return {tag:"Plus · "+c[0],ctx:c[1],q:c[2],ans:z+e,unit:c[3],steps:["Erst die Zehner: "+Z.join(" + ")+" = "+z,"Dann die Einer: "+E.join(" + ")+" = "+e,"Zusammen: "+z+" + "+e+" = "+(z+e)]}});
+  G.pm.push(function(){var L=[["Brot",189,349],["Milch",99,139],["Äpfel",199,299],["Käse",229,399],["Nudeln",89,149],["Schokolade",99,179],["Saft",129,249],["Joghurt",49,89],["Müsli",249,399],["Bananen",129,229]];
+    var n=R(3,4),it=[];L.sort(function(){return Math.random()-.5});for(var i=0;i<n;i++){var p=R(L[i][1],L[i][2]);p=Math.round(p/10)*10-1;it.push([L[i][0],p])}
+    var eu=it.map(function(x){return Math.floor(x[1]/100)}),ct=it.map(function(x){return x[1]%100}),se=eu.reduce(function(a,b){return a+b}),sc=ct.reduce(function(a,b){return a+b}),tot=se*100+sc;
+    var ask=Math.random()<.5,pay=tot<1000?1000:2000;
+    var s=["Erst die Euros: "+eu.join(" + ")+" = "+se+" €","Dann die Cent: "+ct.join(" + ")+" = "+sc+" Cent = "+eur2(sc),"Zusammen: "+se+" € + "+eur2(sc)+" = "+eur2(tot)];
+    var ctx="Im Supermarkt: "+it.map(function(x){return x[0]+" "+eur2(x[1])}).join(", ")+".";
+    if(ask)return {tag:"Plus · Einkauf",ctx:ctx,q:"Was kostet alles zusammen?",ans:tot/100,unit:"€",steps:s.concat(["Trick zum Überschlagen: Jeder Preis endet auf 9 Cent – also fast volle 10 Cent. Runde auf und zieh am Ende die fehlenden Cent wieder ab."])};
+    return {tag:"Minus · Rückgeld",ctx:ctx+" Du bezahlst mit einem "+(pay/100)+"-€-Schein.",q:"Wie viel Rückgeld bekommst du?",ans:(pay-tot)/100,unit:"€",steps:s.concat(ergSteps(tot,pay))}});
+  function ergSteps(tot,pay){var s=["Rückgeld durch Ergänzen – zähl vom Preis hoch bis zum Schein:"],c=tot,sum=0;
+    var up=Math.ceil(c/100)*100;if(up>c){s.push(eur2(c)+" → "+eur2(up)+": +"+eur2(up-c));sum+=up-c;c=up}
+    var up10=Math.ceil(c/1000)*1000;if(up10>c&&up10<=pay){s.push(eur(c)+" → "+eur(up10)+": +"+eur(up10-c));sum+=up10-c;c=up10}
+    if(pay>c){s.push(eur(c)+" → "+eur(pay)+": +"+eur(pay-c));sum+=pay-c}
+    s.push("Alles zusammen: "+eur2(sum));return s}
+  G.pm.push(function(){var tot=R(5,47)*100+R(0,19)*5,pay=tot<1000?1000:tot<2000?2000:5000;
+    var c=pick(["Im Kino kostet dein Ticket mit Popcorn","Dein Einkauf im Drogeriemarkt kostet","Die Pizza für eure Familie kostet","Das neue Buch kostet"]);
+    return {tag:"Minus · Rückgeld",ctx:c+" "+eur2(tot)+". Du bezahlst mit "+(pay/100)+" €.",q:"Wie viel Rückgeld bekommst du?",ans:(pay-tot)/100,unit:"€",steps:ergSteps(tot,pay)}});
+  G.pm.push(function(){var a=R(124,689),b=R(112,489);
+    var c=pick([["Schulfest","Beim Schulfest kommen am Vormittag "+a+" Gäste, am Nachmittag "+b+".","Wie viele Gäste waren es insgesamt?","Gäste"],
+      ["Strecke","Ihr fahrt in den Urlaub: am ersten Tag "+a+" km, am zweiten "+b+" km.","Wie weit seid ihr insgesamt gefahren?","km"],
+      ["Sparen","Du hast "+a+" € gespart und bekommst zum Geburtstag "+b+" € dazu.","Wie viel Geld hast du jetzt?","€"]]);
+    var H=Math.floor(b/100)*100,Z=Math.floor(b%100/10)*10,E=b%10,s=["Zerlege die zweite Zahl: "+b+" = "+[H,Z,E].filter(Boolean).join(" + "),"Erst die Hunderter: "+a+" + "+H+" = "+(a+H)];
+    if(Z)s.push("Dann die Zehner: "+(a+H)+" + "+Z+" = "+(a+H+Z));if(E)s.push("Dann die Einer: "+(a+H+Z)+" + "+E+" = "+(a+b));
+    return {tag:"Plus · "+c[0],ctx:c[1],q:c[2],ans:a+b,unit:c[3],steps:s}});
+  G.pm.push(function(){var a=R(30,99)*10-pick([0,0,1,5]),b=R(112,a-60);
+    var c=pick([["Sparziel","Das neue Fahrrad kostet "+a+" €. Du hast schon "+b+" € gespart.","Wie viel Geld fehlt dir noch?","€"],
+      ["Buch","Dein Buch hat "+a+" Seiten. Du hast "+b+" Seiten gelesen.","Wie viele Seiten fehlen noch?","Seiten"],
+      ["Strecke","Bis zum Urlaubsort sind es "+a+" km. "+b+" km habt ihr schon geschafft.","Wie viele Kilometer fehlen noch?","km"]]);
+    var s=["Ergänze von "+b+" bis "+a+" – in Sprüngen:"],x=b,sum=0;var u=Math.ceil(x/10)*10;if(u>x&&u<=a){s.push(x+" → "+u+": +"+(u-x));sum+=u-x;x=u}
+    u=Math.ceil(x/100)*100;if(u>x&&u<=a){s.push(x+" → "+u+": +"+(u-x));sum+=u-x;x=u}u=Math.floor(a/100)*100;if(u>x){s.push(x+" → "+u+": +"+(u-x));sum+=u-x;x=u}
+    if(a>x){s.push(x+" → "+a+": +"+(a-x));sum+=a-x}s.push("Alle Sprünge zusammen: "+sum);
+    return {tag:"Minus · "+c[0],ctx:c[1],q:c[2],ans:a-b,unit:c[3],steps:s}});
+  G.pm.push(function(){var a=R(12,58)*100,b=R(11,49)*100,sub=Math.random()<.5;if(sub&&b>=a){var t=a;a=b+R(20,60)*100;b=t}
+    var ctx=sub?"Im Stadion sind "+nf(a)+" Fans. Kurz vor Schluss gehen "+nf(b)+" schon nach Hause.":"Beim Konzert sind am Freitag "+nf(a)+" Leute, am Samstag "+nf(b)+".";
+    var q=sub?"Wie viele Fans sind am Ende noch da?":"Wie viele Leute waren an beiden Tagen zusammen da?",ans=sub?a-b:a+b;
+    var T=Math.floor(b/1000)*1000,H=b%1000,op=sub?" − ":" + ";
+    var s=["Rechne in Tausendern und Hundertern – die zwei Nullen hinten bleiben einfach stehen.","Erst "+nf(a)+op+nf(T)+" = "+nf(sub?a-T:a+T)];if(H)s.push("Dann "+nf(sub?a-T:a+T)+op+nf(H)+" = "+nf(ans));
+    return {tag:(sub?"Minus":"Plus")+" · Große Zahlen",ctx:ctx,q:q,ans:ans,unit:sub?"Fans":"Leute",steps:s}});
+  G.pm.push(function(){var lo=-R(2,11),hi=R(4,19);
+    return {tag:"Minus · Temperatur",ctx:"Morgens zeigt das Thermometer "+String(lo).replace("-","−")+" °C. Am Nachmittag sind es "+hi+" °C.",q:"Um wie viel Grad ist es wärmer geworden?",ans:hi-lo,unit:"Grad",
+      steps:["Von "+String(lo).replace("-","−")+" °C bis 0 °C sind es "+(-lo)+" Grad.","Von 0 °C bis "+hi+" °C sind es "+hi+" Grad.","Zusammen: "+(-lo)+" + "+hi+" = "+(hi-lo)+" Grad"]}});
+  G.pm.push(function(){var Y=new Date().getFullYear(),e=pick([["kam Kolumbus in Amerika an",1492],["trat das Grundgesetz in Kraft",1949],["fiel die Berliner Mauer",1989],["wurde Deutschland wiedervereinigt",1990],["landeten die ersten Menschen auf dem Mond",1969],["veröffentlichte Martin Luther seine 95 Thesen",1517]]);
+    var s=["Ergänze vom Jahr "+e[1]+" bis "+Y+":"],x=e[1],sum=0,u=Math.ceil(x/10)*10;if(u>x){s.push(x+" → "+u+": +"+(u-x));sum+=u-x;x=u}
+    u=Math.ceil(x/100)*100;if(u>x&&u<=Y){s.push(x+" → "+u+": +"+(u-x));sum+=u-x;x=u}if(Y>x){s.push(x+" → "+Y+": +"+(Y-x));sum+=Y-x}s.push("Zusammen: "+sum+" Jahre");
+    return {tag:"Minus · Geschichte",ctx:"Im Jahr "+e[1]+" "+e[0]+".",q:"Wie viele Jahre ist das "+Y+" her?",ans:Y-e[1],unit:"Jahre",steps:s}});
+  G.pm.push(function(){var st=R(14,20)*60+R(0,11)*5,du=R(1,2)*60+R(1,11)*5;
+    var c=pick(["Der Film beginnt um","Das Fußballspiel mit Verlängerung beginnt um","Die Zugfahrt zu Oma beginnt um"]);
+    var h=Math.floor(du/60),m=du%60,mid=st+h*60;
+    return {tag:"Plus · Uhrzeit",ctx:c+" "+hm(st)+" Uhr und dauert "+h+" Std. "+m+" Min.",q:"Um wie viel Uhr ist es vorbei?",ans:st+du,time:true,unit:"Uhr",
+      steps:["Erst die Stunden: "+hm(st)+" + "+h+" Std. = "+hm(mid),"Dann die Minuten: "+hm(mid)+" + "+m+" Min. = "+hm(st+du)+(Math.floor((mid%60+m)/60)?" (über die volle Stunde: 60 Minuten = 1 Stunde)":"")]}});
+  // ===== Stufe 2: Prozent =====
+  G.pz.push(function(){var p=pick([10,20,25,50,5,15,30,40,75]),w=pick([["einen Hund haben","Hundebesitzende"],["jeden Tag mit dem Fahrrad fahren","Radfahrende"],["kein Fleisch essen","Menschen"],["im Ausland Urlaub machen","Menschen"],["ein E-Auto fahren","Menschen"]]);
+    var res=r2(84*p/100);
+    return {tag:"Prozent · Bevölkerung",ctx:"In Deutschland leben rund 84 Millionen Menschen. Stell dir vor, "+p+" % davon würden "+w[0]+".",q:"Wie viele Millionen Menschen wären das? (Gib nur die Zahl in Millionen an.)",ans:res,unit:"Mio.",
+      steps:pctSteps(p,84,function(x){return nf(x)+" Mio."}).concat(["Das sind "+nf(res)+" Millionen Menschen – also "+nf(res*1e6,0)+"."])}});
+  G.pz.push(function(){var N=pick([200,300,400,500,600,800,1000,1200]),a=R(11,42),b=R(11,42),r=100-a-b,t=pick(["ein Handyverbot an Schulen","längere Sommerferien","eine Schuluniform","Wählen ab 16","Social Media erst ab 13","eine Vier-Tage-Schulwoche"]);
+    var k=R(0,3),one=N/100,s=["1 % von "+nf(N)+" Jugendlichen = "+nf(N)+" : 100 = "+nf(one)];var q,ans;
+    if(k===0){q="Wie viele Jugendliche sind dafür?";ans=a*one;s.push(a+" % = "+a+" × "+nf(one)+" = "+nf(ans))}
+    else if(k===1){q="Wie viele Jugendliche sind dagegen?";ans=b*one;s.push(b+" % = "+b+" × "+nf(one)+" = "+nf(ans))}
+    else if(k===2){q="Wie vielen Jugendlichen ist es egal?";ans=r*one;s.unshift("Erst den Rest in Prozent: 100 % − "+a+" % − "+b+" % = "+r+" %");s.push(r+" % = "+r+" × "+nf(one)+" = "+nf(ans))}
+    else {if(a===b)b=a>20?a-R(3,9):a+R(3,9);r=100-a-b;q="Wie viele Jugendliche sind "+(a>b?"mehr dafür als dagegen":"mehr dagegen als dafür")+"?";ans=Math.abs(a-b)*one;s.unshift("Unterschied in Prozent: "+Math.max(a,b)+" % − "+Math.min(a,b)+" % = "+Math.abs(a-b)+" %");s.push(Math.abs(a-b)+" % = "+Math.abs(a-b)+" × "+nf(one)+" = "+nf(ans))}
+    return {tag:"Prozent · Umfrage",ctx:"In einer Umfrage unter "+nf(N)+" Jugendlichen zu „"+t+"“ sagen "+a+" % „dafür“, "+b+" % „dagegen“, dem Rest ist es egal.",q:q,ans:ans,unit:"Jugendliche",steps:s}});
+  G.pz.push(function(){var o=pick([[28,[7,14,21],"In deiner Klasse sind 28 Kinder. {P} davon haben ein Haustier.","Wie viel Prozent der Klasse haben ein Haustier?"],
+      [40,[30,36,34,28,20],"Im Mathetest gibt es 40 Punkte. Du hast {P} Punkte.","Wie viel Prozent der Punkte hast du?"],
+      [25,[5,10,15,20],"Dein Verein hat 25 Spiele gespielt und {P} davon gewonnen.","Wie viel Prozent der Spiele wurden gewonnen?"],
+      [20,[3,4,5,9,15],"Von 20 Kindern im Bus haben {P} eine Brille.","Wie viel Prozent haben eine Brille?"],
+      [64,[16,32,48],"Dein Handy hat 64 GB Speicher. Fotos belegen {P} GB.","Wie viel Prozent des Speichers sind Fotos?"],
+      [200,[50,30,90,140,10],"In einer Schule mit 200 Kindern kommen {P} mit dem Rad.","Wie viel Prozent kommen mit dem Rad?"],
+      [500,[100,25,150,350],"Im Ort wohnen 500 Familien. {P} haben eine Solaranlage auf dem Dach.","Wie viel Prozent sind das?"]]);
+    var W=o[0],P=pick(o[1]),p=r2(P*100/W),g=gcd(P,W),a=P/g,b=W/g;
+    var s=["Schreib es als Bruch: "+fr(P,W)+(g>1?" – gekürzt: "+fr(a,b):"")];
+    if(b!==100)s.push("Erweitere auf Hundertstel: "+fr(a,b)+" = "+fr(a*100/b,100));s.push("Hundertstel sind Prozent: "+fr(p,100)+" = "+nf(p)+" %");
+    return {tag:"Prozent · Wie viel Prozent?",ctx:o[2].replace("{P}",P),q:o[3],ans:p,unit:"%",steps:s}});
+  G.pz.push(function(){var pr=pick([19,24,29,39,45,49,59,60,79,80,99,120,150]),p=pick([10,20,25,30,50,15,40]),save=Math.random()<.35;
+    var it=pick(["Ein Pullover","Ein Paar Sneaker","Ein Videospiel","Eine Jacke","Ein Rucksack","Kopfhörer"]),dc=Math.round(pr*100*p/100),fin=pr*100-dc;
+    var s=pctSteps(p,pr,function(x){return eur2(Math.round(x*100))},eur(pr*100));
+    if(!save)s.push("Vom Preis abziehen: "+eur(pr*100)+" − "+eur2(dc)+" = "+eur2(fin));
+    s.push("Überschlag zur Kontrolle: Der Preis muss ein bisschen weniger als "+eur(pr*100)+" sein"+(p>=50?" – bei "+p+" % sogar deutlich weniger.":"."));
+    return {tag:"Prozent · Rabatt",ctx:it+" kostet "+eur(pr*100)+". Im Laden steht: „"+p+" % Rabatt“.",q:save?"Wie viel Geld sparst du?":"Was musst du noch bezahlen?",ans:(save?dc:fin)/100,unit:"€",steps:s}});
+  G.pz.push(function(){var o=pick([["Eine Kinokarte",900],["Das Busticket",250],["Ein Döner",700],["Das Streaming-Abo",1200],["Eine Kugel Eis",180],["Der Eintritt ins Schwimmbad",500]]),p=pick([10,20,5]);
+    var up=Math.round(o[1]*p/100),fin=o[1]+up;
+    return {tag:"Prozent · Preiserhöhung",ctx:o[0]+" kostet "+eur(o[1])+". Der Preis steigt um "+p+" %.",q:"Was kostet es danach?",ans:fin/100,unit:"€",
+      steps:pctSteps(p,o[1]/100,function(x){return eur2(Math.round(x*100))},eur(o[1])).concat(["Zum alten Preis dazu: "+eur(o[1])+" + "+eur2(up)+" = "+eur2(fin)])}});
+  G.pz.push(function(){var n=pick([20,30,40,50,60,100,200]),c=n*100,ten=c/10,one=c/100,tax=2*ten-one;
+    return {tag:"Prozent · Mehrwertsteuer",ctx:"Auf fast alles, was man kauft, kommt eine Steuer für den Staat: die Mehrwertsteuer, meistens 19 %. Ein Handwerker berechnet "+eur(c)+" plus 19 % Mehrwertsteuer.",q:"Wie viel musst du insgesamt bezahlen?",ans:(c+tax)/100,unit:"€",
+      steps:["Trick: 19 % = 10 % + 10 % − 1 %","10 % von "+eur(c)+" = "+eur2(ten)+", also 20 % = "+eur2(2*ten),"1 % = "+eur2(one)+", also 19 % = "+eur2(2*ten)+" − "+eur2(one)+" = "+eur2(tax),"Insgesamt: "+eur(c)+" + "+eur2(tax)+" = "+eur2(c+tax)]}});
+  G.pz.push(function(){var b=R(18,89)*100+pick([0,0,50,20,80]),t=Math.round(b/10),tot=Math.random()<.5;
+    return {tag:"Prozent · Trinkgeld",ctx:"Ihr wart essen, die Rechnung beträgt "+eur2(b)+". Ihr wollt 10 % Trinkgeld geben.",q:tot?"Wie viel zahlt ihr insgesamt?":"Wie viel Trinkgeld ist das?",ans:(tot?b+t:t)/100,unit:"€",
+      steps:["10 %: Komma eine Stelle nach links – "+eur2(b)+" : 10 = "+eur2(t)].concat(tot?["Zusammen: "+eur2(b)+" + "+eur2(t)+" = "+eur2(b+t)]:[]).concat(["Im Alltag rundet man das Trinkgeld meist etwas auf."])}});
+  G.pz.push(function(){var B=pick([100,200,250,400,500,1000]),p=pick([2,3,4,5]),z=B*p/100;
+    return {tag:"Prozent · Zinsen",ctx:"Du legst "+eur(B*100)+" auf ein Sparkonto. Die Bank zahlt "+p+" % Zinsen im Jahr.",q:"Wie viel Euro Zinsen bekommst du nach einem Jahr?",ans:z,unit:"€",
+      steps:["1 % von "+eur(B*100)+" = "+eur2(B)+" (durch 100)",p+" % = "+p+" × "+eur2(B)+" = "+eur2(z*100)]}});
+  G.pz.push(function(){var N=pick([1000,2000,5000,10000]),k=Math.random();
+    if(k<.5){var x=R(30,69)*(N/1000),p=r2(x*100/N),one=N/100;
+      return {tag:"Prozent · Wahl",ctx:"Bei einer Gemeinderatswahl werden "+nf(N)+" Stimmen abgegeben. Die Partei „Grüne Wiese“ bekommt "+nf(x)+" Stimmen. In den Rat kommt nur, wer mindestens 5 % hat.",q:"Wie viel Prozent hat die Partei? (Schafft sie es?)",ans:p,unit:"%",
+        steps:["1 % von "+nf(N)+" Stimmen = "+nf(one)+" Stimmen",nf(x)+" Stimmen : "+nf(one)+" = "+nf(p)+" %",p>=5?"Das sind mindestens 5 % – die Partei kommt in den Rat.":"Das ist weniger als 5 % – die Partei kommt nicht in den Rat."]}}
+    var p2=R(21,39);return {tag:"Prozent · Wahl",ctx:"Bei einer Wahl gibt es "+nf(N)+" gültige Stimmen. Die Partei „Blauer Himmel“ bekommt "+p2+" %.",q:"Wie viele Stimmen sind das?",ans:N*p2/100,unit:"Stimmen",
+      steps:["1 % von "+nf(N)+" = "+nf(N/100)+" Stimmen",p2+" % = "+p2+" × "+nf(N/100)+" = "+nf(N*p2/100)+" Stimmen"]}});
+  G.pz.push(function(){var o=pick([["Ein Spiel wird heruntergeladen. Es ist 2.000 MB groß.",2000,"MB"],["Dein Handy hat 128 GB Speicher.",128,"GB"],["Ein Film ist 4.000 MB groß.",4000,"MB"],["Die Festplatte hat 500 GB Platz.",500,"GB"]]),p=pick([20,25,30,40,60,75,80,90]),rest=r2(o[1]*(100-p)/100);
+    var ctx=o[0]+(o[1]===128||o[1]===500?" "+p+" % sind schon belegt.":" "+p+" % sind schon fertig.");
+    return {tag:"Prozent · Speicher & Download",ctx:ctx,q:o[1]===128||o[1]===500?"Wie viel "+o[2]+" sind noch frei?":"Wie viel "+o[2]+" fehlen noch?",ans:rest,unit:o[2],
+      steps:["Erst den Rest in Prozent: 100 % − "+p+" % = "+(100-p)+" %"].concat(pctSteps(100-p,o[1],function(x){return nf(x)+" "+o[2]})) }});
+  G.pz.push(function(){var M=pick([30,40,50,60,80]),p=pick([50,75,80,90]),need=M*p/100;
+    var n=p===50?"Zum Bestehen brauchst du mindestens 50 %.":p===90?"Für eine 1 brauchst du mindestens 90 %.":"Für eine 2 brauchst du mindestens "+p+" %.";
+    return {tag:"Prozent · Test",ctx:"Im Test gibt es "+M+" Punkte. "+n,q:"Wie viele Punkte brauchst du mindestens?",ans:need,unit:"Punkte",steps:pctSteps(p,M,function(x){return nf(x)+" Punkte"})}});
+  G.pz.push(function(){var p=pick([50,25,20]),orig=pick([20,24,36,40,48,60,80,100,120]),fin=orig*(100-p)/100,keep=100-p;
+    var s=["Nach "+p+" % Rabatt bezahlst du noch "+keep+" % vom alten Preis – das sind "+eur(fin*100)+"."];
+    if(p===50)s.push("50 % sind die Hälfte. Der volle Preis ist doppelt so viel: "+eur(fin*100)+" · 2 = "+eur(orig*100));
+    else {var part=keep/p;s.push(keep+" % sind "+part+" × "+p+" %. Also: "+p+" % = "+eur(fin*100)+" : "+part+" = "+eur(fin*100/part));s.push("100 % = "+(100/p)+" × "+eur(fin*100/part)+" = "+eur(orig*100))}
+    return {tag:"Prozent · Rückwärts",ctx:"Im Sale kostet eine Jacke nach "+p+" % Rabatt nur noch "+eur(fin*100)+".",q:"Was hat die Jacke vorher gekostet?",ans:orig,unit:"€",steps:s}});
+  // ===== Stufe 3: Brüche & Teilen =====
+  G.br.push(function(){var d=pick([2,3,4,5,6,8,10]),z=R(1,d-1),k=R(3,15),n=d*k;if(gcd(z,d)>1)z=1;
+    var c=pick([["In deiner Jahrgangsstufe sind "+n+" Kinder. "+fr(z,d)+" davon fahren mit dem Bus.","Wie viele Kinder fahren mit dem Bus?","Kinder"],
+      ["In der Tüte sind "+n+" Gummibärchen. Du darfst "+fr(z,d)+" davon essen.","Wie viele Gummibärchen sind das?","Stück"],
+      ["Du bekommst "+n+" € Taschengeld und sparst "+fr(z,d)+" davon.","Wie viel Euro sparst du?","€"],
+      ["Im Stadion sind "+n+".000 Fans. "+fr(z,d)+" davon tragen ein Trikot.","Wie viele Tausend Fans sind das? (Gib die Zahl in Tausend an.)","Tausend"]]);
+    var s=["Erst "+fr(1,d)+": "+n+" : "+d+" = "+k];if(z>1)s.push(fr(z,d)+" = "+z+" × "+fr(1,d)+": "+z+" · "+k+" = "+z*k);
+    return {tag:"Brüche · Anteil",ctx:c[0],q:c[1],ans:z*k,unit:c[2],steps:s}});
+  G.br.push(function(){var k=R(2,5),per=R(8,29)*100+pick([0,0,50,20,40,60,80]),tot=per*k;
+    var e=Math.floor(tot/100),big=Math.floor(e/(10*k))*10*k,rest=tot-big*100;
+    var s=["Zerlege den Betrag so, dass sich ein Teil leicht teilen lässt: "+eur2(tot)+" = "+eur(big*100)+" + "+eur2(rest),eur(big*100)+" : "+k+" = "+eur(big*100/k),eur2(rest)+" : "+k+" = "+eur2(rest/k),"Zusammen: "+eur(big*100/k)+" + "+eur2(rest/k)+" = "+eur2(per)];
+    if(!big)s=[eur2(tot)+" : "+k+" = "+eur2(per)];
+    return {tag:"Teilen · Rechnung",ctx:"Ihr seid "+k+" Personen und bestellt zusammen. Die Rechnung beträgt "+eur2(tot)+". Ihr teilt gerecht.",q:"Wie viel zahlt jede Person?",ans:per/100,unit:"€",steps:s}});
+  G.br.push(function(){var o=pick([["Mehl",pick([200,300,400,500]),"g"],["Milch",pick([200,400,600]),"ml"],["Zucker",pick([100,120,160,200]),"g"],["Butter",pick([80,100,120,200]),"g"]]),from=4,to=pick([2,6,8,10,1,3]);
+    var one=o[1]/from,ans=one*to,s=to===2?["Für 2 Personen ist es die Hälfte: "+o[1]+" : 2 = "+ans+" "+o[2]]:to===8?["Für 8 Personen das Doppelte: "+o[1]+" · 2 = "+ans+" "+o[2]]:["Erst für 1 Person: "+o[1]+" : 4 = "+nf(one)+" "+o[2],"Dann für "+to+(to===1?" Person":" Personen")+": "+nf(one)+" · "+to+" = "+nf(ans)+" "+o[2]];
+    return {tag:"Teilen · Rezept",ctx:"Ein Pfannkuchen-Rezept ist für 4 Personen. Man braucht "+o[1]+" "+o[2]+" "+o[0]+".",q:"Wie viel "+o[0]+" brauchst du für "+to+(to===1?" Person":" Personen")+"?",ans:ans,unit:o[2],steps:s}});
+  G.br.push(function(){var f=pick([[1,2],[1,4],[3,4],[1,5],[2,5],[3,5],[4,5],[1,10],[3,10],[7,10],[1,20],[3,20],[1,25],[1,50]]),p=f[0]*100/f[1];
+    var c=pick(["der Klasse fahren mit dem Rad zur Schule","der Menschen in einer Umfrage sind zufrieden","der Pizza sind schon gegessen","des Weges ist geschafft"]);
+    return {tag:"Brüche · in Prozent",ctx:fr(f[0],f[1])+" "+c+".",q:"Wie viel Prozent sind das?",ans:p,unit:"%",
+      steps:["Prozent heißt „von Hundert“. Erweitere den Bruch auf Hundertstel:",fr(f[0],f[1])+" = "+fr(f[0]+" · "+(100/f[1]),f[1]+" · "+(100/f[1]))+" = "+fr(p,100),fr(p,100)+" = "+p+" %"]}});
+  G.br.push(function(){var o=pick([[3,4,60,"Stunde","Minuten"],[2,3,60,"Stunde","Minuten"],[1,5,60,"Stunde","Minuten"],[5,6,60,"Stunde","Minuten"],[1,4,24,"Tag","Stunden"],[3,4,24,"Tag","Stunden"],[2,3,24,"Tag","Stunden"],[3,4,1000,"Kilometer","Meter"],[2,5,1000,"Kilogramm","Gramm"],[1,8,1000,"Liter","Milliliter"]]);
+    var one=o[2]/o[1],ans=one*o[0];var s=["1 "+o[3]+" = "+nf(o[2])+" "+o[4],fr(1,o[1])+" = "+nf(o[2])+" : "+o[1]+" = "+nf(one)+" "+o[4]];if(o[0]>1)s.push(fr(o[0],o[1])+" = "+o[0]+" · "+nf(one)+" = "+nf(ans)+" "+o[4]);
+    return {tag:"Brüche · Umrechnen",ctx:"Im Alltag sagt man oft „eine Dreiviertelstunde“ oder „ein halber Liter“.",q:"Wie viele "+o[4]+" sind "+fr(o[0],o[1])+" "+o[3]+"?",ans:ans,unit:o[4],steps:s}});
+  G.br.push(function(){var d=pick([3,4,5,8,10]),z=R(1,d-1),k=pick([2,3,4,5,6]),n=d*k;if(gcd(z,d)>1)z=1;var r=d-z;
+    var piz=Math.random()<.3;if(piz){var pz=pick([[8,4,3],[8,4,1],[8,8,3],[8,8,5],[12,3,2],[12,4,3],[12,6,5],[16,4,3],[16,8,5]]);n=pz[0];d=pz[1];z=pz[2];k=n/d;r=d-z}
+    var c=piz?["Eure Riesen-Pizza hat "+n+" Stücke. "+fr(z,d)+" davon sind schon gegessen.","Wie viele Stücke sind noch übrig?","Stücke"]:pick([["Eure Radtour ist "+n+" km lang. "+fr(z,d)+" der Strecke habt ihr geschafft.","Wie viele Kilometer fehlen noch?","km"],
+      ["Dein Buch hat "+n*10+" Seiten. Du hast "+fr(z,d)+" gelesen.","Wie viele Seiten fehlen noch?","Seiten"]]);
+    if(c[2]==="Seiten"){n*=10;k*=10}
+    return {tag:"Brüche · Rest",ctx:c[0],q:c[1],ans:r*k,unit:c[2],steps:["Was fehlt noch? "+fr(d,d)+" − "+fr(z,d)+" = "+fr(r,d),fr(1,d)+" von "+n+" = "+n+" : "+d+" = "+k].concat(r>1?[fr(r,d)+" = "+r+" · "+k+" = "+r*k]:[])}});
+  G.br.push(function(){var n=pick([60,120,240,300,600]),a=pick([[1,3],[1,4],[1,5],[2,3],[3,4]]),p=pick([10,20,25,30,40,50]);
+    var A=n*a[0]/a[1],B=n*p/100;if(A===B)p=p===50?40:50,B=n*p/100;
+    return {tag:"Brüche & Prozent · Vergleich",ctx:"Zwei Angebote für "+n+" €: Rabatt A ist "+fr(a[0],a[1])+" vom Preis, Rabatt B ist "+p+" %.",q:"Wie viel Euro spart man mit dem besseren Rabatt mehr?",ans:Math.abs(A-B),unit:"€",
+      steps:["Rabatt A: "+fr(a[0],a[1])+" von "+n+" € = "+n+" : "+a[1]+(a[0]>1?" · "+a[0]:"")+" = "+nf(A)+" €","Rabatt B: "+p+" % von "+n+" € = "+nf(B)+" € (10 % = "+nf(n/10)+" €)","Der bessere ist "+(A>B?"A":"B")+". Unterschied: "+nf(Math.max(A,B))+" € − "+nf(Math.min(A,B))+" € = "+nf(Math.abs(A-B))+" €"]}});
+  function makeTask(lvl){if(lvl==="mix")lvl=pick(["pm","pz","pz","br"]);var t=pick(G[lvl])();t.lvl=lvl;return t}
+  function parseAns(v,time){v=String(v||"").trim().replace(/[−–]/g,"-");
+    if(time){var m=v.match(/^(\d{1,2})\s*[:.,h ]?\s*(\d{2})/);if(!m)return NaN;return (+m[1])*60+(+m[2])}
+    v=v.replace(/[^0-9,.\-]/g,"");if(!v||v==="-")return NaN;
+    if(/^-?\d{1,3}(\.\d{3})+(,\d+)?$/.test(v))v=v.replace(/\./g,"").replace(",",".");
+    else if(v.indexOf(",")>=0&&v.indexOf(".")>=0)v=v.replace(/\./g,"").replace(",",".");
+    else v=v.replace(",",".");
+    var n=parseFloat(v);return isFinite(n)?n:NaN}
+  function isRight(v,t){var n=parseAns(v,t.time);return !isNaN(n)&&Math.abs(n-t.ans)<0.006}
+
+  var GOAL=5,lvl="pz",view="x",T=null,tries=0,done=false;
+  try{var sl=localStorage.getItem("gu-alltag-lvl");if(["pm","pz","br","mix"].indexOf(sl)>=0)lvl=sl;if(localStorage.getItem("gu-ma-view")==="alltag")view="alltag"}catch(e){}
+  function ymd(d){return window.__GUymd?window.__GUymd(d):d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")}
+  function A(){return window.__GUalltag||{n:0,last:"",day:"",today:0,total:0,ok:0}}
+  function info(){var a=A(),t=ymd(new Date()),y=new Date();y.setDate(y.getDate()-1);y=ymd(y);
+    return {n:(a.last===t||a.last===y)?(a.n||0):0,today:a.day===t?(a.today||0):0,doneToday:a.last===t,yest:a.last===y}}
+  function drawRun(){var r=info(),t,s;
+    if(r.doneToday){t=r.n+(r.n===1?" Tag":" Tage")+" in Folge geübt ✓";s="Heute geschafft – "+r.today+" Aufgaben gerechnet. Du darfst gern weiterrechnen."}
+    else if(r.n>0){t=r.n+(r.n===1?" Tag":" Tage")+" in Folge – heute noch "+(GOAL-r.today)+(GOAL-r.today===1?" Aufgabe":" Aufgaben");s="Dann läuft dein Rechen-Run weiter."}
+    else {t="Starte deinen Rechen-Run";s=r.today?"Heute schon "+r.today+" von "+GOAL+" Aufgaben.":GOAL+" Aufgaben am Tag – dann zählt der Tag."}
+    $("a-run-t").textContent=t;$("a-run-s").textContent=s;
+    [].forEach.call($("a-dots").children,function(d,i){d.classList.toggle("on",i<Math.min(r.today,GOAL))})}
+  function record(first){var a=Object.assign({},A()),t=ymd(new Date()),y=new Date();y.setDate(y.getDate()-1);y=ymd(y);
+    if(a.day!==t){a.day=t;a.today=0}a.today=(a.today||0)+1;a.total=(a.total||0)+1;if(first)a.ok=(a.ok||0)+1;var win=false;
+    if(a.today>=GOAL&&a.last!==t){a.n=a.last===y?(a.n||0)+1:1;a.last=t;win=true}
+    if(window.__GUalltagSave)window.__GUalltagSave(a);else window.__GUalltag=a;
+    if(window.__GUpracticed)try{window.__GUpracticed()}catch(e){}
+    drawRun();if(win){var c=$("a-run");c.classList.remove("win");void c.offsetWidth;c.classList.add("win")}return win}
+  function fmtAns(t){if(t.time)return hm(t.ans)+" Uhr";if(t.unit==="€")return eur2(Math.round(t.ans*100));return nf(t.ans)+" "+t.unit}
+  function fb(cls,html){var f=$("a-fb");f.className="a-fb"+(cls?" "+cls:"");f.innerHTML=html;f.hidden=false}
+  function steps(title){$("a-steps-t").textContent=title;$("a-ol").innerHTML=T.steps.map(function(s){return "<li>"+s+"</li>"}).join("");$("a-steps").hidden=false}
+  function finish(){done=true;$("a-in").disabled=true;$("a-check").hidden=true;$("a-tip").hidden=true;$("a-sol").hidden=true;$("a-next").hidden=false;setTimeout(function(){$("a-next").focus({preventScroll:true})},30)}
+  function next(){T=makeTask(lvl);tries=0;done=false;
+    $("a-tag").textContent=T.tag;$("a-ctx").innerHTML=T.ctx;$("a-q").innerHTML=T.q;
+    var i=$("a-in");i.value="";i.disabled=false;i.className="a-in";i.setAttribute("inputmode",T.time?"text":"decimal");i.placeholder=T.time?"z. B. 19:45":"Deine Antwort";
+    $("a-unit").textContent=T.unit;$("a-fb").hidden=true;$("a-steps").hidden=true;
+    $("a-check").hidden=false;$("a-tip").hidden=false;$("a-sol").hidden=true;$("a-next").hidden=true}
+  function check(){if(done){next();return}var i=$("a-in"),v=i.value;if(!v.trim()){i.focus();return}
+    if(isRight(v,T)){i.className="a-in ok";var w=record(tries===0);
+      fb("",(tries===0?pick(["Richtig!","Genau!","Stimmt!","Super gerechnet!"]):"Richtig – gut drangeblieben!")+(w?" 🔥 Heute sind deine "+GOAL+" Aufgaben geschafft – der Tag zählt für deinen Run!":""));
+      steps("So rechnest du’s schnell im Kopf");finish();return}
+    var n=parseAns(v,T.time);tries++;i.className="a-in bad";
+    if(isNaN(n)){tries--;fb("bad",T.time?"Schreib die Uhrzeit so: 19:45":"Schreib nur die Zahl, z. B. 31,20");return}
+    if(tries===1){fb("tip","Noch nicht ganz. Erster Schritt: "+T.steps[0]+"<br>Versuch’s noch mal!");$("a-sol").hidden=false;$("a-tip").hidden=true;i.select()}
+    else showSol(false)}
+  function showSol(){var w=record(false);fb("bad","Die Lösung ist <b>"+fmtAns(T)+"</b>."+(w?" 🔥 Deine "+GOAL+" Aufgaben für heute sind trotzdem geschafft!":""));steps("Rechenweg");finish()}
+  $("a-form").addEventListener("submit",function(e){e.preventDefault();check()});
+  $("a-tip").onclick=function(){fb("tip","Tipp: "+T.steps[0]);$("a-tip").hidden=true;$("a-sol").hidden=false;$("a-in").focus()};
+  $("a-sol").onclick=function(){if(!done)showSol()};
+  $("a-next").onclick=next;
+  function setLvl(l){lvl=l;try{localStorage.setItem("gu-alltag-lvl",l)}catch(e){}
+    document.querySelectorAll("#ma .a-lvl").forEach(function(b){b.setAttribute("aria-pressed",String(b.dataset.l===l))})}
+  document.querySelectorAll("#ma .a-lvl").forEach(function(b){b.onclick=function(){if(b.dataset.l===lvl&&T&&!done)return;setLvl(b.dataset.l);next()}});
+  function busy(){return !$("m-play").hidden||!$("m-countbox").hidden}
+  function setView(v){if(busy()&&v!=="x")return;view=v;$("ma-1x1").hidden=v!=="x";$("ma-alltag").hidden=v!=="alltag";
+    document.querySelectorAll("#ma .m-sw").forEach(function(b){b.setAttribute("aria-pressed",String(b.dataset.view===v))});
+    try{localStorage.setItem("gu-ma-view",v)}catch(e){}if(v==="alltag"){drawRun();if(!T)next()}}
+  document.querySelectorAll("#ma .m-sw").forEach(function(b){b.onclick=function(){setView(b.dataset.view)}});
+  window.__GUalltagOpen=function(){var t=$("gu-tab-ma");if(t)t.click();setView("alltag");setTimeout(function(){var w=$("ma-alltag");if(w)w.scrollIntoView({block:"start",behavior:"smooth"})},350)};
+  window.addEventListener("gu-alltag",drawRun);
+  setLvl(lvl);setView(view);drawRun();
 })();
 </script>
 
@@ -3095,6 +3428,8 @@ if(player)loadPlayer();migrate();rebuild();drawRandom();renderStats();renderStag
     window.__GUVIS=pr.vis||"";window.__GUHIDE=pr.vis==="me";
     function ymd(d){return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")}
     window.__GUymd=ymd;window.__GUstreak=(pr.streak&&pr.streak.last)?pr.streak:{n:0,last:""};
+    window.__GUalltag=(pr.alltag&&typeof pr.alltag==="object")?pr.alltag:{n:0,last:"",day:"",today:0,total:0,ok:0};
+    window.__GUalltagSave=function(a){window.__GUalltag=a;fs.doc("progress/"+uid).set({alltag:a},{merge:true}).catch(function(){});window.dispatchEvent(new Event("gu-alltag"))};
     window.__GUpracticed=function(){var st=window.__GUstreak,t=ymd(new Date());if(st.last===t)return;
       var y=new Date();y.setDate(y.getDate()-1);st={n:st.last===ymd(y)?st.n+1:1,last:t};window.__GUstreak=st;
       fs.doc("progress/"+uid).set({streak:st},{merge:true}).catch(function(){});window.dispatchEvent(new Event("gu-streak"))};
@@ -3111,7 +3446,7 @@ if(player)loadPlayer();migrate();rebuild();drawRandom();renderStats();renderStag
     // Fortschritt automatisch sichern
     var keys=["greta-latein-p:"+uid,"greta-englisch-p:"+uid,"gretas-update-tab"],t=null;
     function flush(){clearTimeout(t);t=null;var d={updatedAt:firebase.firestore.FieldValue.serverTimestamp()};
-      try{d.lat=LS.getItem(keys[0])||"";d.en=LS.getItem(keys[1])||"";d.tab=LS.getItem(keys[2])||""}catch(e){}d.vis=window.__GUVIS||"";d.streak=window.__GUstreak||{n:0,last:""};
+      try{d.lat=LS.getItem(keys[0])||"";d.en=LS.getItem(keys[1])||"";d.tab=LS.getItem(keys[2])||""}catch(e){}d.vis=window.__GUVIS||"";d.streak=window.__GUstreak||{n:0,last:""};d.alltag=window.__GUalltag||{n:0,last:"",day:"",today:0,total:0,ok:0};
       fs.doc("progress/"+uid).set(d).catch(function(){})}
     var orig=Storage.prototype.setItem;
     Storage.prototype.setItem=function(k,v){orig.call(this,k,v);if(keys.indexOf(k)>=0){clearTimeout(t);t=setTimeout(flush,1200)}};
