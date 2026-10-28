@@ -2,6 +2,68 @@
   "_hinweis": "Land der Woche: neueste Ausgabe zuerst. iso = ISO-3166-Zahlencode (wie in weltkarte.json), koord = [Längengrad, Breitengrad] der Hauptstadt.",
   "laender": [
     {
+      "nr": 3,
+      "datum": "2026-10-29",
+      "name": "Brasilien",
+      "iso": "076",
+      "flagge": "🇧🇷",
+      "hauptstadt": "Brasília",
+      "koord": [
+        -47.8825,
+        -15.7942
+      ],
+      "entfernung_km": 9600,
+      "einleitung": "Brasilien ist das größte Land Südamerikas und nimmt fast die Hälfte des Kontinents ein. Es grenzt an zehn Länder und an den Atlantischen Ozean.",
+      "fakten": [
+        {
+          "label": "Einwohner",
+          "wert": "rund 213 Millionen",
+          "hinweis": "Etwa zweieinhalbmal so viele wie in Deutschland."
+        },
+        {
+          "label": "Hauptstadt",
+          "wert": "Brasília",
+          "hinweis": "Die Stadt wurde extra als neue Hauptstadt gebaut und 1960 eingeweiht."
+        },
+        {
+          "label": "Landessprache",
+          "wert": "Portugiesisch",
+          "hinweis": "Brasilien war früher eine Kolonie Portugals."
+        },
+        {
+          "label": "Fläche",
+          "wert": "rund 8,5 Millionen km²",
+          "hinweis": "Etwa 24-mal so groß wie Deutschland."
+        },
+        {
+          "label": "Währung",
+          "wert": "Real"
+        },
+        {
+          "label": "Regenwald",
+          "wert": "rund 60 Prozent des Amazonas-Regenwalds",
+          "hinweis": "Der größte Regenwald der Welt liegt zum größten Teil in Brasilien."
+        }
+      ],
+      "nice": [
+        {
+          "thema": "Kultur",
+          "titel": "Karneval und Fußball",
+          "text": "Der Karneval in Rio de Janeiro ist einer der berühmtesten der Welt: Sambaschulen ziehen mit riesigen Wagen und bunten Kostümen durch die Stadt. Außerdem ist Brasilien mit fünf Titeln Rekord-Weltmeister im Fußball."
+        },
+        {
+          "thema": "Politik",
+          "titel": "Lula gewinnt die Wahl",
+          "text": "Am vergangenen Sonntag hat Brasilien einen Präsidenten gewählt. Luiz Inácio Lula da Silva gewann die Stichwahl knapp mit 51,8 Prozent gegen Flávio Bolsonaro. Für Lula ist es schon die vierte Amtszeit."
+        },
+        {
+          "thema": "Herausforderung",
+          "titel": "Den Regenwald schützen",
+          "text": "Im Amazonas-Regenwald werden Bäume abgeholzt, zum Beispiel für Weideflächen und Felder. Zuletzt ist die Abholzung deutlich zurückgegangen. Dürren und Waldbrände bedrohen den Wald aber weiterhin, und er ist sehr wichtig für das Klima der ganzen Erde."
+        }
+      ]
+    },
+    {
       "nr": 2,
       "datum": "2026-10-22",
       "name": "Australien",

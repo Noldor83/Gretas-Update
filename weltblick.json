@@ -1,5 +1,118 @@
 [
   {
+    "nr": 4,
+    "datum": "2026-10-29",
+    "themen": [
+      {
+        "bereich": "aussen",
+        "schlagzeile": "Serbien: Machtwechsel nach Protesten",
+        "text": "In Serbien wurde am Sonntag ein neues Parlament gewählt. Gewonnen hat mit gut 53 Prozent die „Studentenliste“, eine Bewegung, die aus den Protesten der letzten zwei Jahre entstanden ist. Die Partei des langjährigen Machthabers Aleksandar Vučić kam auf gut 39 Prozent, er hat seine Niederlage eingeräumt. Auslöser der Proteste war 2024 der Einsturz eines Bahnhofsdachs in Novi Sad mit 16 Toten.",
+        "wichtig": "Hier hat eine friedliche Protestbewegung, die von Studierenden ausging, eine Regierung per Wahl abgelöst."
+      },
+      {
+        "bereich": "innen",
+        "schlagzeile": "Wohin mit dem Atommüll?",
+        "text": "Deutschland sucht einen sicheren Ort, an dem hochradioaktiver Atommüll tief unter der Erde gelagert werden kann. Jetzt wurde die Suche stark eingegrenzt: Nur noch weniger als 5 Prozent der Fläche Deutschlands kommen infrage. Rheinland-Pfalz, Hessen, Berlin, Sachsen und das Saarland sind ganz raus. Bis Ende 2027 sollen wenige Regionen ausgewählt werden, die genauer untersucht werden.",
+        "wichtig": "Der Müll aus 60 Jahren Atomkraft strahlt noch sehr lange und muss für eine Million Jahre sicher verwahrt werden."
+      },
+      {
+        "bereich": "aussen",
+        "schlagzeile": "Israel: Knappes Rennen bei der Wahl",
+        "text": "In Israel wurde am Dienstag ein neues Parlament gewählt. Nach den vorläufigen Zahlen liegt das Lager von Ministerpräsident Benjamin Netanjahu vorn, hat aber keine Mehrheit. Auch das Lager seines Herausforderers Gadi Eisenkot hat keine. Das Ergebnis ist noch nicht endgültig, weil noch Stimmen ausgezählt werden.",
+        "wichtig": "Wer Israel künftig regiert, ist auch für den Frieden im Nahen Osten wichtig."
+      },
+      {
+        "bereich": "aussen",
+        "schlagzeile": "Ukraine: Neue Gespräche geplant",
+        "text": "US-Präsident Donald Trump hat angekündigt, dass er sich „sehr bald“ mit Russlands Präsident Wladimir Putin und dem ukrainischen Präsidenten Wolodymyr Selenskyj treffen will. Wann und wo, ist noch offen. In der ersten Novemberhälfte soll es außerdem direkte Gespräche zwischen Russland und der Ukraine in Abu Dhabi geben, mit den USA als Vermittler.",
+        "wichtig": "Der Krieg dauert schon mehr als viereinhalb Jahre. Frühere Gespräche haben noch keinen Frieden gebracht."
+      }
+    ],
+    "zahl": {
+      "wert": "1 Million Jahre",
+      "text": "So lange muss ein Endlager den hochradioaktiven Atommüll in Deutschland sicher von Menschen und Umwelt fernhalten."
+    },
+    "wort": {
+      "begriff": "Endlager",
+      "erklaerung": "Ein Endlager ist ein Ort tief unter der Erde, an dem gefährlicher Atommüll für immer bleiben soll. Er muss so sicher sein, dass keine Strahlung nach oben dringt, auch nicht in sehr ferner Zukunft."
+    },
+    "frage": "In Serbien haben Studierende mit friedlichen Protesten viel verändert. Wann findest du es richtig, auf die Straße zu gehen? Und was können junge Leute sonst noch tun, um gehört zu werden?",
+    "quellen": [
+      {
+        "titel": "ZDFheute: Serbien-Wahl 2026 – Vučić gesteht Niederlage ein",
+        "url": "https://www.zdfheute.de/politik/ausland/serbien-vucic-niederlage-wahl-100.html"
+      },
+      {
+        "titel": "Berliner Zeitung: Endlagersuche – Fünf Bundesländer scheiden komplett aus",
+        "url": "https://www.berliner-zeitung.de/article/bge-schliesst-fuenf-bundeslaender-von-endlager-suche-aus-10535353"
+      },
+      {
+        "titel": "ad-hoc-news: Endlagersuche – weniger als fünf Prozent kommen noch infrage",
+        "url": "https://www.ad-hoc-news.de/politik/endlagersuche-weniger-als-fuenf-prozent-kommen-noch-infrage/70420651"
+      },
+      {
+        "titel": "ZDFheute: Wahl in Israel – enges Rennen",
+        "url": "https://zdfheute.de/politik/ausland/israel-parlamentswahl-netanjahu-eisenkot-100.html"
+      },
+      {
+        "titel": "ZDFheute: Trump kündigt „sehr bald“ Treffen mit Selenskyj und Putin an",
+        "url": "https://www.zdfheute.de/politik/ausland/trump-treffen-selenskyj-putin-ukraine-krieg-russland-100.html"
+      },
+      {
+        "titel": "logo! – Kindernachrichten",
+        "url": "https://www.logo.de/"
+      }
+    ],
+    "quiz": [
+      {
+        "typ": "mc",
+        "frage": "Wer hat die Parlamentswahl in Serbien gewonnen?",
+        "optionen": [
+          "Die Partei von Aleksandar Vučić",
+          "Die Studentenliste",
+          "Eine Partei aus Kroatien"
+        ],
+        "richtig": 1,
+        "erklaerung": "Die Studentenliste ist aus den Protesten entstanden und bekam gut 53 Prozent der Stimmen."
+      },
+      {
+        "typ": "mc",
+        "frage": "Was suchen die Fachleute in Deutschland gerade?",
+        "optionen": [
+          "Einen sicheren Ort für Atommüll tief unter der Erde",
+          "Einen Platz für ein neues Atomkraftwerk",
+          "Eine neue Hauptstadt"
+        ],
+        "richtig": 0,
+        "erklaerung": "Gesucht wird ein Endlager, in dem hochradioaktiver Atommüll für sehr lange Zeit sicher liegt."
+      },
+      {
+        "typ": "mc",
+        "frage": "Wo sollen Anfang November direkte Gespräche zwischen Russland und der Ukraine stattfinden?",
+        "optionen": [
+          "In Berlin",
+          "In Paris",
+          "In Abu Dhabi"
+        ],
+        "richtig": 2,
+        "erklaerung": "Die Gespräche sind in Abu Dhabi geplant, die USA sollen vermitteln."
+      },
+      {
+        "typ": "wf",
+        "frage": "In Israel steht schon fest, wer die Wahl gewonnen hat und künftig regiert.",
+        "richtig": false,
+        "erklaerung": "Netanjahus Lager liegt vorn, hat aber keine Mehrheit, und es werden noch Stimmen ausgezählt."
+      },
+      {
+        "typ": "schaetzen",
+        "frage": "Wie viele Jahre lang muss ein Endlager den Atommüll sicher verwahren?",
+        "einheit": "Jahre",
+        "richtig": 1000000,
+        "erklaerung": "Das Endlager muss für eine Million Jahre sicher sein, weil der Müll so lange gefährlich strahlt."
+      }
+    ]
+  },
+  {
     "nr": 3,
     "datum": "2026-10-22",
     "themen": [
