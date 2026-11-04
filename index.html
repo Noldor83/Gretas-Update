@@ -662,6 +662,8 @@ body{background:var(--gu-bar);color:var(--gu-bar-fg)}
 #st .s-alltaghint{border-color:#1d8655}
 #st .s-alltaghint .s-qic{background:#1d8655}
 #st .s-duelhint .s-qic{background:#0f7c8c;font-size:22px}
+#st .s-kahint{border-color:#41e396}
+#st .s-kahint .s-qic{background:#1d8655;font-size:22px}
 #st .s-quizhint b{display:block;font-family:var(--s-f-head);font-weight:700;font-size:17px}
 #st .s-quizhint .s-sub{font-size:14px;color:var(--s-muted)}
 #st .s-nic.qz{background:#d9472b}
@@ -741,6 +743,11 @@ body{background:var(--gu-bar);color:var(--gu-bar-fg)}
     <span class="s-qic" aria-hidden="true">%</span>
     <span><b id="s-al-t">Alltagsrechnen</b><span class="s-sub" id="s-al-s"></span></span>
     <span class="s-instgo">Rechnen</span>
+  </button>
+  <button type="button" class="s-card s-quizhint s-kahint" id="s-kahint" hidden>
+    <span class="s-qic" aria-hidden="true">📝</span>
+    <span><b>Sonderaktion: Fit für die Mathearbeit</b><span class="s-sub">Rationale Zahlen üben – Aufgaben wie in der Probearbeit, mit Rechenweg.</span></span>
+    <span class="s-instgo">Los</span>
   </button>
   <div class="s-grid">
     <div class="s-col">
@@ -830,6 +837,8 @@ body{background:var(--gu-bar);color:var(--gu-bar-fg)}
     ul.innerHTML=all.slice(0,4).map(function(n){var mine=n.id===me.uid,unit=(n.k==="ma"||n.k==="md"||n.k==="ek")?n.best+" Punkte":n.best+" in Folge";
       if(n.k==="qz"&&n.last)return '<li><span class="s-nic qz" aria-hidden="true">?</span><p><b>'+(mine?"Du":esc(n.name))+'</b> '+(mine?"hast":"hat")+' das Wochenquiz Nr. '+esc(n.last.nr)+' gelöst: <b>'+esc(n.last.p)+' von '+esc(n.last.max)+' Punkten</b> <time>· '+ago(n.t)+'</time></p></li>';
       return '<li class="'+(n.top?"top":"")+'"><span class="s-nic '+n.k+'" aria-hidden="true">'+NIC[n.k]+'</span><p><b>'+(mine?"Du":esc(n.name))+'</b> '+(mine?"hast":"hat")+' einen neuen Rekord in '+NNAME[n.k]+': <b>'+unit+'</b>'+(n.top?'<span class="s-crown">Platz 1</span>':'')+' <time>· '+ago(n.t)+'</time></p></li>'}).join("")}
+  (function(){var c=$("s-kahint");if(!c)return;var until="2026-11-15",today=new Date(),y=today.getFullYear()+"-"+String(today.getMonth()+1).padStart(2,"0")+"-"+String(today.getDate()).padStart(2,"0");
+    c.hidden=y>until;c.onclick=function(){var t=document.getElementById("gu-tab-ma");if(t)t.click();setTimeout(function(){if(window.__GUmaView)window.__GUmaView("ka");var v=document.getElementById("ma-ka");if(v)v.scrollIntoView({block:"start",behavior:"smooth"})},150)}})();
   function duelHint(A){var c=$("s-duelhint");if(!c)return;var mine=(A[me.uid]&&A[me.uid].duels)||{},seen=(A[me.uid]&&A[me.uid].seen)||{},inv=[],res=[];
     Object.keys(A).forEach(function(u){if(u===me.uid)return;var dd=(A[u]&&A[u].duels)||{};Object.keys(dd).forEach(function(id){var d=dd[id];
       if(d&&d.from===u&&d.to===me.uid&&d.places&&!d.withdrawn&&!mine[id])inv.push(String(A[u].name||"Jemand").slice(0,24))})});
@@ -1974,8 +1983,8 @@ if(player)loadPlayer();migrate();rebuild();drawRandom();renderStats();renderStag
 #ma .m-sw[aria-pressed="true"]{background:var(--m-sun);color:#14231b;border-color:var(--m-sun)}
 #ma .m-sw:focus-visible{outline:3px solid var(--m-pink);outline-offset:2px}
 #ma .m-wrap{grid-template-columns:minmax(0,1fr)}
-#ma #ma-1x1,#ma #ma-alltag{display:grid;grid-template-columns:minmax(0,1fr);gap:16px;min-width:0}
-#ma #ma-1x1[hidden],#ma #ma-alltag[hidden]{display:none}
+#ma #ma-1x1,#ma #ma-alltag,#ma #ma-ka{display:grid;grid-template-columns:minmax(0,1fr);gap:16px;min-width:0}
+#ma #ma-1x1[hidden],#ma #ma-alltag[hidden],#ma #ma-ka[hidden]{display:none}
 #ma .a-run{display:grid;gap:10px}
 #ma .a-runtop{display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:center}
 #ma .a-flame{font-size:34px;line-height:1}
@@ -2011,6 +2020,36 @@ if(player)loadPlayer();migrate();rebuild();drawRandom();renderStats();renderStag
 #ma .a-alt{font:700 16px var(--m-f-head);border:2px solid var(--m-line);border-radius:12px;padding:8px 14px;background:transparent;color:var(--m-ink);cursor:pointer}
 #ma .a-alt:focus-visible{outline:3px solid var(--m-pink);outline-offset:2px}
 #ma .a-foot{text-align:center}
+#ma .m-switch.m-three{grid-template-columns:repeat(3,1fr)}
+@media (max-width:480px){#ma .m-switch.m-three .m-sw{font-size:14.5px;padding:9px 4px}}
+#ma .ka-intro{margin-top:-4px}
+#ma .ka-tops{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+#ma .ka-top{font:700 14px var(--m-f-head);border:2px solid var(--m-line);border-radius:12px;padding:8px 4px;background:transparent;color:var(--m-ink);cursor:pointer;line-height:1.15}
+#ma .ka-top.ka-wide{grid-column:1 / -1;font-size:16px;padding:10px 6px}
+#ma .ka-top.ka-wide2{grid-column:span 3}
+#ma .ka-top[aria-pressed="true"]{background:var(--m-sun);color:#14231b;border-color:var(--m-sun)}
+#ma .ka-top:focus-visible,#ma .ka-keys button:focus-visible,#ma .ka-wfb:focus-visible{outline:3px solid var(--m-pink);outline-offset:2px}
+#ma .ka-svg{color:var(--m-ink)}
+#ma .ka-nl{display:block;width:100%;height:auto;max-width:520px}
+#ma .ka-keys{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+#ma .ka-keys button{min-width:48px;font:700 22px var(--m-f-head);border:2px solid var(--m-line);border-radius:12px;padding:4px 12px;background:var(--m-key);color:var(--m-ink);cursor:pointer}
+#ma .ka-wf{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+#ma .ka-wfb{font:700 20px var(--m-f-head);border:2.5px solid var(--m-line);border-radius:14px;padding:12px 8px;background:var(--m-key);color:var(--m-ink);cursor:pointer}
+#ma .ka-wfb.ok{background:var(--m-ok-bg);border-color:var(--m-ok)}
+#ma .ka-wfb.bad{background:var(--m-bad-bg);border-color:var(--m-bad)}
+#ma .ka-wfb:disabled{cursor:default}
+#ma .ka-sum{display:grid;gap:10px;text-align:center}
+#ma .ka-sum[hidden],#ma .a-task[hidden]{display:none}
+#ma .ka-sum .a-tag{justify-self:center}
+#ma .ka-sum-n{font-family:var(--m-f-big);font-size:clamp(40px,12vw,56px);line-height:1;color:var(--m-green)}
+#ma .ka-sum-t{font:700 18px var(--m-f-head)}
+#ma .ka-sum-l{list-style:none;margin:0;padding:0;display:grid;gap:6px;text-align:left}
+#ma .ka-sum-l li{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:12px;background:var(--m-key);font:600 16px var(--m-f-head)}
+#ma .ka-sum-l li span{font-weight:700;width:1.2em;text-align:center}
+#ma .ka-sum-l li.ok span{color:var(--m-ok)}
+#ma .ka-sum-l li.no span{color:var(--m-bad)}
+#ma .ka-sum-l .ka-go{margin-left:auto;padding:4px 12px;font-size:14px}
+#ma .ka-bil{font-size:14px}
 #ma .a-run.win{animation:apop .6s ease}
 @keyframes apop{40%{transform:scale(1.03)}}
 @media (prefers-reduced-motion:reduce){#ma .a-run.win{animation:none}}
@@ -2111,9 +2150,10 @@ if(player)loadPlayer();migrate();rebuild();drawRandom();renderStats();renderStag
 </style>
 <div class="m-space" aria-hidden="true"><div class="m-planet"></div><div class="m-moon"></div></div>
 <div class="m-wrap">
-  <div class="m-switch" role="group" aria-label="Was möchtest du üben?">
+  <div class="m-switch m-three" role="group" aria-label="Was möchtest du üben?">
     <button type="button" class="m-sw" data-view="x" aria-pressed="true">🚀 1×1-Rakete</button>
     <button type="button" class="m-sw" data-view="alltag" aria-pressed="false">🛒 Alltagsrechnen</button>
+    <button type="button" class="m-sw" data-view="ka" aria-pressed="false">📝 Mathearbeit</button>
   </div>
   <div id="ma-1x1">
   <div class="m-head"><h2 id="m-title">Kleines 1×1</h2><span class="m-best">Dein Rekord: <b id="m-best">0</b></span></div>
@@ -2202,6 +2242,45 @@ if(player)loadPlayer();migrate();rebuild();drawRandom();renderStats();renderStag
       </div>
     </form>
     <p class="m-note a-foot">Kein Zeitdruck, keine Punkte. Ein Tag zählt für deinen Run, sobald du 5 Aufgaben gerechnet hast.</p>
+  </div>
+  <div id="ma-ka" hidden>
+    <div class="m-head"><h2>Mathearbeit</h2><span class="m-best">Sonderaktion · Rationale Zahlen</span></div>
+    <p class="m-note ka-intro">Aufgaben wie in der Probearbeit – jedes Mal mit neuen Zahlen. Ohne Taschenrechner, mit Rechenweg zum Nachlesen.</p>
+    <div class="ka-tops" role="group" aria-label="Thema wählen">
+      <button type="button" class="ka-top ka-wide" data-t="probe" aria-pressed="true">📝 Probearbeit · 8 Aufgaben</button>
+      <button type="button" class="ka-top" data-t="wf" aria-pressed="false">Wahr / Falsch</button>
+      <button type="button" class="ka-top" data-t="zg" aria-pressed="false">Zahlengerade</button>
+      <button type="button" class="ka-top" data-t="br" aria-pressed="false">Brüche</button>
+      <button type="button" class="ka-top" data-t="dz" aria-pressed="false">Dezimal &amp; Klammern</button>
+      <button type="button" class="ka-top" data-t="rv" aria-pressed="false">Rechenvorteile</button>
+      <button type="button" class="ka-top" data-t="ff" aria-pressed="false">Fehler finden</button>
+      <button type="button" class="ka-top ka-wide2" data-t="tx" aria-pressed="false">Textaufgaben</button>
+    </div>
+    <form class="m-card a-task" id="ka-task" autocomplete="off" novalidate>
+      <span class="a-tag" id="ka-tag"></span>
+      <p class="a-ctx" id="ka-ctx"></p>
+      <div class="ka-svg" id="ka-svg" hidden></div>
+      <p class="a-q" id="ka-q"></p>
+      <div class="a-row" id="ka-row"><input class="a-in" id="ka-in" type="text" inputmode="decimal" enterkeyhint="done" autocomplete="off" autocorrect="off" spellcheck="false" aria-label="Deine Antwort" placeholder="Deine Antwort"><span class="a-unit" id="ka-unit"></span></div>
+      <div class="ka-keys" id="ka-keys"><button type="button" data-key="−" aria-label="Minus">−</button><button type="button" data-key="/" aria-label="Bruchstrich">/</button><button type="button" data-key="," aria-label="Komma">,</button><span class="m-note">Brüche so: −3/4</span></div>
+      <div class="ka-wf" id="ka-wf" hidden><button type="button" class="ka-wfb" data-wf="1">✓ Wahr</button><button type="button" class="ka-wfb" data-wf="0">✗ Falsch</button></div>
+      <div class="a-fb" id="ka-fb" hidden aria-live="polite"></div>
+      <div class="a-steps" id="ka-steps" hidden><b id="ka-steps-t">So geht’s</b><ol id="ka-ol"></ol></div>
+      <div class="a-btns">
+        <button type="submit" class="m-go" id="ka-check">Prüfen</button>
+        <button type="button" class="a-alt" id="ka-tip">Tipp</button>
+        <button type="button" class="a-alt" id="ka-sol" hidden>Lösung zeigen</button>
+        <button type="button" class="m-go" id="ka-next" hidden>Nächste Aufgabe →</button>
+      </div>
+    </form>
+    <div class="m-card ka-sum" id="ka-sum" hidden>
+      <span class="a-tag">Auswertung</span>
+      <div class="ka-sum-n" id="ka-sum-n"></div>
+      <p class="ka-sum-t" id="ka-sum-t"></p>
+      <ul class="ka-sum-l" id="ka-sum-l"></ul>
+      <p class="m-note">Gezählt wird nur, was beim ersten Versuch richtig war.</p>
+      <div class="a-btns"><button type="button" class="m-go" id="ka-again">Neue Probearbeit</button></div>
+    </div>
   </div>
 </div>
 </section>
@@ -2471,7 +2550,7 @@ if(player)loadPlayer();migrate();rebuild();drawRandom();renderStats();renderStag
   function isRight(v,t){var n=parseAns(v,t.time);return !isNaN(n)&&Math.abs(n-t.ans)<0.006}
 
   var GOAL=5,lvl="pz",view="x",T=null,tries=0,done=false;
-  try{var sl=localStorage.getItem("gu-alltag-lvl");if(["pm","pz","br","mix"].indexOf(sl)>=0)lvl=sl;if(localStorage.getItem("gu-ma-view")==="alltag")view="alltag"}catch(e){}
+  try{var sl=localStorage.getItem("gu-alltag-lvl");if(["pm","pz","br","mix"].indexOf(sl)>=0)lvl=sl;var sv2=localStorage.getItem("gu-ma-view");if(sv2==="alltag"||sv2==="ka")view=sv2}catch(e){}
   function ymd(d){return window.__GUymd?window.__GUymd(d):d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")}
   function A(){return window.__GUalltag||{n:0,last:"",day:"",today:0,total:0,ok:0}}
   function info(){var a=A(),t=ymd(new Date()),y=new Date();y.setDate(y.getDate()-1);y=ymd(y);
@@ -2514,13 +2593,239 @@ if(player)loadPlayer();migrate();rebuild();drawRandom();renderStats();renderStag
     document.querySelectorAll("#ma .a-lvl").forEach(function(b){b.setAttribute("aria-pressed",String(b.dataset.l===l))})}
   document.querySelectorAll("#ma .a-lvl").forEach(function(b){b.onclick=function(){if(b.dataset.l===lvl&&T&&!done)return;setLvl(b.dataset.l);next()}});
   function busy(){return !$("m-play").hidden||!$("m-countbox").hidden}
-  function setView(v){if(busy()&&v!=="x")return;view=v;$("ma-1x1").hidden=v!=="x";$("ma-alltag").hidden=v!=="alltag";
+  function setView(v){if(busy()&&v!=="x")return;view=v;$("ma-1x1").hidden=v!=="x";$("ma-alltag").hidden=v!=="alltag";if($("ma-ka"))$("ma-ka").hidden=v!=="ka";
     document.querySelectorAll("#ma .m-sw").forEach(function(b){b.setAttribute("aria-pressed",String(b.dataset.view===v))});
-    try{localStorage.setItem("gu-ma-view",v)}catch(e){}if(v==="alltag"){drawRun();if(!T)next()}}
+    try{localStorage.setItem("gu-ma-view",v)}catch(e){}if(v==="alltag"){drawRun();if(!T)next()}if(v==="ka"&&window.__GUkaShow)window.__GUkaShow()}
+  window.__GUmaView=setView;
   document.querySelectorAll("#ma .m-sw").forEach(function(b){b.onclick=function(){setView(b.dataset.view)}});
   window.__GUalltagOpen=function(){var t=$("gu-tab-ma");if(t)t.click();setView("alltag");setTimeout(function(){var w=$("ma-alltag");if(w)w.scrollIntoView({block:"start",behavior:"smooth"})},350)};
   window.addEventListener("gu-alltag",drawRun);
   setLvl(lvl);setView(view);drawRun();
+})();
+</script>
+<script type="text/x-deferred">
+/* Mathe: Sonderaktion „Fit für die Mathearbeit“ – Rationale Zahlen (Klasse 7) */
+(function(){
+  var $=function(id){return document.getElementById(id)};
+  if(!$("ma-ka"))return;
+  function R(a,b){return a+Math.floor(Math.random()*(b-a+1))}
+  function pick(a){return a[Math.floor(Math.random()*a.length)]}
+  function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=a[i];a[i]=a[j];a[j]=t}return a}
+  function gcd(a,b){a=Math.abs(a);b=Math.abs(b);while(b){var t=b;b=a%b;a=t}return a||1}
+  function lcm(a,b){return Math.abs(a*b)/gcd(a,b)}
+  /* ---------- exakte Brüche ---------- */
+  function F(n,d){d=d==null?1:d;if(d<0){n=-n;d=-d}var g=gcd(n,d);return {n:n/g,d:d/g}}
+  function add(a,b){return F(a.n*b.d+b.n*a.d,a.d*b.d)}
+  function sub(a,b){return F(a.n*b.d-b.n*a.d,a.d*b.d)}
+  function mul(a,b){return F(a.n*b.n,a.d*b.d)}
+  function dv(a,b){return F(a.n*b.d,a.d*b.n)}
+  function eq(a,b){return a.n*b.d===b.n*a.d}
+  function T(x){return F(Math.round(x*1000),1000)} /* Dezimalzahl -> Bruch */
+  function term(f){var d=f.d;while(d%2===0)d/=2;while(d%5===0)d/=5;return d===1}
+  var M="−";
+  function frh(n,d){return '<span class="a-fr"><sup>'+n+'</sup>⁄<sub>'+d+'</sub></span>'}
+  function dec(f){return (f.n<0?M:"")+Math.abs(f.n/f.d).toLocaleString("de-DE",{maximumFractionDigits:4})}
+  function S(f,mode){if(f.d===1)return (f.n<0?M:"")+Math.abs(f.n);
+    if(mode==="dec"&&term(f))return dec(f);return (f.n<0?M:"")+frh(Math.abs(f.n),f.d)}
+  function eu(f){return (f.n<0?M:"")+Math.abs(f.n/f.d).toLocaleString("de-DE",{minimumFractionDigits:2,maximumFractionDigits:2})}
+  function SA(t){return t.money?eu(t.ans):S(t.ans,t.mode)}
+  function P(f,mode){return f.n<0?"("+S(f,mode)+")":S(f,mode)} /* negative Zahl in Klammern */
+  function txt(f,mode){if(f.d===1)return (f.n<0?"-":"")+Math.abs(f.n);if(mode==="dec"&&term(f))return dec(f).replace(M,"-");return (f.n<0?"-":"")+Math.abs(f.n)+"/"+f.d}
+  /* ---------- Eingabe lesen ---------- */
+  function parse(v){v=String(v||"").trim().replace(/[−–—]/g,"-").replace(/\s+/g,"").replace(/[()]/g,"").replace(/€|°C|°|Punkte|Uhr/gi,"");
+    if(!v)return null;var neg=false;while(v.charAt(0)==="-"||v.charAt(0)==="+"){if(v.charAt(0)==="-")neg=!neg;v=v.slice(1)}
+    var m=v.match(/^(\d+(?:[.,]\d+)?)\/(\d+(?:[.,]\d+)?)$/),f,raw=null;
+    if(m){var a=T(parseFloat(m[1].replace(",","."))),b=T(parseFloat(m[2].replace(",",".")));if(b.n===0)return null;f=dv(a,b);
+      if(/^\d+$/.test(m[1])&&/^\d+$/.test(m[2]))raw={n:+m[1],d:+m[2]}}
+    else if(/^\d+(?:[.,]\d+)?$|^[.,]\d+$/.test(v)){f=T(parseFloat(v.replace(",",".")))}
+    else return null;
+    if(neg)f=F(-f.n,f.d);return {f:f,raw:raw}}
+  /* ---------- Aufgabentypen ---------- */
+  var NAMES={wf:"Wahr oder falsch?",zg:"Zahlengerade",br:"Brüche mit Vorzeichen",dz:"Dezimalzahlen & Klammern",rv:"Rechenvorteile",ff:"Fehler finden",tx:"Textaufgabe"};
+  var WF=[
+    ["Die Differenz einer kleineren und einer größeren Zahl ist negativ, wenn die kleinere Zahl zuerst steht.",true,"Beispiel: 2 "+M+" 5 = "+M+"3. Wer von einer Zahl eine größere abzieht, landet links von 0."],
+    ["Wer eine negative Zahl subtrahiert, bewegt sich auf der Zahlengeraden nach links.",false,"Gegenbeispiel: 2 "+M+" ("+M+"3) = 2 + 3 = 5. Minus mal Minus wird Plus – man geht nach rechts."],
+    ["Der Quotient zweier negativer Zahlen ist immer größer als 1.",false,"Gegenbeispiel: ("+M+"1) : ("+M+"4) = 0,25. Das Ergebnis ist positiv, aber kleiner als 1."],
+    ["Eine Zahl und ihre Gegenzahl haben denselben Abstand von 0.",true,"Beispiel: "+M+"3 und 3 liegen beide 3 Schritte von 0 entfernt, nur auf verschiedenen Seiten."],
+    ["Das Produkt aus drei negativen Zahlen ist negativ.",true,"Beispiel: ("+M+"1) · ("+M+"2) · ("+M+"3) = "+M+"6. Bei ungerader Anzahl Minuszeichen ist das Produkt negativ."],
+    ["Das Produkt zweier negativer Zahlen ist negativ.",false,"Gegenbeispiel: ("+M+"2) · ("+M+"3) = 6. Zwei Minuszeichen ergeben Plus."],
+    ["Jede negative Zahl ist kleiner als jede positive Zahl.",true,"Alle negativen Zahlen liegen links von 0, alle positiven rechts davon."],
+    ["Der Betrag einer Zahl ist immer größer als 0.",false,"Gegenbeispiel: Der Betrag von 0 ist 0 – und 0 ist nicht größer als 0."],
+    ["Addiert man zwei negative Zahlen, ist das Ergebnis negativ.",true,"Beispiel: ("+M+"2) + ("+M+"5) = "+M+"7. Man geht zweimal nach links."],
+    ["Die Summe aus einer positiven und einer negativen Zahl ist immer negativ.",false,"Gegenbeispiel: 5 + ("+M+"2) = 3. Es kommt darauf an, welche Zahl den größeren Betrag hat."],
+    [M+"0,5 ist größer als "+M+"0,4.",false,M+"0,5 liegt weiter links auf der Zahlengeraden als "+M+"0,4, ist also kleiner."],
+    ["Je weiter links eine Zahl auf der Zahlengeraden liegt, desto kleiner ist sie.",true,"Beispiel: "+M+"5 liegt links von "+M+"2 und "+M+"5 < "+M+"2."],
+    ["Multipliziert man eine Zahl mit ("+M+"1), erhält man ihre Gegenzahl.",true,"Beispiel: 4 · ("+M+"1) = "+M+"4 und ("+M+"7) · ("+M+"1) = 7."],
+    ["Die Gegenzahl einer negativen Zahl ist negativ.",false,"Gegenbeispiel: Die Gegenzahl von "+M+"3 ist 3 – also positiv."],
+    [M+"("+M+"("+M+"2)) = 2",false,"Drei Minuszeichen: "+M+"("+M+"("+M+"2)) = "+M+"(2) = "+M+"2."],
+    ["Der Quotient aus einer positiven und einer negativen Zahl ist negativ.",true,"Beispiel: 12 : ("+M+"4) = "+M+"3. Unterschiedliche Vorzeichen ergeben ein negatives Ergebnis."],
+    ["Subtrahiert man eine negative Zahl, wird das Ergebnis größer.",true,"Beispiel: 1 "+M+" ("+M+"4) = 5. Minus einer negativen Zahl ist dasselbe wie Plus."],
+    ["("+M+"0,5) · ("+M+"0,5) ist negativ.",false,"Gegenbeispiel: ("+M+"0,5) · ("+M+"0,5) = 0,25. Minus mal Minus ergibt Plus."]];
+  var lastWF=[];
+  function gWF(){var i;do{i=R(0,WF.length-1)}while(lastWF.indexOf(i)>=0);lastWF.push(i);if(lastWF.length>6)lastWF.shift();var w=WF[i];
+    return {k:"wf",kind:"wf",ctx:"Kreuze an: Stimmt die Aussage?",q:w[0],ans:w[1],why:w[2],tip:"Probier ein Zahlenbeispiel aus – auch mit 0, mit Brüchen oder mit Zahlen zwischen 0 und 1."}}
+  function nlSvg(L,span,k,pts){var W=340,x0=20,x1=320,n=span*k,h='<svg class="ka-nl" viewBox="0 0 '+W+' 74" role="img" aria-label="Zahlengerade von '+L+' bis '+(L+span)+'">';
+    h+='<line x1="8" y1="44" x2="332" y2="44" stroke="currentColor" stroke-width="2"/><path d="M332 44 l-8 -5 v10 z" fill="currentColor"/>';
+    for(var i=0;i<=n;i++){var x=x0+(x1-x0)*i/n,big=i%k===0;h+='<line x1="'+x+'" y1="'+(big?34:38)+'" x2="'+x+'" y2="'+(big?54:50)+'" stroke="currentColor" stroke-width="'+(big?2:1.2)+'"/>';
+      if(big){var z=L+i/k;h+='<text x="'+x+'" y="70" text-anchor="middle" font-size="13" font-weight="700" fill="currentColor">'+(z<0?M+Math.abs(z):z)+'</text>'}}
+    pts.forEach(function(p){var x=x0+(x1-x0)*p.i/n;h+='<circle cx="'+x+'" cy="44" r="4.5" fill="var(--m-sun)" stroke="currentColor" stroke-width="1.5"/><text x="'+x+'" y="24" text-anchor="middle" font-size="15" font-weight="700" fill="var(--m-sun)">'+p.l+'</text>'});
+    return h+'</svg>'}
+  function gZG(){var k=pick([2,4,5,10]),span=pick([3,4]),L=R(-3,-1),n=span*k,idx=[];
+    while(idx.length<3){var c=R(1,n-1);if(c%k!==0&&idx.indexOf(c)<0&&idx.every(function(x){return Math.abs(x-c)>1}))idx.push(c)}
+    idx.sort(function(a,b){return a-b});var pts=[{l:"A",i:idx[0]},{l:"B",i:idx[1]},{l:"C",i:idx[2]}];
+    var val=function(i){return F(L*k+i,k)},step=F(1,k),mode=k===10||k===5?"dec":"dec",svg=nlSvg(L,span,k,pts);
+    var stepTxt="Zwischen zwei ganzen Zahlen liegen "+k+" Abschnitte. Ein Abschnitt ist also "+S(step,"frac")+(term(step)?" = "+dec(step):"")+".";
+    if(Math.random()<0.6){var p=pick(pts),v=val(p.i),base=Math.floor(p.i/k),from=L+base,cnt=p.i-base*k;
+      return {k:"zg",kind:"num",svg:svg,ctx:"Lies an der Zahlengeraden ab.",q:"Welche Zahl liegt bei Punkt "+p.l+"?",ans:v,mode:"dec",
+        tip:"Zähle zuerst, in wie viele Abschnitte eine Einheit geteilt ist.",
+        steps:[stepTxt,p.l+" liegt "+cnt+" Abschnitt"+(cnt>1?"e":"")+" rechts von "+(from<0?M+Math.abs(from):from)+".",
+          S(F(from),"dec")+" + "+cnt+" · "+S(step,"frac")+" = <b>"+S(v,"dec")+"</b>"+(term(v)?"":" (oder als Dezimalzahl gerundet "+dec(v)+")")]}}
+    var a=val(idx[0]),c=val(idx[2]),m=dv(add(a,c),F(2));
+    return {k:"zg",kind:"num",svg:svg,ctx:"Lies an der Zahlengeraden ab.",q:"Welche Zahl liegt genau in der Mitte zwischen A und C?",ans:m,mode:"dec",
+      tip:"Lies A und C ab. Die Mitte ist (A + C) : 2.",
+      steps:[stepTxt,"A = "+S(a,"dec")+", C = "+S(c,"dec"),"Mitte = (A + C) : 2 = ("+S(a,"dec")+" + "+P(c,"dec")+") : 2 = "+S(add(a,c),"dec")+" : 2 = <b>"+S(m,"dec")+"</b>"]}}
+  var DEN=[2,3,4,5,6,8,10,12];
+  function rf(){var d=pick(DEN),n=R(1,d+3);if(n%d===0)n++;return F((Math.random()<0.5?-1:1)*n,d)}
+  function gBR(){if(Math.random()<0.55){
+      var t=[rf(),rf(),rf()],ops=[pick(["+",M]),pick(["+",M])],first=t[0];if(first.n<0&&Math.random()<0.5)first=F(-first.n,first.d);t[0]=first;
+      var expr=S(t[0])+" "+ops[0]+" "+P(t[1])+" "+ops[1]+" "+P(t[2]);
+      var s1=ops[0]==="+"?t[1]:F(-t[1].n,t[1].d),s2=ops[1]==="+"?t[2]:F(-t[2].n,t[2].d),res=add(add(t[0],s1),s2);
+      var N=lcm(lcm(t[0].d,s1.d),s2.d),parts=[t[0],s1,s2],st=[];
+      st.push("Vorzeichen zusammenfassen (Minus und Minus wird Plus): "+S(t[0])+" "+[s1,s2].map(function(f){return (f.n<0?M+" ":"+ ")+S(F(Math.abs(f.n),f.d))}).join(" "));
+      st.push("Hauptnenner "+N+": "+parts.map(function(f){return (f.n<0?M:"")+frh(Math.abs(f.n)*N/f.d,N)}).join("  "));
+      var sumN=parts.reduce(function(s,f){return s+f.n*N/f.d},0);
+      st.push("Zähler zusammenrechnen: "+(sumN<0?M:"")+frh(Math.abs(sumN),N)+(F(sumN,N).d!==N?" = <b>"+S(res)+"</b> (gekürzt)":" = <b>"+S(res)+"</b>"));
+      return {k:"br",kind:"num",ctx:"Berechne. Gib das Ergebnis vollständig gekürzt an.",q:expr,ans:res,mode:"frac",reduce:true,
+        tip:"Erst die Vorzeichen klären: "+M+" ("+M+"…) wird +. Dann auf den Hauptnenner bringen.",steps:st}}
+    var a=rf(),b=rf(),c=rf();if(a.n>0&&b.n>0&&c.n>0)a=F(-a.n,a.d);
+    var expr=P(a)+" : "+P(b)+" · "+P(c),res=mul(dv(a,b),c),neg=[a,b,c].filter(function(f){return f.n<0}).length;
+    var kb=F(b.d,b.n);
+    return {k:"br",kind:"num",ctx:"Berechne. Gib das Ergebnis vollständig gekürzt an.",q:expr,ans:res,mode:"frac",reduce:true,
+      tip:"Durch einen Bruch teilen heißt: mit dem Kehrwert malnehmen. Zähle die Minuszeichen für das Vorzeichen.",
+      steps:["Durch "+P(b)+" teilen = mit dem Kehrwert "+P(kb)+" malnehmen: "+P(a)+" · "+P(kb)+" · "+P(c),
+        "Vorzeichen: "+neg+" Minuszeichen → Ergebnis ist "+(neg%2?"negativ":"positiv")+".",
+        "Zähler mal Zähler, Nenner mal Nenner – vorher über Kreuz kürzen: <b>"+S(res)+"</b>"]}}
+  function gDZ(){var z=T(pick([-0.2,-0.3,-0.4,-0.5,-0.6,0.2,0.5])),k=pick([-6,-5,-4,-3,-2,2,3,4,5,6]),s=mul(z,F(k));
+    var x;do{x=T(R(-30,30)/10)}while(x.n===0||eq(x,s));var y=sub(s,x),u;do{u=T(R(-40,40)/10)}while(u.n===0||u.d===1);var v=pick([-5,-4,-3,-2,2,3,4]);
+    var w=mul(u,F(v)),res=sub(F(k),w);
+    return {k:"dz",kind:"num",ctx:"Berechne. Achte auf Klammern und Punkt vor Strich.",
+      q:"("+S(x,"dec")+" + "+P(y,"dec")+") : "+P(z,"dec")+" "+M+" "+P(u,"dec")+" · "+P(F(v),"dec"),ans:res,mode:"dec",
+      tip:"Reihenfolge: zuerst die Klammer, dann Punktrechnung (· und :), zuletzt Strichrechnung.",
+      steps:["Klammer: "+S(x,"dec")+" + "+P(y,"dec")+" = "+S(s,"dec"),"Teilen: "+S(s,"dec")+" : "+P(z,"dec")+" = "+S(F(k),"dec"),
+        "Punkt vor Strich: "+P(u,"dec")+" · "+P(F(v),"dec")+" = "+S(w,"dec"),"Zum Schluss: "+S(F(k),"dec")+" "+M+" "+P(w,"dec")+" = <b>"+S(res,"dec")+"</b>"]}}
+  var PAIRS=[[0.125,8],[0.25,4],[2.5,4],[0.5,2],[1.25,8],[0.2,5],[12.5,8],[25,4],[0.4,5]];
+  function gRV(){if(Math.random()<0.55){var pp=shuffle(PAIRS.slice()),p1=pp[0],p2=pp.find(function(p){return p[0]!==p1[0]&&p[1]!==p1[1]&&p[0]!==p1[1]&&p[1]!==p1[0]});
+      var nums=[p1[0],p1[1],p2[0],p2[1]].map(function(x){return {v:x,neg:Math.random()<0.5}});if(!nums.some(function(n){return n.neg}))nums[R(0,3)].neg=true;
+      var order=shuffle([0,1,2,3]),fs=nums.map(function(n){return T(n.neg?-n.v:n.v)}),res=fs.reduce(function(a,b){return mul(a,b)},F(1)),neg=nums.filter(function(n){return n.neg}).length;
+      var q=order.map(function(i){return P(fs[i],"dec")}).join(" · ");
+      return {k:"rv",kind:"num",ctx:"Rechne geschickt. Tipp: Vertauschen und passende Paare bilden.",q:q,ans:res,mode:"dec",
+        tip:"Suche zwei Zahlen, die zusammen eine glatte Zahl ergeben (z. B. 0,25 · 4 = 1).",
+        steps:["Vorzeichen zuerst: "+neg+" Minuszeichen → Ergebnis ist "+(neg%2?"negativ":"positiv")+".",
+          "Paare bilden: ("+dec(T(p1[0]))+" · "+p1[1]+") · ("+dec(T(p2[0]))+" · "+p2[1]+") = "+dec(T(p1[0]*p1[1]))+" · "+dec(T(p2[0]*p2[1])),
+          "Ergebnis: <b>"+S(res,"dec")+"</b>"]}}
+    var Sm=pick([2,4,5,10]),a=T(R(1,Sm*10-1)/10);if(a.d===1)a=T(a.n+0.3);var b=sub(F(Sm),a),fr=pick([[3,4],[1,2],[2,5],[3,5],[1,4],[5,2],[3,2]]),f=F((Math.random()<0.7?-1:1)*fr[0],fr[1]),res=mul(F(Sm),f);
+    return {k:"rv",kind:"num",ctx:"Rechne geschickt. Welcher Faktor kommt zweimal vor?",q:S(a,"dec")+" · "+P(f)+" + "+S(b,"dec")+" · "+P(f),ans:res,mode:"dec",
+      tip:"Beide Produkte haben denselben Faktor. Klammere ihn aus: a · x + b · x = (a + b) · x.",
+      steps:["Gemeinsamen Faktor ausklammern: ("+S(a,"dec")+" + "+S(b,"dec")+") · "+P(f),S(a,"dec")+" + "+S(b,"dec")+" = "+Sm,
+        Sm+" · "+P(f)+" = <b>"+S(res,"dec")+"</b>"+(term(res)&&res.d!==1?" (= "+S(res,"frac")+")":"")]}}
+  function gFF(){var v=R(0,2);
+    if(v===0){var c=pick([-2,-3,-4,-5]),b=c*pick([-3,-2,2,3,4]),sum=c*pick([-4,-3,-2,2,3,4,5]),a=sum-b,wrong=a+b/c,res=sum/c;if(a===0)return gFF();
+      return {k:"ff",kind:"num",ctx:"Mira rechnet im Kopf und schreibt: ("+S(F(a))+" + "+P(F(b))+") : "+P(F(c))+" = "+S(F(a))+" + "+P(F(b))+" : "+P(F(c))+" = "+S(F(wrong)),
+        q:"Mira hat einen Fehler gemacht. Was ist das richtige Ergebnis?",ans:F(res),mode:"dec",
+        tip:"Was in der Klammer steht, muss zuerst ausgerechnet werden.",
+        steps:["Fehler: Mira hat die Klammer weggelassen. Dadurch wird nur "+P(F(b))+" geteilt (Punkt vor Strich).","Richtig: zuerst die Klammer: "+S(F(a))+" + "+P(F(b))+" = "+S(F(sum)),
+          S(F(sum))+" : "+P(F(c))+" = <b>"+S(F(res))+"</b>"]}}
+    if(v===1){var A=pick([12,18,24,30,36]),divs=[1,2,3,4,6,12,18].filter(function(d){return A%d===0&&d<A}),b1,c1;
+      do{b1=-pick(divs);c1=pick(divs)}while(b1+c1===0||A%(b1+c1)!==0);var res2=A/(b1+c1),wr=A/b1+A/c1;
+      return {k:"ff",kind:"num",ctx:"Mira will "+A+" : ("+S(F(b1))+" + "+c1+") als "+A+" : "+P(F(b1))+" + "+A+" : "+c1+" rechnen. Das ergäbe "+S(F(wr))+".",
+        q:"Was ist das richtige Ergebnis von "+A+" : ("+S(F(b1))+" + "+c1+")?",ans:F(res2),mode:"dec",
+        tip:"Darf man durch eine Summe einzeln teilen? Rechne zur Sicherheit erst die Klammer aus.",
+        steps:["Klammer zuerst: "+S(F(b1))+" + "+c1+" = "+S(F(b1+c1)),A+" : "+P(F(b1+c1))+" = <b>"+S(F(res2))+"</b>",
+          "Merke: Steht die Summe <i>vorne</i> ((a + b) : c), darf man aufteilen. Steht sie <i>hinten</i> (a : (b + c)), nicht!"]}}
+    var p=R(2,9),q=R(2,9),wrong3=p-q,res3=p+q;if(wrong3===res3)return gFF();
+    return {k:"ff",kind:"num",ctx:"Tim schreibt: "+p+" "+M+" ("+M+q+") = "+S(F(wrong3)),q:"Tim hat sich vertan. Was ist richtig?",ans:F(res3),mode:"dec",
+      tip:"Was passiert, wenn man eine negative Zahl abzieht?",
+      steps:["Minus und Minus direkt hintereinander wird Plus: "+p+" "+M+" ("+M+q+") = "+p+" + "+q,"= <b>"+res3+"</b>","Tim hat das Minus in der Klammer übersehen."]}}
+  function gTX(){var v=R(0,2);
+    if(v===0){var h0=pick([8,9,10]),T0=T(pick([-3,-2.5,-2,-1.5,-1])),r=T(pick([0.25,0.5,0.75])),n=13-h0,T1=add(T0,mul(r,F(n))),h2=pick([16,17]),m=h2-13;
+      var T2,d;do{d=T(pick([0.75,1,1.25,1.5,2]));T2=sub(T1,mul(d,F(m)))}while(T2.n>=0);
+      var ctx="Um "+h0+" Uhr zeigt ein Thermometer "+S(T0,"dec")+" °C. Bis 13 Uhr steigt die Temperatur jede Stunde um "+dec(r)+" °C. Danach kühlt es bis "+h2+" Uhr gleichmäßig auf "+S(T2,"dec")+" °C ab.";
+      if(Math.random()<0.5)return {k:"tx",kind:"num",ctx:ctx,q:"Welche Temperatur zeigt das Thermometer um 13 Uhr?",ans:T1,mode:"dec",unit:"°C",tip:"Wie viele Stunden sind es von "+h0+" bis 13 Uhr?",
+        steps:["Von "+h0+" bis 13 Uhr sind es "+n+" Stunden.","Anstieg: "+n+" · "+dec(r)+" = "+dec(mul(r,F(n)))+" °C",S(T0,"dec")+" + "+dec(mul(r,F(n)))+" = <b>"+S(T1,"dec")+" °C</b>"]};
+      return {k:"tx",kind:"num",ctx:ctx+" Um 13 Uhr sind es "+S(T1,"dec")+" °C.",q:"Um wie viel Grad ändert sich die Temperatur von 13 bis "+h2+" Uhr pro Stunde? Gib die Änderung mit Vorzeichen an.",ans:F(-d.n,d.d),mode:"dec",unit:"°C",
+        tip:"Änderung = Endwert "+M+" Anfangswert. Dann durch die Anzahl der Stunden teilen.",
+        steps:["Änderung insgesamt: "+S(T2,"dec")+" "+M+" "+P(T1,"dec")+" = "+S(sub(T2,T1),"dec")+" °C","In "+m+" Stunden: "+S(sub(T2,T1),"dec")+" : "+m+" = <b>"+S(F(-d.n,d.d),"dec")+" °C</b> pro Stunde"]}}
+    if(v===1){var s0=pick([-4,-5,-6,-8]),pl=T(pick([3.5,4.5,5])),mi=T(pick([2,2.5,3])),ri=R(2,4),wr=R(1,3),pts=add(F(s0),sub(mul(pl,F(ri)),mul(mi,F(wr))));
+      return {k:"tx",kind:"num",ctx:"Beim Zahlenquiz startet Team Blau mit "+S(F(s0))+" Punkten. Für eine richtige Antwort gibt es "+dec(pl)+" Punkte, für eine falsche werden "+dec(mi)+" Punkte abgezogen.",
+        q:"Nach "+(ri+wr)+" Runden hat das Team "+ri+"-mal richtig und "+wr+"-mal falsch geantwortet. Wie viele Punkte hat es jetzt?",ans:pts,mode:"dec",unit:"Punkte",
+        tip:"Startwert + Pluspunkte "+M+" Minuspunkte.",
+        steps:["Pluspunkte: "+ri+" · "+dec(pl)+" = "+dec(mul(pl,F(ri))),"Minuspunkte: "+wr+" · "+dec(mi)+" = "+dec(mul(mi,F(wr))),S(F(s0))+" + "+dec(mul(pl,F(ri)))+" "+M+" "+dec(mul(mi,F(wr)))+" = <b>"+S(pts,"dec")+" Punkte</b>"]}}
+    var K=T(pick([12.4,15.6,19.8,21.2])),pk=T(pick([3.6,4.2,4.8])),ln=T(pick([1.25,1.5,1.75,2])),st=sub(F(-K.n,K.d),mul(pk,F(2)));
+    var ctx="Das Schulfest-Café startet mit "+M+eu(K)+" € in der Kasse (Minus). Vor dem Verkauf kauft die Klasse zwei Packungen Becher für je "+eu(pk)+" €. Jede Limonade bringt "+eu(ln)+" € ein.";
+    var w=R(0,2);
+    if(w===0)return {k:"tx",kind:"num",ctx:ctx,q:"Wie hoch ist der Kassenstand nach dem Becherkauf, vor dem ersten Verkauf? Mit Vorzeichen.",ans:st,mode:"dec",unit:"€",money:true,tip:"Ausgaben werden abgezogen – der Stand wird noch negativer.",
+      steps:["Becher: 2 · "+eu(pk)+" = "+eu(mul(pk,F(2)))+" €",M+eu(K)+" "+M+" "+eu(mul(pk,F(2)))+" = <b>"+eu(st)+" €</b>"]};
+    if(w===1){var n=R(5,12),e=add(st,mul(ln,F(n)));return {k:"tx",kind:"num",ctx:ctx+" Nach dem Becherkauf steht die Kasse bei "+eu(st)+" €.",q:"Wie hoch ist der Kassenstand nach "+n+" verkauften Limonaden?",ans:e,mode:"dec",unit:"€",money:true,tip:"Einnahmen: Anzahl · Preis. Dann zum Kassenstand addieren.",
+      steps:["Einnahmen: "+n+" · "+eu(ln)+" = "+eu(mul(ln,F(n)))+" €",eu(st)+" + "+eu(mul(ln,F(n)))+" = <b>"+eu(e)+" €</b>"]}}
+    var need=0;while(add(st,mul(ln,F(need))).n<=0)need++;
+    return {k:"tx",kind:"num",ctx:ctx+" Nach dem Becherkauf steht die Kasse bei "+eu(st)+" €.",q:"Wie viele Limonaden muss die Klasse mindestens verkaufen, damit der Kassenstand positiv ist?",ans:F(need),mode:"dec",unit:"Limonaden",
+      tip:"Teile den fehlenden Betrag durch den Preis einer Limonade und runde passend.",
+      steps:["Fehlender Betrag: "+eu(F(-st.n,st.d))+" €",eu(F(-st.n,st.d))+" : "+eu(ln)+" ≈ "+(Math.abs(st.n/st.d)/(ln.n/ln.d)).toLocaleString("de-DE",{maximumFractionDigits:2}),
+        "Mit "+(need-1)+" Limonaden ist die Kasse bei "+eu(add(st,mul(ln,F(need-1))))+" € – noch nicht positiv. Mit "+need+" sind es "+eu(add(st,mul(ln,F(need))))+" €.","Also mindestens <b>"+need+" Limonaden</b>."]}}
+  var GEN={wf:gWF,zg:gZG,br:gBR,dz:gDZ,rv:gRV,ff:gFF,tx:gTX};
+  /* ---------- Ablauf ---------- */
+  var topic="probe",Tk=null,tries=0,done=false,PROBE=["wf","zg","br","dz","rv","ff","tx","tx"],pi=0,score=[];
+  try{var sv=localStorage.getItem("gu-ka-topic");if(sv&&(sv==="probe"||GEN[sv]))topic=sv}catch(e){}
+  function fb(cls,h){var f=$("ka-fb");f.className="a-fb"+(cls?" "+cls:"");f.innerHTML=h;f.hidden=false}
+  function steps(t,arr){$("ka-steps-t").textContent=t;$("ka-ol").innerHTML=arr.map(function(s){return "<li>"+s+"</li>"}).join("");$("ka-steps").hidden=false}
+  function practiced(){if(window.__GUpracticed)try{window.__GUpracticed()}catch(e){}}
+  function finish(ok){done=true;$("ka-in").disabled=true;$("ka-check").hidden=true;$("ka-tip").hidden=true;$("ka-sol").hidden=true;
+    document.querySelectorAll("#ma [data-wf]").forEach(function(b){b.disabled=true});
+    if(topic==="probe"){score[pi]=ok&&tries===0;$("ka-next").textContent=pi<PROBE.length-1?"Nächste Aufgabe →":"Auswertung →"}else $("ka-next").textContent="Nächste Aufgabe →";
+    $("ka-next").hidden=false;practiced();setTimeout(function(){$("ka-next").focus({preventScroll:true})},30)}
+  function render(){var t=Tk;tries=0;done=false;
+    $("ka-tag").textContent=(topic==="probe"?"Aufgabe "+(pi+1)+" von "+PROBE.length+" · ":"")+NAMES[t.k];
+    $("ka-ctx").innerHTML=t.ctx||"";$("ka-ctx").hidden=!t.ctx;$("ka-q").innerHTML=t.q;$("ka-svg").innerHTML=t.svg||"";$("ka-svg").hidden=!t.svg;
+    var wf=t.kind==="wf";$("ka-row").hidden=wf;$("ka-keys").hidden=wf;$("ka-wf").hidden=!wf;$("ka-check").hidden=wf;
+    document.querySelectorAll("#ma [data-wf]").forEach(function(b){b.disabled=false;b.className="ka-wfb"});
+    var i=$("ka-in");i.value="";i.disabled=false;i.className="a-in";$("ka-unit").textContent=t.unit||"";
+    $("ka-fb").hidden=true;$("ka-steps").hidden=true;$("ka-tip").hidden=false;$("ka-sol").hidden=true;$("ka-next").hidden=true;
+    $("ka-task").hidden=false;$("ka-sum").hidden=true}
+  function next(){if(topic==="probe"){if(Tk&&done)pi++;if(pi>=PROBE.length){summary();return}Tk=GEN[PROBE[pi]]()}else Tk=GEN[topic]();render()}
+  function startProbe(){pi=0;score=[];Tk=null;next()}
+  function summary(){var n=score.filter(Boolean).length;$("ka-task").hidden=true;$("ka-sum").hidden=false;
+    $("ka-sum-n").textContent=n+" von "+PROBE.length;
+    $("ka-sum-t").textContent=n>=7?"Stark! Du bist gut vorbereitet.":n>=5?"Gut! Übe die Themen mit ✗ noch einmal gezielt.":"Dranbleiben! Übe die Themen mit ✗ einzeln, dann klappt’s.";
+    $("ka-sum-l").innerHTML=PROBE.map(function(k,i){return '<li class="'+(score[i]?"ok":"no")+'"><span>'+(score[i]?"✓":"✗")+'</span>'+NAMES[k]+(score[i]?"":' <button type="button" class="a-alt ka-go" data-go="'+k+'">üben</button>')+'</li>'}).join("");
+    document.querySelectorAll("#ma [data-go]").forEach(function(b){b.onclick=function(){setTopic(b.dataset.go)}})}
+  function check(){if(done){next();return}var t=Tk,i=$("ka-in"),r=parse(i.value);if(!i.value.trim()){i.focus();return}
+    if(!r){fb("tip","Das kann ich nicht lesen. Schreib eine Zahl wie <b>"+M+"2,5</b> oder einen Bruch wie <b>"+M+"3/4</b>.");return}
+    if(eq(r.f,t.ans)){
+      if(t.reduce&&r.raw&&gcd(r.raw.n,r.raw.d)>1){fb("tip","Der Wert stimmt – aber vollständig gekürzt ist das noch nicht. Kürze weiter!");return}
+      i.className="a-in ok";fb("","✓ Richtig!"+(tries?" Im "+(tries+1)+". Versuch.":""));steps("So geht’s",t.steps);finish(true);return}
+    tries++;i.className="a-in bad";
+    var sign=eq(F(Math.abs(r.f.n),r.f.d),F(Math.abs(t.ans.n),t.ans.d))&&r.f.n!==0;
+    if(tries<2){fb("bad",sign?"Fast! Der Betrag stimmt, aber das <b>Vorzeichen</b> nicht.":"Noch nicht. "+t.tip);$("ka-sol").hidden=false;i.select();return}
+    fb("bad","Leider falsch. Richtig ist <b>"+SA(t)+(t.unit?" "+t.unit:"")+"</b>.");steps("Rechenweg",t.steps);finish(false)}
+  function answerWF(v){if(done)return;var t=Tk,ok=v===t.ans;
+    document.querySelectorAll("#ma [data-wf]").forEach(function(b){var bv=b.dataset.wf==="1";b.className="ka-wfb"+(bv===t.ans?" ok":(bv===v?" bad":""))});
+    tries=ok?0:2;fb(ok?"":"bad",(ok?"✓ Richtig! ":"Leider falsch. ")+"Die Aussage ist <b>"+(t.ans?"wahr":"falsch")+"</b>.");steps(t.ans?"Begründung":"Widerlegt mit einem Zahlenbeispiel",[t.why]);finish(ok)}
+  $("ka-task").onsubmit=function(e){e.preventDefault();check()};
+  $("ka-next").onclick=function(){next()};
+  $("ka-tip").onclick=function(){fb("tip","💡 "+Tk.tip)};
+  $("ka-sol").onclick=function(){fb("bad","Richtig ist <b>"+SA(Tk)+(Tk.unit?" "+Tk.unit:"")+"</b>.");tries=2;steps("Rechenweg",Tk.steps);finish(false)};
+  document.querySelectorAll("#ma [data-wf]").forEach(function(b){b.onclick=function(){answerWF(b.dataset.wf==="1")}});
+  document.querySelectorAll("#ma [data-key]").forEach(function(b){b.onclick=function(){var i=$("ka-in");if(i.disabled)return;var k=b.dataset.key,s=i.selectionStart==null?i.value.length:i.selectionStart,e=i.selectionEnd==null?s:i.selectionEnd;
+    i.value=i.value.slice(0,s)+k+i.value.slice(e);var p=s+k.length;try{i.setSelectionRange(p,p)}catch(_){}i.focus()}});
+  $("ka-again").onclick=function(){startProbe()};
+  function setTopic(t){topic=t;try{localStorage.setItem("gu-ka-topic",t)}catch(e){}
+    document.querySelectorAll("#ma .ka-top").forEach(function(b){b.setAttribute("aria-pressed",String(b.dataset.t===t))});
+    if(t==="probe")startProbe();else{Tk=null;next()}}
+  document.querySelectorAll("#ma .ka-top").forEach(function(b){b.onclick=function(){setTopic(b.dataset.t)}});
+  var started=false;
+  window.__GUkaShow=function(){if(!started){started=true;setTopic(topic)}};
+  window.__GUkaTest={parse:parse,GEN:GEN,F:F,eq:eq};
+  if(!$("ma-ka").hidden)window.__GUkaShow();
 })();
 </script>
 
