@@ -2,6 +2,67 @@
   "_hinweis": "Land der Woche: neueste Ausgabe zuerst. iso = ISO-3166-Zahlencode (wie in weltkarte.json), koord = [Längengrad, Breitengrad] der Hauptstadt.",
   "laender": [
     {
+      "nr": 4,
+      "datum": "2026-11-05",
+      "name": "Japan",
+      "iso": "392",
+      "flagge": "🇯🇵",
+      "hauptstadt": "Tokio",
+      "koord": [
+        139.6917,
+        35.6895
+      ],
+      "entfernung_km": 8900,
+      "einleitung": "Japan ist ein Inselstaat in Ostasien im Pazifischen Ozean. Seine nächsten Nachbarn auf der anderen Seite des Meeres sind Südkorea, China und Russland.",
+      "fakten": [
+        {
+          "label": "Einwohner",
+          "wert": "rund 123 Millionen",
+          "hinweis": "Etwa anderthalbmal so viele wie in Deutschland."
+        },
+        {
+          "label": "Hauptstadt",
+          "wert": "Tokio",
+          "hinweis": "Mit ihrem Umland ist Tokio eine der größten Städteregionen der Welt."
+        },
+        {
+          "label": "Landessprache",
+          "wert": "Japanisch"
+        },
+        {
+          "label": "Fläche",
+          "wert": "rund 378.000 km²",
+          "hinweis": "Etwas größer als Deutschland."
+        },
+        {
+          "label": "Währung",
+          "wert": "Yen"
+        },
+        {
+          "label": "Inseln",
+          "wert": "über 14.000",
+          "hinweis": "Die vier größten sind Honshū, Hokkaidō, Kyūshū und Shikoku."
+        }
+      ],
+      "nice": [
+        {
+          "thema": "Kultur",
+          "titel": "Manga und Kirschblüte",
+          "text": "Aus Japan kommen Manga-Comics und Anime-Zeichentrickfilme, die auf der ganzen Welt beliebt sind. Im Frühling feiern viele Menschen die Kirschblüte mit Picknicks unter den blühenden Bäumen. Das nennt man Hanami."
+        },
+        {
+          "thema": "Politik",
+          "titel": "Die erste Frau an der Spitze",
+          "text": "Seit Oktober 2025 ist Sanae Takaichi Premierministerin von Japan. Sie ist die erste Frau in diesem Amt. Das Staatsoberhaupt ist der Kaiser, er hat aber keine politische Macht."
+        },
+        {
+          "thema": "Herausforderung",
+          "titel": "Leben mit Erdbeben",
+          "text": "Japan liegt dort, wo mehrere Erdplatten aufeinandertreffen. Deshalb gibt es sehr oft Erdbeben, manchmal auch gefährliche Tsunamis. Häuser werden besonders sicher gebaut, und schon Kinder üben in der Schule, was bei einem Beben zu tun ist."
+        }
+      ]
+    },
+    {
       "nr": 3,
       "datum": "2026-10-29",
       "name": "Brasilien",

@@ -1,5 +1,114 @@
 [
   {
+    "nr": 5,
+    "datum": "2026-11-05",
+    "themen": [
+      {
+        "bereich": "aussen",
+        "schlagzeile": "USA: Niederlage für Trumps Partei",
+        "text": "In den USA wurde am Dienstag ein großer Teil des Parlaments neu gewählt, der sogenannte Kongress. Nach Hochrechnungen US-amerikanischer Medien haben die Demokraten die Mehrheit sowohl im Repräsentantenhaus als auch im Senat erobert. Bisher hatten dort Präsident Trumps Republikaner die Mehrheit. Einige Rennen sind noch nicht fertig ausgezählt.",
+        "wichtig": "Ohne Mehrheit im Kongress kann Trump viele Gesetze nicht mehr durchsetzen, und die Demokraten können seine Regierung stärker kontrollieren."
+      },
+      {
+        "bereich": "innen",
+        "schlagzeile": "Junge Leute demonstrieren – am Abend Krawalle",
+        "text": "Am Samstag sind in über 30 deutschen Städten Zehntausende junge Menschen unter dem Motto „Gen Z regelt“ auf die Straße gegangen. Sie fordern zum Beispiel mehr Geld für Schulen und Psychotherapie, Klimaschutz und niedrigere Preise, und sie sind gegen eine Wehrpflicht. Tagsüber blieben die Demos meist friedlich, am Abend kam es vor allem in Frankfurt und Köln zu Gewalt und Plünderungen. Die Organisierenden haben sich davon distanziert.",
+        "wichtig": "Die Forderungen betreffen junge Leute direkt, doch nach der Gewalt wird vor allem über die Krawalle gesprochen."
+      },
+      {
+        "bereich": "aussen",
+        "schlagzeile": "Ukraine: Selenskyj in Berlin",
+        "text": "Der ukrainische Präsident Wolodymyr Selenskyj hat am Dienstag Bundeskanzler Friedrich Merz in Berlin besucht. Merz sagte der Ukraine Hilfe für den Winter zu. Nächste Woche, am 10. und 11. November, sollen Fachleute aus der Ukraine, Russland und den USA in Abu Dhabi über Schritte zum Frieden verhandeln.",
+        "wichtig": "Im Winter greift Russland oft die Strom- und Wärmeversorgung an, deshalb braucht die Ukraine jetzt besonders viel Hilfe."
+      },
+      {
+        "bereich": "aussen",
+        "schlagzeile": "Israel: Endergebnis ohne Mehrheit",
+        "text": "Nach der Wahl in Israel sind jetzt alle Stimmen ausgezählt. Das Lager von Benjamin Netanjahu hat 53 von 120 Sitzen, das Lager seines Herausforderers Gadi Eisenkot 48. Für eine Mehrheit sind 61 Sitze nötig, deshalb wird die Regierungsbildung schwierig.",
+        "wichtig": "Wenn keine Seite eine Mehrheit findet, kann es lange dauern, bis Israel eine neue Regierung hat."
+      }
+    ],
+    "zahl": {
+      "wert": "435",
+      "text": "So viele Abgeordnete hat das US-Repräsentantenhaus. Alle 435 Sitze wurden am Dienstag neu gewählt."
+    },
+    "wort": {
+      "begriff": "Zwischenwahl",
+      "erklaerung": "In den USA wird der Präsident alle vier Jahre gewählt. Genau in der Mitte seiner Amtszeit gibt es eine Zwischenwahl (englisch „Midterms“): Dann wird das ganze Repräsentantenhaus und ein Drittel des Senats neu gewählt."
+    },
+    "frage": "Bei den „Gen Z regelt“-Demos wurde am Ende mehr über die Gewalt gesprochen als über die Forderungen. Wie können junge Leute dafür sorgen, dass ihre Anliegen gehört werden?",
+    "quellen": [
+      {
+        "titel": "ZDFheute: US-Midterms 2026 – Liveblog",
+        "url": "https://zdfheute.de/politik/ausland/midterms-usa-wahl-kongress-liveticker-100.html"
+      },
+      {
+        "titel": "SRF: Midterms 2026 – Demokraten erobern Mehrheit im Senat und Repräsentantenhaus",
+        "url": "https://www.srf.ch/news/international/midterms-2026-demokraten-erobern-mehrheit-im-senat-und-repraesentantenhaus"
+      },
+      {
+        "titel": "ZDFheute: „Gen Z regelt“-Demos von Krawallen überschattet",
+        "url": "https://www.zdfheute.de/politik/deutschland/gen-z-proteste-pluenderungen-gewalt-100.html"
+      },
+      {
+        "titel": "ZDFheute: Vor Ukraine-Russland-Gesprächen – Selenskyj zu Gast in Berlin",
+        "url": "https://www.zdfheute.de/politik/ausland/selenskyj-berlin-besuch-merz-ukraine-krieg-russland-102.html"
+      },
+      {
+        "titel": "ZDFheute: Wahl in Israel – alle Stimmen ausgezählt, kein Lager hat Mehrheit",
+        "url": "https://www.zdfheute.de/politik/ausland/israel-wahl-auszaehlung-ergebnis-gewinner-netanjahu-eisenkot-100.html"
+      }
+    ],
+    "quiz": [
+      {
+        "typ": "mc",
+        "frage": "Welche Partei hat bei den Zwischenwahlen in den USA nach den Hochrechnungen die Mehrheit im Kongress erobert?",
+        "optionen": [
+          "Die Republikaner",
+          "Die Grünen",
+          "Die Demokraten"
+        ],
+        "richtig": 2,
+        "erklaerung": "Nach Hochrechnungen haben die Demokraten die Mehrheit im Repräsentantenhaus und im Senat gewonnen."
+      },
+      {
+        "typ": "mc",
+        "frage": "Unter welchem Motto haben junge Menschen am Samstag in vielen Städten demonstriert?",
+        "optionen": [
+          "„Gen Z regelt“",
+          "„Schule statt Handy“",
+          "„Fridays for Peace“"
+        ],
+        "richtig": 0,
+        "erklaerung": "Die Demos liefen unter dem Motto „Gen Z regelt“ in über 30 deutschen Städten."
+      },
+      {
+        "typ": "mc",
+        "frage": "Wer hat Bundeskanzler Merz am Dienstag in Berlin besucht?",
+        "optionen": [
+          "Benjamin Netanjahu",
+          "Wolodymyr Selenskyj",
+          "Donald Trump"
+        ],
+        "richtig": 1,
+        "erklaerung": "Der ukrainische Präsident Selenskyj war in Berlin, Merz sagte ihm Hilfe für den Winter zu."
+      },
+      {
+        "typ": "wf",
+        "frage": "In Israel hat das Lager von Netanjahu nach dem Endergebnis eine eigene Mehrheit im Parlament.",
+        "richtig": false,
+        "erklaerung": "Netanjahus Lager hat 53 von 120 Sitzen, für eine Mehrheit wären 61 nötig."
+      },
+      {
+        "typ": "schaetzen",
+        "frage": "Wie viele Abgeordnete hat das US-Repräsentantenhaus?",
+        "einheit": "Abgeordnete",
+        "richtig": 435,
+        "erklaerung": "Das Repräsentantenhaus hat 435 Abgeordnete, alle wurden am Dienstag neu gewählt."
+      }
+    ]
+  },
+  {
     "nr": 4,
     "datum": "2026-10-29",
     "themen": [
