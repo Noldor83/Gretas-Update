@@ -2060,6 +2060,8 @@ if(player)loadPlayer();migrate();rebuild();drawRandom();renderStats();renderStag
 #ma .ka-hint b{font:700 16px var(--m-f-head);color:var(--m-sun)}
 #ma .ka-hint ol{margin:0;padding-left:22px;display:grid;gap:6px;font-size:16.5px;line-height:1.4}
 #ma .ka-sum-l li.help span{color:var(--m-sun)}
+#ma .ka-how{margin:10px 0;padding:10px 12px;border-radius:10px;background:rgba(255,255,255,.06);border-left:4px solid var(--m-sun);font-weight:400;line-height:1.5}
+#ma .ka-how b{font-family:var(--m-f-head)}
 #ma .ka-done{list-style:none;margin:0;padding:0;display:grid;gap:6px}
 #ma .ka-done[hidden],#ma .ka-step[hidden]{display:none}
 #ma .ka-done li{display:grid;gap:2px;padding:8px 10px;border-radius:12px;background:var(--m-ok-bg);border:2px solid var(--m-ok);font-size:15px;line-height:1.35}
@@ -2711,148 +2713,243 @@ if(player)loadPlayer();migrate();rebuild();drawRandom();renderStats();renderStag
       if(big){var z=L+i/k;h+='<text x="'+x+'" y="70" text-anchor="middle" font-size="13" font-weight="700" fill="currentColor">'+(z<0?M+Math.abs(z):z)+'</text>'}}
     pts.forEach(function(p){var x=x0+(x1-x0)*p.i/n;h+='<circle cx="'+x+'" cy="44" r="4.5" fill="var(--m-sun)" stroke="currentColor" stroke-width="1.5"/><text x="'+x+'" y="24" text-anchor="middle" font-size="15" font-weight="700" fill="var(--m-sun)">'+p.l+'</text>'});
     return h+'</svg>'}
+  /* ---------- Bausteine für Erklärungen ---------- */
+  function neg(f){return F(-f.n,f.d)}
+  function ab(f){return F(Math.abs(f.n),f.d)}
+  function sgMD(a,b,op){var same=(a.n<0)===(b.n<0);return "Vorzeichenregel beim "+(op===":"?"Teilen":"Malnehmen")+": "+(a.n<0?"minus":"plus")+" "+op+" "+(b.n<0?"minus":"plus")+" ergibt <b>"+(same?"plus":"minus")+"</b>."}
+  function addRule(x,y,mode){mode=mode||"dec";/* erklärt x + y mit tatsächlichen Zahlen, ohne das Ergebnis zu nennen */
+    if(x.n===0||y.n===0)return "Eine der Zahlen ist 0, sie ändert nichts.";
+    if((x.n<0)===(y.n<0))return "Beide Zahlen haben dasselbe Vorzeichen ("+(x.n<0?"minus":"plus")+"). Dann addierst du die Beträge ("+S(ab(x),mode)+" + "+S(ab(y),mode)+") und behältst das Vorzeichen "+(x.n<0?"<b>minus</b>":"<b>plus</b>")+".";
+    var big=Math.abs(x.n/x.d)>=Math.abs(y.n/y.d)?x:y,sm=big===x?y:x;
+    return "Die Zahlen haben verschiedene Vorzeichen. Dann ziehst du den kleineren Betrag vom größeren ab ("+S(ab(big),mode)+" "+M+" "+S(ab(sm),mode)+") und nimmst das Vorzeichen der Zahl mit dem größeren Betrag – das ist "+S(big,mode)+", also <b>"+(big.n<0?"minus":"plus")+"</b>."}
+  function plusForm(x,op,y,mode){/* x op y -> x + y' mit aufgelöstem Vorzeichen */
+    var yy=op==="+"?y:neg(y);var txt=S(x,mode)+" "+op+" "+P(y,mode);
+    if(op===M&&y.n<0)return {y:yy,t:txt+" → Minus und Minus wird Plus: "+S(x,mode)+" + "+S(ab(y),mode)};
+    if(op==="+"&&y.n<0)return {y:yy,t:txt+" → Plus und Minus wird Minus: "+S(x,mode)+" "+M+" "+S(ab(y),mode)};
+    return {y:yy,t:txt}}
+  var DEC_CM="Zähle die Nachkommastellen: Beim Malnehmen hat das Ergebnis so viele Nachkommastellen wie beide Zahlen zusammen. Beim Teilen schiebst du das Komma bei beiden Zahlen gleich weit nach rechts, bis der Teiler keine Kommazahl mehr ist.";
+  /* ---------- Zahlengerade ---------- */
   function gZG(){var k=pick([2,4,5,10]),span=pick([3,4]),L=R(-3,-1),n=span*k,idx=[];
     while(idx.length<3){var c=R(1,n-1);if(c%k!==0&&idx.indexOf(c)<0&&idx.every(function(x){return Math.abs(x-c)>1}))idx.push(c)}
     idx.sort(function(a,b){return a-b});var pts=[{l:"A",i:idx[0]},{l:"B",i:idx[1]},{l:"C",i:idx[2]}];
-    var val=function(i){return F(L*k+i,k)},step=F(1,k),mode=k===10||k===5?"dec":"dec",svg=nlSvg(L,span,k,pts);
-    var stepTxt="Zwischen zwei ganzen Zahlen liegen "+k+" Abschnitte. Ein Abschnitt ist also "+S(step,"frac")+(term(step)?" = "+dec(step):"")+".";
-    if(Math.random()<0.6){var p=pick(pts),v=val(p.i),base=Math.floor(p.i/k),from=L+base,cnt=p.i-base*k;
+    var val=function(i){return F(L*k+i,k)},step=F(1,k),svg=nlSvg(L,span,k,pts),stS=S(step,"frac")+(term(step)?" = "+dec(step):"");
+    function zi(z){return z<0?M+Math.abs(z):""+z}
+    var gStep={l:"Wie groß ist <b>eine</b> Lücke zwischen zwei benachbarten Strichen?",a:step,
+      ex:"Schau dir nur den Bereich zwischen zwei langen Strichen an, zum Beispiel von 0 bis 1. Zähle dort die <b>Lücken</b>, nicht die Striche (bei 5 Strichen sind es nur 4 Lücken!). Die Strecke von 0 bis 1 ist genau 1 groß und wird in diese Lücken aufgeteilt – eine Lücke ist also 1 : (Anzahl der Lücken). Du kannst als Bruch (z. B. 1/4) oder als Dezimalzahl (0,25) antworten.",
+      how:"Zwischen 0 und 1 liegen "+k+" Lücken → 1 : "+k+" = <b>"+stS+"</b>",
+      err:[[F(k),"Du hast die <b>Anzahl</b> der Lücken eingegeben. Gefragt ist, wie groß <b>eine</b> Lücke ist: Die Strecke 1 wird auf alle Lücken verteilt, also 1 geteilt durch die Anzahl."],
+        [F(1,k+1),"Du hast die <b>Striche</b> gezählt statt der Lücken. Zwischen 0 und 1 gibt es einen Strich mehr als Lücken – zähle nur die Zwischenräume."],
+        k>2?[F(1,k-1),"Knapp – du hast eine Lücke zu wenig gezählt. Zähle die Zwischenräume von 0 bis 1 noch einmal ganz genau."]:null]};
+    function gPoint(p){var v=val(p.i),base=Math.floor(p.i/k),from=L+base,cnt=p.i-base*k,ff=F(from);
+      return {l:"Welche Zahl liegt bei Punkt "+p.l+"?",a:v,
+        ex:"1. Suche die <b>ganze Zahl direkt links</b> von "+p.l+": Das ist <b>"+zi(from)+"</b>.<br>2. Zähle die Lücken von "+zi(from)+" bis "+p.l+".<br>3. Jede Lücke ist "+stS+" groß. Rechne: "+zi(from)+" + (Anzahl Lücken) · "+S(step,"frac")+".<br>Achtung: Auf der Zahlengeraden wird es nach <b>rechts größer</b> – auch bei negativen Zahlen. Beispiel: "+M+"2 + 0,25 = "+M+"1,75 (und nicht "+M+"2,25).",
+        how:p.l+" liegt "+cnt+" Lücke"+(cnt>1?"n":"")+" rechts von "+zi(from)+": "+zi(from)+" + "+cnt+" · "+S(step,"frac")+" = <b>"+S(v,"dec")+"</b>",
+        sg:"Liegt der Punkt links von 0, ist die Zahl negativ – rechts von 0 positiv.",
+        err:[[sub(ff,mul(F(cnt),step)),"Du bist von "+zi(from)+" aus nach <b>links</b> gegangen. Die Zahlen werden nach rechts größer: Rechne "+zi(from)+" <b>+</b> "+cnt+" · "+S(step,"frac")+"."],
+          [add(v,step),"Knapp daneben – du hast dich um genau <b>eine Lücke</b> verzählt (eine zu viel). Starte bei "+zi(from)+" und zähle die Sprünge bis "+p.l+" noch einmal."],
+          [sub(v,step),"Knapp daneben – du hast dich um genau <b>eine Lücke</b> verzählt (eine zu wenig). Starte bei "+zi(from)+" und zähle die Sprünge bis "+p.l+" noch einmal."],
+          [sub(F(from+1),mul(F(cnt),step)),"Du hast von der ganzen Zahl <b>rechts</b> von "+p.l+" aus gezählt, aber die Lücken von links genommen. Starte bei "+zi(from)+" (links von "+p.l+") und geh nach rechts."]]}}
+    if(Math.random()<0.6){var p=pick(pts),v=val(p.i);
       return {k:"zg",kind:"num",svg:svg,ctx:"Lies an der Zahlengeraden ab.",q:"Welche Zahl liegt bei Punkt "+p.l+"?",ans:v,mode:"dec",
-        gs:[{l:"Wie groß ist ein Abschnitt zwischen zwei Teilstrichen?",a:step,ex:"Zähle die Abschnitte zwischen zwei ganzen Zahlen, z. B. zwischen 0 und 1. Bei "+k+" Abschnitten ist einer 1 : "+k+" groß. Du darfst als Bruch (1/"+k+") oder als Dezimalzahl antworten."},
-          {l:"Welche Zahl liegt bei Punkt "+p.l+"?",a:v,ex:"Starte bei der ganzen Zahl links von "+p.l+" und zähle die Abschnitte bis "+p.l+". Jeder Abschnitt ist "+S(step,"frac")+" groß."}],
-        tip:"Zähle zuerst, in wie viele Abschnitte eine Einheit geteilt ist.",
-        steps:[stepTxt,p.l+" liegt "+cnt+" Abschnitt"+(cnt>1?"e":"")+" rechts von "+(from<0?M+Math.abs(from):from)+".",
-          S(F(from),"dec")+" + "+cnt+" · "+S(step,"frac")+" = <b>"+S(v,"dec")+"</b>"+(term(v)?"":" (oder als Dezimalzahl gerundet "+dec(v)+")")]}}
-    var a=val(idx[0]),c=val(idx[2]),m=dv(add(a,c),F(2));
+        tip:"Plan: Erst herausfinden, wie groß eine Lücke ist. Dann von der ganzen Zahl links vom Punkt aus die Lücken zählen und so oft die Lückengröße dazurechnen.",
+        gs:[gStep,gPoint(p)]}}
+    var a=val(idx[0]),c=val(idx[2]),sm=add(a,c),m=dv(sm,F(2));
     return {k:"zg",kind:"num",svg:svg,ctx:"Lies an der Zahlengeraden ab.",q:"Welche Zahl liegt genau in der Mitte zwischen A und C?",ans:m,mode:"dec",
-      gs:[{l:"Welche Zahl liegt bei A?",a:a,ex:stepTxt+" Starte bei der ganzen Zahl links von A und zähle die Abschnitte."},
-        {l:"Welche Zahl liegt bei C?",a:c,ex:"Genauso wie bei A: ganze Zahl links von C, dann Abschnitte zählen."},
-        {l:"Rechne A + C.",a:add(a,c),ex:"Addiere die beiden Zahlen. Achte auf die Vorzeichen."},
-        {l:"Die Mitte ist (A + C) : 2. Welche Zahl ist das?",a:m,ex:"Teile deine Summe durch 2."}],
-      tip:"Lies A und C ab. Die Mitte ist (A + C) : 2.",
-      steps:[stepTxt,"A = "+S(a,"dec")+", C = "+S(c,"dec"),"Mitte = (A + C) : 2 = ("+S(a,"dec")+" + "+P(c,"dec")+") : 2 = "+S(add(a,c),"dec")+" : 2 = <b>"+S(m,"dec")+"</b>"]}}
+      tip:"Plan: Lückengröße bestimmen, dann A und C ablesen. Die Mitte zwischen zwei Zahlen ist ihr Durchschnitt: (A + C) : 2. Alternativ kannst du auch die Lücken zwischen A und C zählen und zur Hälfte gehen.",
+      gs:[gStep,gPoint(pts[0]),gPoint(pts[2]),
+        {l:"Rechne A + C = "+S(a,"dec")+" + "+P(c,"dec")+".",a:sm,ex:addRule(a,c),how:S(a,"dec")+" + "+P(c,"dec")+" = <b>"+S(sm,"dec")+"</b>",
+          err:[[sub(a,c),"Du hast "+M+" gerechnet. Gesucht ist A <b>plus</b> C."],[sub(c,a),"Du hast C "+M+" A gerechnet. Gesucht ist A <b>plus</b> C."]]},
+        {l:"Die Mitte ist (A + C) : 2. Rechne "+S(sm,"dec")+" : 2.",a:m,ex:"Teile "+S(sm,"dec")+" durch 2. Das Vorzeichen bleibt dabei gleich. Tipp: Die Hälfte von 0,5 ist 0,25, die Hälfte von 1,5 ist 0,75.",
+          how:S(sm,"dec")+" : 2 = <b>"+S(m,"dec")+"</b>",err:[[mul(sm,F(2)),"Du hast mit 2 <b>malgenommen</b>. Für die Mitte musst du durch 2 <b>teilen</b>."],[sm,"Das ist noch die Summe A + C. Jetzt fehlt noch: durch 2 teilen."]]}]}}
+  /* ---------- Brüche ---------- */
   var DEN=[2,3,4,5,6,8,10,12];
   function rf(){var d=pick(DEN),n=R(1,d+3);if(n%d===0)n++;return F((Math.random()<0.5?-1:1)*n,d)}
+  function fracTxt(f){return (f.n<0?M:"")+frh(Math.abs(f.n),f.d)}
   function gBR(){if(Math.random()<0.55){
-      var t=[rf(),rf(),rf()],ops=[pick(["+",M]),pick(["+",M])],first=t[0];if(first.n<0&&Math.random()<0.5)first=F(-first.n,first.d);t[0]=first;
+      var t=[rf(),rf(),rf()],ops=[pick(["+",M]),pick(["+",M])];if(t[0].n<0&&Math.random()<0.5)t[0]=neg(t[0]);
       var expr=S(t[0])+" "+ops[0]+" "+P(t[1])+" "+ops[1]+" "+P(t[2]);
-      var s1=ops[0]==="+"?t[1]:F(-t[1].n,t[1].d),s2=ops[1]==="+"?t[2]:F(-t[2].n,t[2].d),res=add(add(t[0],s1),s2);
-      var N=lcm(lcm(t[0].d,s1.d),s2.d),parts=[t[0],s1,s2],st=[];
-      st.push("Vorzeichen zusammenfassen (Minus und Minus wird Plus): "+S(t[0])+" "+[s1,s2].map(function(f){return (f.n<0?M+" ":"+ ")+S(F(Math.abs(f.n),f.d))}).join(" "));
-      st.push("Hauptnenner "+N+": "+parts.map(function(f){return (f.n<0?M:"")+frh(Math.abs(f.n)*N/f.d,N)}).join("  "));
-      var sumN=parts.reduce(function(s,f){return s+f.n*N/f.d},0);
-      st.push("Zähler zusammenrechnen: "+(sumN<0?M:"")+frh(Math.abs(sumN),N)+(F(sumN,N).d!==N?" = <b>"+S(res)+"</b> (gekürzt)":" = <b>"+S(res)+"</b>"));
+      var s1=ops[0]==="+"?t[1]:neg(t[1]),s2=ops[1]==="+"?t[2]:neg(t[2]),res=add(add(t[0],s1),s2);
+      var parts=[t[0],s1,s2],dens=[t[0].d,t[1].d,t[2].d],N=lcm(lcm(dens[0],dens[1]),dens[2]),mx=Math.max.apply(null,dens),prod=dens[0]*dens[1]*dens[2];
+      var nums=parts.map(function(f){return f.n*N/f.d}),sumN=nums.reduce(function(s,x){return s+x},0);
+      var norm=fracTxt(t[0])+" "+[s1,s2].map(function(f){return (f.n<0?M+" ":"+ ")+frh(Math.abs(f.n),f.d)}).join(" ");
+      var erw=parts.map(function(f){var fa=N/f.d;return frh(Math.abs(f.n),f.d)+" = "+frh(Math.abs(f.n)+"·"+fa,f.d+"·"+fa)+" = "+frh(Math.abs(f.n)*fa,N)}).join("<br>");
+      var numLine=nums.map(function(x,i){return i===0?(x<0?M:"")+Math.abs(x):(x<0?" "+M+" ":" + ")+Math.abs(x)}).join("");
+      /* typische Fehler im Zähler-Schritt */
+      var wrongMM=nums[0]-nums[1]+nums[2];
+      var wrongMM2=nums[0]+nums[1]-nums[2];
+      var rawAdd=parts.reduce(function(s,f){return s+f.n},0);
+      var g=gcd(sumN,N);
       return {k:"br",kind:"num",ctx:"Berechne. Gib das Ergebnis vollständig gekürzt an.",q:expr,ans:res,mode:"frac",reduce:true,
-        gs:[{l:"Was ist der Hauptnenner (kleinster gemeinsamer Nenner)?",a:F(N),ex:"Suche die kleinste Zahl, die durch alle Nenner teilbar ist: "+[t[0].d,t[1].d,t[2].d].join(", ")+". Gehe dazu die Vielfachen des größten Nenners durch."},
-          {l:"Erweitere alle Brüche auf den Nenner "+N+" und fasse zusammen. Welcher Zähler steht über "+N+"? (mit Vorzeichen)",a:F(sumN),ex:st[0]+"<br>Dann erweitern: "+parts.map(function(f){return (f.n<0?M:"")+frh(Math.abs(f.n)*N/f.d,N)}).join("  ")+"<br>Jetzt nur noch die Zähler zusammenrechnen."},
-          {l:"Kürze vollständig. Wie lautet das Ergebnis?",a:res,m:"frac",red:true,ex:"Teile Zähler und Nenner durch die größte Zahl, durch die beide teilbar sind. Kann man nicht kürzen, bleibt der Bruch so."}],
-        tip:"Erst die Vorzeichen klären: "+M+" ("+M+"…) wird +. Dann auf den Hauptnenner bringen.",steps:st}}
-    var a=rf(),b=rf(),c=rf();if(a.n>0&&b.n>0&&c.n>0)a=F(-a.n,a.d);
-    var expr=P(a)+" : "+P(b)+" · "+P(c),res=mul(dv(a,b),c),neg=[a,b,c].filter(function(f){return f.n<0}).length;
-    var kb=F(b.d,b.n);
+        tip:"Plan: 1) Vorzeichen zusammenfassen – zwei Zeichen nebeneinander werden eins (− und − wird +, + und − wird −). 2) Hauptnenner suchen. 3) Alle Brüche erweitern. 4) Nur die Zähler zusammenrechnen, der Nenner bleibt. 5) Kürzen.",
+        gs:[{l:"Was ist der Hauptnenner (der <b>kleinste</b> gemeinsame Nenner) von "+dens.join(", ")+"?",a:F(N),
+            ex:"Schreib die Vielfachen des größten Nenners auf: "+[1,2,3,4,5].map(function(i){return mx*i}).join(", ")+", … Prüfe bei jeder Zahl, ob sie auch durch die anderen Nenner ("+dens.filter(function(d,i){return dens.indexOf(d)===i&&d!==mx}).join(" und ")+") teilbar ist. Die <b>erste</b> Zahl, bei der das klappt, ist der Hauptnenner.",
+            how:"Nenner "+dens.join(", ")+" → kleinstes gemeinsames Vielfaches: <b>"+N+"</b>",
+            err:[prod!==N?[F(prod),"Das ist zwar ein gemeinsamer Nenner (alle Nenner multipliziert), aber nicht der <b>kleinste</b>. Mit dem kleinsten wird das Rechnen viel leichter. Geh die Vielfachen von "+mx+" durch: "+mx+", "+2*mx+", "+3*mx+", …"]:null,
+              mx!==N?[F(mx),mx+" ist nicht durch alle Nenner teilbar. Prüfe die nächsten Vielfachen: "+2*mx+", "+3*mx+", …"]:null]},
+          {l:"Erweitere alle Brüche auf "+N+" und rechne die Zähler zusammen. Welcher Zähler steht über "+N+"? (mit Vorzeichen)",a:F(sumN),
+            ex:"<b>1. Vorzeichen zusammenfassen:</b><br>"+expr+"<br>= "+norm+"<br><b>2. Erweitern auf "+N+"</b> (oben und unten mit derselben Zahl malnehmen):<br>"+erw+"<br><b>3. Jetzt nur noch die Zähler rechnen:</b> "+numLine+" = ?<br>Rechne von links nach rechts und achte bei jedem Schritt auf das Vorzeichen.",
+            how:norm+" → Zähler über "+N+": "+numLine+" = <b>"+(sumN<0?M:"")+Math.abs(sumN)+"</b>, also "+(sumN<0?M:"")+frh(Math.abs(sumN),N),
+            err:[[F(wrongMM),"Achtung beim Vorzeichen des zweiten Bruchs: In der Aufgabe steht „"+ops[0]+" "+P(t[1])+"“. "+(ops[0]===M&&t[1].n<0?"Minus und Minus wird <b>Plus</b>.":ops[0]==="+"&&t[1].n<0?"Plus und Minus wird <b>Minus</b>.":ops[0]===M?"Das ist ein <b>Minus</b>.":"Das ist ein <b>Plus</b>.")+" Schreib die Aufgabe erst ohne Klammern auf: "+norm],
+              [F(wrongMM2),"Achtung beim Vorzeichen des dritten Bruchs: In der Aufgabe steht „"+ops[1]+" "+P(t[2])+"“. "+(ops[1]===M&&t[2].n<0?"Minus und Minus wird <b>Plus</b>.":ops[1]==="+"&&t[2].n<0?"Plus und Minus wird <b>Minus</b>.":ops[1]===M?"Das ist ein <b>Minus</b>.":"Das ist ein <b>Plus</b>.")+" Schreib die Aufgabe erst ohne Klammern auf: "+norm],
+              rawAdd!==sumN?[F(rawAdd),"Du hast die Zähler zusammengerechnet, <b>ohne vorher zu erweitern</b>. Das geht nur, wenn alle Brüche schon denselben Nenner haben. Erweitere zuerst jeden Bruch auf "+N+"."]:null]},
+          {l:"Kürze "+(sumN<0?M:"")+frh(Math.abs(sumN),N)+" vollständig. Wie lautet das Ergebnis?",a:res,m:"frac",red:true,
+            ex:g>1?"Suche die größte Zahl, durch die <b>"+Math.abs(sumN)+"</b> und <b>"+N+"</b> beide teilbar sind. Probier der Reihe nach 2, 3, 5, … oder gleich größere Teiler. Teile dann Zähler und Nenner durch diese Zahl. Das Vorzeichen bleibt.":"Prüfe, ob "+Math.abs(sumN)+" und "+N+" einen gemeinsamen Teiler haben (2, 3, 5, …). Wenn nicht, ist der Bruch schon vollständig gekürzt – dann gibst du ihn einfach so ein.",
+            how:g>1?(sumN<0?M:"")+frh(Math.abs(sumN),N)+" = "+(sumN<0?M:"")+frh(Math.abs(sumN)+":"+g,N+":"+g)+" = <b>"+S(res)+"</b>":"Nicht kürzbar → <b>"+S(res)+"</b>"}]}}
+    var a=rf(),b=rf(),c=rf();if(a.n>0&&b.n>0&&c.n>0)a=neg(a);
+    var expr=P(a)+" : "+P(b)+" · "+P(c),res=mul(dv(a,b),c),ng=[a,b,c].filter(function(f){return f.n<0}).length,kb=F(b.d,b.n),ar=ab(res);
+    var zN=Math.abs(a.n)+" · "+Math.abs(kb.n)+" · "+Math.abs(c.n),nN=a.d+" · "+kb.d+" · "+c.d;
     return {k:"br",kind:"num",ctx:"Berechne. Gib das Ergebnis vollständig gekürzt an.",q:expr,ans:res,mode:"frac",reduce:true,
-      gs:[{l:"Durch "+P(b)+" teilen heißt mit dem Kehrwert malnehmen. Was ist der Kehrwert von "+P(b)+"?",a:kb,m:"frac",ex:"Kehrwert: Zähler und Nenner tauschen. Das Vorzeichen bleibt gleich."},
-        {l:"Rechne jetzt "+P(a)+" · "+P(kb)+" · "+P(c)+". Ergebnis vollständig gekürzt?",a:res,m:"frac",red:true,ex:"1. Vorzeichen: Zähle die Minuszeichen. Gerade Anzahl → plus, ungerade → minus.<br>2. Zähler mal Zähler, Nenner mal Nenner. Vorher über Kreuz kürzen spart Arbeit."}],
-      tip:"Durch einen Bruch teilen heißt: mit dem Kehrwert malnehmen. Zähle die Minuszeichen für das Vorzeichen.",
-      steps:["Durch "+P(b)+" teilen = mit dem Kehrwert "+P(kb)+" malnehmen: "+P(a)+" · "+P(kb)+" · "+P(c),
-        "Vorzeichen: "+neg+" Minuszeichen → Ergebnis ist "+(neg%2?"negativ":"positiv")+".",
-        "Zähler mal Zähler, Nenner mal Nenner – vorher über Kreuz kürzen: <b>"+S(res)+"</b>"]}}
+      tip:"Plan: 1) Durch einen Bruch teilen = mit dem Kehrwert malnehmen. 2) Ohne Vorzeichen rechnen: alles auf einen Bruchstrich, vorher kürzen. 3) Zum Schluss das Vorzeichen bestimmen, indem du die Minuszeichen zählst.",
+      gs:[{l:"Teilen durch "+P(b)+" heißt malnehmen mit dem Kehrwert. Was ist der <b>Kehrwert</b> von "+P(b)+"?",a:kb,m:"frac",
+          ex:"Den Kehrwert bekommst du, indem du <b>Zähler und Nenner tauschst</b>: aus "+frh("x","y")+" wird "+frh("y","x")+". Das Vorzeichen bleibt dabei genau gleich. Also: Was steht bei "+P(b)+" oben, was unten? Tausche die beiden.",
+          how:"Kehrwert von "+P(b)+" = <b>"+P(kb)+"</b> (Zähler und Nenner getauscht)",
+          sg:"Beim Kehrwert bleibt das Vorzeichen gleich – nur oben und unten werden getauscht.",
+          err:[[b,"Das ist der Bruch selbst. Für den Kehrwert musst du Zähler und Nenner <b>tauschen</b>."]]},
+        {l:"Rechne erst <b>ohne Vorzeichen</b>: "+S(ab(a))+" · "+S(ab(kb))+" · "+S(ab(c))+" = ? (vollständig gekürzt)",a:ar,m:"frac",red:true,
+          ex:"Schreib alles auf einen Bruchstrich: oben "+zN+", unten "+nN+".<br><b>Vor dem Ausrechnen kürzen:</b> Such eine Zahl oben und eine unten, die einen gemeinsamen Teiler haben, und teile beide dadurch. Das darfst du auch über Kreuz machen. Erst danach oben und unten malnehmen.",
+          how:frh(zN,nN)+" = <b>"+S(ar)+"</b>",
+          err:[[neg(ar),"In diesem Schritt rechnest du noch <b>ohne Vorzeichen</b> – das Vorzeichen kommt im nächsten Schritt."],
+            [mul(mul(ab(a),ab(b)),ab(c)),"Du hast mit "+S(ab(b))+" malgenommen statt mit dem <b>Kehrwert</b> "+S(ab(kb))+". Beim Teilen durch einen Bruch nimmst du den Kehrwert."]]},
+        {l:"Jetzt das Vorzeichen: Zähle die Minuszeichen in der Aufgabe. Wie lautet das Ergebnis?",a:res,m:"frac",red:true,
+          ex:"In "+expr+" stehen <b>"+ng+"</b> negative Zahlen. Regel: <b>gerade</b> Anzahl Minuszeichen (0, 2, …) → Ergebnis positiv, <b>ungerade</b> Anzahl (1, 3) → Ergebnis negativ. Setz das passende Vorzeichen vor "+S(ar)+".",
+          how:ng+" Minuszeichen → "+(ng%2?"ungerade → negativ":"gerade → positiv")+": <b>"+S(res)+"</b>",
+          sg:"Zähle die negativen Zahlen in der Aufgabe noch einmal: "+ng+" Stück. Gerade Anzahl → plus, ungerade → minus."}]}}
+  /* ---------- Dezimalzahlen & Klammern ---------- */
   function gDZ(){var z=T(pick([-0.2,-0.3,-0.4,-0.5,-0.6,0.2,0.5])),k=pick([-6,-5,-4,-3,-2,2,3,4,5,6]),s=mul(z,F(k));
     var x;do{x=T(R(-30,30)/10)}while(x.n===0||eq(x,s));var y=sub(s,x),u;do{u=T(R(-40,40)/10)}while(u.n===0||u.d===1);var v=pick([-5,-4,-3,-2,2,3,4]);
-    var w=mul(u,F(v)),res=sub(F(k),w);
+    var w=mul(u,F(v)),res=sub(F(k),w),K=F(k);
+    var zd=1;while(mul(z,F(zd)).d!==1)zd*=10;var sS=mul(s,F(zd)),zS=mul(z,F(zd));
+    var u10=mul(ab(u),F(10));
     return {k:"dz",kind:"num",ctx:"Berechne. Achte auf Klammern und Punkt vor Strich.",
       q:"("+S(x,"dec")+" + "+P(y,"dec")+") : "+P(z,"dec")+" "+M+" "+P(u,"dec")+" · "+P(F(v),"dec"),ans:res,mode:"dec",
-      gs:[{l:"Zuerst die Klammer: "+S(x,"dec")+" + "+P(y,"dec")+" = ?",a:s,ex:"Was in der Klammer steht, kommt immer zuerst. Plus eine negative Zahl ist dasselbe wie minus."},
-        {l:"Jetzt teilen: "+S(s,"dec")+" : "+P(z,"dec")+" = ?",a:F(k),ex:"Tipp bei Kommazahlen: Verschiebe bei beiden Zahlen das Komma um gleich viele Stellen nach rechts, dann teilst du ohne Komma. Vorzeichen: gleich → plus, verschieden → minus."},
-        {l:"Punkt vor Strich: "+P(u,"dec")+" · "+P(F(v),"dec")+" = ?",a:w,ex:"Erst ohne Komma malnehmen, dann das Komma wieder setzen. Vorzeichen: gleich → plus, verschieden → minus."},
-        {l:"Zum Schluss: "+S(F(k),"dec")+" "+M+" "+P(w,"dec")+" = ?",a:res,ex:"Jetzt die Strichrechnung. Minus eine negative Zahl wird zu plus."}],
-      tip:"Reihenfolge: zuerst die Klammer, dann Punktrechnung (· und :), zuletzt Strichrechnung.",
-      steps:["Klammer: "+S(x,"dec")+" + "+P(y,"dec")+" = "+S(s,"dec"),"Teilen: "+S(s,"dec")+" : "+P(z,"dec")+" = "+S(F(k),"dec"),
-        "Punkt vor Strich: "+P(u,"dec")+" · "+P(F(v),"dec")+" = "+S(w,"dec"),"Zum Schluss: "+S(F(k),"dec")+" "+M+" "+P(w,"dec")+" = <b>"+S(res,"dec")+"</b>"]}}
+      tip:"Plan: 1) Klammer ausrechnen. 2) Punktrechnung (: und ·). 3) Ganz zum Schluss die Strichrechnung (+ und "+M+"). Schreib jedes Zwischenergebnis auf – genau so fragt dich die App Schritt für Schritt.",
+      gs:[{l:"Zuerst die Klammer: "+S(x,"dec")+" + "+P(y,"dec")+" = ?",a:s,
+          ex:(y.n<0?"„+ ("+S(y,"dec")+")“ ist dasselbe wie „"+M+" "+S(ab(y),"dec")+"“. ":"")+addRule(x,y),
+          how:S(x,"dec")+" + "+P(y,"dec")+" = <b>"+S(s,"dec")+"</b>",
+          err:[[sub(x,y),"Du hast subtrahiert. In der Klammer steht ein <b>Plus</b>: "+S(x,"dec")+" + "+P(y,"dec")+"."],
+            (x.n<0)!==(y.n<0)?[F((x.n<0?-1:1)*(Math.abs(x.n)*y.d+Math.abs(y.n)*x.d),x.d*y.d),"Bei <b>verschiedenen</b> Vorzeichen werden die Beträge nicht addiert, sondern <b>voneinander abgezogen</b>. "+addRule(x,y)]:null]},
+        {l:"Jetzt teilen: "+S(s,"dec")+" : "+P(z,"dec")+" = ?",a:K,
+          ex:"<b>Komma loswerden:</b> Schieb bei beiden Zahlen das Komma gleich weit nach rechts, bis der Teiler eine ganze Zahl ist: "+S(s,"dec")+" : "+P(z,"dec")+" ist dasselbe wie "+S(sS,"dec")+" : "+P(zS,"dec")+".<br><b>Ohne Vorzeichen teilen:</b> "+S(ab(sS),"dec")+" : "+S(ab(zS),"dec")+" = ?<br><b>Vorzeichen:</b> "+sgMD(s,z,":"),
+          how:S(s,"dec")+" : "+P(z,"dec")+" = "+S(sS,"dec")+" : "+P(zS,"dec")+" = <b>"+S(K,"dec")+"</b>",sg:sgMD(s,z,":"),cm:"Schieb das Komma bei <b>beiden</b> Zahlen um gleich viele Stellen – dann bleibt das Ergebnis gleich.",
+          err:[[mul(s,z),"Du hast <b>malgenommen</b> statt geteilt."],[dv(z,s),"Du hast andersherum geteilt ("+S(z,"dec")+" : "+S(s,"dec")+"). Die erste Zahl wird durch die zweite geteilt."]]},
+        {l:"Punkt vor Strich: "+P(u,"dec")+" · "+P(F(v),"dec")+" = ?",a:w,
+          ex:"<b>Erst ohne Komma und ohne Vorzeichen</b> rechnen: "+S(u10,"dec")+" · "+Math.abs(v)+" = ?<br><b>Dann das Komma setzen:</b> "+S(ab(u),"dec")+" hat eine Nachkommastelle, also bekommt auch das Ergebnis eine (teile durch 10).<br><b>Vorzeichen:</b> "+sgMD(u,F(v),"·"),
+          how:P(u,"dec")+" · "+P(F(v),"dec")+" = <b>"+S(w,"dec")+"</b>",sg:sgMD(u,F(v),"·"),cm:DEC_CM,
+          err:[[add(u,F(v)),"Du hast <b>addiert</b> statt malgenommen."]]},
+        {l:"Zum Schluss: "+S(K,"dec")+" "+M+" "+P(w,"dec")+" = ?",a:res,
+          ex:(w.n<0?"<b>Minus und Minus wird Plus:</b> "+S(K,"dec")+" "+M+" "+P(w,"dec")+" = "+S(K,"dec")+" + "+S(ab(w),"dec")+".<br>"+addRule(K,ab(w)):"Du rechnest "+S(K,"dec")+" "+M+" "+S(w,"dec")+", also "+S(K,"dec")+" + ("+M+S(w,"dec")+").<br>"+addRule(K,neg(w))),
+          how:S(K,"dec")+" "+M+" "+P(w,"dec")+" = <b>"+S(res,"dec")+"</b>",
+          err:[[add(K,w),w.n<0?"Du hast das <b>doppelte Minus</b> übersehen: "+M+" ("+S(w,"dec")+") wird zu <b>+ "+S(ab(w),"dec")+"</b>.":"Du hast addiert. Es heißt "+S(K,"dec")+" <b>minus</b> "+S(w,"dec")+"."]]}]}}
+  /* ---------- Rechenvorteile ---------- */
   var PAIRS=[[0.125,8],[0.25,4],[2.5,4],[0.5,2],[1.25,8],[0.2,5],[12.5,8],[25,4],[0.4,5]];
+  var PTIP={"0.125":"0,125 ist dasselbe wie "+frh(1,8)+" – und "+frh(1,8)+" · 8 = 1.","0.25":"0,25 ist ein Viertel – und vier Viertel sind 1.","2.5":"2,5 · 4: Rechne 2 · 4 und 0,5 · 4 und addiere.","0.5":"0,5 ist die Hälfte – zwei Hälften sind 1.","1.25":"1,25 · 8: Rechne 1 · 8 und 0,25 · 8 und addiere.","0.2":"0,2 ist ein Fünftel – fünf Fünftel sind 1.","12.5":"12,5 · 8: Rechne 12 · 8 und 0,5 · 8 und addiere.","25":"25 · 4 – denk an vier 25-Cent-Münzen.","0.4":"0,4 · 5: Rechne 4 · 5 und setz dann das Komma (eine Stelle)."};
   function gRV(){if(Math.random()<0.55){var pp=shuffle(PAIRS.slice()),p1=pp[0],p2=pp.find(function(p){return p[0]!==p1[0]&&p[1]!==p1[1]&&p[0]!==p1[1]&&p[1]!==p1[0]});
       var nums=[p1[0],p1[1],p2[0],p2[1]].map(function(x){return {v:x,neg:Math.random()<0.5}});if(!nums.some(function(n){return n.neg}))nums[R(0,3)].neg=true;
-      var order=shuffle([0,1,2,3]),fs=nums.map(function(n){return T(n.neg?-n.v:n.v)}),res=fs.reduce(function(a,b){return mul(a,b)},F(1)),neg=nums.filter(function(n){return n.neg}).length;
-      var q=order.map(function(i){return P(fs[i],"dec")}).join(" · ");
-      return {k:"rv",kind:"num",ctx:"Rechne geschickt. Tipp: Vertauschen und passende Paare bilden.",q:q,ans:res,mode:"dec",
-        gs:[{l:"Bilde ein Paar, das eine glatte Zahl ergibt: "+dec(T(p1[0]))+" · "+p1[1]+" = ? (erst mal ohne Vorzeichen)",a:T(p1[0]*p1[1]),ex:"Beim Malnehmen darfst du die Reihenfolge tauschen. Such dir die zwei Zahlen, die zusammen etwas Glattes ergeben."},
-          {l:"Das zweite Paar: "+dec(T(p2[0]))+" · "+p2[1]+" = ? (ohne Vorzeichen)",a:T(p2[0]*p2[1]),ex:"Genauso wie beim ersten Paar."},
-          {l:"Wie viele Minuszeichen gibt es? Gib das Ergebnis mit Vorzeichen an.",a:res,ex:"Multipliziere deine beiden Paar-Ergebnisse. Gerade Anzahl Minuszeichen → plus, ungerade → minus."}],
-        tip:"Suche zwei Zahlen, die zusammen eine glatte Zahl ergeben (z. B. 0,25 · 4 = 1).",
-        steps:["Vorzeichen zuerst: "+neg+" Minuszeichen → Ergebnis ist "+(neg%2?"negativ":"positiv")+".",
-          "Paare bilden: ("+dec(T(p1[0]))+" · "+p1[1]+") · ("+dec(T(p2[0]))+" · "+p2[1]+") = "+dec(T(p1[0]*p1[1]))+" · "+dec(T(p2[0]*p2[1])),
-          "Ergebnis: <b>"+S(res,"dec")+"</b>"]}}
+      var order=shuffle([0,1,2,3]),fs=nums.map(function(n){return T(n.neg?-n.v:n.v)}),res=fs.reduce(function(a,b){return mul(a,b)},F(1)),ng=nums.filter(function(n){return n.neg}).length;
+      var q=order.map(function(i){return P(fs[i],"dec")}).join(" · "),r1=T(p1[0]*p1[1]),r2=T(p2[0]*p2[1]);
+      return {k:"rv",kind:"num",ctx:"Rechne geschickt. Zeige, welchen Rechenvorteil du nutzt.",q:q,ans:res,mode:"dec",
+        tip:"Plan: Beim Malnehmen darfst du die Zahlen beliebig umsortieren (Vertauschungsgesetz). 1) Such dir Paare, die eine glatte Zahl ergeben. 2) Rechne die Paare. 3) Bestimme das Vorzeichen, indem du die Minuszeichen zählst.",
+        gs:[{l:"Bilde das erste Paar: "+dec(T(p1[0]))+" · "+p1[1]+" = ? (erst mal ohne Vorzeichen)",a:r1,ex:"Diese beiden Zahlen passen zusammen. "+PTIP[String(p1[0])],how:dec(T(p1[0]))+" · "+p1[1]+" = <b>"+dec(r1)+"</b>",cm:DEC_CM,
+            err:[[neg(r1),"In diesem Schritt noch <b>ohne Vorzeichen</b> – das kommt am Ende."]]},
+          {l:"Das zweite Paar: "+dec(T(p2[0]))+" · "+p2[1]+" = ? (ohne Vorzeichen)",a:r2,ex:PTIP[String(p2[0])],how:dec(T(p2[0]))+" · "+p2[1]+" = <b>"+dec(r2)+"</b>",cm:DEC_CM,
+            err:[[neg(r2),"In diesem Schritt noch <b>ohne Vorzeichen</b> – das kommt am Ende."]]},
+          {l:"Multipliziere "+dec(r1)+" · "+dec(r2)+" und setze das richtige Vorzeichen. Ergebnis?",a:res,
+            ex:"<b>Betrag:</b> "+dec(r1)+" · "+dec(r2)+" = ?<br><b>Vorzeichen:</b> In der Aufgabe stehen <b>"+ng+"</b> negative Zahlen. Gerade Anzahl Minuszeichen → plus, ungerade Anzahl → minus.",
+            how:dec(r1)+" · "+dec(r2)+" = "+dec(mul(r1,r2))+"; "+ng+" Minuszeichen → <b>"+S(res,"dec")+"</b>",sg:"Zähle die negativen Zahlen in der Aufgabe: "+ng+". "+(ng%2?"Ungerade":"Gerade")+" Anzahl → Ergebnis "+(ng%2?"negativ":"positiv")+"."}]}}
     var Sm=pick([2,4,5,10]),a=T(R(1,Sm*10-1)/10);if(a.d===1)a=T(a.n+0.3);var b=sub(F(Sm),a),fr=pick([[3,4],[1,2],[2,5],[3,5],[1,4],[5,2],[3,2]]),f=F((Math.random()<0.7?-1:1)*fr[0],fr[1]),res=mul(F(Sm),f);
-    return {k:"rv",kind:"num",ctx:"Rechne geschickt. Welcher Faktor kommt zweimal vor?",q:S(a,"dec")+" · "+P(f)+" + "+S(b,"dec")+" · "+P(f),ans:res,mode:"dec",
-      gs:[{l:"Klammere den gemeinsamen Faktor "+P(f)+" aus. Was ist "+S(a,"dec")+" + "+S(b,"dec")+"?",a:F(Sm),ex:"a · x + b · x = (a + b) · x. Rechne also zuerst die beiden anderen Zahlen zusammen."},
-        {l:Sm+" · "+P(f)+" = ?",a:res,ex:"Eine ganze Zahl mal einen Bruch: Zahl mal Zähler, Nenner bleibt. Dann kürzen oder in eine Dezimalzahl umwandeln."}],
-      tip:"Beide Produkte haben denselben Faktor. Klammere ihn aus: a · x + b · x = (a + b) · x.",
-      steps:["Gemeinsamen Faktor ausklammern: ("+S(a,"dec")+" + "+S(b,"dec")+") · "+P(f),S(a,"dec")+" + "+S(b,"dec")+" = "+Sm,
-        Sm+" · "+P(f)+" = <b>"+S(res,"dec")+"</b>"+(term(res)&&res.d!==1?" (= "+S(res,"frac")+")":"")]}}
+    return {k:"rv",kind:"num",ctx:"Rechne geschickt. Zeige, welchen Rechenvorteil du nutzt.",q:S(a,"dec")+" · "+P(f)+" + "+S(b,"dec")+" · "+P(f),ans:res,mode:"dec",
+      tip:"Plan: Beide Produkte haben denselben Faktor "+P(f)+". Klammere ihn aus (Verteilungsgesetz): a · x + b · x = (a + b) · x. Die Summe a + b ist eine glatte Zahl – das ist der Rechenvorteil.",
+      gs:[{l:"Klammere "+P(f)+" aus: ("+S(a,"dec")+" + "+S(b,"dec")+") · "+P(f)+". Was ist "+S(a,"dec")+" + "+S(b,"dec")+"?",a:F(Sm),
+          ex:"Statt zwei schwierige Produkte zu rechnen, fasst du zuerst die beiden anderen Zahlen zusammen: "+S(a,"dec")+" + "+S(b,"dec")+". Rechne erst die Ganzen, dann die Zehntel – es kommt eine glatte Zahl heraus.",
+          how:S(a,"dec")+" + "+S(b,"dec")+" = <b>"+Sm+"</b>",err:[[mul(a,b),"Du hast malgenommen. Nach dem Ausklammern werden die beiden Zahlen <b>addiert</b>."]]},
+        {l:Sm+" · "+P(f)+" = ?",a:res,
+          ex:"Ganze Zahl mal Bruch: Die ganze Zahl mit dem <b>Zähler</b> malnehmen, der Nenner bleibt: "+Sm+" · "+frh(fr[0],fr[1])+" = "+frh(Sm+"·"+fr[0],fr[1])+" = "+frh(Sm*fr[0],fr[1])+". Dann kürzen oder als Dezimalzahl schreiben.<br><b>Vorzeichen:</b> "+sgMD(F(Sm),f,"·"),
+          how:Sm+" · "+P(f)+" = <b>"+S(res,"dec")+"</b>"+(term(res)&&res.d!==1?" (= "+S(res,"frac")+")":""),sg:sgMD(F(Sm),f,"·"),
+          err:[[dv(F(Sm),f),"Du hast geteilt statt malgenommen."],[add(F(Sm),f),"Du hast addiert statt malgenommen."]]}]}}
+  /* ---------- Fehler finden ---------- */
   function gFF(){var v=R(0,2);
     if(v===0){var c=pick([-2,-3,-4,-5]),b=c*pick([-3,-2,2,3,4]),sum=c*pick([-4,-3,-2,2,3,4,5]),a=sum-b,wrong=a+b/c,res=sum/c;if(a===0)return gFF();
-      return {k:"ff",kind:"num",ctx:"Mira rechnet im Kopf und schreibt: ("+S(F(a))+" + "+P(F(b))+") : "+P(F(c))+" = "+S(F(a))+" + "+P(F(b))+" : "+P(F(c))+" = "+S(F(wrong)),
-        q:"Mira hat einen Fehler gemacht. Was ist das richtige Ergebnis?",ans:F(res),mode:"dec",helpMax:1,
-        gs:[{l:"Rechne zuerst die Klammer: "+S(F(a))+" + "+P(F(b))+" = ?",a:F(sum),ex:"Mira hat die Klammer weggelassen. Was in der Klammer steht, muss aber zuerst ausgerechnet werden."},
-          {l:"Jetzt teilen: "+S(F(sum))+" : "+P(F(c))+" = ?",a:F(res),ex:"Vorzeichen: gleich → plus, verschieden → minus."}],
-        tip:"Was in der Klammer steht, muss zuerst ausgerechnet werden.",
-        steps:["Fehler: Mira hat die Klammer weggelassen. Dadurch wird nur "+P(F(b))+" geteilt (Punkt vor Strich).","Richtig: zuerst die Klammer: "+S(F(a))+" + "+P(F(b))+" = "+S(F(sum)),
-          S(F(sum))+" : "+P(F(c))+" = <b>"+S(F(res))+"</b>"]}}
-    if(v===1){var A=pick([12,18,24,30,36]),divs=[1,2,3,4,6,12,18].filter(function(d){return A%d===0&&d<A}),b1,c1;
-      do{b1=-pick(divs);c1=pick(divs)}while(b1+c1===0||A%(b1+c1)!==0);var res2=A/(b1+c1),wr=A/b1+A/c1;
-      return {k:"ff",kind:"num",ctx:"Mira will "+A+" : ("+S(F(b1))+" + "+c1+") als "+A+" : "+P(F(b1))+" + "+A+" : "+c1+" rechnen. Das ergäbe "+S(F(wr))+".",
-        q:"Was ist das richtige Ergebnis von "+A+" : ("+S(F(b1))+" + "+c1+")?",ans:F(res2),mode:"dec",
-        gs:[{l:"Klammer zuerst: "+S(F(b1))+" + "+c1+" = ?",a:F(b1+c1),ex:"Durch eine Summe darf man nicht einzeln teilen. Rechne die Klammer aus."},
-          {l:A+" : "+P(F(b1+c1))+" = ?",a:F(res2),ex:"Vorzeichen: gleich → plus, verschieden → minus."}],
-        tip:"Darf man durch eine Summe einzeln teilen? Rechne zur Sicherheit erst die Klammer aus.",
-        steps:["Klammer zuerst: "+S(F(b1))+" + "+c1+" = "+S(F(b1+c1)),A+" : "+P(F(b1+c1))+" = <b>"+S(F(res2))+"</b>",
-          "Merke: Steht die Summe <i>vorne</i> ((a + b) : c), darf man aufteilen. Steht sie <i>hinten</i> (a : (b + c)), nicht!"]}}
+      var A=F(a),B=F(b),C=F(c),SU=F(sum);
+      return {k:"ff",kind:"num",ctx:"Mira rechnet im Kopf und schreibt: ("+S(A)+" + "+P(B)+") : "+P(C)+" = "+S(A)+" + "+P(B)+" : "+P(C)+" = "+S(F(wrong)),
+        q:"a) Wo liegt Miras Fehler? b) Rechne richtig. Was ist das Ergebnis?",ans:F(res),mode:"dec",
+        tip:"Miras Fehler: Sie hat die Klammer einfach weggelassen. Ohne Klammer gilt Punkt vor Strich – dann wird nur "+P(B)+" geteilt und nicht die ganze Summe. Richtig ist: erst die Klammer, dann teilen.",
+        gs:[{l:"Rechne zuerst die Klammer: "+S(A)+" + "+P(B)+" = ?",a:SU,ex:"Die Klammer bedeutet: <b>Erst</b> zusammenrechnen, <b>dann</b> teilen. "+addRule(A,B),how:S(A)+" + "+P(B)+" = <b>"+S(SU)+"</b>",
+            err:[[sub(A,B),"In der Klammer steht ein <b>Plus</b>."]]},
+          {l:"Jetzt die ganze Summe teilen: "+S(SU)+" : "+P(C)+" = ?",a:F(res),ex:"Teile ohne Vorzeichen: "+Math.abs(sum)+" : "+Math.abs(c)+". "+sgMD(SU,C,":"),how:S(SU)+" : "+P(C)+" = <b>"+S(F(res))+"</b>",sg:sgMD(SU,C,":"),
+            err:[[F(wrong),"Das ist genau <b>Miras Fehler</b>: Du hast nur "+P(B)+" geteilt. Die Klammer sagt aber: Die <b>ganze</b> Summe "+S(SU)+" wird geteilt."],[mul(SU,C),"Du hast malgenommen statt geteilt."]]}]}}
+    if(v===1){var A2=pick([12,18,24,30,36]),divs=[1,2,3,4,6,12,18].filter(function(d){return A2%d===0&&d<A2}),b1,c1;
+      do{b1=-pick(divs);c1=pick(divs)}while(b1+c1===0||A2%(b1+c1)!==0);var res2=A2/(b1+c1),wr=A2/b1+A2/c1,BC=F(b1+c1);
+      return {k:"ff",kind:"num",ctx:"Mira will "+A2+" : ("+S(F(b1))+" + "+c1+") als "+A2+" : "+P(F(b1))+" + "+A2+" : "+c1+" rechnen. Das ergäbe "+S(F(wr))+".",
+        q:"a) Warum scheitert Miras Vorschlag? b) Was ist das richtige Ergebnis von "+A2+" : ("+S(F(b1))+" + "+c1+")?",ans:F(res2),mode:"dec",
+        tip:"Die Klammer steht hier <b>hinter</b> dem Geteiltzeichen. Durch eine Summe darf man nicht „stückweise“ teilen. Prüf es mit einfachen Zahlen: 12 : (2 + 4) = 12 : 6 = 2, aber 12 : 2 + 12 : 4 = 6 + 3 = 9. Aufteilen geht nur, wenn die Summe <b>vorne</b> steht: (a + b) : c = a : c + b : c.",
+        gs:[{l:"Klammer zuerst: "+S(F(b1))+" + "+c1+" = ?",a:BC,ex:addRule(F(b1),F(c1)),how:S(F(b1))+" + "+c1+" = <b>"+S(BC)+"</b>"},
+          {l:A2+" : "+P(BC)+" = ?",a:F(res2),ex:"Teile ohne Vorzeichen: "+A2+" : "+Math.abs(b1+c1)+". "+sgMD(F(A2),BC,":"),how:A2+" : "+P(BC)+" = <b>"+S(F(res2))+"</b>",sg:sgMD(F(A2),BC,":"),
+            err:[[F(wr),"Das ist <b>Miras</b> Ergebnis – genau das ist falsch. Durch eine Summe darf man nicht einzeln teilen. Rechne "+A2+" : "+P(BC)+"."]]}]}}
     var p=R(2,9),q=R(2,9),wrong3=p-q,res3=p+q;if(wrong3===res3)return gFF();
-    return {k:"ff",kind:"num",ctx:"Tim schreibt: "+p+" "+M+" ("+M+q+") = "+S(F(wrong3)),q:"Tim hat sich vertan. Was ist richtig?",ans:F(res3),mode:"dec",helpMax:1,
-      gs:[{l:"Rechne richtig: "+p+" "+M+" ("+M+q+") = ?",a:F(res3),ex:"Minus und Minus direkt hintereinander wird Plus: "+p+" "+M+" ("+M+q+") = "+p+" + "+q+"."}],
-      tip:"Was passiert, wenn man eine negative Zahl abzieht?",
-      steps:["Minus und Minus direkt hintereinander wird Plus: "+p+" "+M+" ("+M+q+") = "+p+" + "+q,"= <b>"+res3+"</b>","Tim hat das Minus in der Klammer übersehen."]}}
+    return {k:"ff",kind:"num",ctx:"Tim schreibt: "+p+" "+M+" ("+M+q+") = "+S(F(wrong3)),q:"a) Was hat Tim falsch gemacht? b) Was ist richtig?",ans:F(res3),mode:"dec",
+      tip:"Tim hat das Minus in der Klammer übersehen. Eine negative Zahl abziehen heißt auf der Zahlengeraden nach <b>rechts</b> gehen – das Ergebnis wird größer.",
+      gs:[{l:"Rechne richtig: "+p+" "+M+" ("+M+q+") = ?",a:F(res3),ex:"Zwei Minuszeichen direkt hintereinander („"+M+" ("+M+"…)“) werden zu einem <b>Plus</b>: "+p+" "+M+" ("+M+q+") = "+p+" + "+q+". Denk an Schulden: Werden dir "+q+" € Schulden <b>weggenommen</b>, hast du mehr Geld.",
+        how:p+" "+M+" ("+M+q+") = "+p+" + "+q+" = <b>"+res3+"</b>",
+        err:[[F(wrong3),"Das ist <b>Tims Fehler</b>: Er hat das Minus in der Klammer übersehen. "+M+" ("+M+q+") ist dasselbe wie + "+q+"."],[F(-res3),"Der Betrag stimmt, aber minus minus ergibt <b>plus</b> – das Ergebnis ist positiv."]]}]}}
+  /* ---------- Textaufgaben ---------- */
   function gTX(){var v=R(0,2);
-    if(v===0){var h0=pick([8,9,10]),T0=T(pick([-3,-2.5,-2,-1.5,-1])),r=T(pick([0.25,0.5,0.75])),n=13-h0,T1=add(T0,mul(r,F(n))),h2=pick([16,17]),m=h2-13;
+    if(v===0){var h0=pick([8,9,10]),T0=T(pick([-3,-2.5,-2,-1.5,-1])),r=T(pick([0.25,0.5,0.75])),n=13-h0,rise=mul(r,F(n)),T1=add(T0,rise),h2=pick([16,17]),m=h2-13;
       var T2,d;do{d=T(pick([0.75,1,1.25,1.5,2]));T2=sub(T1,mul(d,F(m)))}while(T2.n>=0);
       var ctx="Um "+h0+" Uhr zeigt ein Thermometer "+S(T0,"dec")+" °C. Bis 13 Uhr steigt die Temperatur jede Stunde um "+dec(r)+" °C. Danach kühlt es bis "+h2+" Uhr gleichmäßig auf "+S(T2,"dec")+" °C ab.";
       if(Math.random()<0.5)return {k:"tx",kind:"num",ctx:ctx,q:"Welche Temperatur zeigt das Thermometer um 13 Uhr?",ans:T1,mode:"dec",unit:"°C",
-        gs:[{l:"Wie viele Stunden sind es von "+h0+" bis 13 Uhr?",a:F(n),u:"Stunden",ex:"Zähle die Stunden ab: "+h0+" → "+(h0+1)+" → … → 13."},
-          {l:"Um wie viel Grad steigt die Temperatur in dieser Zeit?",a:mul(r,F(n)),u:"°C",ex:"Anzahl Stunden · Anstieg pro Stunde ("+dec(r)+" °C)."},
-          {l:"Welche Temperatur zeigt das Thermometer um 13 Uhr?",a:T1,u:"°C",ex:"Starttemperatur + Anstieg. Achte auf das Minus bei der Starttemperatur."}],tip:"Wie viele Stunden sind es von "+h0+" bis 13 Uhr?",
-        steps:["Von "+h0+" bis 13 Uhr sind es "+n+" Stunden.","Anstieg: "+n+" · "+dec(r)+" = "+dec(mul(r,F(n)))+" °C",S(T0,"dec")+" + "+dec(mul(r,F(n)))+" = <b>"+S(T1,"dec")+" °C</b>"]};
-      return {k:"tx",kind:"num",ctx:ctx+" Um 13 Uhr sind es "+S(T1,"dec")+" °C.",q:"Um wie viel Grad ändert sich die Temperatur von 13 bis "+h2+" Uhr pro Stunde? Gib die Änderung mit Vorzeichen an.",ans:F(-d.n,d.d),mode:"dec",unit:"°C",
-        gs:[{l:"Wie groß ist die Änderung insgesamt von 13 bis "+h2+" Uhr? (Endwert "+M+" Anfangswert)",a:sub(T2,T1),u:"°C",ex:"Rechne "+S(T2,"dec")+" "+M+" "+P(T1,"dec")+". Kühlt es ab, ist die Änderung negativ."},
-          {l:"Wie viele Stunden sind es von 13 bis "+h2+" Uhr?",a:F(m),u:"Stunden",ex:"Zähle die Stunden ab."},
-          {l:"Wie groß ist die Änderung pro Stunde? (mit Vorzeichen)",a:F(-d.n,d.d),u:"°C",ex:"Teile die Gesamtänderung durch die Anzahl der Stunden. Minus geteilt durch Plus bleibt Minus."}],
-        tip:"Änderung = Endwert "+M+" Anfangswert. Dann durch die Anzahl der Stunden teilen.",
-        steps:["Änderung insgesamt: "+S(T2,"dec")+" "+M+" "+P(T1,"dec")+" = "+S(sub(T2,T1),"dec")+" °C","In "+m+" Stunden: "+S(sub(T2,T1),"dec")+" : "+m+" = <b>"+S(F(-d.n,d.d),"dec")+" °C</b> pro Stunde"]}}
-    if(v===1){var s0=pick([-4,-5,-6,-8]),pl=T(pick([3.5,4.5,5])),mi=T(pick([2,2.5,3])),ri=R(2,4),wr=R(1,3),pts=add(F(s0),sub(mul(pl,F(ri)),mul(mi,F(wr))));
-      return {k:"tx",kind:"num",ctx:"Beim Zahlenquiz startet Team Blau mit "+S(F(s0))+" Punkten. Für eine richtige Antwort gibt es "+dec(pl)+" Punkte, für eine falsche werden "+dec(mi)+" Punkte abgezogen.",
+        tip:"Plan: 1) Wie viele Stunden steigt die Temperatur? 2) Um wie viel steigt sie insgesamt (Stunden · Anstieg pro Stunde)? 3) Starttemperatur + Anstieg. Mal dir eine senkrechte Zahlengerade wie ein Thermometer aufs Schmierblatt.",
+        gs:[{l:"Wie viele Stunden sind es von "+h0+" bis 13 Uhr?",a:F(n),u:"Stunden",ex:"Zähle die <b>Abstände</b> zwischen den Uhrzeiten, nicht die Uhrzeiten selbst: 13 "+M+" "+h0+" = ?",how:"13 "+M+" "+h0+" = <b>"+n+" Stunden</b>",
+            err:[[F(n+1),"Du hast die Uhrzeiten gezählt ("+h0+", "+(h0+1)+", …, 13). Gefragt sind die Stunden <b>dazwischen</b>: 13 "+M+" "+h0+"."]]},
+          {l:"Um wie viel Grad steigt die Temperatur in diesen "+n+" Stunden?",a:rise,u:"°C",ex:"Jede Stunde "+dec(r)+" °C mehr. In "+n+" Stunden also "+n+" · "+dec(r)+". Tipp: "+dec(r)+" · 4 = "+dec(mul(r,F(4)))+".",how:n+" · "+dec(r)+" = <b>"+dec(rise)+" °C</b>",cm:DEC_CM,
+            err:[[add(r,F(n)),"Du hast addiert. Der Anstieg kommt <b>jede</b> Stunde dazu – also malnehmen: "+n+" · "+dec(r)+"."]]},
+          {l:"Welche Temperatur zeigt das Thermometer um 13 Uhr?",a:T1,u:"°C",ex:"Starttemperatur + Anstieg: "+S(T0,"dec")+" + "+dec(rise)+". "+addRule(T0,rise)+" Stell es dir am Thermometer vor: Von "+S(T0,"dec")+" geht es "+dec(rise)+" Grad nach <b>oben</b>.",
+            how:S(T0,"dec")+" + "+dec(rise)+" = <b>"+S(T1,"dec")+" °C</b>",
+            err:[[sub(T0,rise),"Die Temperatur <b>steigt</b> – also musst du den Anstieg <b>addieren</b>, nicht abziehen."],[add(ab(T0),rise),"Achtung: Die Starttemperatur ist <b>negativ</b> ("+S(T0,"dec")+")."]]}]};
+      var ch=sub(T2,T1);
+      return {k:"tx",kind:"num",ctx:ctx+" Um 13 Uhr sind es "+S(T1,"dec")+" °C.",q:"Um wie viel Grad ändert sich die Temperatur von 13 bis "+h2+" Uhr pro Stunde? Gib die Änderung mit Vorzeichen an.",ans:neg(d),mode:"dec",unit:"°C",
+        tip:"Plan: 1) Änderung insgesamt = Endwert "+M+" Anfangswert. 2) Wie viele Stunden? 3) Änderung insgesamt durch Stunden teilen. Wird es kälter, ist die Änderung negativ.",
+        gs:[{l:"Wie groß ist die Änderung insgesamt von 13 bis "+h2+" Uhr? (Endwert "+M+" Anfangswert)",a:ch,u:"°C",
+            ex:"Rechne <b>Endwert "+M+" Anfangswert</b> = "+S(T2,"dec")+" "+M+" "+P(T1,"dec")+". "+(T1.n<0?"Minus und Minus wird Plus: "+S(T2,"dec")+" + "+S(ab(T1),"dec")+". ":"")+"Kühlt es ab, muss eine <b>negative</b> Zahl herauskommen.",
+            how:S(T2,"dec")+" "+M+" "+P(T1,"dec")+" = <b>"+S(ch,"dec")+" °C</b>",sg:"Es wird kälter – die Änderung muss <b>negativ</b> sein.",
+            err:[[sub(T1,T2),"Du hast andersherum gerechnet (Anfang "+M+" Ende). Die Änderung ist immer <b>Ende "+M+" Anfang</b> – beim Abkühlen kommt etwas Negatives heraus."]]},
+          {l:"Wie viele Stunden sind es von 13 bis "+h2+" Uhr?",a:F(m),u:"Stunden",ex:"Abstand der Uhrzeiten: "+h2+" "+M+" 13.",how:h2+" "+M+" 13 = <b>"+m+" Stunden</b>",err:[[F(m+1),"Du hast die Uhrzeiten gezählt. Gefragt ist der Abstand: "+h2+" "+M+" 13."]]},
+          {l:"Wie groß ist die Änderung <b>pro Stunde</b>? (mit Vorzeichen)",a:neg(d),u:"°C",ex:"Teile die Gesamtänderung durch die Stunden: "+S(ch,"dec")+" : "+m+". Ohne Vorzeichen: "+dec(ab(ch))+" : "+m+". "+sgMD(ch,F(m),":"),
+            how:S(ch,"dec")+" : "+m+" = <b>"+S(neg(d),"dec")+" °C pro Stunde</b>",sg:sgMD(ch,F(m),":"),
+            err:[[mul(ch,F(m)),"Du hast malgenommen. Die Änderung wird auf die Stunden <b>verteilt</b> – also teilen."]]}]}}
+    if(v===1){var s0=pick([-4,-5,-6,-8]),pl=T(pick([3.5,4.5,5])),mi=T(pick([2,2.5,3])),ri=R(2,4),wr=R(1,3),P1=mul(pl,F(ri)),M1=mul(mi,F(wr)),pts=add(F(s0),sub(P1,M1)),S0=F(s0);
+      return {k:"tx",kind:"num",ctx:"Beim Zahlenquiz startet Team Blau mit "+S(S0)+" Punkten. Für eine richtige Antwort gibt es "+dec(pl)+" Punkte, für eine falsche werden "+dec(mi)+" Punkte abgezogen.",
         q:"Nach "+(ri+wr)+" Runden hat das Team "+ri+"-mal richtig und "+wr+"-mal falsch geantwortet. Wie viele Punkte hat es jetzt?",ans:pts,mode:"dec",unit:"Punkte",
-        gs:[{l:"Wie viele Punkte gibt es für die "+ri+" richtigen Antworten?",a:mul(pl,F(ri)),u:"Punkte",ex:ri+" · "+dec(pl)+" rechnen."},
-          {l:"Wie viele Punkte werden für die "+wr+" falschen Antworten abgezogen?",a:mul(mi,F(wr)),u:"Punkte",ex:wr+" · "+dec(mi)+" rechnen."},
-          {l:"Wie viele Punkte hat das Team jetzt?",a:pts,u:"Punkte",ex:"Startwert ("+S(F(s0))+") + Pluspunkte "+M+" Minuspunkte."}],
-        tip:"Startwert + Pluspunkte "+M+" Minuspunkte.",
-        steps:["Pluspunkte: "+ri+" · "+dec(pl)+" = "+dec(mul(pl,F(ri))),"Minuspunkte: "+wr+" · "+dec(mi)+" = "+dec(mul(mi,F(wr))),S(F(s0))+" + "+dec(mul(pl,F(ri)))+" "+M+" "+dec(mul(mi,F(wr)))+" = <b>"+S(pts,"dec")+" Punkte</b>"]}}
-    var K=T(pick([12.4,15.6,19.8,21.2])),pk=T(pick([3.6,4.2,4.8])),ln=T(pick([1.25,1.5,1.75,2])),st=sub(F(-K.n,K.d),mul(pk,F(2)));
+        tip:"Plan: 1) Pluspunkte ausrechnen. 2) Minuspunkte ausrechnen. 3) Startwert + Pluspunkte "+M+" Minuspunkte. Den negativen Startwert nicht vergessen!",
+        gs:[{l:"Wie viele Punkte gibt es für die "+ri+" richtigen Antworten?",a:P1,u:"Punkte",ex:"Für jede richtige Antwort "+dec(pl)+" Punkte: "+ri+" · "+dec(pl)+" = ?",how:ri+" · "+dec(pl)+" = <b>"+dec(P1)+"</b>",cm:DEC_CM},
+          {l:"Wie viele Punkte werden für die "+wr+" falschen Antworten abgezogen?",a:M1,u:"Punkte",ex:"Für jede falsche Antwort "+dec(mi)+" Punkte weg: "+wr+" · "+dec(mi)+" = ? (Gib den Betrag ohne Minus ein.)",how:wr+" · "+dec(mi)+" = <b>"+dec(M1)+"</b>",cm:DEC_CM,
+            err:[[neg(M1),"Gefragt ist hier nur, <b>wie viele</b> Punkte abgezogen werden (ohne Minus). Das Abziehen kommt im nächsten Schritt."]]},
+          {l:"Wie viele Punkte hat das Team jetzt?",a:pts,u:"Punkte",ex:"Startwert + Pluspunkte "+M+" Minuspunkte: "+S(S0)+" + "+dec(P1)+" "+M+" "+dec(M1)+". Rechne von links nach rechts. Erst "+S(S0)+" + "+dec(P1)+": "+addRule(S0,P1),
+            how:S(S0)+" + "+dec(P1)+" "+M+" "+dec(M1)+" = <b>"+S(pts,"dec")+"</b>",
+            err:[[add(add(S0,P1),M1),"Die Punkte für falsche Antworten werden <b>abgezogen</b>, nicht dazugezählt."],[sub(P1,M1),"Du hast den <b>Startwert "+S(S0)+"</b> vergessen."],[add(F(-s0),sub(P1,M1)),"Achtung: Der Startwert ist <b>negativ</b> ("+S(S0)+")."]]}]}}
+    var K=T(pick([12.4,15.6,19.8,21.2])),pk=T(pick([3.6,4.2,4.8])),ln=T(pick([1.25,1.5,1.75,2])),PK=mul(pk,F(2)),st=sub(neg(K),PK);
     var ctx="Das Schulfest-Café startet mit "+M+eu(K)+" € in der Kasse (Minus). Vor dem Verkauf kauft die Klasse zwei Packungen Becher für je "+eu(pk)+" €. Jede Limonade bringt "+eu(ln)+" € ein.";
     var w=R(0,2);
-    if(w===0)return {k:"tx",kind:"num",ctx:ctx,q:"Wie hoch ist der Kassenstand nach dem Becherkauf, vor dem ersten Verkauf? Mit Vorzeichen.",ans:st,mode:"dec",unit:"€",money:true,
-      gs:[{l:"Was kosten die zwei Packungen Becher zusammen?",a:mul(pk,F(2)),u:"€",money:true,ex:"2 · "+eu(pk)+" €"},
-        {l:"Wie hoch ist der Kassenstand nach dem Kauf? (mit Vorzeichen)",a:st,u:"€",money:true,ex:"Die Kasse steht schon im Minus. Ausgaben machen das Minus größer: "+M+eu(K)+" "+M+" Becherkosten."}],tip:"Ausgaben werden abgezogen – der Stand wird noch negativer.",
-      steps:["Becher: 2 · "+eu(pk)+" = "+eu(mul(pk,F(2)))+" €",M+eu(K)+" "+M+" "+eu(mul(pk,F(2)))+" = <b>"+eu(st)+" €</b>"]};
-    if(w===1){var n=R(5,12),e=add(st,mul(ln,F(n)));return {k:"tx",kind:"num",ctx:ctx+" Nach dem Becherkauf steht die Kasse bei "+eu(st)+" €.",q:"Wie hoch ist der Kassenstand nach "+n+" verkauften Limonaden?",ans:e,mode:"dec",unit:"€",money:true,
-      gs:[{l:"Wie viel Geld bringen "+n+" Limonaden ein?",a:mul(ln,F(n)),u:"€",money:true,ex:n+" · "+eu(ln)+" €"},
-        {l:"Wie hoch ist der Kassenstand jetzt?",a:e,u:"€",money:true,ex:"Kassenstand ("+eu(st)+" €) + Einnahmen."}],tip:"Einnahmen: Anzahl · Preis. Dann zum Kassenstand addieren.",
-      steps:["Einnahmen: "+n+" · "+eu(ln)+" = "+eu(mul(ln,F(n)))+" €",eu(st)+" + "+eu(mul(ln,F(n)))+" = <b>"+eu(e)+" €</b>"]}}
-    var need=0;while(add(st,mul(ln,F(need))).n<=0)need++;
-    return {k:"tx",kind:"num",ctx:ctx+" Nach dem Becherkauf steht die Kasse bei "+eu(st)+" €.",q:"Wie viele Limonaden muss die Klasse mindestens verkaufen, damit der Kassenstand positiv ist?",ans:F(need),mode:"dec",unit:"Limonaden",helpMax:2,
-      gs:[{l:"Wie viel Euro fehlen noch bis 0 €?",a:F(-st.n,st.d),u:"€",money:true,ex:"Der Betrag ohne Minuszeichen ist das, was fehlt."},
-        {l:"Wie viele Limonaden muss die Klasse mindestens verkaufen, damit die Kasse im Plus ist?",a:F(need),u:"Limonaden",ex:"Teile den fehlenden Betrag durch "+eu(ln)+" €. Kommt keine ganze Zahl heraus, rundest du <b>auf</b>. Ist es genau eine ganze Zahl, steht die Kasse damit erst bei 0 € – dann brauchst du eine Limonade mehr."}],
-      tip:"Teile den fehlenden Betrag durch den Preis einer Limonade und runde passend.",
-      steps:["Fehlender Betrag: "+eu(F(-st.n,st.d))+" €",eu(F(-st.n,st.d))+" : "+eu(ln)+" ≈ "+(Math.abs(st.n/st.d)/(ln.n/ln.d)).toLocaleString("de-DE",{maximumFractionDigits:2}),
-        "Mit "+(need-1)+" Limonaden ist die Kasse bei "+eu(add(st,mul(ln,F(need-1))))+" € – noch nicht positiv. Mit "+need+" sind es "+eu(add(st,mul(ln,F(need))))+" €.","Also mindestens <b>"+need+" Limonaden</b>."]}}
+    if(w===0)return {k:"tx",kind:"num",ctx:ctx,q:"Wie hoch ist der Kassenstand nach dem Becherkauf, vor dem ersten Verkauf? Gib ihn mit Vorzeichen an.",ans:st,mode:"dec",unit:"€",money:true,
+      tip:"Plan: 1) Was kosten die Becher zusammen? 2) Ausgaben werden vom Kassenstand abgezogen – das Minus wird größer. Denk an ein Konto, das schon im Minus ist.",
+      gs:[{l:"Was kosten die zwei Packungen Becher zusammen?",a:PK,u:"€",money:true,ex:"2 · "+eu(pk)+" € – rechne erst die Euro, dann die Cent.",how:"2 · "+eu(pk)+" = <b>"+eu(PK)+" €</b>",cm:DEC_CM},
+        {l:"Wie hoch ist der Kassenstand nach dem Kauf? (mit Vorzeichen)",a:st,u:"€",money:true,ex:"Die Kasse steht schon bei "+M+eu(K)+" €. Jede Ausgabe macht das Minus <b>größer</b>: "+M+eu(K)+" "+M+" "+eu(PK)+". Beide Beträge zusammenzählen und das Minus davor.",
+          how:M+eu(K)+" "+M+" "+eu(PK)+" = <b>"+eu(st)+" €</b>",sg:"Die Kasse ist im <b>Minus</b> und es wird Geld ausgegeben – der Stand bleibt negativ.",
+          err:[[add(neg(K),PK),"Ausgaben werden <b>abgezogen</b>. Die Kasse rutscht also noch weiter ins Minus."]]}]};
+    if(w===1){var n=R(5,12),inc=mul(ln,F(n)),e=add(st,inc);return {k:"tx",kind:"num",ctx:ctx+" Nach dem Becherkauf steht die Kasse bei "+eu(st)+" €.",q:"Wie hoch ist der Kassenstand nach "+n+" verkauften Limonaden?",ans:e,mode:"dec",unit:"€",money:true,
+      tip:"Plan: 1) Einnahmen = Anzahl · Preis. 2) Einnahmen zum (negativen) Kassenstand dazuzählen.",
+      gs:[{l:"Wie viel Geld bringen "+n+" Limonaden ein?",a:inc,u:"€",money:true,ex:n+" · "+eu(ln)+" €. Tipp: Rechne erst "+n+" · "+Math.floor(ln.n/ln.d)+" und dann "+n+" · "+dec(sub(ln,F(Math.floor(ln.n/ln.d))))+" und addiere.",how:n+" · "+eu(ln)+" = <b>"+eu(inc)+" €</b>",cm:DEC_CM},
+        {l:"Wie hoch ist der Kassenstand jetzt?",a:e,u:"€",money:true,ex:"Kassenstand + Einnahmen: "+eu(st)+" + "+eu(inc)+". "+addRule(st,inc),how:eu(st)+" + "+eu(inc)+" = <b>"+eu(e)+" €</b>",
+          err:[[sub(st,inc),"Einnahmen werden <b>dazugezählt</b> – die Kasse kommt dem Plus näher."],[add(ab(st),inc),"Achtung: Der Kassenstand ist <b>negativ</b> ("+eu(st)+" €)."]]}]}}
+    var need=0;while(add(st,mul(ln,F(need))).n<=0)need++;var miss=neg(st),qq=Math.abs(st.n/st.d)/(ln.n/ln.d);
+    return {k:"tx",kind:"num",ctx:ctx+" Nach dem Becherkauf steht die Kasse bei "+eu(st)+" €.",q:"Wie viele Limonaden muss die Klasse mindestens verkaufen, damit der Kassenstand positiv ist? Zeige auch, warum eine weniger nicht reicht.",ans:F(need),mode:"dec",unit:"Limonaden",
+      tip:"Plan: 1) Wie viel Geld fehlt bis 0 €? 2) Fehlbetrag durch den Preis einer Limonade teilen. 3) Passend runden – und mit „eine weniger“ prüfen.",
+      gs:[{l:"Wie viel Euro fehlen noch bis 0 €?",a:miss,u:"€",money:true,ex:"Die Kasse steht bei "+eu(st)+" €. Bis 0 € fehlt genau der Betrag ohne Minuszeichen.",how:"Es fehlen <b>"+eu(miss)+" €</b>",
+          err:[[st,"Gefragt ist, wie viel <b>fehlt</b> – das ist ein positiver Betrag (ohne Minus)."]]},
+        {l:"Wie viele Limonaden muss die Klasse mindestens verkaufen, damit die Kasse im Plus ist?",a:F(need),u:"Limonaden",
+          ex:"Teile "+eu(miss)+" durch "+eu(ln)+" (Tipp: Komma bei beiden um zwei Stellen verschieben). Das Ergebnis ist ungefähr "+qq.toLocaleString("de-DE",{maximumFractionDigits:2})+".<br>Kommt keine ganze Zahl heraus, musst du <b>aufrunden</b> – abrunden reicht nicht. Kommt genau eine ganze Zahl heraus, steht die Kasse damit erst bei <b>0 €</b> (nicht im Plus) – dann brauchst du noch eine mehr.<br>Prüfe zum Schluss: "+eu(st)+" + Anzahl · "+eu(ln)+" muss größer als 0 sein.",
+          how:eu(miss)+" : "+eu(ln)+" ≈ "+qq.toLocaleString("de-DE",{maximumFractionDigits:2})+" → mit "+(need-1)+" Limonaden: "+eu(add(st,mul(ln,F(need-1))))+" € (noch nicht im Plus), mit "+need+": "+eu(add(st,mul(ln,F(need))))+" € → mindestens <b>"+need+" Limonaden</b>",
+          err:[[F(need-1),"Fast! Prüf mal: Mit "+(need-1)+" Limonaden ist die Kasse bei "+eu(add(st,mul(ln,F(need-1))))+" € – das ist noch <b>nicht im Plus</b>. Du musst aufrunden."],
+            [F(need+1),"Eine zu viel: Schon mit "+need+" Limonaden ist die Kasse bei "+eu(add(st,mul(ln,F(need))))+" € – also im Plus."]]}]}}
   var GEN={wf:gWF,zg:gZG,br:gBR,dz:gDZ,rv:gRV,ff:gFF,tx:gTX};
   /* ---------- Ablauf (geführte Zwischenschritte) ---------- */
   var topic="probe",Tk=null,tries=0,done=false,hlp=0,si=0,mist=0,rev=0,PROBE=["wf","zg","br","dz","rv","ff","tx","tx"],pi=0,score=[];
@@ -2872,7 +2969,7 @@ if(player)loadPlayer();migrate();rebuild();drawRandom();renderStats();renderStag
     var i=$("ka-in");i.value="";i.disabled=false;i.className="a-in";
     $("ka-hint").hidden=true;$("ka-hol").innerHTML="";$("ka-sol").hidden=true}
   function doneLine(g,how){var li=document.createElement("li");li.className=how;
-    li.innerHTML='<span class="ka-dl">'+g.l+'</span><span class="ka-dv">'+(how==="rev"?"Lösung: ":"")+gv(g)+(g.u?" "+g.u:"")+(how==="ok"?" ✓":"")+'</span>';$("ka-done").appendChild(li);$("ka-done").hidden=false}
+    li.innerHTML='<span class="ka-dl">'+g.l+'</span><span class="ka-dv">'+(how==="rev"?"Lösung: ":"")+gv(g)+(g.u?" "+g.u:"")+(how==="ok"?" ✓":"")+'</span>'+(how==="rev"&&g.how?'<span class="ka-dl">'+g.how+'</span>':'');$("ka-done").appendChild(li);$("ka-done").hidden=false}
   function render(){var t=Tk;tries=0;done=false;hlp=0;si=0;mist=0;rev=0;$("ka-hint").hidden=true;$("ka-hol").innerHTML="";$("ka-help").hidden=false;
     $("ka-tag").textContent=(topic==="probe"?"Aufgabe "+(pi+1)+" von "+PROBE.length+" · ":"")+NAMES[t.k];
     $("ka-ctx").innerHTML=t.ctx||"";$("ka-ctx").hidden=!t.ctx;$("ka-q").innerHTML=t.q;$("ka-svg").innerHTML=t.svg||"";$("ka-svg").hidden=!t.svg;
@@ -2883,13 +2980,19 @@ if(player)loadPlayer();migrate();rebuild();drawRandom();renderStats();renderStag
     $("ka-task").hidden=false;$("ka-sum").hidden=true;$("ka-pad").hidden=false;
     if(!wf)showStep();
     $("ka-padq").innerHTML=t.q;padClear()}
-  function next(){if(topic==="probe"){if(Tk&&done)pi++;if(pi>=PROBE.length){summary();return}Tk=GEN[PROBE[pi]]()}else Tk=GEN[topic]();render()}
+  function next(){if(topic==="probe"){if(Tk&&done)pi++;if(pi>=PROBE.length){summary();return}Tk=GEN[PROBE[pi]]()}else Tk=GEN[topic]();if(Tk.gs&&!Tk.steps)Tk.steps=Tk.gs.map(function(g){return g.how});render()}
   function startProbe(){pi=0;score=[];Tk=null;next()}
   function summary(){var n=score.filter(function(x){return x===2}).length,h=score.filter(function(x){return x===1}).length;$("ka-task").hidden=true;$("ka-sum").hidden=false;$("ka-pad").hidden=true;
     $("ka-sum-n").textContent=n+" von "+PROBE.length;
     $("ka-sum-t").textContent=n>=7?"Stark! Du bist gut vorbereitet.":n>=5?"Gut! Übe die Themen mit ✗ noch einmal gezielt.":"Dranbleiben! Übe die Themen mit ✗ einzeln, dann klappt’s.";
     $("ka-sum-l").innerHTML=PROBE.map(function(k,i){var v=score[i]||0;return '<li class="'+(v===2?"ok":v===1?"help":"no")+'"><span>'+(v===2?"✓":v===1?"💡":"✗")+'</span>'+NAMES[k]+(v===1?' <small class="m-note">mit Hilfe</small>':'')+(v===2?"":' <button type="button" class="a-alt ka-go" data-go="'+k+'">üben</button>')+'</li>'}).join("")+(h?'<li class="help"><span>💡</span><small>'+h+'× richtig mit Hilfe oder Fehlversuch – das zählt hier noch nicht voll.</small></li>':'');
     document.querySelectorAll("#ma [data-go]").forEach(function(b){b.onclick=function(){setTopic(b.dataset.go)}})}
+  function diag(g,f){var A=g.a,i,e,errs=g.err||[];
+    for(i=0;i<errs.length;i++){e=errs[i];if(e&&eq(f,e[0]))return e[1]}
+    if(f.n!==0&&eq(ab(f),ab(A)))return "Fast! Der Betrag stimmt, aber das <b>Vorzeichen</b> nicht. "+(g.sg||"Prüfe die Vorzeichenregeln: Beim Malnehmen und Teilen ergeben gleiche Vorzeichen plus und verschiedene minus. Beim Addieren entscheidet die Zahl mit dem größeren Betrag.");
+    var ms=[10,100,1000];for(i=0;i<ms.length;i++){var m=F(ms[i]);if(eq(ab(f),ab(mul(A,m)))||eq(ab(f),ab(dv(A,m))))return "Die Ziffern stimmen, aber das <b>Komma</b> sitzt an der falschen Stelle. "+(g.cm||DEC_CM)}
+    if(A.n!==0&&A.d!==1&&eq(f,F(A.d,A.n)))return "Du hast <b>Zähler und Nenner vertauscht</b>.";
+    return ""}
   function advance(){si++;$("ka-fb").hidden=true;
     if(si>=Tk.gs.length){var ok=!rev;fb(ok?"":"bad",ok?(mist||hlp?"✓ Geschafft!":"✓ Alles richtig – stark!"):"Diese Aufgabe üben wir nochmal. Schau dir den Rechenweg an.");steps("Der ganze Rechenweg",Tk.steps);finish(ok);return}
     showStep();setTimeout(function(){$("ka-in").focus({preventScroll:true})},30)}
@@ -2898,11 +3001,10 @@ if(player)loadPlayer();migrate();rebuild();drawRandom();renderStats();renderStag
     if(eq(r.f,g.a)){
       if(g.red&&r.raw&&gcd(r.raw.n,r.raw.d)>1){fb("tip","Der Wert stimmt – aber vollständig gekürzt ist das noch nicht. Kürze weiter!");return}
       doneLine(g,"ok");advance();return}
-    tries++;mist++;i.className="a-in bad";
-    var sign=eq(F(Math.abs(r.f.n),r.f.d),F(Math.abs(g.a.n),g.a.d))&&r.f.n!==0;
-    if(tries<2){fb("bad",(sign?"Fast! Der Betrag stimmt, aber das <b>Vorzeichen</b> nicht.":"Noch nicht.")+" Tippe auf <b>?</b>, wenn du nicht weiterkommst.");$("ka-sol").hidden=false;i.select();return}
-    rev++;doneLine(g,"rev");fb("bad","Dieser Schritt war knifflig. Die Lösung steht oben – weiter geht’s mit dem nächsten Schritt.");
-    var keep=$("ka-fb").innerHTML;advance();if(!done){fb("bad",keep)}}
+    tries++;mist++;i.className="a-in bad";var why=diag(g,r.f);
+    if(tries<2){fb("bad",(why?"<b>Noch nicht.</b> "+why:"<b>Noch nicht richtig.</b>")+'<div class="ka-how"><b>So gehst du vor:</b><br>'+g.ex+'</div>Rechne den Schritt noch einmal auf dem Schmierblatt und trag dein Ergebnis ein.');$("ka-sol").hidden=false;i.select();return}
+    rev++;doneLine(g,"rev");var keep=(why?"<b>Wieder nicht ganz.</b> "+why+"<br>":"")+'<div class="ka-how"><b>So geht dieser Schritt:</b><br>'+g.ex+'<br><br><b>Gerechnet:</b> '+g.how+'</div>Schau dir den Weg genau an – weiter geht’s mit dem nächsten Schritt.';
+    advance();fb("bad",keep)}
   function answerWF(v){if(done)return;var t=Tk,ok=v===t.ans;
     document.querySelectorAll("#ma [data-wf]").forEach(function(b){var bv=b.dataset.wf==="1";b.className="ka-wfb"+(bv===t.ans?" ok":(bv===v?" bad":""))});
     mist=ok?0:1;rev=ok?0:1;fb(ok?"":"bad",(ok?"✓ Richtig! ":"Leider falsch. ")+"Die Aussage ist <b>"+(t.ans?"wahr":"falsch")+"</b>.");steps(t.ans?"Begründung":"Widerlegt mit einem Zahlenbeispiel",[t.why]);finish(ok)}
@@ -2911,7 +3013,7 @@ if(player)loadPlayer();migrate();rebuild();drawRandom();renderStats();renderStag
   $("ka-tip").onclick=function(){fb("tip","💡 "+Tk.tip)};
   function help(){if(done||!Tk)return;var t=Tk,ol=$("ka-hol"),note=$("ka-hnote");hlp=1;
     if(t.kind==="wf"){ol.innerHTML="<li>"+t.tip+"</li><li>Setz ein oder zwei passende Zahlen in die Aussage ein und prüfe: Stimmt sie <i>immer</i>? Ein einziges Gegenbeispiel reicht, dann ist sie falsch.</li>";note.textContent="";$("ka-hint").hidden=false;return}
-    var g=t.gs[si];ol.innerHTML="<li>"+(g.ex||t.tip)+"</li>";note.textContent="Rechne den Schritt auf dem Schmierblatt und trag dann dein Ergebnis ein.";$("ka-hint").hidden=false}
+    var g=t.gs[si];ol.innerHTML="<li>"+(g.ex||t.tip)+"</li>"+(si===0?"<li><b>Plan für die ganze Aufgabe:</b> "+t.tip+"</li>":"");note.textContent="Rechne den Schritt auf dem Schmierblatt und trag dann dein Ergebnis ein.";$("ka-hint").hidden=false}
   $("ka-help").onclick=help;
   $("ka-sol").onclick=function(){if(done)return;rev++;for(;si<Tk.gs.length;si++)doneLine(Tk.gs[si],"rev");fb("bad","Richtig ist <b>"+SA(Tk)+(Tk.unit?" "+Tk.unit:"")+"</b>.");steps("Der ganze Rechenweg",Tk.steps);finish(false)};
   document.querySelectorAll("#ma [data-wf]").forEach(function(b){b.onclick=function(){answerWF(b.dataset.wf==="1")}});
