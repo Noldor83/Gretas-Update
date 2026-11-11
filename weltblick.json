@@ -10,16 +10,16 @@
         "wichtig": "Bisher waren alle Bundespräsidenten Männer – Ilse Aigner wäre die erste Frau an der Spitze unseres Staates."
       },
       {
+        "bereich": "innen",
+        "schlagzeile": "Kameras sollen Tiere in Schlachthöfen schützen",
+        "text": "Der Bundestag hat am Donnerstag ein neues Tierschutzgesetz beschlossen. Große Schlachthöfe müssen künftig Videokameras aufstellen. So können Behörden nachträglich kontrollieren, ob die Tiere dort richtig behandelt werden. Kleinere Betriebe sind ausgenommen – Tierschutzorganisationen kritisieren, dass die Pflicht deshalb nur für einen kleinen Teil der Schlachthöfe gilt.",
+        "wichtig": "In der Vergangenheit kam immer wieder heraus, dass Tiere in Schlachthöfen gequält wurden. Mit Videos lässt sich so etwas leichter entdecken und beweisen."
+      },
+      {
         "bereich": "aussen",
         "schlagzeile": "Ukraine-Gespräche ohne Ergebnis",
         "text": "In Abu Dhabi haben sich am Dienstag und Mittwoch Fachleute aus der Ukraine, Russland und den USA getroffen. Sie wollten über Schritte zu einem Ende des Krieges sprechen. Nach dem zweiten Tag waren die Gespräche schon beendet, konkrete Ergebnisse wurden zunächst nicht bekannt.",
         "wichtig": "Vor allem bei der Frage, welche Gebiete zu welchem Land gehören sollen, liegen beide Seiten weit auseinander."
-      },
-      {
-        "bereich": "aussen",
-        "schlagzeile": "Iran: Neue Angriffe trotz Gesprächen",
-        "text": "Zwischen den USA und dem Iran herrscht seit mehreren Monaten Krieg. Große Kämpfe gibt es gerade nicht, aber die USA haben erneut Ziele im Iran angegriffen. Gleichzeitig versuchen andere Länder wie Katar zu vermitteln, damit der Krieg nicht wieder voll ausbricht. Beide Seiten stellen aber Forderungen, die die andere Seite ablehnt.",
-        "wichtig": "Durch die Meerenge bei Iran fahren viele Öltanker – Unruhe dort macht zum Beispiel Benzin auf der ganzen Welt teurer."
       }
     ],
     "zahl": {
@@ -45,12 +45,12 @@
         "url": "https://en.wikipedia.org/wiki/2027_German_presidential_election"
       },
       {
-        "titel": "SN.at: Ukraine-Verhandlungen in Abu Dhabi beendet",
-        "url": "https://www.sn.at/politik/weltpolitik/ukraine-verhandlungen-in-abu-dhabi-beendet-art-683285"
+        "titel": "Deutscher Bundestag: Videoüberwachung in Schlachthöfen beschlossen",
+        "url": "https://www.bundestag.de/dokumente/textarchiv/2026/kw45-de-tierschutzgesetz-1225086"
       },
       {
-        "titel": "Al Jazeera: Iran stands by demands to end the war as US ramps up military pressure",
-        "url": "https://www.aljazeera.com/news/2026/11/9/iran-stands-by-demands-to-end-the-war-as-us-ramps-up-military-pressure"
+        "titel": "SN.at: Ukraine-Verhandlungen in Abu Dhabi beendet",
+        "url": "https://www.sn.at/politik/weltpolitik/ukraine-verhandlungen-in-abu-dhabi-beendet-art-683285"
       },
       {
         "titel": "logo! vom 8.11.2026 – Was macht der Bundespräsident?",
@@ -71,14 +71,14 @@
       },
       {
         "typ": "mc",
-        "frage": "Wer wählt in Deutschland das Staatsoberhaupt?",
+        "frage": "Was müssen große Schlachthöfe nach dem neuen Gesetz aufstellen?",
         "optionen": [
-          "Die Bundesversammlung",
-          "Alle Wahlberechtigten direkt",
-          "Der Bundeskanzler"
+          "Mehr Futterautomaten",
+          "Videokameras",
+          "Lautsprecher mit Musik"
         ],
-        "richtig": 0,
-        "erklaerung": "Gewählt wird von der Bundesversammlung, nicht direkt vom Volk."
+        "richtig": 1,
+        "erklaerung": "Große Schlachthöfe müssen Videokameras aufstellen, damit Behörden den Umgang mit den Tieren kontrollieren können."
       },
       {
         "typ": "mc",
