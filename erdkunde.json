@@ -2,6 +2,67 @@
   "_hinweis": "Land der Woche: neueste Ausgabe zuerst. iso = ISO-3166-Zahlencode (wie in weltkarte.json), koord = [Längengrad, Breitengrad] der Hauptstadt.",
   "laender": [
     {
+      "nr": 5,
+      "datum": "2026-11-12",
+      "name": "Ägypten",
+      "iso": "818",
+      "flagge": "🇪🇬",
+      "hauptstadt": "Kairo",
+      "koord": [
+        31.2357,
+        30.0444
+      ],
+      "entfernung_km": 2900,
+      "einleitung": "Ägypten liegt im Nordosten Afrikas am Mittelmeer und am Roten Meer. Nachbarn sind Libyen, der Sudan, Israel und der Gazastreifen; die Halbinsel Sinai gehört schon zu Asien.",
+      "fakten": [
+        {
+          "label": "Einwohner",
+          "wert": "rund 109 Millionen",
+          "hinweis": "Etwa 1,3-mal so viele wie in Deutschland."
+        },
+        {
+          "label": "Hauptstadt",
+          "wert": "Kairo",
+          "hinweis": "Kairo ist eine der größten Städte Afrikas."
+        },
+        {
+          "label": "Landessprache",
+          "wert": "Arabisch"
+        },
+        {
+          "label": "Fläche",
+          "wert": "rund 1 Million km²",
+          "hinweis": "Fast dreimal so groß wie Deutschland – aber zum größten Teil Wüste."
+        },
+        {
+          "label": "Währung",
+          "wert": "Ägyptisches Pfund"
+        },
+        {
+          "label": "Der Nil",
+          "wert": "Lebensader des Landes",
+          "hinweis": "Fast alle Menschen leben in einem schmalen Streifen am Nil und in seinem Delta."
+        }
+      ],
+      "nice": [
+        {
+          "thema": "Kultur",
+          "titel": "Pyramiden und Pharaonen",
+          "text": "Vor über 4.500 Jahren bauten die alten Ägypter die Pyramiden von Gizeh als Gräber für ihre Könige, die Pharaonen. Sie schrieben mit Bildzeichen, den Hieroglyphen. Viele Schätze, etwa aus dem Grab des Tutanchamun, kann man heute im Großen Ägyptischen Museum bei Gizeh sehen."
+        },
+        {
+          "thema": "Politik",
+          "titel": "Ein Präsident mit viel Macht",
+          "text": "Seit 2014 ist Abdel Fattah al-Sisi Präsident von Ägypten. Er hat sehr viel Macht. Menschenrechtsorganisationen kritisieren, dass Menschen, die die Regierung kritisieren, oft nicht frei ihre Meinung sagen dürfen oder ins Gefängnis kommen."
+        },
+        {
+          "thema": "Herausforderung",
+          "titel": "Zu wenig Wasser",
+          "text": "Fast das gesamte Wasser Ägyptens kommt aus dem Nil. Die Bevölkerung wächst schnell, und weiter oben am Fluss hat Äthiopien einen riesigen Staudamm gebaut. Ägypten befürchtet, dass dadurch zu wenig Wasser für Felder und Menschen ankommt."
+        }
+      ]
+    },
+    {
       "nr": 4,
       "datum": "2026-11-05",
       "name": "Japan",

@@ -1,5 +1,112 @@
 [
   {
+    "nr": 6,
+    "datum": "2026-11-12",
+    "themen": [
+      {
+        "bereich": "innen",
+        "schlagzeile": "Bekommt Deutschland die erste Bundespräsidentin?",
+        "text": "Die CDU hat am Montag Ilse Aigner als Kandidatin für das Amt der Bundespräsidentin vorgeschlagen, die CSU unterstützt sie. Aigner ist Präsidentin des bayerischen Landtags. Gewählt wird am 30. Januar 2027 von der Bundesversammlung. Weil auch SPD und Grüne sie unterstützen wollen, hat sie gute Chancen.",
+        "wichtig": "Bisher waren alle Bundespräsidenten Männer – Ilse Aigner wäre die erste Frau an der Spitze unseres Staates."
+      },
+      {
+        "bereich": "aussen",
+        "schlagzeile": "Ukraine-Gespräche ohne Ergebnis",
+        "text": "In Abu Dhabi haben sich am Dienstag und Mittwoch Fachleute aus der Ukraine, Russland und den USA getroffen. Sie wollten über Schritte zu einem Ende des Krieges sprechen. Nach dem zweiten Tag waren die Gespräche schon beendet, konkrete Ergebnisse wurden zunächst nicht bekannt.",
+        "wichtig": "Vor allem bei der Frage, welche Gebiete zu welchem Land gehören sollen, liegen beide Seiten weit auseinander."
+      },
+      {
+        "bereich": "aussen",
+        "schlagzeile": "Iran: Neue Angriffe trotz Gesprächen",
+        "text": "Zwischen den USA und dem Iran herrscht seit mehreren Monaten Krieg. Große Kämpfe gibt es gerade nicht, aber die USA haben erneut Ziele im Iran angegriffen. Gleichzeitig versuchen andere Länder wie Katar zu vermitteln, damit der Krieg nicht wieder voll ausbricht. Beide Seiten stellen aber Forderungen, die die andere Seite ablehnt.",
+        "wichtig": "Durch die Meerenge bei Iran fahren viele Öltanker – Unruhe dort macht zum Beispiel Benzin auf der ganzen Welt teurer."
+      }
+    ],
+    "zahl": {
+      "wert": "1.260",
+      "text": "So viele Mitglieder hat die Bundesversammlung, die im Januar den nächsten Bundespräsidenten oder die nächste Bundespräsidentin wählt."
+    },
+    "wort": {
+      "begriff": "Bundesversammlung",
+      "erklaerung": "Die Bundesversammlung tritt nur zusammen, um das Staatsoberhaupt zu wählen. Dazu gehören alle Bundestagsabgeordneten und genauso viele Personen, die von den Landesparlamenten geschickt werden – auch bekannte Leute aus Sport oder Kultur können dabei sein."
+    },
+    "frage": "Bisher gab es in Deutschland noch nie eine Bundespräsidentin. Warum, glaubst du, hat das so lange gedauert – und ist es wichtig, ob eine Frau oder ein Mann das Amt hat?",
+    "quellen": [
+      {
+        "titel": "Tagesspiegel: Einigung in der Union – Ilse Aigner soll Bundespräsidentin werden",
+        "url": "https://www.tagesspiegel.de/politik/wohl-einigung-in-der-union-ilse-aigner-soll-bundesprasidentin-werden-16252498.html"
+      },
+      {
+        "titel": "CDU: Ilse Aigner – Kandidatin für das Amt der Bundespräsidentin",
+        "url": "https://www.cdu.de/aktuelles/cdu-deutschlands/ilse-aigner-kandidatin-fuer-das-amt-der-bundespraesidentin-und-cdu-bundeskanzler-friedrich-merz/"
+      },
+      {
+        "titel": "Wikipedia: Bundespräsidentenwahl 2027 (Bundesversammlung)",
+        "url": "https://en.wikipedia.org/wiki/2027_German_presidential_election"
+      },
+      {
+        "titel": "SN.at: Ukraine-Verhandlungen in Abu Dhabi beendet",
+        "url": "https://www.sn.at/politik/weltpolitik/ukraine-verhandlungen-in-abu-dhabi-beendet-art-683285"
+      },
+      {
+        "titel": "Al Jazeera: Iran stands by demands to end the war as US ramps up military pressure",
+        "url": "https://www.aljazeera.com/news/2026/11/9/iran-stands-by-demands-to-end-the-war-as-us-ramps-up-military-pressure"
+      },
+      {
+        "titel": "logo! vom 8.11.2026 – Was macht der Bundespräsident?",
+        "url": "https://www.logo.de/logo-vom-sonntag-8-november-2026-102.html"
+      }
+    ],
+    "quiz": [
+      {
+        "typ": "mc",
+        "frage": "Wen schlagen CDU und CSU als nächste Bundespräsidentin vor?",
+        "optionen": [
+          "Angela Merkel",
+          "Ilse Aigner",
+          "Julia Klöckner"
+        ],
+        "richtig": 1,
+        "erklaerung": "Die Union hat Ilse Aigner vorgeschlagen, die Präsidentin des bayerischen Landtags."
+      },
+      {
+        "typ": "mc",
+        "frage": "Wer wählt in Deutschland das Staatsoberhaupt?",
+        "optionen": [
+          "Die Bundesversammlung",
+          "Alle Wahlberechtigten direkt",
+          "Der Bundeskanzler"
+        ],
+        "richtig": 0,
+        "erklaerung": "Gewählt wird von der Bundesversammlung, nicht direkt vom Volk."
+      },
+      {
+        "typ": "mc",
+        "frage": "Wo haben sich Fachleute aus der Ukraine, Russland und den USA diese Woche getroffen?",
+        "optionen": [
+          "In Genf",
+          "In Washington",
+          "In Abu Dhabi"
+        ],
+        "richtig": 2,
+        "erklaerung": "Die Gespräche fanden in Abu Dhabi statt, endeten aber ohne bekannte Ergebnisse."
+      },
+      {
+        "typ": "wf",
+        "frage": "Deutschland hatte schon einmal eine Bundespräsidentin.",
+        "richtig": false,
+        "erklaerung": "Bisher waren alle Bundespräsidenten Männer – Ilse Aigner wäre die erste Frau."
+      },
+      {
+        "typ": "schaetzen",
+        "frage": "Wie viele Mitglieder hat die Bundesversammlung?",
+        "einheit": "Mitglieder",
+        "richtig": 1260,
+        "erklaerung": "Die Bundesversammlung hat 1.260 Mitglieder: die Bundestagsabgeordneten und genauso viele Personen aus den Ländern."
+      }
+    ]
+  },
+  {
     "nr": 5,
     "datum": "2026-11-05",
     "themen": [
