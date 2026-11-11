@@ -11,9 +11,9 @@
       },
       {
         "bereich": "innen",
-        "schlagzeile": "Kameras sollen Tiere in Schlachthöfen schützen",
-        "text": "Der Bundestag hat am Donnerstag ein neues Tierschutzgesetz beschlossen. Große Schlachthöfe müssen künftig Videokameras aufstellen. So können Behörden nachträglich kontrollieren, ob die Tiere dort richtig behandelt werden. Kleinere Betriebe sind ausgenommen – Tierschutzorganisationen kritisieren, dass die Pflicht deshalb nur für einen kleinen Teil der Schlachthöfe gilt.",
-        "wichtig": "In der Vergangenheit kam immer wieder heraus, dass Tiere in Schlachthöfen gequält wurden. Mit Videos lässt sich so etwas leichter entdecken und beweisen."
+        "schlagzeile": "Fahne vor dem Reichstag ausgetauscht",
+        "text": "Am Sonntag ist ein 22-jähriger Mann in Berlin den 30 Meter hohen Fahnenmast vor dem Reichstag hinaufgeklettert. Er hat die Deutschlandfahne heruntergeholt und stattdessen eine Fahne der Palästinenser aufgehängt. Zwei Begleiter haben die Aktion live auf TikTok gezeigt. Die Polizei hat die drei Männer vorübergehend festgenommen und ermittelt unter anderem wegen Verunglimpfung des Staates und seiner Symbole, Sachbeschädigung und Hausfriedensbruch.",
+        "wichtig": "Die Fahne vor dem Reichstag ist ein Zeichen für die Einheit Deutschlands und unsere Demokratie. Wer protestieren will, darf das – aber nur auf erlaubtem Weg, nicht durch Straftaten."
       },
       {
         "bereich": "aussen",
@@ -45,8 +45,12 @@
         "url": "https://en.wikipedia.org/wiki/2027_German_presidential_election"
       },
       {
-        "titel": "Deutscher Bundestag: Videoüberwachung in Schlachthöfen beschlossen",
-        "url": "https://www.bundestag.de/dokumente/textarchiv/2026/kw45-de-tierschutzgesetz-1225086"
+        "titel": "t-online: Deutschland-Fahne abgenommen, Palästina-Flagge gehisst – drei Festnahmen",
+        "url": "https://www.t-online.de/nachrichten/deutschland/id_101518610/palaestina-flagge-am-reichstag-mann-tauscht-deutschlandfahne-aus.html"
+      },
+      {
+        "titel": "Tagesspiegel: Aktivisten hissen Palästina-Flagge am Reichstag",
+        "url": "https://www.tagesspiegel.de/berlin/wegner-spricht-von-verachtung-fur-demokratie-aktivisten-hissen-palastina-flagge-am-reichstag-und-streamen-aktion-bei-tiktok-16257962.html"
       },
       {
         "titel": "SN.at: Ukraine-Verhandlungen in Abu Dhabi beendet",
@@ -71,14 +75,14 @@
       },
       {
         "typ": "mc",
-        "frage": "Was müssen große Schlachthöfe nach dem neuen Gesetz aufstellen?",
+        "frage": "Was ist am Sonntag vor dem Reichstag in Berlin passiert?",
         "optionen": [
-          "Mehr Futterautomaten",
-          "Videokameras",
-          "Lautsprecher mit Musik"
+          "Ein Mann hat die Deutschlandfahne gegen eine andere Fahne ausgetauscht",
+          "Der Reichstag wurde neu gestrichen",
+          "Ein Feuerwerk wurde gezündet"
         ],
-        "richtig": 1,
-        "erklaerung": "Große Schlachthöfe müssen Videokameras aufstellen, damit Behörden den Umgang mit den Tieren kontrollieren können."
+        "richtig": 0,
+        "erklaerung": "Ein Mann kletterte den Fahnenmast hinauf und hängte statt der Deutschlandfahne eine Palästinenser-Fahne auf. Die Polizei ermittelt."
       },
       {
         "typ": "mc",
