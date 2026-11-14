@@ -1161,6 +1161,17 @@ function parseGenus(v){const s=String(v||"").toLowerCase().replace(/[^a-zäöü]
   if(/^(f|fe|fem|feminin|femininum|w|weiblich)$/.test(s))return"f";
   if(/^(n|ne|neu|neutr|neutrum|s|sächlich|saechlich)$/.test(s))return"n";return"?"}
 let curGenus="";
+/* Wortart/Fall selbst angeben: tolerant gegen Abkürzungen und Tippfehler */
+const WA={praep:["praposition","praeposition","verhaltniswort"],adv:["adverb","umstandswort"],konj:["konjunktion","bindewort","subjunktion"],pron:["pronomen","furwort"],
+  akk:["akkusativ","wenfall"],abl:["ablativ"],dat:["dativ","wemfall"],gen:["genitiv","wesfall"],nom:["nominativ","werfall"],vok:["vokativ"],verb:["verb","tuwort","zeitwort"],adj:["adjektiv","eigenschaftswort"],num:["numerale","zahlwort"],interj:["interjektion","ausrufewort"]};
+const WA_FILL=new Set(["mit","m","plus","und","u","fall","wort","der","die","das","ein","eine","steht","man","braucht"]);
+function waLev(a,b){const d=Array.from({length:a.length+1},(_,i)=>[i]);for(let j=1;j<=b.length;j++)d[0][j]=j;for(let i=1;i<=a.length;i++)for(let j=1;j<=b.length;j++)d[i][j]=Math.min(d[i-1][j]+1,d[i][j-1]+1,d[i-1][j-1]+(a[i-1]===b[j-1]?0:1));return d[a.length][b.length]}
+function waSet(s){const toks=String(s||"").toLowerCase().replace(/ä/g,"a").replace(/ö/g,"o").replace(/ü/g,"u").replace(/ß/g,"ss").replace(/4\s*\.?/g," akk ").replace(/3\s*\.?/g," dat ").replace(/[^a-z]+/g," ").trim().split(" ").filter(Boolean);
+  const out=new Set();toks.forEach(t=>{if(WA_FILL.has(t))return;let hit=[];for(const k in WA)if(t.length>=2&&WA[k].some(f=>f.startsWith(t)))hit.push(k);
+    if(!hit.length&&t.length>=6){let best=3;for(const k in WA)WA[k].forEach(f=>{const d=waLev(t,f);if(d<best){best=d;hit=[k]}else if(d===best&&!hit.includes(k))hit.push(k)})}
+    if(hit.length===1)out.add(hit[0])});return out}
+const askTag=w=>!!w.tg&&!isNoun(w)&&waSet(w.tg).size>0;
+function tagRight(v,w){const a=waSet(v),b=waSet(w.tg);return a.size===b.size&&[...b].every(x=>a.has(x))}
 const slug=n=>n.trim().toLowerCase().replace(/ä/g,"ae").replace(/ö/g,"oe").replace(/ü/g,"ue").replace(/ß/g,"ss").replace(/[^a-z0-9]+/g,"-").replace(/^-+|-+$/g,"").slice(0,40);
 let player=null,localNames=[];
 try{player=JSON.parse(localStorage.getItem("greta-latein-player")||"null")}catch(e){}
@@ -1269,11 +1280,12 @@ function renderStage(){
     $("again").onclick=reshuffle;$("goL2").onclick=()=>show("list");return}
   const w=BY[current];
   const noun=isNoun(w);
-  const tags=w.tg?`<div class="tags" id="tg"${noun?" hidden":""}><span class="tag">${esc(TN[w.tg]||w.tg)}</span></div>`:"";
+  const tags=w.tg?`<div class="tags" id="tg"${noun||askTag(w)?" hidden":""}><span class="tag">${esc(TN[w.tg]||w.tg)}</span></div>`:"";
   st.innerHTML=`<form class="card panel pop" id="cardForm" autocomplete="off">
     <div class="meta"><span>Lektion ${w.l} ${w.l===NEWEST()?'<span class="neu">neu</span>':""}</span><span>${S.retry.includes(current)?"Nochmal üben":"Latein → Deutsch"}</span></div>
     <div><div class="latin">${esc(w.la)}</div>${w.info?`<div class="extra">${esc(w.info)}</div>`:""}</div>
     ${tags}
+    ${askTag(w)?`<div class="row genus"><label for="wa">Wortart <small>Abkürzung reicht</small></label><input class="answer gen zf" id="wa" maxlength="40" placeholder="…" autocapitalize="off" spellcheck="false"></div>`:""}
     ${w.ex?`<div class="row genus"><label for="zf">Zusatzform <small>z. B. Akkusativ, 3. Person</small></label><input class="answer gen zf" id="zf" maxlength="40" placeholder="…" autocapitalize="off" spellcheck="false"></div>`:""}
     ${noun?`<div class="row genus"><label for="gen">Geschlecht <small>m / f / n</small></label><input class="answer gen" id="gen" maxlength="14" placeholder="m, f oder n" autocapitalize="off" spellcheck="false"></div>`:""}
     ${(()=>{const n=nMean(w.de),t=n>2?"Zwei deutsche Bedeutungen …":n===2?"Beide deutschen Bedeutungen …":"Deutsche Bedeutung …";return `<div class="row"><input class="answer" id="ans" placeholder="${t}" autocapitalize="off" spellcheck="false" aria-label="${t.replace(" …","")}"></div>${n>2?`<div class="extra">${n} Bedeutungen – 2 richtige reichen, mit Komma trennen.</div>`:""}`})()}
@@ -1283,7 +1295,7 @@ function renderStage(){
       <button class="btn" type="submit">Prüfen</button>
     </div></form>`;
   answered=false;
-  const inp=$("ans"),flds=[$("zf"),$("gen"),inp].filter(Boolean);setTimeout(()=>flds[0].focus({preventScroll:true}),60);
+  const inp=$("ans"),flds=[$("wa"),$("zf"),$("gen"),inp].filter(Boolean);setTimeout(()=>flds[0].focus({preventScroll:true}),60);
   $("cardForm").onsubmit=e=>{e.preventDefault();if(answered){next();return}
     const empty=flds.find(f=>!f.value.trim());if(empty){const ai=flds.indexOf(document.activeElement);const nxt=flds.slice(ai+1).find(f=>!f.value.trim())||empty;if(nxt!==document.activeElement||!inp.value.trim()){nxt.focus();return}}
     const g=$("gen");curGenus=g?g.value.trim():"";gradeFull(inp.value.trim())};
@@ -1316,12 +1328,13 @@ function checkAll(input,de){const guesses=input.replace(/\([^)]*\)/g,m=>m.replac
   return{res:"bad",missing,need,found:exact+nearN}}
 function gradeFull(v){const w=BY[current],rows=[];let ok=true,near=false;
   const li=(good,label,right,had)=>`<li class="${good?"y":"n"}">${good?"✓":"✗"} ${label}${good?"":`: richtig ist <strong>${esc(right)}</strong>${had?` (du: „${esc(had)}“)`:""}`}</li>`;
+  if(askTag(w)){const g=($("wa").value||"").trim(),good=tagRight(g,w);if(!good)ok=false;rows.push(li(good,"Wortart",TN[w.tg]||w.tg,g))}
   if(w.ex){const g=($("zf").value||"").trim(),good=normL(g)===normL(w.ex);if(!good)ok=false;rows.push(li(good,"Zusatzform",w.ex,g))}
   if(isNoun(w)){const good=parseGenus(curGenus)===w.tg;if(good)S.genus=(S.genus||0)+1;else ok=false;rows.push(li(good,"Geschlecht",w.tg+" ("+GN[w.tg]+")",curGenus))}
   const r=checkAll(v,w.de);if(r.res==="bad"){ok=false;rows.push(`<li class="n">✗ Bedeutung: ${r.need===1?"nicht richtig":`du brauchst ${r.need} richtige, ${r.found?"du hast "+r.found:"keine stimmt"}`} – möglich wäre z. B. <strong>${esc(r.missing.slice(0,Math.max(1,r.need-r.found)).join(", "))}</strong></li>`)}
   else{if(r.res==="near")near=true;rows.push(`<li class="y">✓ Bedeutung${r.res==="near"?" (achte auf die Schreibweise)":""}</li>`)}
   const html=`<ul class="chk">${rows.join("")}</ul>${fullEntry(w)}`;
-  const z=$("zf");if(z)z.disabled=true;
+  const z=$("zf");if(z)z.disabled=true;const wa=$("wa");if(wa)wa.disabled=true;
   skipGN=true;if(ok)win((near?"<strong>Gewonnen!</strong>":"<strong>Alles richtig!</strong> Die Karte gehört dir.")+html,near?"warn":"ok");else lose("<strong>Noch nicht ganz.</strong>"+html);skipGN=false}
 function genusNote(won){const w=BY[current];if(skipGN||!isNoun(w))return"";const g=parseGenus(curGenus),t=`${w.tg} = ${GN[w.tg]}`;
   if(won&&g===w.tg){S.genus=(S.genus||0)+1;return ` <strong>+ Genus-Punkt</strong> (${t}).`}
