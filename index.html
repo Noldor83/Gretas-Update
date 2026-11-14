@@ -1276,7 +1276,7 @@ function renderStage(){
     ${tags}
     ${w.ex?`<div class="row genus"><label for="zf">Zusatzform <small>z. B. Akkusativ, 3. Person</small></label><input class="answer gen zf" id="zf" maxlength="40" placeholder="…" autocapitalize="off" spellcheck="false"></div>`:""}
     ${noun?`<div class="row genus"><label for="gen">Geschlecht <small>m / f / n</small></label><input class="answer gen" id="gen" maxlength="14" placeholder="m, f oder n" autocapitalize="off" spellcheck="false"></div>`:""}
-    <div class="row"><input class="answer" id="ans" placeholder="Alle deutschen Bedeutungen …" autocapitalize="off" spellcheck="false" aria-label="Alle deutschen Bedeutungen"></div>
+    ${(()=>{const n=nMean(w.de),t=n>2?"Zwei deutsche Bedeutungen …":n===2?"Beide deutschen Bedeutungen …":"Deutsche Bedeutung …";return `<div class="row"><input class="answer" id="ans" placeholder="${t}" autocapitalize="off" spellcheck="false" aria-label="${t.replace(" …","")}"></div>${n>2?`<div class="extra">${n} Bedeutungen – 2 richtige reichen, mit Komma trennen.</div>`:""}`})()}
     <div id="fb"></div>
     <div class="actions" id="acts">
       <button class="btn ghost" type="button" id="skip">Weiß ich nicht</button>
@@ -1303,18 +1303,22 @@ function grade(v){
 let skipGN=false;
 const normL=s=>String(s||"").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[^a-z]/g,"");
 function fullEntry(w){const m=w.lw||LW[w.la];return `<div class="full">${esc(w.la)}${w.ex?", "+esc(w.ex):""}${isNoun(w)?" "+w.tg:""} – ${esc(w.de)}${w.info?`<small class="lw">Hinweis: ${esc(w.info)}</small>`:""}${m?`<small class="lw">Merkhilfe: ${esc(m)}</small>`:""}</div>`}
-function checkAll(input,de){const guesses=input.replace(/\([^)]*\)/g,m=>m.replace(/[,;\/]/g," ")).split(/[,;\/]| oder /).map(norm).filter(Boolean);const missing=[];let near=false;
+function nMean(de){return de.replace(/\([^)]*\)/g,"").split(",").filter(s=>s.trim()).length}
+function checkAll(input,de){const guesses=input.replace(/\([^)]*\)/g,m=>m.replace(/[,;\/]/g," ")).split(/[,;\/]| oder /).map(norm).filter(Boolean);const missing=[];let exact=0,nearN=0;
   de.replace(/\([^)]*\)/g,m=>m.replace(/[,;\/]/g,"\u0002")).split(",").map(s=>s.replace(/\u0002/g,",").trim()).filter(Boolean).forEach(t=>{const vs=[...variants(t)];let hit=false;
     for(const g of guesses){const gs=[g];if(g.startsWith("sich "))gs.push(g.slice(5));
       for(const x of gs)for(const v of vs){if(x===v){hit=true;break}const tol=v.length>=9?2:v.length>=4?1:0;if(tol&&lev(x,v)<=tol&&hit!==true)hit="near"}
       if(hit===true)break}
-    if(!hit)missing.push(t);else if(hit==="near")near=true});
-  return missing.length?{res:"bad",missing}:{res:near?"near":"ok"}}
+    if(!hit)missing.push(t);else if(hit===true)exact++;else nearN++});
+  /* Höchstens 2 Bedeutungen sind Pflicht – welche, ist egal */
+  const total=exact+nearN+missing.length,need=Math.min(2,total);
+  if(exact>=need)return{res:"ok"};if(exact+nearN>=need)return{res:"near"};
+  return{res:"bad",missing,need,found:exact+nearN}}
 function gradeFull(v){const w=BY[current],rows=[];let ok=true,near=false;
   const li=(good,label,right,had)=>`<li class="${good?"y":"n"}">${good?"✓":"✗"} ${label}${good?"":`: richtig ist <strong>${esc(right)}</strong>${had?` (du: „${esc(had)}“)`:""}`}</li>`;
   if(w.ex){const g=($("zf").value||"").trim(),good=normL(g)===normL(w.ex);if(!good)ok=false;rows.push(li(good,"Zusatzform",w.ex,g))}
   if(isNoun(w)){const good=parseGenus(curGenus)===w.tg;if(good)S.genus=(S.genus||0)+1;else ok=false;rows.push(li(good,"Geschlecht",w.tg+" ("+GN[w.tg]+")",curGenus))}
-  const r=checkAll(v,w.de);if(r.res==="bad"){ok=false;rows.push(`<li class="n">✗ Bedeutung: es fehlt <strong>${esc(r.missing.join(", "))}</strong></li>`)}
+  const r=checkAll(v,w.de);if(r.res==="bad"){ok=false;rows.push(`<li class="n">✗ Bedeutung: ${r.need===1?"nicht richtig":`du brauchst ${r.need} richtige, ${r.found?"du hast "+r.found:"keine stimmt"}`} – möglich wäre z. B. <strong>${esc(r.missing.slice(0,Math.max(1,r.need-r.found)).join(", "))}</strong></li>`)}
   else{if(r.res==="near")near=true;rows.push(`<li class="y">✓ Bedeutung${r.res==="near"?" (achte auf die Schreibweise)":""}</li>`)}
   const html=`<ul class="chk">${rows.join("")}</ul>${fullEntry(w)}`;
   const z=$("zf");if(z)z.disabled=true;
