@@ -1,5 +1,108 @@
 [
   {
+    "nr": 7,
+    "datum": "2026-11-19",
+    "themen": [
+      {
+        "bereich": "innen",
+        "schlagzeile": "Strom soll billiger werden",
+        "text": "Die Spitzen von CDU, CSU und SPD haben sich in der Nacht zu Mittwoch geeinigt: Ab 2027 soll die Steuer auf Strom für alle sinken – nicht nur für bestimmte Firmen, sondern auch für Familien zu Hause. Außerdem soll es ab dem 1. Januar 2027 eine Obergrenze für Spritpreise an den Tankstellen geben. Wie genau dieser „Spritpreisdeckel“ funktionieren soll, ist noch nicht bekannt.",
+        "wichtig": "Strom und Benzin sind durch den Krieg im Nahen Osten teuer geworden – viele Familien und Firmen haben deshalb weniger Geld übrig."
+      },
+      {
+        "bereich": "innen",
+        "schlagzeile": "Sprachtests für alle Vierjährigen",
+        "text": "Der Bundestag hat ein neues Gesetz für Kitas beschlossen. Alle Kinder sollen mit vier Jahren getestet werden: Wie gut können sie schon sprechen, zählen und sich selbst organisieren? Wer Hilfe braucht, soll vor der Einschulung gezielt gefördert werden. Kritik gibt es am Geld: Viele Bundesländer, Grüne und Linke sagen, der Bund gibt dafür zu wenig.",
+        "wichtig": "Wer schon vor der Schule Probleme mit der Sprache hat, tut sich später oft schwer. Frühe Hilfe soll verhindern, dass Kinder abgehängt werden."
+      },
+      {
+        "bereich": "aussen",
+        "schlagzeile": "Weltklimakonferenz in der Türkei",
+        "text": "In Antalya in der Türkei treffen sich noch bis Freitag Vertreter aus fast allen Ländern der Welt zur Weltklimakonferenz. Sie beraten, wie die Erderwärmung gebremst werden kann und wie reiche Länder ärmeren helfen, mit Dürren, Stürmen und Überschwemmungen klarzukommen. Die Verhandlungen leitet diesmal Australien.",
+        "wichtig": "Nach Berechnungen der Vereinten Nationen reichen die bisherigen Klimapläne der Länder bei Weitem nicht aus, um die Erderwärmung wie vereinbart zu begrenzen."
+      }
+    ],
+    "zahl": {
+      "wert": "197",
+      "text": "So viele Vertragsparteien – fast alle Länder der Welt und die EU – gehören zur Weltklimakonferenz."
+    },
+    "wort": {
+      "begriff": "COP",
+      "erklaerung": "Die Weltklimakonferenz heißt auch „COP“. Das ist Englisch und steht für „Conference of the Parties“ – die Konferenz der Vertragsparteien. Die Zahl dahinter zählt mit: Die COP31 ist die 31. Konferenz."
+    },
+    "frage": "Bei der Weltklimakonferenz müssen sich fast 200 Länder einigen. Warum ist das so schwierig – und was kannst du selbst für das Klima tun?",
+    "quellen": [
+      {
+        "titel": "ZDFheute: Stromsteuer wird gesenkt, Spritpreisdeckel kommt – Koalition einig",
+        "url": "https://www.zdfheute.de/politik/stromsteuer-senkung-beschlossen-100.html"
+      },
+      {
+        "titel": "ZDFheute: Kita-Kinder – Gesetz zur Förderung frühkindlicher Bildung",
+        "url": "https://www.zdfheute.de/politik/deutschland/startchancengesetz-kita-bundestag-100.html"
+      },
+      {
+        "titel": "news.at: Weltklimakonferenz in Antalya – worum es bei der COP31 geht",
+        "url": "https://www.news.at/umwelt/weltklimakonferenz-cop31-antalya-worum-es-geht"
+      },
+      {
+        "titel": "logo!: Warum die Weltklimakonferenz auch COP heißt",
+        "url": "https://www.logo.de/weltklimakonferenz-cop-31-100.html"
+      },
+      {
+        "titel": "news.de: Nachrichtenüberblick 17. November 2026",
+        "url": "https://www.news.de/panorama/860194459/17-november-2026-news-themen-des-tages-was-passiert-heute-in-deutschland-und-der-welt-das-ist-heute-am-17-11-2026-wichtig-in-den-nachrichten-aus-politik-wirtschaft-sport-und-co/1/"
+      }
+    ],
+    "quiz": [
+      {
+        "typ": "mc",
+        "frage": "Was soll ab 2027 für alle günstiger werden?",
+        "optionen": [
+          "Der Strom",
+          "Die Bahnfahrkarte",
+          "Das Schulessen"
+        ],
+        "richtig": 0,
+        "erklaerung": "Die Stromsteuer soll ab 2027 für alle sinken, auch für Familien zu Hause."
+      },
+      {
+        "typ": "mc",
+        "frage": "Wer soll nach dem neuen Kita-Gesetz getestet werden?",
+        "optionen": [
+          "Alle Grundschulkinder",
+          "Alle Vierjährigen",
+          "Alle Erzieherinnen und Erzieher"
+        ],
+        "richtig": 1,
+        "erklaerung": "Alle Kinder sollen mit vier Jahren auf Sprache und Entwicklung getestet werden."
+      },
+      {
+        "typ": "mc",
+        "frage": "Wo findet die Weltklimakonferenz COP31 statt?",
+        "optionen": [
+          "In Australien",
+          "In Deutschland",
+          "In der Türkei"
+        ],
+        "richtig": 2,
+        "erklaerung": "Die Konferenz findet in Antalya in der Türkei statt, Australien leitet die Verhandlungen."
+      },
+      {
+        "typ": "wf",
+        "frage": "Die bisherigen Klimapläne der Länder reichen aus, um die Erderwärmung wie vereinbart zu begrenzen.",
+        "richtig": false,
+        "erklaerung": "Nach Berechnungen der Vereinten Nationen reichen die bisherigen Pläne bei Weitem nicht aus."
+      },
+      {
+        "typ": "schaetzen",
+        "frage": "Wie viele Vertragsparteien gehören zur Weltklimakonferenz?",
+        "einheit": "Vertragsparteien",
+        "richtig": 197,
+        "erklaerung": "Es sind 197 Vertragsparteien – fast alle Länder der Welt und die EU."
+      }
+    ]
+  },
+  {
     "nr": 6,
     "datum": "2026-11-12",
     "themen": [

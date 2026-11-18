@@ -2,6 +2,68 @@
   "_hinweis": "Land der Woche: neueste Ausgabe zuerst. iso = ISO-3166-Zahlencode (wie in weltkarte.json), koord = [Längengrad, Breitengrad] der Hauptstadt.",
   "laender": [
     {
+      "nr": 6,
+      "datum": "2026-11-19",
+      "name": "Mexiko",
+      "iso": "484",
+      "flagge": "🇲🇽",
+      "hauptstadt": "Mexiko-Stadt",
+      "koord": [
+        -99.1332,
+        19.4326
+      ],
+      "entfernung_km": 9700,
+      "einleitung": "Mexiko liegt in Nordamerika zwischen den USA im Norden und Guatemala und Belize im Süden. Im Westen grenzt es an den Pazifik, im Osten an den Golf von Mexiko und die Karibik.",
+      "fakten": [
+        {
+          "label": "Einwohner",
+          "wert": "rund 130 Millionen",
+          "hinweis": "Etwa anderthalbmal so viele wie in Deutschland."
+        },
+        {
+          "label": "Hauptstadt",
+          "wert": "Mexiko-Stadt",
+          "hinweis": "Sie liegt auf über 2.000 Metern Höhe und ist eine der größten Städte der Welt."
+        },
+        {
+          "label": "Landessprache",
+          "wert": "Spanisch",
+          "hinweis": "Dazu kommen viele indigene Sprachen, zum Beispiel Nahuatl, die Sprache der Azteken."
+        },
+        {
+          "label": "Fläche",
+          "wert": "rund 2 Millionen km²",
+          "hinweis": "Etwa fünfeinhalbmal so groß wie Deutschland."
+        },
+        {
+          "label": "Währung",
+          "wert": "Mexikanischer Peso"
+        },
+        {
+          "label": "Fußball-WM 2026",
+          "wert": "Mitgastgeber",
+          "hinweis": "Mexiko war in diesem Sommer zusammen mit den USA und Kanada Gastgeber der Fußball-Weltmeisterschaft."
+        }
+      ],
+      "nice": [
+        {
+          "thema": "Kultur",
+          "titel": "Der Tag der Toten",
+          "text": "Anfang November feiern viele Menschen in Mexiko den „Día de los Muertos“, den Tag der Toten. Sie schmücken Altäre mit Blumen, Kerzen und Fotos und erinnern fröhlich an ihre verstorbenen Verwandten. Bekannt sind auch die bunten Totenköpfe aus Zucker."
+        },
+        {
+          "thema": "Politik",
+          "titel": "Die erste Präsidentin",
+          "text": "Seit Oktober 2024 regiert Claudia Sheinbaum als erste Frau das Land. Sie war vorher Bürgermeisterin von Mexiko-Stadt. Ein wichtiges Thema für sie ist das Verhältnis zum großen Nachbarn USA, zum Beispiel beim Handel und an der gemeinsamen Grenze."
+        },
+        {
+          "thema": "Herausforderung",
+          "titel": "Gewalt durch Drogenbanden",
+          "text": "In Teilen Mexikos haben mächtige Drogenbanden, sogenannte Kartelle, großen Einfluss. Sie schmuggeln Drogen, vor allem in die USA, und schrecken auch vor Gewalt nicht zurück. Polizei und Regierung versuchen seit vielen Jahren, sie zu bekämpfen."
+        }
+      ]
+    },
+    {
       "nr": 5,
       "datum": "2026-11-12",
       "name": "Ägypten",
