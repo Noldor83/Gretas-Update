@@ -3948,6 +3948,13 @@ if(player)loadPlayer();migrate();rebuild();drawRandom();renderStats();renderStag
 .ico-pick div{display:flex;gap:12px}
 #inst-steps .ico-pick button{display:grid;justify-items:center;gap:4px;border:3px solid transparent;border-radius:16px;padding:6px 10px;margin:0;background:none;cursor:pointer;font:600 15px "Fredoka",sans-serif;color:#1d2140}
 #inst-steps .ico-pick button[aria-pressed="true"]{border-color:#1d2140;background:#ffd24d}
+#inst-steps .ico-pick .sys button{border:3px solid #c9cbe0;min-width:120px;font-size:17px;padding:8px 12px}
+#inst-steps .ico-pick .sys button[aria-pressed="true"]{border-color:#1d2140}
+#inst-steps .ico-pick .emo{font-size:34px;line-height:1}
+#inst-steps .ico-pick small{font-size:12px;font-weight:500;color:#5a5f7d}
+#inst-steps .ico-pick .note{margin:0}
+#inst-steps .ico-pick + .ico-pick{border-top:2px dashed #e3e4ef;padding-top:12px}
+#inst-steps button.big{font-size:18px;padding:10px 18px}
 .ico-pick img{width:64px;height:64px;border-radius:14px;display:block}
 #inst-steps ol{margin:0;padding-left:22px;display:grid;gap:10px;font-size:16px;line-height:1.4}
 #inst-steps .ico{display:inline-block;vertical-align:-4px;width:20px;height:20px}
@@ -4079,20 +4086,32 @@ if(player)loadPlayer();migrate();rebuild();drawRandom();renderStats();renderStag
     $("inst-x").onclick=function(){try{localStorage.setItem("gu-inst-x","1")}catch(e){}$("inst-bar").hidden=true};
     $("inst-close").onclick=function(){$("inst-guide").hidden=true};
     var share='<svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M7 8l5-5 5 5"/><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7"/></svg>';
-    function guide(){var h;
-      if(ios&&iosOther){h='<ol><li>Diese Seite funktioniert als App nur über <b>Safari</b>. Tippe zuerst hier:<br><button type="button" id="inst-copy">Link kopieren</button></li><li>Öffne <b>Safari</b> (blauer Kompass).</li><li>Tippe oben in die Adresszeile und dann auf <b>„Einsetzen und öffnen“</b>.</li><li>Dort wieder auf <b>„Als App installieren“</b> tippen und der Anleitung folgen.</li></ol>'}
-      else if(ios){var menu='<svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M5 7h14M5 12h14M5 17h9"/></svg>';
-        h='<p class="note" style="margin-top:0">Dieses Fenster darf offen bleiben – die Leiste unten erreichst du trotzdem.</p><ol>'
-        +'<li>Schau ganz <b>unten</b> auf die Leiste mit der Adresse <b>noldor83.github.io</b>. Tippe dort <b>links</b> auf das Symbol mit den Strichen '+menu+'.<br><span class="note">Älteres iPhone? Dann tippe unten in der Mitte auf '+share+' und mach bei Schritt 3 weiter.</span></li>'
-        +'<li>Es öffnet sich ein Menü. Tippe auf <b>„Teilen“</b> '+share+'.</li>'
-        +'<li>Ein Fenster mit Apps (WhatsApp, Mail …) geht auf. <b>Wische darin nach oben</b>, bis die Liste kommt. Steht dort <b>„Mehr“</b>, tippe darauf.</li>'
-        +'<li>Tippe auf <b>„Zum Home-Bildschirm“</b> (Symbol: Quadrat mit <b>+</b>).</li>'
-        +'<li>Tippe oben rechts auf <b>„Hinzufügen“</b>. Fertig!</li></ol><p class="note">Danach öffnest du Gretas Update immer über das GU-Symbol auf dem Home-Bildschirm.</p>'}
-      else{h='<ol><li>Tippe oben rechts auf die drei Punkte <b>⋮</b>.</li><li>Wähle <b>„App installieren“</b> oder <b>„Installieren und Verknüpfung erstellen“</b> bzw. „Zum Startbildschirm hinzufügen“.</li><li>Mit <b>„Installieren“</b> bestätigen. Fertig!</li></ol>'}
+    var sysSel=null;try{sysSel=sessionStorage.getItem("gu-inst-sys")}catch(e){}
+    function guide(){
+      var sys=sysSel||"";
+      var menu='<svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M5 7h14M5 12h14M5 17h9"/></svg>';
       var cur="gelb";try{if(localStorage.getItem("gu-icon")==="rosa")cur="rosa"}catch(e){}
-      var pick='<div class="ico-pick"><b>1. Wähle dein App-Symbol</b><div>'+[["gelb","icon-180.png","Gelb"],["rosa","icon-rosa-180.png","Rosa"]].map(function(o){return '<button type="button" data-ico="'+o[0]+'" aria-pressed="'+(cur===o[0])+'"><img src="'+o[1]+'" alt="">'+o[2]+'</button>'}).join("")+'</div><b>2. So installierst du die App</b></div>';
-      if(!(ios&&iosOther)&&!ios&&deferred)h='<p><button type="button" id="inst-now">Jetzt installieren</button></p>';
-      $("inst-steps").innerHTML=pick+h;$("inst-guide").hidden=false;
+      var h='<div class="ico-pick"><b>① Welches Handy hast du?</b><div class="sys">'
+        +'<button type="button" data-sys="ios" aria-pressed="'+(sys==="ios")+'"><span class="emo">🍎</span>iPhone</button>'
+        +'<button type="button" data-sys="android" aria-pressed="'+(sys==="android")+'"><span class="emo">🤖</span>Android<small>Samsung, Xiaomi, Pixel …</small></button></div>'
+        +'<p class="note">Unsicher? Hinten auf dem Handy ist ein Apfel 🍎 → iPhone. Sonst → Android.</p></div>';
+      if(sys){
+        h+='<div class="ico-pick"><b>② Welches Symbol gefällt dir?</b><div>'+[["gelb","icon-180.png","Gelb"],["rosa","icon-rosa-180.png","Rosa"]].map(function(o){return '<button type="button" data-ico="'+o[0]+'" aria-pressed="'+(cur===o[0])+'"><img src="'+o[1]+'" alt="">'+o[2]+'</button>'}).join("")+'</div></div>';
+        h+='<div class="ico-pick"><b>③ Jetzt kommt die App auf dein Handy</b></div>';
+        if(sys==="ios"&&iosOther){h+='<ol><li>Das klappt nur im Browser <b>Safari</b> 🧭 (der blaue Kompass). Tippe zuerst hier:<br><button type="button" id="inst-copy">Link kopieren</button></li><li>Öffne die App <b>Safari</b>.</li><li>Tippe oben oder unten in die Adresszeile und dann auf <b>„Einsetzen und öffnen“</b>.</li><li>Tippe dort wieder auf <b>„Als App installieren“</b>.</li></ol>'}
+        else if(sys==="ios"){h+='<p class="note">Dieses Fenster kann offen bleiben.</p><ol>'
+          +'<li>Schau ganz <b>unten</b> auf die Leiste mit <b>noldor83.github.io</b>. Tippe dort <b>links</b> auf die Striche '+menu+'.<br><span class="note">Siehst du die Striche nicht, sondern unten in der Mitte '+share+'? Dann tippe darauf und mach bei Schritt 3 weiter.</span></li>'
+          +'<li>Tippe im Menü auf <b>„Teilen“</b> '+share+'.</li>'
+          +'<li>Jetzt siehst du WhatsApp, Mail und Co. <b>Schieb das Fenster mit dem Finger nach oben</b>. Steht da <b>„Mehr“</b>? Dann tippe darauf.</li>'
+          +'<li>Tippe auf <b>„Zum Home-Bildschirm“</b> ⊞</li>'
+          +'<li>Oben rechts auf <b>„Hinzufügen“</b> tippen. Geschafft! 🎉</li></ol><p class="note">Ab jetzt öffnest du Gretas Update über das neue Symbol auf deinem Startbildschirm.</p>'}
+        else{if(deferred&&!ios)h+='<p><button type="button" id="inst-now" class="big">📲 Jetzt installieren</button></p><p class="note">Klappt nicht? Dann so:</p>';
+          h+='<ol><li>Tippe <b>oben rechts</b> auf die drei Punkte <b>⋮</b>.<br><span class="note">Samsung-Browser? Dann unten rechts auf die Striche '+menu+'.</span></li>'
+          +'<li>Tippe auf <b>„App installieren“</b> oder <b>„Zum Startbildschirm hinzufügen“</b>.<br><span class="note">Samsung-Browser: „Seite hinzufügen zu“ → „Startbildschirm“.</span></li>'
+          +'<li>Auf <b>„Installieren“</b> bzw. <b>„Hinzufügen“</b> tippen. Geschafft! 🎉</li></ol><p class="note">Ab jetzt öffnest du Gretas Update über das neue Symbol auf deinem Startbildschirm.</p>'}
+      }
+      $("inst-steps").innerHTML=h;$("inst-guide").hidden=false;
+      $("inst-steps").querySelectorAll("[data-sys]").forEach(function(b){b.onclick=function(){sysSel=b.dataset.sys;try{sessionStorage.setItem("gu-inst-sys",sysSel)}catch(e){}guide()}});
       $("inst-steps").querySelectorAll("[data-ico]").forEach(function(b){b.onclick=function(){var v=b.dataset.ico;try{localStorage.setItem("gu-icon",v)}catch(e){}
         document.querySelector('link[rel="apple-touch-icon"]').href=v==="rosa"?"icon-rosa-180.png":"icon-180.png";
         $("inst-steps").querySelectorAll("[data-ico]").forEach(function(x){x.setAttribute("aria-pressed",String(x===b))});
