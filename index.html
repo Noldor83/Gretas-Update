@@ -9,6 +9,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="icon-180.png"><link rel="icon" href="icon-192.png">
+<script>/* App-Symbol pro Gerät: gelb (Standard) oder rosa */try{if(localStorage.getItem("gu-icon")==="rosa"){document.querySelector('link[rel="apple-touch-icon"]').href="icon-rosa-180.png";document.querySelector('link[rel="manifest"]').href="manifest-rosa.webmanifest"}}catch(e){}</script>
 <style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style>
 <link rel="preload" href="fonts/fredoka.woff2" as="font" type="font/woff2" crossorigin>
 <style>
@@ -3942,6 +3943,12 @@ if(player)loadPlayer();migrate();rebuild();drawRandom();renderStats();renderStag
 .inst-bar span{flex:1;min-width:0}
 #inst-guide{z-index:120}
 .inst-x{border:0;background:none;color:#fff;font-size:18px;cursor:pointer}
+.ico-pick{display:grid;gap:8px;margin:0 0 14px}
+.ico-pick b{font:700 16px "Fredoka",sans-serif}
+.ico-pick div{display:flex;gap:12px}
+#inst-steps .ico-pick button{display:grid;justify-items:center;gap:4px;border:3px solid transparent;border-radius:16px;padding:6px 10px;margin:0;background:none;cursor:pointer;font:600 15px "Fredoka",sans-serif;color:#1d2140}
+#inst-steps .ico-pick button[aria-pressed="true"]{border-color:#1d2140;background:#ffd24d}
+.ico-pick img{width:64px;height:64px;border-radius:14px;display:block}
 #inst-steps ol{margin:0;padding-left:22px;display:grid;gap:10px;font-size:16px;line-height:1.4}
 #inst-steps .ico{display:inline-block;vertical-align:-4px;width:20px;height:20px}
 #inst-steps .note{font-size:14px;color:#5a5f7d;margin-top:10px}
@@ -4076,12 +4083,20 @@ if(player)loadPlayer();migrate();rebuild();drawRandom();renderStats();renderStag
       if(ios&&iosOther){h='<ol><li>Diese Seite funktioniert als App nur über <b>Safari</b>. Tippe zuerst hier:<br><button type="button" id="inst-copy">Link kopieren</button></li><li>Öffne <b>Safari</b> (blauer Kompass).</li><li>Tippe oben in die Adresszeile und dann auf <b>„Einsetzen und öffnen“</b>.</li><li>Dort wieder auf <b>„Als App installieren“</b> tippen und der Anleitung folgen.</li></ol>'}
       else if(ios){h='<ol><li>Tippe auf <b>Teilen</b> '+share+' – unten in der Leiste oder hinter <b>„…“</b>.</li><li>Wische nach unten und tippe auf <b>„Zum Home-Bildschirm“</b>.</li><li>Tippe oben rechts auf <b>„Hinzufügen“</b>. Fertig!</li></ol><p class="note">Danach öffnest du Gretas Update immer über das GU-Symbol.</p>'}
       else{h='<ol><li>Tippe oben rechts auf die drei Punkte <b>⋮</b>.</li><li>Wähle <b>„App installieren“</b> oder <b>„Installieren und Verknüpfung erstellen“</b> bzw. „Zum Startbildschirm hinzufügen“.</li><li>Mit <b>„Installieren“</b> bestätigen. Fertig!</li></ol>'}
-      $("inst-steps").innerHTML=h;$("inst-guide").hidden=false;
+      var cur="gelb";try{if(localStorage.getItem("gu-icon")==="rosa")cur="rosa"}catch(e){}
+      var pick='<div class="ico-pick"><b>1. Wähle dein App-Symbol</b><div>'+[["gelb","icon-180.png","Gelb"],["rosa","icon-rosa-180.png","Rosa"]].map(function(o){return '<button type="button" data-ico="'+o[0]+'" aria-pressed="'+(cur===o[0])+'"><img src="'+o[1]+'" alt="">'+o[2]+'</button>'}).join("")+'</div><b>2. So installierst du die App</b></div>';
+      if(!(ios&&iosOther)&&!ios&&deferred)h='<p><button type="button" id="inst-now">Jetzt installieren</button></p>';
+      $("inst-steps").innerHTML=pick+h;$("inst-guide").hidden=false;
+      $("inst-steps").querySelectorAll("[data-ico]").forEach(function(b){b.onclick=function(){var v=b.dataset.ico;try{localStorage.setItem("gu-icon",v)}catch(e){}
+        document.querySelector('link[rel="apple-touch-icon"]').href=v==="rosa"?"icon-rosa-180.png":"icon-180.png";
+        $("inst-steps").querySelectorAll("[data-ico]").forEach(function(x){x.setAttribute("aria-pressed",String(x===b))});
+        var mf=document.querySelector('link[rel="manifest"]'),want=v==="rosa"?"manifest-rosa.webmanifest":"manifest.webmanifest";
+        if(mf.getAttribute("href")!==want){mf.setAttribute("href",want);if(!ios){try{sessionStorage.setItem("gu-inst-open","1")}catch(e){}location.reload()}}}});
+      var nw=$("inst-now");if(nw)nw.onclick=async function(){if(!deferred)return;deferred.prompt();try{var r=await deferred.userChoice;if(r.outcome==="accepted"){show(false);$("inst-guide").hidden=true}}catch(e){}deferred=null};
       var c=$("inst-copy");if(c)c.onclick=function(){var u=location.href.split("#")[0];
         (navigator.clipboard?navigator.clipboard.writeText(u):Promise.reject()).then(function(){c.textContent="Kopiert ✓"},function(){c.outerHTML='<input value="'+u+'" readonly style="width:100%;font:inherit">'})}}
-    btns.forEach(function(b){b.onclick=async function(){
-      if(deferred){deferred.prompt();try{var r=await deferred.userChoice;if(r.outcome==="accepted")show(false)}catch(e){}deferred=null;return}
-      guide()}});
+    btns.forEach(function(b){b.onclick=function(){guide()}});
+    try{if(sessionStorage.getItem("gu-inst-open")){sessionStorage.removeItem("gu-inst-open");setTimeout(guide,900)}}catch(e){}
   })();
 
   $("vis-all").onclick=function(){if(window.__GUsetVis)window.__GUsetVis("all");$("vis-dlg").hidden=true};
