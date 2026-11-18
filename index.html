@@ -4081,7 +4081,13 @@ if(player)loadPlayer();migrate();rebuild();drawRandom();renderStats();renderStag
     var share='<svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M7 8l5-5 5 5"/><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7"/></svg>';
     function guide(){var h;
       if(ios&&iosOther){h='<ol><li>Diese Seite funktioniert als App nur über <b>Safari</b>. Tippe zuerst hier:<br><button type="button" id="inst-copy">Link kopieren</button></li><li>Öffne <b>Safari</b> (blauer Kompass).</li><li>Tippe oben in die Adresszeile und dann auf <b>„Einsetzen und öffnen“</b>.</li><li>Dort wieder auf <b>„Als App installieren“</b> tippen und der Anleitung folgen.</li></ol>'}
-      else if(ios){h='<ol><li>Tippe auf <b>Teilen</b> '+share+' – unten in der Leiste oder hinter <b>„…“</b>.</li><li>Wische nach unten und tippe auf <b>„Zum Home-Bildschirm“</b>.</li><li>Tippe oben rechts auf <b>„Hinzufügen“</b>. Fertig!</li></ol><p class="note">Danach öffnest du Gretas Update immer über das GU-Symbol.</p>'}
+      else if(ios){var menu='<svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M5 7h14M5 12h14M5 17h9"/></svg>';
+        h='<p class="note" style="margin-top:0">Dieses Fenster darf offen bleiben – die Leiste unten erreichst du trotzdem.</p><ol>'
+        +'<li>Schau ganz <b>unten</b> auf die Leiste mit der Adresse <b>noldor83.github.io</b>. Tippe dort <b>links</b> auf das Symbol mit den Strichen '+menu+'.<br><span class="note">Älteres iPhone? Dann tippe unten in der Mitte auf '+share+' und mach bei Schritt 3 weiter.</span></li>'
+        +'<li>Es öffnet sich ein Menü. Tippe auf <b>„Teilen“</b> '+share+'.</li>'
+        +'<li>Ein Fenster mit Apps (WhatsApp, Mail …) geht auf. <b>Wische darin nach oben</b>, bis die Liste kommt. Steht dort <b>„Mehr“</b>, tippe darauf.</li>'
+        +'<li>Tippe auf <b>„Zum Home-Bildschirm“</b> (Symbol: Quadrat mit <b>+</b>).</li>'
+        +'<li>Tippe oben rechts auf <b>„Hinzufügen“</b>. Fertig!</li></ol><p class="note">Danach öffnest du Gretas Update immer über das GU-Symbol auf dem Home-Bildschirm.</p>'}
       else{h='<ol><li>Tippe oben rechts auf die drei Punkte <b>⋮</b>.</li><li>Wähle <b>„App installieren“</b> oder <b>„Installieren und Verknüpfung erstellen“</b> bzw. „Zum Startbildschirm hinzufügen“.</li><li>Mit <b>„Installieren“</b> bestätigen. Fertig!</li></ol>'}
       var cur="gelb";try{if(localStorage.getItem("gu-icon")==="rosa")cur="rosa"}catch(e){}
       var pick='<div class="ico-pick"><b>1. Wähle dein App-Symbol</b><div>'+[["gelb","icon-180.png","Gelb"],["rosa","icon-rosa-180.png","Rosa"]].map(function(o){return '<button type="button" data-ico="'+o[0]+'" aria-pressed="'+(cur===o[0])+'"><img src="'+o[1]+'" alt="">'+o[2]+'</button>'}).join("")+'</div><b>2. So installierst du die App</b></div>';
