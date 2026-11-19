@@ -600,7 +600,7 @@ body{background:var(--gu-bar);color:var(--gu-bar-fg)}
 #st{background-color:var(--s-bg);background-image:radial-gradient(var(--s-dot) 1.6px,transparent 1.8px);background-size:22px 22px;color:var(--s-ink);font-family:var(--s-f-body)}
 #st .s-hello a.s-bus{position:absolute;right:14px;bottom:14px;z-index:2;width:44px;height:44px;border-radius:50%;background:#ffffff;display:grid;place-items:center;box-shadow:0 3px 0 rgba(0,0,0,.18);text-decoration:none;-webkit-tap-highlight-color:transparent}
 #st .s-bus:active{transform:translateY(2px);box-shadow:0 1px 0 rgba(0,0,0,.18)}
-#st a.s-gamehint{text-decoration:none;border-color:#2a7ad8}
+#st a.s-gamehint{text-decoration:none;box-sizing:border-box;border-color:#2a7ad8}
 #st .s-wrap{max-width:860px;margin:0 auto;padding-block:18px 48px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:grid;gap:18px}
 #st h2,#st h3{margin:0;text-wrap:balance}
 #st p{margin:0}
@@ -733,7 +733,7 @@ body{background:var(--gu-bar);color:var(--gu-bar-fg)}
     <span><b>Gretas Update als App</b><span class="s-sub">Auf den Startbildschirm legen – dann bist du mit einem Tipp drin.</span></span>
     <span class="s-instgo">So geht’s</span>
   </button>
-  <a class="s-card s-quizhint s-gamehint" href="schulweg.html">     <span class="s-qic" aria-hidden="true">🚌</span>     <span><b>Neu: Gretas Weg zur Schule</b><span class="s-sub">Das Jump'n'Run: mit Kuschelhase, Fahrrad und Bus bis 8 Uhr in die Klasse. Wer schafft die meisten Punkte?</span></span>     <span class="s-instgo">Spielen</span>   </a>   <button type="button" class="s-card s-quizhint" id="s-quizhint" data-quiz="1" hidden>
+  <a class="s-card s-quizhint s-gamehint" href="schulweg.html">     <span class="s-qic" aria-hidden="true">🚌</span>     <span><b>Neu: Gretas Weg zur Schule</b><span class="s-sub">Jump'n'Run: Schaffst du es bis 8 Uhr in die Klasse?</span></span>     <span class="s-instgo">Spielen</span>   </a>   <button type="button" class="s-card s-quizhint" id="s-quizhint" data-quiz="1" hidden>
     <span class="s-qic" aria-hidden="true">?</span>
     <span><b id="s-qh-t">Neues Wochenquiz!</b><span class="s-sub" id="s-qh-s"></span></span>
     <span class="s-instgo">Los</span>
