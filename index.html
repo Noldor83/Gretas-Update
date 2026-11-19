@@ -598,6 +598,8 @@ body{background:var(--gu-bar);color:var(--gu-bar-fg)}
 :root[data-theme="dark"] #st{--s-bg:#15132a; --s-dot:#252146; --s-card:#1f1c3a; --s-ink:#eeeaff; --s-muted:#b2acd6;
   --s-sun:#e8c23a; --s-pink:#ff8fb6; --s-sky:#4aa8d6; --s-lat:#a184f0; --s-en:#5d9be6; --s-ma:#3fbf82; --s-wb:#ff8a70; --s-ek:#3cc3d4; color-scheme:dark}
 #st{background-color:var(--s-bg);background-image:radial-gradient(var(--s-dot) 1.6px,transparent 1.8px);background-size:22px 22px;color:var(--s-ink);font-family:var(--s-f-body)}
+#st .s-hello a.s-bus{position:absolute;right:14px;bottom:14px;z-index:2;width:44px;height:44px;border-radius:50%;background:#ffffff;display:grid;place-items:center;box-shadow:0 3px 0 rgba(0,0,0,.18);text-decoration:none;-webkit-tap-highlight-color:transparent}
+#st .s-bus:active{transform:translateY(2px);box-shadow:0 1px 0 rgba(0,0,0,.18)}
 #st .s-wrap{max-width:860px;margin:0 auto;padding-block:18px 48px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:grid;gap:18px}
 #st h2,#st h3{margin:0;text-wrap:balance}
 #st p{margin:0}
@@ -721,7 +723,7 @@ body{background:var(--gu-bar);color:var(--gu-bar-fg)}
     <p class="s-day" id="s-day">Heute</p>
     <h2 id="s-hello">Hallo!</h2>
     <p class="s-line" id="s-line">Schön, dass du da bist.</p>
-    <span class="s-school"><b aria-hidden="true">H</b>Heriburg-Gymnasium · Stufe 7</span>
+    <span class="s-school"><b aria-hidden="true">H</b>Heriburg-Gymnasium · Stufe 7</span>     <a class="s-bus" href="schulweg.html" title="Gretas Weg zur Schule" aria-label="Spiel: Gretas Weg zur Schule"><svg viewBox="0 0 24 16" width="26" height="18" aria-hidden="true"><rect x="1" y="1" width="22" height="11" rx="2" fill="#2a7ad8"/><rect x="3" y="3" width="4" height="4" fill="#d8eefa"/><rect x="8" y="3" width="4" height="4" fill="#d8eefa"/><rect x="13" y="3" width="4" height="4" fill="#d8eefa"/><rect x="18" y="3" width="3" height="7" fill="#d8eefa"/><rect x="1" y="9" width="16" height="1" fill="#ffd24d"/><circle cx="6" cy="13" r="2.2" fill="#1d2140"/><circle cx="18" cy="13" r="2.2" fill="#1d2140"/></svg></a>
     <span class="s-streak" id="s-streak" hidden></span>
   </div>
 
@@ -4155,7 +4157,7 @@ if(player)loadPlayer();migrate();rebuild();drawRandom();renderStats();renderStag
     if(armed!==id){armed=id;this.querySelectorAll("button[data-rm]").forEach(function(x){x.classList.remove("sure");x.textContent="Entfernen"});
       b.classList.add("sure");b.textContent="Wirklich entfernen?";return}
     b.disabled=true;b.textContent="Entfernt …";
-    try{await Promise.all([fs.doc("scores/lat/players/"+id).delete(),fs.doc("scores/en/players/"+id).delete(),fs.doc("scores/mathe/players/"+id).delete(),fs.doc("scores/mathe_div/players/"+id).delete(),fs.doc("scores/kudos/players/"+id).delete(),fs.doc("scores/quiz/players/"+id).delete(),fs.doc("scores/erdkunde/players/"+id).delete(),fs.doc("scores/erdkunde_serie/players/"+id).delete(),fs.doc("scores/duel/players/"+id).delete(),fs.doc("progress/"+id).delete()]);
+    try{await Promise.all([fs.doc("scores/lat/players/"+id).delete(),fs.doc("scores/en/players/"+id).delete(),fs.doc("scores/mathe/players/"+id).delete(),fs.doc("scores/mathe_div/players/"+id).delete(),fs.doc("scores/kudos/players/"+id).delete(),fs.doc("scores/quiz/players/"+id).delete(),fs.doc("scores/erdkunde/players/"+id).delete(),fs.doc("scores/erdkunde_serie/players/"+id).delete(),fs.doc("scores/duel/players/"+id).delete(),fs.doc("scores/schulweg/players/"+id).delete(),fs.doc("progress/"+id).delete()]);
       await fs.doc("profiles/"+id).delete();
       $("ad-msg").textContent=name+" wurde entfernt. Tipp: jetzt den Klassen-Code ändern.";loadMembers()}
     catch(err){b.disabled=false;b.classList.remove("sure");b.textContent="Entfernen";armed=null;$("ad-msg").textContent="Entfernen hat nicht geklappt: "+(err.code||err.message)}};
