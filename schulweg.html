@@ -30,8 +30,9 @@ body.ride .pad.left,body.ride .pad button[data-k=attack]{visibility:hidden}
 .pad button.on{background:rgba(255,210,90,.5)}
 .pad button.off{opacity:.35}
 .pad.right{gap:30px}
-.pad.right .col{display:flex;flex-direction:column;align-items:center;gap:14px}
-.pad.right button[data-k=jump],.pad.right button[data-k=attack]{width:78px;height:78px}
+.pad.right .col{display:flex;flex-direction:column;align-items:center;gap:22px;transform:translateY(-34px)}
+.pad.right button[data-k=attack]{width:78px;height:78px}
+.pad.right button[data-k=jump]{width:96px;height:96px;font-size:16px}
 #rotate{position:fixed;inset:0;z-index:99;display:none;flex-direction:column;align-items:center;justify-content:center;gap:14px;background:#1d2140;color:#fff;font:bold 18px 'Trebuchet MS',sans-serif;text-align:center;padding:24px}
 #rotate .ph{width:46px;height:78px;border:3px solid #ffd24a;border-radius:9px;animation:rot 2.2s ease-in-out infinite}
 @keyframes rot{0%,25%{transform:rotate(0)}55%,100%{transform:rotate(-90deg)}}
@@ -344,12 +345,12 @@ const isTouch=('ontouchstart' in window)||(window.matchMedia&&matchMedia('(point
 if(isTouch) document.body.classList.add('touch');
 // Touch: jeder Finger wird dem nächstgelegenen Knopf zugeordnet, auch beim Gleiten; Trefferfläche ca. 1,45-fach.
 const padBtns=[...document.querySelectorAll('.pad button')]; const tMap=new Map();
-function btnAt(x,y){ let best=null, bd=1e9; for(const b of padBtns){ const r=b.getBoundingClientRect(); if(!r.width) continue; const d=Math.hypot(x-(r.left+r.width/2),y-(r.top+r.height/2))/(r.width/2); if(d<bd){ bd=d; best=b; } } return bd<=1.45?best:null; }
+function btnAt(x,y){ let best=null, bd=1e9; for(const b of padBtns){ const r=b.getBoundingClientRect(); if(!r.width||getComputedStyle(b).visibility==='hidden') continue; let d=Math.hypot(x-(r.left+r.width/2),y-(r.top+r.height/2))/(r.width/2); if(b.dataset.k==='jump') d/=1.2; if(d<bd){ bd=d; best=b; } } return bd<=1.5?best:null; }
 function syncPads(){ const want=new Set(); for(const b of tMap.values()) if(b) want.add(b); for(const b of padBtns){ const on=want.has(b); if(on!==b.classList.contains('on')){ b.classList.toggle('on',on); press(b.dataset.k,on); } } }
 function padActive(){ return game.state==='play'; }
 function onTouch(e){ if(!padActive()){ if(tMap.size){ tMap.clear(); syncPads(); } return; } let used=false;
   for(const t of e.changedTouches){
-    if(e.type==='touchstart'){ const b=btnAt(t.clientX,t.clientY); if(!b) continue; tMap.set(t.identifier,b); used=true; }
+    if(e.type==='touchstart'){ const b=btnAt(t.clientX,t.clientY); if(!b) continue; tMap.set(t.identifier,b); used=true; if(b.classList.contains('on')){ if(b.dataset.k==='jump') input.jumpPressed=true; if(b.dataset.k==='attack') input.attackPressed=true; } }
     else if(e.type==='touchmove'){ if(!tMap.has(t.identifier)) continue; const b=btnAt(t.clientX,t.clientY); if(b) tMap.set(t.identifier,b); used=true; }
     else if(tMap.has(t.identifier)){ tMap.delete(t.identifier); used=true; } }
   if(e.type==='touchend'||e.type==='touchcancel'){ const live=new Set([...e.touches].map(t=>t.identifier)); for(const id of [...tMap.keys()]) if(!live.has(id)){ tMap.delete(id); used=true; } }
@@ -497,17 +498,17 @@ function updEnemy(e,dt){
 /* ---- Mini-Boss: die Zwillinge ---- */
 const TW_LOOK={skin:'#f3cfae',hair:'#f4e070',hairD:'#d8c050',top:'#ffffff',topD:'#d8d8e8',skirt:'#e84a8a',legs:'#f3cfae',shoe:'#e84a8a',hairStyle:'pig',eye:'#2a62d8'};
 function setGate(on){ for(let y=0;y<10;y++) for(const x of [ARENA.x0,ARENA.x1]){ if(on&&grid[y][x]==='.') grid[y][x]='G'; else if(!on&&grid[y][x]==='G') grid[y][x]='.'; } }
-function startBoss(){ game.arena=true; setGate(true); const y=GY-26; W.twins=[{x:(ARENA.x1-8)*TS,y,w:10,h:26,vx:0,vy:0,hp:2,role:'throw',dir:-1,t:0,cd:1.2,inv:0,dead:false,deathT:0,anim:0,st:'go'},{x:(ARENA.x1-11)*TS,y,w:10,h:26,vx:0,vy:0,hp:2,role:'charge',dir:-1,t:0,cd:1.2,inv:0,dead:false,deathT:0,anim:0,st:'go'}];
+function startBoss(){ game.arena=true; setGate(true); const y=GY-26; W.twins=[{x:(ARENA.x1-8)*TS,y,w:10,h:26,vx:0,vy:0,hp:3,role:'throw',dir:-1,t:0,cd:1.2,inv:0,dead:false,deathT:0,anim:0,st:'go'},{x:(ARENA.x1-11)*TS,y,w:10,h:26,vx:0,vy:0,hp:3,role:'charge',dir:-1,t:0,cd:1.2,inv:0,dead:false,deathT:0,anim:0,st:'go'}];
   W.twinSwap=5; W.twinIntro=2.8; chip.start('boss'); shake=0.35; sfx.thud(); bossRed=1; say(W.twins[1],'Wenn du mit uns nicht über Pferde redest, können wir dich nicht leiden!',2.8,true); sfx.giggle(); bossBar(true); }
 function resetBoss(){ game.arena=false; setGate(false); W.twins=null; W.joost=null; W.lehrer=null; W.bag=null; W.bellT=0; W.ringT=0; W.items=W.items.filter(i=>i.kind!=='heart'); W.enemies=W.enemies.filter(e=>!e.rab); W.shots.length=0; bossBar(false); bossRed=0; if(game.state==='play'||game.state==='faint') later(0.1,()=>{ if(!sfx.isMuted()) chip.start(LV.music); }); }
 function updTwins(dt){ const P=W.P, T=W.twins; if(W.twinIntro>0){ W.twinIntro-=dt; return; }
-  W.twinSwap-=dt; if(W.twinSwap<=0){ W.twinSwap=5; const a=T.filter(t=>!t.dead); if(a.length===2){ for(const t of a) t.role=t.role==='throw'?'charge':'throw'; say(a[0],'Tausch!',1.2,true); sfx.giggle(); } }
+  W.twinSwap-=dt; if(W.twinSwap<=0){ W.twinSwap=4; const a=T.filter(t=>!t.dead); if(a.length===2){ for(const t of a) t.role=t.role==='throw'?'charge':'throw'; say(a[0],'Tausch!',1.2,true); sfx.giggle(); } }
   for(const t of T){ t.anim+=dt; if(t.inv>0) t.inv-=dt;
     if(t.dead){ t.deathT+=dt; continue; }
     const dx=(P.x+P.w/2)-(t.x+t.w/2), adx=Math.abs(dx); t.dir=dx<0?-1:1;
     const alone=T.filter(q=>!q.dead).length===1; if(alone&&t.role==='throw') t.role='mix';
-    if(t.role==='throw'||(t.role==='mix'&&Math.floor(t.anim/4)%2===0)){ const want=adx<90?-t.dir*60:(adx>130?t.dir*40:0); t.vx+=(want-t.vx)*Math.min(1,dt*4); t.cd-=dt; if(t.cd<=0){ t.cd=alone?0.9:1.1; const tt=0.8; shoot('stone',t.x+t.w/2,t.y+6,dx/tt,-200,380); } }
-    else { if(t.st==='go'){ t.vx=t.dir*45; if(adx<80){ t.st='wind'; t.t=0; t.vx=0; } } else if(t.st==='wind'){ t.t+=dt; t.vx=0; if(t.t>0.4){ t.st='dash'; t.t=0; t.vx=t.dir*170; } } else if(t.st==='dash'){ t.t+=dt; if(t.t>0.6||t.hitWall){ t.st='rest'; t.t=0; t.vx=0; } } else if(t.st==='rest'){ t.t+=dt; t.vx=0; if(t.t>0.6) t.st='go'; } }
+    if(t.role==='throw'||(t.role==='mix'&&Math.floor(t.anim/4)%2===0)){ const want=adx<90?-t.dir*60:(adx>130?t.dir*40:0); t.vx+=(want-t.vx)*Math.min(1,dt*4); t.cd-=dt; if(t.cd<=0){ t.cd=alone?0.7:0.85; const tt=0.8; shoot('stone',t.x+t.w/2,t.y+6,dx/tt,-200,380); } }
+    else { if(t.st==='go'){ t.vx=t.dir*45; if(adx<80){ t.st='wind'; t.t=0; t.vx=0; } } else if(t.st==='wind'){ t.t+=dt; t.vx=0; if(t.t>0.35){ t.st='dash'; t.t=0; t.vx=t.dir*200; } } else if(t.st==='dash'){ t.t+=dt; if(t.t>0.6||t.hitWall){ t.st='rest'; t.t=0; t.vx=0; } } else if(t.st==='rest'){ t.t+=dt; t.vx=0; if(t.t>0.6) t.st='go'; } }
     t.vy=Math.min(t.vy+900*dt,420); move(t,dt);
     if(t.x<(ARENA.x0+1)*TS) t.x=(ARENA.x0+1)*TS; if(t.x>ARENA.x1*TS-t.w) t.x=ARENA.x1*TS-t.w;
     if(overlap(P,t)){ if(stompable(t)&&t.inv<=0){ bounceP(); hitTwin(t,P.x<t.x?1:-1); } else if(t.inv<=0&&P.inv<=0) hurt(t); }
@@ -517,7 +518,7 @@ function updTwins(dt){ const P=W.P, T=W.twins; if(W.twinIntro>0){ W.twinIntro-=d
 function hitTwin(t,dir){ t.hp--; t.inv=0.8; game.hits+=2; t.vx=dir*110; t.vy=-150; t.st='rest'; t.t=0; sfx.bonk(); burst(t.x+5,t.y+6,8,['#fff','#ffd24a','#ff8ac0'],60,20); shake=0.12;
   if(t.hp<=0){ t.dead=true; t.deathT=0; sfx.pop(); game.hits+=3; say(t,'Menno!',1.8,true); } else say(t,'Aua!',1,true); bossBar(true); }
 const bossEl=document.getElementById('bossbar'), bossFill=document.getElementById('bossFill');
-function bossBar(on){ bossEl.style.display=on?'block':'none'; if(on&&W&&W.lehrer){ bossEl.querySelector('.bn').textContent='Der Lehrer'; bossFill.style.width=(Math.max(0,W.lehrer.hp)/8*100)+'%'; return; } if(on&&W&&W.joost){ bossEl.querySelector('.bn').textContent='Achtklässler'; bossFill.style.width=(Math.max(0,W.joost.hp)/8*100)+'%'; return; } if(on) bossEl.querySelector('.bn').textContent='Die Zwillinge'; if(on&&W&&W.twins){ const hp=W.twins.reduce((s,t)=>s+Math.max(0,t.hp),0); bossFill.style.width=(hp/4*100)+'%'; } }
+function bossBar(on){ bossEl.style.display=on?'block':'none'; if(on&&W&&W.lehrer){ bossEl.querySelector('.bn').textContent='Der Lehrer'; bossFill.style.width=(Math.max(0,W.lehrer.hp)/8*100)+'%'; return; } if(on&&W&&W.joost){ bossEl.querySelector('.bn').textContent='Achtklässler'; bossFill.style.width=(Math.max(0,W.joost.hp)/8*100)+'%'; return; } if(on) bossEl.querySelector('.bn').textContent='Die Zwillinge'; if(on&&W&&W.twins){ const hp=W.twins.reduce((s,t)=>s+Math.max(0,t.hp),0); bossFill.style.width=(hp/6*100)+'%'; } }
 
 /* ================= Kamera & Zeichnen ================= */
 let shake=0, bossRed=0;
