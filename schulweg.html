@@ -94,7 +94,7 @@ body.ride .pad.left,body.ride .pad button[data-k=attack]{visibility:hidden}
 const VW=320, VH=192, TS=16, LH=12, GY=160;
 const cv=document.getElementById('cv'); const ctx=cv.getContext('2d'); ctx.imageSmoothingEnabled=false;
 const gameEl=document.getElementById('game');
-const MIN_SEC=14; // echte Sekunden pro Spielminute
+const MIN_SEC=11; // echte Sekunden pro Spielminute
 const TARGET=15;  // Zielzeit Viertel 1: 7:15
 
 /* ================= Sound ================= */
@@ -198,6 +198,7 @@ function drawPerson(cx,feet,o,pose,ph,flip,extra){
   else if(arm!=='up') R(x+W/2-1+a1,ty+5,2,2,o.skin);
   // Kopf
   const hx=x+1, hy=y+1; R(hx,hy+2,W-2,8,o.skin);
+  if(extra&&extra.rage){ ctx.globalAlpha=0.45+Math.sin(performance.now()/90)*0.2; R(hx+W-9,hy+4,6,3,'#ff3a10'); ctx.globalAlpha=1; }
   R(hx+W-5,hy+5,1,1,o.eye||'#2a2a3a'); R(hx+W-8,hy+5,1,1,o.eye||'#2a2a3a');
   if(o.freckles){ R(hx+W-6,hy+7,1,1,'#c87a4a'); R(hx+W-9,hy+7,1,1,'#c87a4a'); }
   R(hx+W-7,hy+8,3,1,o.mouth||'#b0405a');
@@ -387,6 +388,7 @@ function updStickBtn(){ const b=document.querySelector('.pad button[data-k=attac
 /* ================= Sprechblasen ================= */
 const bubbles=[]; const bubbleEls=[...document.querySelectorAll('.bubble')];
 function say(target,text,dur,npc){ for(const b of bubbles) if(b.target===target) b.t=0; bubbles.push({target,text,t:dur||2.2,npc:!!npc}); }
+function timeBonus(e,sec){ game.clock=Math.max(0,game.clock-sec/60*MIN_SEC); hudKey=''; (W.pops||(W.pops=[])).push({x:e.x+e.w/2,y:e.y-4,t:1.1,txt:'+'+sec+' s'}); }
 function burst(x,y,n,cols,sp,up){ for(let i=0;i<n;i++){ const a=Math.random()*Math.PI*2, s=(sp||60)*(0.4+Math.random()*0.8); W.particles.push({x,y,vx:Math.cos(a)*s,vy:Math.sin(a)*s-(up||0),life:0.4+Math.random()*0.4,col:cols[(Math.random()*cols.length)|0],g:300}); } }
 
 /* ================= Update ================= */
@@ -411,6 +413,8 @@ function update(dt){
   for(const c of W.candies) if(!c.taken&&overlap(P,c)){ c.taken=true; game.wallet++; sfx.candy(); burst(c.x+4,c.y+4,4,[c.c,'#fff'],40); }
   for(const it of W.items){ if(it.taken) continue; const pb=it.y+it.h; it.vy=Math.min((it.vy||0)+700*dt,400); it.y+=it.vy*dt; if(it.vx){ it.x+=it.vx*dt; if(rectSolid(it.x,it.y,it.w,it.h-1)){ it.x-=it.vx*dt; it.vx=-it.vx*0.5; } } { const tx=Math.floor((it.x+it.w/2)/TS), ty=Math.floor((it.y+it.h)/TS); if(it.vy>0&&(solidAt(tx,ty)||oneWayAt(tx,ty))&&pb<=ty*TS+1){ it.y=ty*TS-it.h; it.vy=Math.abs(it.vy)>60?-it.vy*0.3:0; if(it.vx) it.vx*=0.6; if(Math.abs(it.vx||0)<8) it.vx=0; } } if(it.y+it.h>GY){ it.y=GY-it.h; it.vy=-it.vy*0.3; } if(overlap(P,it)){ it.taken=true; if(P.hearts<3){ P.hearts++; sfx.heart(); burst(P.x+5,P.y+6,12,['#ff5a78','#fff'],60,20); } else { game.bonus+=50; sfx.candy(); burst(P.x+5,P.y+6,10,['#ffd24a','#fff'],60,20); } } }
   for(let i=W.particles.length-1;i>=0;i--){ const p=W.particles[i]; p.life-=dt; p.vy+=p.g*dt; p.x+=p.vx*dt; p.y+=p.vy*dt; if(p.life<=0) W.particles.splice(i,1); }
+  if(W.pops) for(let i=W.pops.length-1;i>=0;i--){ const q=W.pops[i]; q.t-=dt; q.y-=22*dt; if(q.t<=0) W.pops.splice(i,1); }
+  if(W.lehrer&&!W.lehrer.dead) hellFx(dt);
   // Stock, Bäcker, Kirche, Arena, Fahrrad
   const st=(LV.stickTx||0)*TS; if(LV.stickTx!=null&&!W.stickTaken&&P.x>st-6){ W.stickTaken=true; game.stick=true; updStickBtn(); sfx.heart(); burst(st+8,GY-4,10,['#c8862a','#ffd24a'],50,20); }
   (LV.foods||[LV.bakery]).forEach((bk,i)=>{ W.foodDone=W.foodDone||{}; if(!W.foodDone[i]&&P.x>bk.trig*TS){ W.foodDone[i]=true; W.items.push({x:bk.itemTx*TS+4,y:GY-40,w:10,h:7,vy:-80,taken:false,kind:bk.item}); say({x:bk.itemTx*TS,y:GY-34,w:20},bk.say,1.8,true); sfx.bell(); } });
@@ -447,7 +451,7 @@ function respawn(){ if(game.mode==='ride'){ respawnRide(); return; } const P=W.P
 /* ---- Gegner ---- */
 function stompable(e){ const P=W.P; return P.vy>0&&P.prevBottom<=e.y+6&&Math.abs((P.x+P.w/2)-(e.x+e.w/2))<e.w/2+3; }
 function bounceP(){ const P=W.P; P.vy=input.jump?-330:-260; P.bounce=true; P.airJumps=1; P.onGround=false; }
-function damage(e,n,dir,stomp){ e.hp-=n; game.hits++; if(e.hp<=0){ e.dead=true; e.deathT=1.3; e.vx=dir*40; e.vy=-140; game.hits++; sfx.pop(); burst(e.x+e.w/2,e.y+e.h/2,8,['#ffd24a','#ffffff','#ff8ac0'],70,30); }
+function damage(e,n,dir,stomp){ e.hp-=n; game.hits++; if(e.hp<=0){ timeBonus(e,e.type==='pigeon'?5:15); e.dead=true; e.deathT=1.3; e.vx=dir*40; e.vy=-140; game.hits++; sfx.pop(); burst(e.x+e.w/2,e.y+e.h/2,8,['#ffd24a','#ffffff','#ff8ac0'],70,30); }
   else { e.stun=0.5; e.vx=dir*80; e.vy=-100; sfx.bonk(); burst(e.x+e.w/2,e.y+6,5,['#ffffff','#ffd24a'],50); } }
 function stickHits(e){ const P=W.P; if(!(P.atkT>0)||e.lastSwing===P.swingId) return false; const hb={x:P.dir>0?P.x+P.w-2:P.x-20,y:P.y+4,w:22,h:20}; if(overlap(hb,e)){ e.lastSwing=P.swingId; return true; } return false; }
 function shoot(kind,x,y,vx,vy,g){ W.shots.push({kind,x,y,vx,vy,g,life:3}); sfx.throw(); }
@@ -544,6 +548,8 @@ function render(){ if(game.mode==='ride'){ renderRide(); return; } const t=game.
   for(const s of W.shots){ if(drawSchoolShot(s,t)) continue; if(s.kind==='nut'){ R(s.x-2,s.y-2,4,4,'#8a5a2a'); R(s.x-1,s.y-3,2,1,'#5a3a1a'); } else if(s.kind==='stone'){ R(s.x-2,s.y-2,5,4,'#8a8a90'); R(s.x-1,s.y-2,2,1,'#b0b0b8'); } else { ctx.fillStyle='#ffffff'; ctx.beginPath(); ctx.arc(s.x,s.y,4,0,7); ctx.fill(); R(s.x-1,s.y-4,2,8,'#e03a3a'); } }
   drawPlayer(t);
   for(const p of W.particles){ ctx.globalAlpha=Math.min(1,p.life*3); R(p.x,p.y,2,2,p.col); } ctx.globalAlpha=1;
+  if(W.lehrer&&!W.lehrer.dead){ const L=W.lehrer, fl=L.y+L.h, tt=performance.now()/1000, amp=W.hellT>0?Math.min(1,W.hellT/1.2)*1.6+0.25:0.25; ctx.globalAlpha=0.9; for(let x=Math.floor(cam.x/6)*6; x<cam.x+VW+6; x+=6){ const h=Math.max(2,(12+8*Math.sin(x*0.31+tt*11)+6*Math.sin(x*0.13-tt*7))*amp); R(x,fl-h,6,h,'#c81a10'); R(x+1,fl-h*0.7,4,h*0.7,'#ff6a1a'); R(x+2,fl-h*0.35,2,h*0.35,'#ffd24a'); } ctx.globalAlpha=1; }
+  if(W.pops) for(const q of W.pops){ ctx.globalAlpha=Math.min(1,q.t*3); ctx.font='bold 9px monospace'; ctx.textAlign='center'; ctx.textBaseline='middle'; ctx.fillStyle='#1a1a3a'; ctx.fillText(q.txt,q.x+1,q.y+1); ctx.fillStyle='#8aff6a'; ctx.fillText(q.txt,q.x,q.y); ctx.textAlign='left'; } ctx.globalAlpha=1;
   ctx.restore();
   if(bossRed>0){ ctx.fillStyle=(bossRed===3?'rgba(20,30,100,':(bossRed===2?'rgba(140,0,20,':'rgba(255,90,180,'))+((bossRed>=2?0.13:0.08)+Math.sin(t*3)*0.03)+')'; ctx.fillRect(0,0,VW,VH); }
   if(W.flash>0){ W.flash-=1/60; const f=W.flash; if(W.bolt&&f>0.35){ ctx.save(); ctx.translate(-Math.round(cam.x),0); ctx.strokeStyle='#ff3030'; ctx.lineWidth=4; ctx.beginPath(); W.bolt.forEach((p,i)=>i?ctx.lineTo(p[0],p[1]):ctx.moveTo(p[0],p[1])); ctx.stroke(); ctx.strokeStyle='#fff0f0'; ctx.lineWidth=1.5; ctx.stroke(); ctx.restore(); } const fl=(Math.floor(f*14)%2)?0.55:0.15; ctx.fillStyle='rgba('+(W.flashCol||'255,30,30')+','+(fl*Math.min(1,f*1.6))+')'; ctx.fillRect(0,0,VW,VH); }
@@ -878,7 +884,7 @@ function drawBush(x){ ctx.fillStyle='#3e8a3a'; for(let k=0;k<5;k++){ ctx.beginPa
 const JOOST_LOOK={skin:'#f6d6c0',hair:'#d8602a',top:'#3a9a4a',topD:'#2a7a3a',pants:'#3a3a5a',shoe:'#2a2a2a',hairStyle:'short',big:true,letterJ:true,freckles:true};
 function startJoost(){ game.arena=true; setGate(true); W.joost={x:(ARENA.x1-6)*TS,y:GY-36,w:18,h:36,vx:0,vy:0,hp:8,inv:0,dead:false,deathT:0,st:'walk',t:0,cd:2.2,dir:-1,anim:0,stomps:0,stompT:0};
   W.joostIntro=4.6; W.rabLeft=4; W.rabT=6.0; W.rabSide=0; chip.start('joost'); shake=0.6; sfx.thunder(); bossRed=2; W.flash=0.9; W.bolt=mkBolt(); say(W.P,'Oh nein, ein dummer Achtklässler!',2.0); later(2.0,()=>{ if(W.joost&&!W.joost.dead) say(W.joost,'Schule ist heute geschlossen für kleine, doofe Mädchen!',2.8,true); }); bossBar(true); }
-function mkBolt(){ const J=W.joost, pts=[]; let x=J.x+J.w/2, y=-4; pts.push([x,y]); while(y<J.y-2){ y+=10+Math.random()*12; x+=(Math.random()*2-1)*12; pts.push([x,Math.min(y,J.y-2)]); } return pts; }
+function mkBolt(){ const J=W.joost||W.lehrer, pts=[]; let x=J.x+J.w/2, y=-4; pts.push([x,y]); while(y<J.y-2){ y+=10+Math.random()*12; x+=(Math.random()*2-1)*12; pts.push([x,Math.min(y,J.y-2)]); } return pts; }
 function spawnRab(){ const left=W.rabSide++%2===0; const bx=left?(ARENA.x0+2)*TS+10:(ARENA.x1-2)*TS; const e=mkEnemy({type:'rab',tx:Math.floor(bx/TS)}); e.x=bx; e.y=GY-40; e.vy=-260; e.vx=left?60:-60; e.look=RABS[(W.rabSide-1)%RABS.length]; e.st='idle'; e.cd=0.6; e.rab=true; W.enemies.push(e); sfx.hiss(); burst(bx+5,GY-14,10,['#3e8a3a','#5aac4a'],70,20); }
 function updJoost(dt){ const P=W.P, J=W.joost; if(!J) return; J.anim+=dt; if(J.inv>0) J.inv-=dt;
   if(J.dead){ J.deathT+=dt; return; }
@@ -1012,8 +1018,9 @@ function updSchoolShot(s,dt){ if(s.kind==='plane'){ s.ph+=dt*4; s.y=s.y0+Math.si
 
 /* ---- Endgegner: der Lehrer ---- */
 const TEACH_LOOK={skin:'#f0c8a8',hair:'#9a9a9a',top:'#7a5a3a',topD:'#5a4028',pants:'#3a3a4a',shoe:'#2a1a10',hairStyle:'bald',big:true,glasses:true,stache:true};
+const RAGE_LOOK=Object.assign({},TEACH_LOOK,{eye:'#ff1a1a'});
 function startLehrer(){ game.arena=true; setGate(true); W.lehrer={x:(ARENA.x1-5)*TS,y:UPY-35,w:16,h:35,vx:0,vy:0,hp:10,inv:0,dead:false,deathT:0,st:'walk',t:0,cd:1.6,dir:-1,anim:0,next:0};
-  W.lehrerIntro=3.4; chip.start('lehrer'); shake=0.6; sfx.thunder(); sfx.screech(); bossRed=3; W.flash=0.7; W.flashCol='30,60,200'; W.bolt=null; say(W.lehrer,'Glaub ja nicht, dass du pünktlich in den Unterricht kommst. Haha.',3.2,true); bossBar(true); }
+  const late=clockMin()>=60; W.lehrerIntro=4.6; W.hellT=4.6; chip.start('lehrer'); shake=1.2; sfx.thunder(); sfx.screech(); later(0.6,()=>{ sfx.thunder(); shake=0.8; }); bossRed=2; W.flash=1.0; W.flashCol='220,20,0'; W.bolt=mkBolt(); say(W.lehrer,late?'Wer kommt denn da zu spät? HAHAHA! Ab zum Nachsitzen – und bei mir ist Nachsitzen die HÖLLE!':'Du wirst NIEMALS pünktlich in den Unterricht kommen! HAHAHA!',4.4,true); bossBar(true); }
 function updLehrer(dt){ const P=W.P, L=W.lehrer; if(!L) return; L.anim+=dt; if(L.inv>0) L.inv-=dt; if(L.dead){ L.deathT+=dt; return; }
   if(W.lehrerIntro>0){ W.lehrerIntro-=dt; L.dir=-1; return; }
   const dx=(P.x+P.w/2)-(L.x+L.w/2), adx=Math.abs(dx); L.t+=dt;
@@ -1039,10 +1046,11 @@ function hitLehrer(dir){ const L=W.lehrer; L.hp--; L.inv=0.6; game.hits+=2; sfx.
   if(L.hp<=0){ L.dead=true; L.deathT=0; sfx.pop(); game.hits+=5; say(L,'Das … gibt … Nachsitzen …',1.8,true); for(let k=0;k<10;k++) W.particles.push({x:L.x+8,y:L.y+10,vx:(Math.random()*2-1)*90,vy:-80-Math.random()*120,life:1.2,col:'#ffffff',g:200});
     game.bossDone=true; W.shots.length=0; later(1.0,()=>{ setGate(false); game.arena=false; bossBar(false); bossRed=0; if(!sfx.isMuted()) chip.start(LV.music); sfx.check(); }); }
   bossBar(true); }
+function hellFx(dt){ const L=W.lehrer, fl=L.y+L.h; W.hellT=Math.max(0,(W.hellT||0)-dt); const n=W.hellT>0?6:0.35; let k=n*dt*10; while(k>0){ if(Math.random()<k) W.particles.push({x:cam.x+Math.random()*VW,y:fl-1,vx:(Math.random()*2-1)*12,vy:-(W.hellT>0?90:40)-Math.random()*70,life:0.5+Math.random()*0.6,col:['#ff2a10','#ff7a1a','#ffd24a','#c81a10'][(Math.random()*4)|0],g:-40}); k-=1; } }
 function drawLehrer(t){ const L=W.lehrer; if(!L) return; const feet=L.y+L.h, cx=L.x+L.w/2; if(!L.dead&&L.inv>0&&Math.floor(t*16)%2) return;
   ctx.save(); ctx.translate(cx,feet); if(L.dead) ctx.rotate((L.dir<0?1:-1)*1.45); ctx.scale(1.25,1.25); ctx.translate(-cx,-feet);
   const w=L.st==='wind', sw=L.st==='swing', thr=['chalk','sponge','papers'].includes(L.st);
-  drawPerson(cx,feet,TEACH_LOOK,L.dead?'stand':(Math.abs(L.vx)>5?'run':'stand'),L.anim*2,L.dir<0,{arm:w||L.st==='papers'||L.st==='ears'?'up':(sw||thr?'fwd':null),angry:!L.dead}); if(L.st==='ears'){ const hy=feet-25; R(cx-6,hy,3,4,TEACH_LOOK.skin); R(cx+4,hy,3,4,TEACH_LOOK.skin); }
+  drawPerson(cx,feet,L.dead?TEACH_LOOK:RAGE_LOOK,L.dead?'stand':(Math.abs(L.vx)>5?'run':'stand'),L.anim*2,L.dir<0,{arm:w||L.st==='papers'||L.st==='ears'?'up':(sw||thr?'fwd':null),angry:!L.dead,rage:!L.dead}); if(L.st==='ears'){ const hy=feet-25; R(cx-6,hy,3,4,TEACH_LOOK.skin); R(cx+4,hy,3,4,TEACH_LOOK.skin); }
   if(!L.dead){ const hx=cx+(L.dir<0?-3:3), hy=feet-17; ctx.save(); ctx.translate(hx,hy); if(L.dir<0) ctx.scale(-1,1); ctx.rotate(w?-2.3:(sw?0.15:-0.6)); R(0,-1,20,2,'#5a3a1a'); R(0,-1,20,1,'#7a5a2a'); ctx.restore(); }
   ctx.restore(); if(L.dead) for(let k=0;k<3;k++){ const a=t*5+k*2.1; R(cx+(L.dir<0?16:-16)+Math.cos(a)*8,feet-10+Math.sin(a)*2,2,2,'#ffd24a'); } }
 
