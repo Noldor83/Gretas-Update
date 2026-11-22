@@ -24,7 +24,11 @@ html,body{margin:0;height:100%;background:#1d2140;overflow:hidden;touch-action:n
 .bubble.npc:after{border-top-color:#d8e8ff}
 #touch{position:fixed;inset:0;display:none;justify-content:space-between;align-items:center;padding:22vh max(12px,env(safe-area-inset-right)) 0 max(12px,env(safe-area-inset-left));box-sizing:border-box;pointer-events:none}
 body.touch.playing #touch{display:flex}
-body.ride .pad.left,body.ride .pad button[data-k=attack]{visibility:hidden}
+body.ride .pad button[data-k=attack]{visibility:hidden}
+body.ride .pad.left button[data-k=left],body.ride .pad.left button[data-k=right]{display:none}
+body.ride .pad.left button[data-k=jump]{width:112px;height:112px;font-size:17px}
+body.ride .pad.right .col{transform:none}
+body.ride .pad.right button[data-k=down]{width:96px;height:96px;font-size:16px}
 .pad{display:flex;gap:10px;align-items:center;pointer-events:auto}
 .pad button{width:66px;height:66px;border-radius:50%;border:2px solid rgba(255,255,255,.5);background:rgba(30,36,80,.45);color:#fff;font:bold 14px 'Trebuchet MS',sans-serif;touch-action:none;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;padding:0}
 .pad button.on{background:rgba(255,210,90,.5)}
@@ -346,7 +350,7 @@ const isTouch=('ontouchstart' in window)||(window.matchMedia&&matchMedia('(point
 if(isTouch) document.body.classList.add('touch');
 // Touch: jeder Finger wird dem nächstgelegenen Knopf zugeordnet, auch beim Gleiten; Trefferfläche ca. 1,45-fach.
 const padBtns=[...document.querySelectorAll('.pad button')]; const tMap=new Map();
-function btnAt(x,y){ let best=null, bd=1e9; for(const b of padBtns){ const r=b.getBoundingClientRect(); if(!r.width||getComputedStyle(b).visibility==='hidden') continue; let d=Math.hypot(x-(r.left+r.width/2),y-(r.top+r.height/2))/(r.width/2); if(b.dataset.k==='jump') d/=1.2; if(d<bd){ bd=d; best=b; } } return bd<=1.5?best:null; }
+function btnAt(x,y){ if(document.body.classList.contains('ride')){ if(y<56) return null; return document.querySelector('.pad button[data-k='+(x<innerWidth/2?'jump':'down')+']'); } let best=null, bd=1e9; for(const b of padBtns){ const r=b.getBoundingClientRect(); if(!r.width||getComputedStyle(b).visibility==='hidden') continue; let d=Math.hypot(x-(r.left+r.width/2),y-(r.top+r.height/2))/(r.width/2); if(b.dataset.k==='jump') d/=1.2; if(d<bd){ bd=d; best=b; } } return bd<=1.5?best:null; }
 function syncPads(){ const want=new Set(); for(const b of tMap.values()) if(b) want.add(b); for(const b of padBtns){ const on=want.has(b); if(on!==b.classList.contains('on')){ b.classList.toggle('on',on); press(b.dataset.k,on); } } }
 function padActive(){ return game.state==='play'; }
 function onTouch(e){ if(!padActive()){ if(tMap.size){ tMap.clear(); syncPads(); } return; } let used=false;
@@ -377,7 +381,7 @@ function mkEnemy(d){ const bx=d.tx*TS, feet=d.ty?(d.ty+1)*TS:GY; const S={squirr
   if(d.look) e.look=d.look;
   if(d.type==='scooter'){ e.dir=1; e.vx=130; }
   return e; }
-function buildWalk(id){ LV=LEVELS[id]; { const ab=document.querySelector('.pad button[data-k=attack]'); if(ab) ab.textContent=id==='schule'?'Lineal':'Hase'; } LW=LV.LW; ARENA=LV.arena; DITCHES=LV.ditches; game.mode='walk'; game.target=LV.target; document.body.classList.remove('ride'); LV.build(); renderTiles(); const P=newPlayer(LV.startX);
+function buildWalk(id){ LV=LEVELS[id]; { const ab=document.querySelector('.pad button[data-k=attack]'); if(ab) ab.textContent=id==='schule'?'Lineal':'Hase'; } LW=LV.LW; ARENA=LV.arena; DITCHES=LV.ditches; game.mode='walk'; game.target=LV.target; document.body.classList.remove('ride'); placeJump(false); LV.build(); renderTiles(); const P=newPlayer(LV.startX);
   W={P,enemies:[],candies:[],shots:[],particles:[],items:[],twins:null,joost:null,milowBark:0,bakery:{done:false},checks:LV.checks.map(()=>false),stickTaken:false};
   for(const d of DEFS){ if(d.type==='candy') W.candies.push({x:d.tx*TS+4,y:d.ty*TS+4,w:8,h:8,taken:false,ph:Math.random()*6,c:['#ff5a8a','#ffd24a','#5ad0ff','#8aff6a','#c08aff'][(d.tx+d.ty)%5]}); else W.enemies.push(mkEnemy(d)); }
   game.timers=[]; game.cp={x:P.x,y:P.y}; game.arena=false; game.bossDone=false; game.stick=true; W.stickTaken=true; game.endT=0; cam.x=0; setGate(false); updStickBtn(); bossBar(false); bossRed=0; }
@@ -688,18 +692,19 @@ function rideSpec(){ const O=[]; const o=(type,tx,x)=>O.push(Object.assign({type
   row(4,10,9); row(17,22,9); arc(24); row(30,32,9); arc(39); row(53,56,9); arc(56); row(63,66,9); row(70,76,8); arc(94); row(104,108,9); arc(122); row(128,132,9); row(144,150,9); arc(156); row(168,174,9); arc(176);
   row(182,186,9); arc(190); row(207,210,9); arc(220); row(226,230,9); arc(236); row(242,246,9); arc(260); row(266,270,9); arc(288); row(296,300,9);
   return {O,C}; }
-function buildRide(fresh){ const keep=W&&W.P&&!fresh?{h:W.P.hearts}:{h:3}; const sp=rideSpec();
+function placeJump(ride){ const j=document.querySelector('.pad button[data-k=jump]'); if(ride) document.querySelector('.pad.left').appendChild(j); else { const c=document.querySelector('.pad.right .col'); c.insertBefore(j,c.firstChild); } }
+function buildRide(fresh){ placeJump(true); const keep=W&&W.P&&!fresh?{h:W.P.hearts}:{h:3}; const sp=rideSpec();
   W={mode:'ride',P:{x:2*TS,y:GY-34,w:20,h:34,vy:0,onGround:true,hearts:keep.h,inv:0,duck:false,slow:0,airJumps:1,jumped:false,jumpT:0,jumpBuf:0,coyote:0,anim:0,spd:RIDE.speed},obs:sp.O,candies:sp.C,particles:[],items:[],enemies:[],shots:[],end:null,bus:null};
   game.mode='ride'; game.cp={x:2*TS}; game.arena=false; bossBar(false); bossRed=0; cam.x=0; if(fresh){ game.wallet=0; game.hits=0; game.bonus=0; game.time=0; game.clock=TARGET*MIN_SEC; game.t1=null; game.timers=[]; }
   game.totalR=W.candies.length; game.total=(game.total1||0)+W.candies.length; game.target=30; document.body.classList.add('ride'); }
-function startRide(fresh){ buildRide(fresh); hideScreen(); bubbles.length=0; hudKey=''; game.state='play'; releaseAll(); chip.stop(); if(!sfx.isMuted()) chip.start('rad'); showToast('2. Viertel','Mit dem Rad zur Haltestelle · '+clockStr()+' Uhr'); }
+function startRide(fresh){ buildRide(fresh); hideScreen(); bubbles.length=0; hudKey=''; game.state='play'; releaseAll(); chip.stop(); if(!sfx.isMuted()) chip.start('rad'); showToast('2. Viertel','Mit dem Rad zur Haltestelle · '+clockStr()+' Uhr'); if(isTouch) later(2.6,()=>showToast('Links tippen: Springen','Rechts tippen: Ducken')); }
 function rideBox(P){ const top=P.duck?22:34; return {x:P.x+3,y:P.y+P.h-top,w:15,h:top}; }
 function rideHurt(){ const P=W.P; if(P.inv>0||W.end) return; P.hearts--; P.inv=1.4; P.slow=0.6; sfx.hurt(); burst(P.x+10,P.y+10,8,['#ff5a78','#fff'],60); shake=0.15; if(P.hearts<=0) faint(); }
 function updRide(dt,jp){ const P=W.P; if(P.inv>0) P.inv-=dt; if(P.slow>0) P.slow-=dt; P.anim+=dt;
   if(W.end){ updRideEnd(dt); return; }
   const tgt=P.slow>0?70:RIDE.speed; P.spd+=(tgt-P.spd)*Math.min(1,dt*4); P.x+=P.spd*dt;
   const dn=input.down&&P.onGround; P.duck=dn;
-  P.jumpBuf=jp?0.14:P.jumpBuf-dt; P.coyote=P.onGround?0.12:P.coyote-dt; if(P.onGround){ P.jumped=false; P.airJumps=1; }
+  P.jumpBuf=jp?0.2:P.jumpBuf-dt; P.coyote=P.onGround?0.12:P.coyote-dt; if(P.onGround){ P.jumped=false; P.airJumps=1; }
   if(P.jumpBuf>0&&P.coyote>0){ P.jumped=true; P.jumpT=0.2; P.vy=-320; P.jumpBuf=0; P.coyote=0; P.onGround=false; P.duck=false; sfx.jump(); }
   else if(jp&&P.coyote<=0&&P.airJumps>0){ P.vy=Math.min(Math.min(P.vy,0)*0.35-290,-300); P.jumpT=0.2; P.airJumps--; P.jumpBuf=0; sfx.jump2(); burst(P.x+10,P.y+P.h,8,['#fff','#ffd0e0'],50,10); }
   if(P.jumpT>0) P.jumpT-=dt; if(!input.jump&&!(P.jumpT>0)&&P.vy<-150&&!P.boost) P.vy=-150; if(P.vy>=0) P.boost=false;
