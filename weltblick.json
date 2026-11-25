@@ -1,5 +1,104 @@
 [
   {
+    "nr": 8,
+    "datum": "2026-11-26",
+    "themen": [
+      {
+        "bereich": "innen",
+        "schlagzeile": "Falsche Bombendrohungen an Schulen",
+        "text": "Am Montagmorgen haben viele Schulen in Deutschland dieselbe E-Mail bekommen, in der mit einer Bombe gedroht wurde. Allein in Baden-Württemberg waren es mehr als 450 Schulen, auch Schulen in Dänemark sollen solche Mails erhalten haben. Die Polizei hielt eine echte Gefahr für sehr unwahrscheinlich, deshalb fand an den meisten Schulen normaler Unterricht statt. Wer die Mails verschickt hat, ist noch unklar – die Polizei ermittelt.",
+        "wichtig": "Solche Drohungen sind kein Scherz, sondern eine Straftat – auch wenn sie nicht ernst gemeint sind. Wer so etwas tut, kann im schlimmsten Fall ins Gefängnis kommen."
+      },
+      {
+        "bereich": "innen",
+        "schlagzeile": "Junge Leute wieder auf der Straße",
+        "text": "Am Freitag haben in mehr als 50 deutschen Städten wieder Tausende junge Menschen demonstriert, vor allem unter dem Motto „Gen Z regelt“. Sie fordern zum Beispiel weniger Unterrichtsausfall, kaputte Schulen zu reparieren, mehr Klimaschutz, günstigere Mieten und Lebensmittel und keine Wehrpflicht. Diesmal waren es weniger Teilnehmende als beim ersten Protesttag Ende Oktober, und die Demos blieben weitgehend friedlich.",
+        "wichtig": "Junge Menschen dürfen oft noch nicht wählen. Demonstrieren ist für sie ein wichtiger Weg, um zu zeigen, was ihnen wichtig ist."
+      },
+      {
+        "bereich": "aussen",
+        "schlagzeile": "Weltklimakonferenz endet ohne Einigung",
+        "text": "Die Weltklimakonferenz in der Türkei ist am Sonntag zu Ende gegangen – zwei Tage später als geplant und ohne gemeinsame Abschlusserklärung. Die EU und Deutschland lehnten den letzten Entwurf ab, weil darin kein Ausstieg aus Kohle, Öl und Gas vorkam. Umweltminister Carsten Schneider gab Ländern die Schuld, die viel Geld mit Öl und Gas verdienen.",
+        "wichtig": "Ohne gemeinsame Ziele kommt der weltweite Klimaschutz kaum voran – dabei reichen die bisherigen Pläne schon jetzt nicht aus."
+      }
+    ],
+    "zahl": {
+      "wert": "450",
+      "text": "Mehr als so viele Schulen haben allein in Baden-Württemberg am Montag eine falsche Bombendrohung per E-Mail bekommen."
+    },
+    "wort": {
+      "begriff": "Fossile Energien",
+      "erklaerung": "So nennt man Energie aus Kohle, Erdöl und Erdgas. Diese Stoffe sind vor Millionen von Jahren aus Pflanzen und Tieren entstanden. Wenn man sie verbrennt, entsteht das Treibhausgas CO₂, das die Erde aufheizt."
+    },
+    "frage": "Bei einer falschen Bombendrohung wissen Schulen zuerst nicht, ob sie echt ist. Wie sollte eine Schule deiner Meinung nach reagieren – und was würdest du selbst tun?",
+    "quellen": [
+      {
+        "titel": "logo!: Falsche Bombendrohungen an Schulen",
+        "url": "https://www.logo.de/bombendrohungen-schulen-102.html"
+      },
+      {
+        "titel": "logo!: Gen-Z-Proteste – Wieder auf der Straße",
+        "url": "https://www.logo.de/gen-z-proteste-104.html"
+      },
+      {
+        "titel": "logo!: Weltklimakonferenz endet ergebnislos",
+        "url": "https://www.logo.de/weltklimakonferenz-cop-31-100.html"
+      },
+      {
+        "titel": "news.de: Nachrichten am 24. November 2026",
+        "url": "https://www.news.de/panorama/860214085/24-november-2026-news-themen-des-tages-was-passiert-heute-in-deutschland-und-der-welt-das-ist-heute-am-24-11-2026-wichtig-in-den-nachrichten-aus-politik-wirtschaft-sport-und-co/1/"
+      }
+    ],
+    "quiz": [
+      {
+        "typ": "mc",
+        "frage": "Wie haben die Schulen die falschen Bombendrohungen bekommen?",
+        "optionen": [
+          "Per Brief",
+          "Per Anruf",
+          "Per E-Mail"
+        ],
+        "richtig": 2,
+        "erklaerung": "Viele Schulen bekamen am Montagmorgen dieselbe Drohmail per E-Mail."
+      },
+      {
+        "typ": "mc",
+        "frage": "Was fordern die Jugendlichen bei den „Gen Z regelt“-Demos zum Beispiel?",
+        "optionen": [
+          "Weniger Unterrichtsausfall und keine Wehrpflicht",
+          "Längere Schultage",
+          "Höhere Mieten"
+        ],
+        "richtig": 0,
+        "erklaerung": "Sie fordern unter anderem weniger Unterrichtsausfall, mehr Klimaschutz, günstigere Mieten und keine Wehrpflicht."
+      },
+      {
+        "typ": "mc",
+        "frage": "Warum hat die EU den letzten Entwurf der Weltklimakonferenz abgelehnt?",
+        "optionen": [
+          "Er war zu lang",
+          "Darin kam kein Ausstieg aus Kohle, Öl und Gas vor",
+          "Er war nur auf Türkisch"
+        ],
+        "richtig": 1,
+        "erklaerung": "Im Entwurf stand nichts über einen Ausstieg aus den fossilen Energien – deshalb sagten EU und Deutschland Nein."
+      },
+      {
+        "typ": "wf",
+        "frage": "Eine Bombendrohung ist nicht strafbar, wenn sie nur als Scherz gemeint war.",
+        "richtig": false,
+        "erklaerung": "Solche Drohungen sind immer eine Straftat, auch wenn sie nicht ernst gemeint sind."
+      },
+      {
+        "typ": "schaetzen",
+        "frage": "Wie viele Schulen haben allein in Baden-Württemberg die falsche Bombendrohung bekommen (ungefähr)?",
+        "einheit": "Schulen",
+        "richtig": 450,
+        "erklaerung": "Es waren laut Polizei mehr als 450 Schulen in Baden-Württemberg."
+      }
+    ]
+  },
+  {
     "nr": 7,
     "datum": "2026-11-19",
     "themen": [

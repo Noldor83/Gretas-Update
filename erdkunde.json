@@ -2,6 +2,67 @@
   "_hinweis": "Land der Woche: neueste Ausgabe zuerst. iso = ISO-3166-Zahlencode (wie in weltkarte.json), koord = [Längengrad, Breitengrad] der Hauptstadt.",
   "laender": [
     {
+      "nr": 7,
+      "datum": "2026-11-26",
+      "name": "Italien",
+      "iso": "380",
+      "flagge": "🇮🇹",
+      "hauptstadt": "Rom",
+      "koord": [
+        12.4964,
+        41.9028
+      ],
+      "entfernung_km": 1200,
+      "einleitung": "Italien liegt in Südeuropa und hat die Form eines Stiefels, der ins Mittelmeer ragt. Im Norden grenzt es an Frankreich, die Schweiz, Österreich und Slowenien; dazu gehören auch die großen Inseln Sizilien und Sardinien.",
+      "fakten": [
+        {
+          "label": "Einwohner",
+          "wert": "rund 59 Millionen",
+          "hinweis": "Etwa 24 Millionen weniger als in Deutschland."
+        },
+        {
+          "label": "Hauptstadt",
+          "wert": "Rom",
+          "hinweis": "Mitten in Rom liegt ein eigener Staat: die Vatikanstadt, das kleinste Land der Welt."
+        },
+        {
+          "label": "Landessprache",
+          "wert": "Italienisch"
+        },
+        {
+          "label": "Fläche",
+          "wert": "rund 302.000 km²",
+          "hinweis": "Etwas kleiner als Deutschland."
+        },
+        {
+          "label": "Währung",
+          "wert": "Euro"
+        },
+        {
+          "label": "Vulkane",
+          "wert": "Ätna und Vesuv",
+          "hinweis": "Der Ätna auf Sizilien ist einer der aktivsten Vulkane Europas."
+        }
+      ],
+      "nice": [
+        {
+          "thema": "Kultur",
+          "titel": "Pizza, Pasta und alte Römer",
+          "text": "Pizza und Pasta kommen aus Italien und werden heute auf der ganzen Welt gegessen. Vor rund 2.000 Jahren herrschten die alten Römer über ein riesiges Reich – das Kolosseum in Rom, wo früher Gladiatoren kämpften, kann man bis heute besichtigen."
+        },
+        {
+          "thema": "Politik",
+          "titel": "Eine Regierungschefin mit Rekord",
+          "text": "Seit Oktober 2022 ist Giorgia Meloni Ministerpräsidentin – als erste Frau in diesem Amt. Ihre Regierung hält schon länger als jede andere italienische Regierung seit dem Zweiten Weltkrieg. Früher wechselten die Regierungen in Italien oft schon nach kurzer Zeit."
+        },
+        {
+          "thema": "Herausforderung",
+          "titel": "Flucht über das Mittelmeer",
+          "text": "Jedes Jahr versuchen viele Menschen aus Afrika und Asien, in oft kleinen, überfüllten Booten über das Mittelmeer nach Italien zu kommen, zum Beispiel auf die Insel Lampedusa. Die Überfahrt ist gefährlich. Italien und die EU streiten seit Jahren darüber, wie man mit den Geflüchteten umgehen soll."
+        }
+      ]
+    },
+    {
       "nr": 6,
       "datum": "2026-11-19",
       "name": "Mexiko",
